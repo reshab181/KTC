@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Image, Dimensions } from 'react-native';
 import ModuleSelectionUI from '../Auth/ModuleSelection';
+import { useNavigation } from '@react-navigation/native';
 
 
 const { height, width } = Dimensions.get('screen');
 
 const Splash = props => {
-    // useEffect(() => {
+  const navigation = useNavigation();
+  useEffect(() => {
    
-    //     setTimeout(() => {
-         
-    //       props.navigation.replace(<ModuleSelectionUI/>)
-    //     }, 3000); 
-    //   }, []);
+    const timer = setTimeout(() => {
+      navigation.replace('ModuleSelectionUI');
+    }, 2000);
+
+    return () => clearTimeout(timer); 
+  }, [navigation]);
+
     
   return (
     <View style={styles.mainContainer}>
