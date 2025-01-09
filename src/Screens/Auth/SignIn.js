@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -7,251 +7,127 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Alert,
-  Image,
-  Platform,
 } from 'react-native';
-// import { useNavigation, useIsFocused } from '@react-navigation/native';
-// import CONSTANTS from '../../services/Constants';
-// import API from '../../services/Api';
-// import KEYS from '../../services/Keys';
-// import SERVICE_REQUEST from '../../services/ServiceRequest';
-// import SCREENS from '../../Routers/Screens';
-// import ButtonHeader from '../../Component/Button';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { useDispatch } from 'react-redux';
-// import { updateUserDetails } from '../../Redux/reducer/userReducer';
-// import { requestUserPermission } from '../../utils/notificationservice';
-// import { useSelector } from 'react-redux';
-// import { ALERT_TYPE, Toast } from 'react-native-alert-notification';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
-const { height, width } = Dimensions.get('screen');
+const SignInCorporate = () => {
+  const { height, width } = Dimensions.get('screen');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-const SignInCorporate = (props) => {
-//   const { userType } = useSelector((state) => state.userReducer);
-  const [errorEmail, setErrorEmail] = useState(null);
-  const [password, setPassword] = useState('');
-  const [errorPassword, setErrorPassword] = useState(null);
-  const [securePassword, setSecurePassword] = useState();
-  const [email, setEmail] = useState('');
-//   const navigation = useNavigation();
-//   const dispatch = useDispatch();
-  const [accessToken, setAccessToken] = useState('');
-//   const render = useIsFocused();
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email').required('Email is required'),
+    password: Yup.string()
+      .min(6, 'Password must be at least 6 characters')
+      .required('Password is required'),
+  });
 
-//   const fun = useCallback(async () => {
-//     return await requestUserPermission();
-//   }, [render]);
-
-//   console.log("token a rha hai ky login per================>", fun());
-
-  const _emailvalidate = (mail) => {
-    if (mail === '') {
-      setErrorEmail('*Please enter email.');
-    } else {
-      setErrorEmail(null);
-    }
+  const handleSignIn = (values) => {
+    console.log('Form Submitted:', values);
   };
-
-  const _PasswordValidate = (lname) => {
-    var PasswordRegex = /^[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-    if (!lname) {
-      setErrorPassword('*Please enter password.');
-    } else {
-      setErrorPassword(null);
-    }
-  };
-
-  const validate = () => {
-    let flag = true;
-    if (email === '') {
-      flag = false;
-      setErrorEmail('*Please enter email.');
-    } else {
-      setErrorEmail(null);
-    }
-    if (password === '') {
-      flag = false;
-      setErrorPassword('*Please enter password.');
-    } else {
-      setErrorPassword(null);
-    }
-    return flag;
-  };
-
-//   const getJwtAcces = async () => {
-//     try {
-//       const response = await fetch(API.BASE_URL + API.Jwt_TOKEN, {
-//         method: "POST",
-//         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-//         body: 'access_codename_jwt=GciOiJIUzI1NiJ9&access_codepass_jwt=bGciOiJIkUzI1NiJ9eyJpc3MiOiJrdGNhZG1pbiIsImF1ZCI62Fkb',
-//       });
-
-//       if (!response.ok) {
-//         throw new Error('Failed to fetch JWT');
-//       }
-
-//       const data = await response.json();
-//       if (data?.jwt) {
-//         setAccessToken(data.jwt);
-//       }
-//     } catch (error) {
-//       console.error('Error fetching JWT:', error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     getJwtAcces();
-//   }, []);
-
-//   const encryption = async (data) => {
-//     var CryptoJS = require("crypto-js");
-//     const ClientID = '!IV@_$2123456789';
-//     const Clientkey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
-//     const CryptoJsCI = CryptoJS.enc.Utf8.parse(ClientID);
-//     const CryptoJsCK = CryptoJS.enc.Utf8.parse(Clientkey);
-//     const EncryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), CryptoJsCK, {
-//       iv: CryptoJsCI,
-//       mode: CryptoJS.mode.CBC,
-//       padding: CryptoJS.pad.Pkcs7,
-//     });
-//     const Result = EncryptedData.ciphertext.toString(CryptoJS.enc.Base64);
-//     return Result;
-//   };
-
-//   const Submit = async () => {
-//     if (validate()) {
-//       const MyPayLod = {
-//         "email_id": email,
-//         "password": password,
-//         "type": Platform.OS === 'android' ? "GSM" : "FCM",
-//         "tokenid": await fun(),
-//       };
-//       console.log("hello-----------email========gjjhkhkhkhh=======", MyPayLod);
-//       const MyPayLoad = await encryption(MyPayLod);
-//       var details = {
-//         'request_data': MyPayLoad,
-//       };
-//       var formBody = [];
-//       for (var property in details) {
-//         var encodedKey = encodeURIComponent(property);
-//         var encodedValue = encodeURIComponent(details[property]);
-//         formBody.push(encodedKey + "=" + encodedValue);
-//       }
-//       formBody = formBody.join("&");
-
-//       let response = await fetch("https://web.gst.fleet.ktcindia.com/user_apis_encoded/userlogin.php", {
-//         method: "POST",
-//         body: formBody,
-//         headers: {
-//           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-//           'jwt': accessToken,
-//         },
-//       });
-
-//       let data = await response?.json();
-//       console.log("fdgddhgdkjd===============", data);
-//       if (data?.message === 'Password Not Match') {
-//         Toast.show({
-//           type: ALERT_TYPE.DANGER,
-//           title: data?.message,
-//         });
-//       }
-
-//       var CryptoJS = require("crypto-js");
-//       var data1 = data?.result;
-//       var rawData = CryptoJS.enc.Base64.parse(data1);
-//       var key1 = CryptoJS.enc.Latin1.parse("*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh");
-//       var iv1 = CryptoJS.enc.Latin1.parse("!IV@_$2123456789");
-//       var plaintextData = CryptoJS.AES.decrypt({ ciphertext: rawData }, key1, { iv: iv1 });
-//       var plaintext = plaintextData.toString(CryptoJS.enc.Utf8);
-//       var ValueText = JSON.parse(plaintext);
-//       console.log("plaintext==================", ValueText);
-
-//       if (data?.jwt) {
-//         setTimeout(async () => {
-//           await AsyncStorage.setItem('token', data?.jwt);
-//           dispatch(updateUserDetails({ isLoggedIn: ValueText?.status == 1, role: ValueText?.user_type }));
-//           console.log("ggggggg===========================", data?.jwt);
-//         }, 0);
-
-//         if (ValueText?.status == 0) {
-//           Alert.alert("Your Account Is Deactivated !", "Please Contact to KTC Admin", [
-//             { text: "OK", onPress: () => { navigation.navigate(SCREENS.MODULE_SELECTION) } },
-//           ]);
-//         }
-//       }
-
-//       if (response[KEYS.STATUS] === 200) {
-//         await SERVICE_REQUEST.setItem(KEYS.USER_ID, ValueText?.user_id);
-//         await SERVICE_REQUEST.setItem(KEYS.DATA, JSON.stringify(ValueText));
-//         navigation.navigate(SCREENS.HOME);
-//       } else {
-//         console.error("bvdfhbdfjkgrkthlpt================", response?.message);
-//       }
-//     }
-//   };
-
-//   const getToken = async () => {
-//     const token = await AsyncStorage.getItem("token");
-//   };
-
-//   useEffect(() => {
-//     getToken();
-//   }, []);
 
   return (
     <SafeAreaView>
       <View style={styles.mainContainer}>
-        <View style={styles.Email1}>
-          <View style={styles.Email2}>
-            <TextInput
-              style={styles.Text1}
-              editable={true}
-              value={email}
-              onChangeText={setEmail}
-              placeholder=" Email ID & Mobile no"
-              placeholderTextColor="#000"
-              keyboardType='email-address'
-              maxLength={80}
-            />
-          </View>
+        {/* Header */}
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Sign In</Text>
+          <TouchableOpacity>
+            <Text style={styles.skipText}>Skip</Text>
+          </TouchableOpacity>
         </View>
 
-        <View style={styles.password1}>
-          <View style={styles.password2}>
-            <TextInput
-              style={styles.Text2}
-              value={password}
-              secureTextEntry={securePassword ? false : true}
-              placeholder="Password"
-              placeholderTextColor="#212121"
-              onChangeText={(txt) => {
-                setPassword(txt), _PasswordValidate(txt);
-              }}
-            />
-            <View style={styles.eye}>
-              <TouchableOpacity onPress={() => setSecurePassword(!securePassword)}>
-                <View>
-                  {/* {securePassword ? (
-                    // <Image source={require('../../Assets/eye1.jpeg')} style={{ marginTop: 1, width: width / 15, height: 18 }} />
-                  ) : (
-                    // <Image source={require('../../Assets/eye1.jpeg')} style={{ marginTop: 1, width: width / 15, height: 18 }} />
-                  )} */}
+        {/* Formik Form */}
+        <Formik
+          initialValues={{ email: '', password: '' }}
+          validationSchema={validationSchema}
+          onSubmit={handleSignIn}
+        >
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            values,
+            errors,
+            touched,
+          }) => (
+            <>
+              {/* Email Input */}
+              <View style={styles.Email1}>
+                <View style={styles.Email2}>
+                  <TextInput
+                    style={styles.Text1}
+                    placeholder="Email ID & Mobile no"
+                    placeholderTextColor="#000"
+                    keyboardType="email-address"
+                    maxLength={80}
+                    onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')}
+                    value={values.email}
+                  />
+                </View>
+                {touched.email && errors.email && (
+                  <Text style={styles.errorText}>{errors.email}</Text>
+                )}
+              </View>
+
+              {/* Password Input */}
+              <View style={styles.password1}>
+                <View style={styles.password2}>
+                  <TextInput
+                    style={styles.Text2}
+                    secureTextEntry={!isPasswordVisible}
+                    placeholder="Password"
+                    placeholderTextColor="#212121"
+                    onChangeText={handleChange('password')}
+                    onBlur={handleBlur('password')}
+                    value={values.password}
+                  />
+                  {/* <TouchableOpacity
+                    style={styles.eye}
+                    onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+                  >
+                    <Icon
+                      name={isPasswordVisible ? 'eye' : 'eye-off'}
+                      size={30}
+                      color="#212121"
+                    />
+                  </TouchableOpacity> */}
+                </View>
+                {touched.password && errors.password && (
+                  <Text style={styles.errorText}>{errors.password}</Text>
+                )}
+              </View>
+
+              {/* Sign In Button */}
+              <TouchableOpacity onPress={handleSubmit}>
+                <View style={styles.buttonContainer}>
+                  <Text style={styles.buttonText}>Sign In</Text>
                 </View>
               </TouchableOpacity>
-            </View>
-          </View>
-          {errorPassword != null ? (
-            <View style={{ height: height * 0.03, width: width / 1.19, justifyContent: 'center', alignSelf: 'center' }}>
-              <Text style={{ color: 'red', fontSize: 12 }}>{errorPassword}</Text>
-            </View>
-          ) : null}
+            </>
+          )}
+        </Formik>
+
+        {/* Forgot Password */}
+        <View style={styles.forgot}>
+          <TouchableOpacity>
+            <Text style={styles.Text4}>Forgot Password?</Text>
+          </TouchableOpacity>
         </View>
 
+        {/* OR Divider */}
+        <View style={styles.divider}>
+          <View style={styles.line} />
+          <Text style={styles.orText}>OR</Text>
+          <View style={styles.line} />
+        </View>
+
+        {/* Create New Account */}
         <TouchableOpacity>
-          <View style={styles.submitButton}>
-            <Text style={styles.submitText}>SIGN IN</Text>
+          <View style={styles.Create}>
+            <Text style={styles.Text5}>Create New Account</Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -261,52 +137,140 @@ const SignInCorporate = (props) => {
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
-    justifyContent: 'center',
+    height: Dimensions.get('screen').height,
+    width: Dimensions.get('screen').width,
+    backgroundColor: '#F1F1F3',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#3C3567',
     alignItems: 'center',
+    paddingHorizontal: 25,
+    paddingVertical: 15, // Increased vertical padding for better balance
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  headerText: {
+    fontSize: 20, // Increased font size for prominence
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
+  skipText: {
+    fontSize: 16,
+    color: '#FFF',
   },
   Email1: {
-    marginBottom: 20,
+    marginTop: 30,
+    alignSelf: 'center',
   },
   Email2: {
-    width: width - 30,
-    backgroundColor: '#EDEDED',
-    borderRadius: 5,
-    padding: 10,
+    height: Dimensions.get('screen').height / 15,
+    width: Dimensions.get('screen').width / 1.1,
+    backgroundColor: '#FFF',
+    borderRadius: 8, // Rounded corners for a modern feel
+    marginBottom: 20, // Added margin for spacing between inputs
+    elevation: 2, // Added subtle shadow for depth
+    justifyContent: 'center',
+    paddingHorizontal: 15, // Padding for better input alignment
   },
   Text1: {
-    fontSize: 16,
+    height: Dimensions.get('screen').height / 15,
     color: '#212121',
+    fontSize: 16, // Slightly larger font for better readability
+    backgroundColor: '#FFF',
   },
   password1: {
-    marginBottom: 20,
+    marginTop: 30,
+    alignSelf: 'center',
   },
   password2: {
-    width: width - 30,
-    backgroundColor: '#EDEDED',
-    borderRadius: 5,
-    padding: 10,
-    position: 'relative',
+    height: Dimensions.get('screen').height / 15,
+    width: Dimensions.get('screen').width / 1.1,
+    backgroundColor: '#FFF',
+    borderRadius: 8, // Rounded corners
+    elevation: 2, // Added shadow
+    justifyContent: 'center',
+    paddingHorizontal: 15, // Added padding for consistency with email input
   },
   Text2: {
-    fontSize: 16,
+    height: Dimensions.get('screen').height / 15,
     color: '#212121',
+    fontSize: 16,
   },
   eye: {
     position: 'absolute',
-    right: 10,
-    top: 10,
+    top: '50%',
+    right: '8%',
+    transform: [{ translateY: -10 }],
   },
-  submitButton: {
-    backgroundColor: '#4CAF50',
-    paddingVertical: 15,
-    paddingHorizontal: 50,
-    borderRadius: 5,
+  buttonContainer: {
+    height: Dimensions.get('screen').height / 15,
+    width: Dimensions.get('screen').width / 1.1,
+    backgroundColor: '#3C3567',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 20,
+    elevation: 3, // Subtle elevation for a floating effect
   },
-  submitText: {
-    color: 'white',
-    fontSize: 18,
+  buttonText: {
+    color: '#FFF',
+    fontSize: 18, // Larger font size for prominence
+    fontWeight: 'bold',
+  },
+  forgot: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  Text4: {
+    color: '#3C3567',
+    fontSize: 16, // Increased font size for better readability
+  },
+  divider: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'gray',
+    marginHorizontal: 20,
+  },
+  orText: {
+    width: 50,
+    textAlign: 'center',
+    color: '#000',
+    fontSize: 14, // Adjusted size for balance
+  },
+  Create: {
+    height: Dimensions.get('screen').height / 13,
+    width: Dimensions.get('screen').width / 1.1,
+    backgroundColor: '#FFFFFF00',
+    borderRadius: 7,
+    marginTop: 20,
+    alignSelf: 'center',
+    borderWidth: 1,
+    justifyContent: 'center',
+    paddingVertical: 10, // Added vertical padding
+  },
+  Text5: {
+    alignSelf: 'center',
+    color: '#3C3567',
+    fontSize: 17,
+  },
+  errorText: {
+    color: 'red',
+    fontSize: 12,
+    marginLeft: 25,
+    marginTop: 5,
   },
 });
+
 
 export default SignInCorporate;
