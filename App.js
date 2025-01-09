@@ -7,6 +7,7 @@ import SignInCorporate from "./src/Screens/Auth/SignIn";
 import ForgotPassword from "./src/Screens/Auth/ForgotPassword";
 import {NavigationContainer} from '@react-navigation/native'
 import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import ForgotPasswordOTP from "./src/Screens/Auth/ForgotPasswordOTP";
 
 
 
