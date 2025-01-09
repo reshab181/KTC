@@ -13,13 +13,13 @@ const RegisterPOPUP = () => {
       <View
         style={{
           height: '100%',
-          backgroundColor: '#f5f5f5',
+          backgroundColor: '#F5F5F5',
           borderWidth: 1,
           borderColor: '#ddd',
           borderRadius: 10,
           padding: 20,
           shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
+          shadowOffset: { width: 0, height: 1},
           shadowOpacity: 0.2,
           shadowRadius: 5,
           elevation: 5,
