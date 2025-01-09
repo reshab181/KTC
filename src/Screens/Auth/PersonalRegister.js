@@ -45,7 +45,7 @@ const COLORS = {
     
 
 
-const Register = () => {
+const PersonalRegister = () => {
     const [date, setDate] = useState(new Date());
     const [openDate, setOpenDate] = useState(false);
     const [selectedGender, setSelectedGender] = useState('');
@@ -456,4 +456,4 @@ const styles = StyleSheet.create({
 
 
 
-export default Register;
+export default PersonalRegister;

@@ -7,9 +7,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import RegisterPOPUP from './RegisterPopUp';
+
+import { useNavigation } from '@react-navigation/native'; 
 
 const ModuleSelectionUI = () => {
+  const navigation = useNavigation(); 
+
+  const handleCorporatePress = () => {
+    navigation.navigate('RegisterPopUp'); 
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.mainContainer}>
@@ -17,7 +24,7 @@ const ModuleSelectionUI = () => {
           <Image resizeMode="contain" source={require('../../Assets/ktc.png')} />
         </View>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 15 }}>
-          <TouchableOpacity style={styles.moduleContainer} >
+          <TouchableOpacity style={styles.moduleContainer} onPress={handleCorporatePress}>
             <View style={styles.module}>
               <View style={styles.moduleHeader}>
                 <Text style={styles.CorporateText}>Corporate</Text>
@@ -78,7 +85,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 300,
     backgroundColor: '#fff',
-    borderRadius: 12,  
+   
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 6,
@@ -92,8 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#3C3567',
     justifyContent: 'center',
     alignItems: 'center',
-    borderTopLeftRadius: 12,  
-    borderTopRightRadius: 12,
+  
     paddingVertical: 15,  
   },
   moduleBody: {

@@ -8,6 +8,7 @@ import ForgotPassword from "./src/Screens/Auth/ForgotPassword";
 import {NavigationContainer} from '@react-navigation/native'
 import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import ForgotPasswordOTP from "./src/Screens/Auth/ForgotPasswordOTP";
+import PersonalRegister from "./src/Screens/Auth/PersonalRegister";
 
 
 
@@ -18,11 +19,13 @@ const App = ()=>{
     <NavigationContainer>
         <stack.Navigator initialRouteName="Splash">
         <stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-        <stack.Screen name="ModuleSelectionUI" component={ModuleSelectionUI} />
-        <stack.Screen name="RegisterPopUp" component={RegisterPOPUP} />
+        <stack.Screen name="ModuleSelectionUI" component={ModuleSelectionUI}options={{ headerShown: false }} />
+        <stack.Screen name="RegisterPopUp" component={RegisterPOPUP} options={{ headerShown: false }} />
         <stack.Screen name="RegisterPage" component={Register} />
       </stack.Navigator>
     </NavigationContainer>
+ 
+
 
     
    );
