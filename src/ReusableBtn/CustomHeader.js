@@ -17,20 +17,19 @@ function useStyles(){
     const { width: winwidth, height: winheight } = useWindowDimensions();
     return styles = StyleSheet.create({
         header: {
-          position: 'absolute', // Makes it stick to the top
+          position: 'absolute', 
           top: 0,
           left: 0,
-          width: winwidth, // Fixed width as per given properties
+          width: winwidth,
           height: 60,
           backgroundColor: '#3C3567',
-          justifyContent: 'center', // Center content vertically
-          alignItems: 'flex-start', // Center content horizontally
-          opacity: 1, // Fully visible
+          justifyContent: 'center',
+          alignItems: 'flex-start',
         },
         title: {
           fontSize: 20,
           marginStart : 16, 
-          color: '#FFFFFF', // Contrast text color
+          color: '#FFFFFF', 
           fontWeight: 'normal',
         },
       });
