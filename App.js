@@ -9,6 +9,8 @@ import {NavigationContainer} from '@react-navigation/native'
 import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import ForgotPasswordOTP from "./src/Screens/Auth/ForgotPasswordOTP";
 import PersonalRegister from "./src/Screens/Auth/PersonalRegister";
+import ResetPassword from "./src/Screens/Auth/ResetPassword";
+import CorporateModule1 from "./src/Screens/Pages/CorporateModule1";
 
 
 

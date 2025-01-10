@@ -36,8 +36,10 @@ const ForgotPasswordOTP = () => {
       </View>
 
       {/* Button Section */}
-      <CustomButton title="Next" />
-
+      <View style={styles.btn}>
+      <CustomButton title="Next" onPress={()=>console.warn("Clicked")} />
+      </View>
+  
       {/* Footer Text Section */}
       <View>
       <Text style={styles.footerText}>
@@ -59,13 +61,13 @@ function useStyles() {
 
   return StyleSheet.create({
     root: {
-      flex: 1,
-      backgroundColor: '#F1F1F3',
-      alignItems: 'center',
-      paddingTop: winheight * 0.1, 
+        flex: 1,
+        backgroundColor: '#F1F1F3',
+        alignItems: 'center', 
     },
     img: {
-      marginBottom: 24, 
+      marginTop : 47 ,
+      marginBottom: 32, 
       width: 122.1,
       height: 100,
       resizeMode: 'contain',
@@ -91,7 +93,7 @@ function useStyles() {
       height: 40,
       fontSize: 20,
       textAlign: 'center', 
-      borderBottomWidth: 2,
+      borderBottomWidth: 1,
       borderBottomColor: '#1C4096',
       backgroundColor: '#F1F1F3',
     },
@@ -106,6 +108,9 @@ function useStyles() {
         textAlign :'center',
         color: '#212121', 
         opacity : 0.54 
+    },
+    btn: {
+        width: winwidth*0.90
     }
   });
 }
