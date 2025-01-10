@@ -31,10 +31,10 @@ function useStyles(){
           alignItems: 'flex-start',
         },
         title: {
-          fontSize: 20,
+          fontSize: 24,
           marginStart : 16, 
           color: '#FFFFFF', 
-          fontWeight: 'normal',
+          fontWeight: '600',
         },
         icon : {
             height: 30 , 

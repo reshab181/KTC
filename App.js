@@ -11,6 +11,7 @@ import ForgotPasswordOTP from "./src/Screens/Auth/ForgotPasswordOTP";
 import PersonalRegister from "./src/Screens/Auth/PersonalRegister";
 import ResetPassword from "./src/Screens/Auth/ResetPassword";
 import CorporateModule1 from "./src/Screens/Pages/CorporateModule1";
+import Profile from "./src/Screens/Basic/Profile";
 
 
 
@@ -26,7 +27,7 @@ const App = ()=>{
         <stack.Screen name="RegisterPage" component={Register} />
       </stack.Navigator>
     </NavigationContainer>
- 
+//  <Register/>
 
 
     
