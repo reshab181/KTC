@@ -26,8 +26,8 @@ const App = ()=>{
         <stack.Screen name="RegisterPage" component={Register} />
       </stack.Navigator>
     </NavigationContainer>
- 
 
+    // <RegisterPOPUP/>
 
     
    );
