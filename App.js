@@ -5,6 +5,8 @@ import RegisterPOPUP from "./src/Screens/Auth/RegisterPopUp";
 import Register from "./src/Screens/Auth/Register";
 import SignInCorporate from "./src/Screens/Auth/SignIn";
 import ForgotPasswordOTP from "./src/Screens/Auth/ForgotPasswordOTP";
+import ResetPassword from "./src/Screens/Auth/ResetPassword";
+import CorporateModule1 from "./src/Screens/Pages/CorporateModule1";
 
 
 
@@ -17,7 +19,9 @@ const App = ()=>{
     // <RegisterPOPUP/>
   //  <Register/>
     // <SignInCorporate/>
-    <ForgotPasswordOTP/>
+    // <ForgotPasswordOTP/>
+    // <ResetPassword />
+    <CorporateModule1/>
    );
 }
  

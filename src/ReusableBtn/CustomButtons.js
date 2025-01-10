@@ -1,9 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
-const CustomButton = ({ title, onPress }) => {
+const CustomButton = ({ title, onPress ,widthSize = "100%", borderRadius }) => {
+    const widthsize = widthSize;
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity 
+    style={[styles.button, { width: widthSize }]} 
+    onPress={onPress}>
       <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>
   );
@@ -11,13 +14,8 @@ const CustomButton = ({ title, onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    position: 'absolute', // To apply `top` and `left`
-    top: 340,
-    left: 16,
-    width: 328,
+    marginTop : 32 , 
     height: 48,
-    marginTop : 37 ,
-    marginStart : 16,  
     backgroundColor: '#3C3567',
     borderRadius: 4,
     justifyContent: 'center', // Center text vertically
