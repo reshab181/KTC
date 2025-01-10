@@ -319,18 +319,19 @@ const styles = StyleSheet.create({
     },
     formContainer: {
         paddingBottom: 10,
+        backgroundColor: '#F2F2F2',
     },
-    inputWrapper: {
-        height: height / 15,
-        width: width - 40,
-        marginTop: 16,
-        alignSelf: 'center',
-        backgroundColor: COLORS.white,
-        borderRadius: 8,
-        justifyContent: 'center',
-        paddingHorizontal: 15,
-        elevation: 2,
-    },
+    // inputWrapper: {
+    //     height: height / 15.5,
+    //     width: width - 40,
+    //     marginTop: 10,
+    //     alignSelf: 'center',
+    //     backgroundColor: COLORS.white,
+    //     borderRadius: 8,
+    //     justifyContent: 'center',
+    //     paddingHorizontal: 15,
+    //     elevation: 2,
+    // },
     emailInput: {
         height: 48,
         fontSize: 16,
@@ -338,14 +339,14 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
     },
     inputContainer: {
-        height: height / 15,
+        height: height / 15.5,
         width: width - 40,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: COLORS.white,
         marginTop: 15,
         borderRadius: 8,
-        elevation: 2,
+
         paddingHorizontal: 15,
     },
     iconContainer: {
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
         paddingLeft: 12,
     },
     phoneContainer: {
-        height: height / 15,
+        height: height / 15.5,
         width: width - 40,
         flexDirection: 'row',
         alignItems: 'center',
@@ -391,24 +392,24 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
     },
     genderContainer: {
-        height: height / 15,
+        height: height / 15.5,
         width: width - 40,
         marginTop: 20,
         alignSelf: 'center',
         backgroundColor: COLORS.white,
         borderRadius: 8,
         flexDirection: 'row',
-        elevation: 2,
+    
     },
     countryContainer: {
-        height: height / 15,
+        height: height / 15.5,
         width: width - 40,
         marginTop: 20,
         alignSelf: 'center',
         backgroundColor: COLORS.white,
         borderRadius: 8,
         flexDirection: 'row',
-        elevation: 2,
+   
     },
     selectionIcon: {
         marginTop: 15,
@@ -418,8 +419,9 @@ const styles = StyleSheet.create({
     },
     radioContainer: {
         flexDirection: 'row',
+        justifyContent:'center',
         alignItems: 'center',
-        marginLeft: 20,
+     
         flex: 1,
     },
     radioOption: {

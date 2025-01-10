@@ -25,9 +25,11 @@ const App = ()=>{
         <stack.Screen name="ModuleSelectionUI" component={ModuleSelectionUI}options={{ headerShown: false }} />
         <stack.Screen name="RegisterPopUp" component={RegisterPOPUP} options={{ headerShown: false }} />
         <stack.Screen name="RegisterPage" component={Register} />
+        <stack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
+
       </stack.Navigator>
     </NavigationContainer>
-//  <Register/>
+
 
 
     

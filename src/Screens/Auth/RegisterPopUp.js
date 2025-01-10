@@ -195,30 +195,34 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 15,
     marginVertical: height / 4,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F2F2F2',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
     backgroundColor: '#3C3567',
-    padding: 10,
-    borderRadius: 5,
+    alignItems: 'center',
+    paddingHorizontal: 25,
+    paddingVertical: 15, // Increased vertical padding for better balance
+    shadowColor: '#000', 
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
   },
   headerText: {
     color: '#FFFFFF',
     fontSize: 20,
     textAlign: 'center',
+    fontWeight:'600'
   },
   instruction: {
     color: '#212121',
     fontSize: 17,
     marginTop: 20,
+    marginLeft:5
   },
-  inputContainer: {
-    marginTop: 20,
-    borderWidth: 1,
-  },
+ 
   errorText: {
     color: 'red',
     fontSize: 12,
