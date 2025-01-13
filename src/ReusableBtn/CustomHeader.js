@@ -1,18 +1,16 @@
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
-import { StyleSheet, Text, View , Image} from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import Backarrow from '../Assets/backarrow';
 
-const CustomHeader = ({ title, islogo =false , imgPath , iconPath}) => {
-    const useStyle = useStyles() ;
+const CustomHeader = ({ title, imgPath, iconPath, iconHeight, iconWidth }) => {
+  const styles = useStyles();
   return (
     <View style={styles.header}>
-        {
-            islogo ? <View style={{flexDirection: "row"}}>
-             <Image source={iconPath} style={styles.icon}/>
-             <Image source={imgPath} style={styles.img}/>
-            </View>: <Text style={styles.title}>{title}</Text>
-        }
-      
+        {iconPath ? <Image source={iconPath} style={[styles.icon,{height: iconHeight,width: iconWidth}]} /> : null}
+        {imgPath ? <Image source={imgPath} style={styles.img} /> : null}
+      <Text style={styles.title}>{title}</Text>
+
     </View>
   );
 };
@@ -27,6 +25,7 @@ function useStyles(){
           width: winwidth, // Fixed width as per given properties
           height: 60,
           backgroundColor: '#3C3567',
+          flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'flex-start',
         },
@@ -41,11 +40,11 @@ function useStyles(){
             width: 36, 
             marginStart : 10
 
-        },
-        img: {
-            height: 27, 
-            width: 69, 
-            marginStart: 20, 
-        }
-      });
+    },
+    img: {
+      height: 27,
+      width: 69,
+      marginStart: 20,
+    }
+  });
 }
