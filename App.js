@@ -11,6 +11,11 @@ import ForgotPasswordOTP from "./src/Screens/Auth/ForgotPasswordOTP";
 import PersonalRegister from "./src/Screens/Auth/PersonalRegister";
 import ResetPassword from "./src/Screens/Auth/ResetPassword";
 import CorporateModule1 from "./src/Screens/Pages/CorporateModule1";
+import PickUpLocation from "./src/Screens/Pages/PickUpLocation";
+import HomeScreen1 from "./src/Screens/Pages/HomeScreen1";
+import CarGroup from "./src/Screens/Pages/CarGroup";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import CarSelection from "./src/Screens/Pages/CarSelection";
 
 
 
@@ -18,16 +23,24 @@ import CorporateModule1 from "./src/Screens/Pages/CorporateModule1";
 const stack=createNativeStackNavigator()
 const App = ()=>{
   return ( 
-    <NavigationContainer>
-        <stack.Navigator initialRouteName="Splash">
-        <stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-        <stack.Screen name="ModuleSelectionUI" component={ModuleSelectionUI}options={{ headerShown: false }} />
-        <stack.Screen name="RegisterPopUp" component={RegisterPOPUP} options={{ headerShown: false }} />
-        <stack.Screen name="RegisterPage" component={Register} />
-      </stack.Navigator>
-    </NavigationContainer>
-
-    // <RegisterPOPUP/>
+    // <NavigationContainer>
+    //     <stack.Navigator initialRouteName="Splash">
+    //     <stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+    //     <stack.Screen name="ModuleSelectionUI" component={ModuleSelectionUI}options={{ headerShown: false }} />
+    //     <stack.Screen name="RegisterPopUp" component={RegisterPOPUP} options={{ headerShown: false }} />
+    //     <stack.Screen name="RegisterPage" component={Register} />
+    //   </stack.Navigator>
+    // </NavigationContainer>
+    // <Register/>
+    // <CorporateModule1/>
+    // <CorporateModule1/>
+    // <PickUpLocation/>
+    <GestureHandlerRootView>
+        {/* <HomeScreen1/> */}
+        {/* <CarGroup/> */}
+        <CarSelection/>
+    </GestureHandlerRootView>
+    // <CarGroup/>
 
     
    );

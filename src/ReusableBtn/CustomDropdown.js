@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown'; // Ensure you have this package installed.
 
@@ -8,20 +8,29 @@ const CustomDropdown = ({
   searchPlaceholder, 
   labelField = 'label', 
   valueField = 'value', 
-  onChange 
+  onChange,
+  openOnLoad = false,  // Control if the dropdown should be open on load
+  showSearch = false,  // Control if the search box should be visible or not
 }) => {
   const [isFocus, setIsFocus] = useState(false);
   const [value, setValue] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);  // To track dropdown open state
+
+  // Open or close the dropdown based on openOnLoad prop
+  useEffect(() => {
+    setIsOpen(openOnLoad);
+  }, [openOnLoad]);
 
   return (
     <Dropdown
       style={[styles.dropdown, isFocus && { borderColor: 'blue' }]}
+      containerStyle={{zIndex:0}}
       placeholderStyle={styles.placeholderStyle}
       selectedTextStyle={styles.selectedTextStyle}
       inputSearchStyle={styles.inputSearchStyle}
       iconStyle={styles.iconStyle}
       data={data}
-      search
+      search={showSearch}  // Conditionally show/hide the search input
       maxHeight={300}
       labelField={labelField}
       valueField={valueField}
@@ -37,14 +46,17 @@ const CustomDropdown = ({
           onChange(item);
         }
       }}
+      // Automatically open or close the dropdown based on isOpen state
+      isOpen={isOpen}
+      onOpen={() => setIsOpen(true)}
+      onClose={() => setIsOpen(false)}
     />
   );
 };
 
 const styles = StyleSheet.create({
   dropdown: {
-    marginTop: 12 ,
-    marginHorizontal: 12 , 
+    marginTop: 12,
     height: 48,
     borderColor: '#E5E5E5',
     borderWidth: 1,

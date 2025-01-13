@@ -5,6 +5,10 @@ import { useWindowDimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import CustomDropdown from '../../ReusableBtn/CustomDropdown';
+import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import CustomCalender from '../../ReusableBtn/CustomCalender';
+import CustomButton from '../../ReusableBtn/CustomButtons';
 
 const data = [
     { label: 'Item 1', value: '1' },
@@ -51,31 +55,33 @@ const CorporateModule1 = () => {
     return (
         <ScrollView>
             <View style={styles.root}>
-                <CustomHeader islogo={true} imgPath={require('../../Assets/ktclogo.png')} iconPath={require('../../Assets/menuu.png')} />
+                <CustomHeader iconHeight={30} iconWidth={39} islogo={true} imgPath={require('../../Assets/ktclogo.png')} iconPath={require('../../Assets/menuu.png')} />
                 <View style={styles.container}>
                     <View>
                         <View style={styles.container1}>
                             <Text style={styles.txt}>Car Reservation Details</Text>
                         </View>
-                        <View style={[styles.container2, {height: 196}]}>
-                            <CustomDropdown
-                                data={cityData}
-                                placeholder="City"
-                                searchPlaceholder="Search City..."
-                                onChange={(item) => console.log('Selected City:', item)}
-                            />
-                            <CustomDropdown
-                                data={rentalTypeData}
-                                placeholder="Rental Type"
-                                searchPlaceholder="Search Rental Type..."
-                                onChange={(item) => console.log('Selected Rental Type:', item)}
-                            />
-                            <CustomDropdown
-                                data={carGroupData}
-                                placeholder="Car Groups"
-                                searchPlaceholder="Search Car Group..."
-                                onChange={(item) => console.log('Selected Car Group:', item)}
-                            />
+                        <View style={[styles.container2, { height: 196 }]}>
+                            <View style={{ marginHorizontal: 10 }}>
+                                <CustomDropdown
+                                    data={cityData}
+                                    placeholder="City"
+                                    searchPlaceholder="Search City..."
+                                    onChange={(item) => console.log('Selected City:', item)}
+                                />
+                                <CustomDropdown
+                                    data={rentalTypeData}
+                                    placeholder="Rental Type"
+                                    searchPlaceholder="Search Rental Type..."
+                                    onChange={(item) => console.log('Selected Rental Type:', item)}
+                                />
+                                <CustomDropdown
+                                    data={carGroupData}
+                                    placeholder="Car Groups"
+                                    searchPlaceholder="Search Car Group..."
+                                    onChange={(item) => console.log('Selected Car Group:', item)}
+                                />
+                            </View>
                         </View>
                     </View>
 
@@ -85,29 +91,44 @@ const CorporateModule1 = () => {
                         <View style={styles.container1}>
                             <Text style={styles.txt}>Car Reporting Details</Text>
                         </View>
-                        <View style={[styles.container2, {height: 407}]}>
+                        <View style={{ backgroundColor: "#FFFFFF" }}>
+                            <CustomCalender />
+                        </View>
+                        <View style={[styles.container2, { height: 140 }]}>
+                            <View style={{marginHorizontal:  10}}>
                             <CustomDropdown
                                 data={cityData}
-                                placeholder="City"
+                                placeholder="Pickup Address"
                                 searchPlaceholder="Search City..."
                                 onChange={(item) => console.log('Selected City:', item)}
                             />
-                            <CustomDropdown
-                                data={rentalTypeData}
-                                placeholder="Rental Type"
-                                searchPlaceholder="Search Rental Type..."
-                                onChange={(item) => console.log('Selected Rental Type:', item)}
-                            />
-                            <CustomDropdown
-                                data={carGroupData}
-                                placeholder="Car Groups"
-                                searchPlaceholder="Search Car Group..."
-                                onChange={(item) => console.log('Selected Car Group:', item)}
-                            />
+                            <CustomTextInpt placeholder={"Reporting Landmark (Optional)"} />
+                            </View>
                         </View>
                     </View>
 
                 </View>
+                <View style={styles.container}>
+                    <View>
+                        <View style={styles.container1}>
+                            <Text style={styles.txt}>Other Information</Text>
+                        </View>
+                        <View style={[styles.container2, { height: 208 }]}>
+                           <View style={{marginHorizontal:  10}}>
+                           <CustomTextInpt placeholder={"Flight/Train info"} />
+                            <CustomTextInpt placeholder={"Special Instruction (Optional)"} />
+                            <CustomDropdown
+                                data={cityData}
+                                placeholder="Payment Mode"
+                                searchPlaceholder="Search City..."
+                                onChange={(item) => console.log('Selected City:', item)}
+                            />
+                           </View>
+                        </View>
+                    </View>
+
+                </View>
+                <CustomButton title={"Next"} borderRadius={0} />
             </View>
         </ScrollView>
     )
@@ -124,8 +145,8 @@ function useStyles() {
         container: {
             // position: "relative",
             margin: 16,
-            backgroundColor: "#F1F1F3", 
-            elevation: 5 , 
+            backgroundColor: "#F1F1F3",
+            elevation: 5,
         },
         container1: {
             height: 32,
