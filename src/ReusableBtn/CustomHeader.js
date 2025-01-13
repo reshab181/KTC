@@ -17,26 +17,28 @@ const CustomHeader = ({ title, imgPath, iconPath, iconHeight, iconWidth }) => {
 
 export default CustomHeader;
 
-function useStyles() {
-  const { width: winwidth, height: winheight } = useWindowDimensions();
-  return styles = StyleSheet.create({
-    header: {
-      width: winwidth,
-      height: 60,
-      flexDirection: 'row',
-      backgroundColor: '#3C3567',
-      opacity: 1, // Fully visible
-      alignItems: 'center'
-    },
-    title: {
-      fontSize: 20,
-      marginStart: 16,
-      color: '#FFFFFF', 
-      fontWeight: 'normal',
-    },
-    icon: {
-   
-      marginStart: 10
+function useStyles(){
+    const { width: winwidth, height: winheight } = useWindowDimensions();
+    return styles = StyleSheet.create({
+        header: {
+        //   position: 'absolute', // Makes it stick to the top
+          width: winwidth, // Fixed width as per given properties
+          height: 60,
+          backgroundColor: '#3C3567',
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'flex-start',
+        },
+        title: {
+          fontSize: 24,
+          marginStart : 16, 
+          color: '#FFFFFF', 
+          fontWeight: '600',
+        },
+        icon : {
+            height: 30 , 
+            width: 36, 
+            marginStart : 10
 
     },
     img: {

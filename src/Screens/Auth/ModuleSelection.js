@@ -14,6 +14,7 @@ const ModuleSelectionUI = () => {
   const navigation = useNavigation(); 
 
   const handleCorporatePress = () => {
+    console.log("Clicked corporate")
     navigation.navigate('RegisterPopUp'); 
   };
 
@@ -83,8 +84,8 @@ const styles = StyleSheet.create({
   },
   module: {
     width: '100%',
-    height: 300,
-    backgroundColor: '#fff',
+    height: 220,
+    backgroundColor: '#F2F2F2',
    
     shadowColor: '#000',
     shadowOpacity: 0.1,
@@ -110,16 +111,17 @@ const styles = StyleSheet.create({
   },
   CorporateText: {
     color: '#FFFFFF',
-    fontSize: 26,  
-    fontWeight: 'bold',
+    fontSize: 20,  
+    fontWeight: '600',
     textAlign: 'center', 
   },
   ChauffeurText: {
     color: '#212121',
-    fontSize: 18, 
+    fontSize: 20, 
     marginTop: 20,
+    fontWeight: '600',
     textAlign: 'center',
-    lineHeight: 24, 
-    paddingHorizontal: 20, 
+
+
   },
 });

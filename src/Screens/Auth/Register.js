@@ -4,7 +4,7 @@ import {
     View,
     Text,
     StyleSheet,
-    TextInput,
+  
     ScrollView,
     Image,
     TouchableOpacity,
@@ -12,9 +12,11 @@ import {
 } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import DatePicker from 'react-native-date-picker';
-import { Formik } from 'formik';  
-import * as Yup from 'yup'; 
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 import CustomHeader from '../../ReusableBtn/CustomHeader';
+import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
+import CustomButton from '../../ReusableBtn/CustomButtons';
 
 const { height, width } = Dimensions.get('window');
 
@@ -30,19 +32,19 @@ const COLORS = {
 
 // Validation schema using Yup
 
-    const validationSchema = Yup.object().shape({
-        email: Yup.string().email('Invalid email address').required('Email is required'),
-        firstName: Yup.string().required('First Name is required'),
-        lastName: Yup.string().required('Last Name is required'),
-        password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
-        confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Confirm Password is required'),
-        phone: Yup.string().length(10, 'Phone number must be 10 digits').required('Phone number is required'),
-        alternatePhone: Yup.string().length(10, 'Alternate phone number must be 10 digits').required('Alternate phone number is required'),
-        dob: Yup.date().required('Date of birth is required').nullable().max(new Date(), 'Date of birth cannot be in the future'),
-        gender: Yup.string().oneOf(['Male', 'Female', 'Other'], 'Invalid gender').required('Gender is required'),
-        country: Yup.string().required('Country is required'),
-    });
-    
+const validationSchema = Yup.object().shape({
+    email: Yup.string().email('Invalid email address').required('Email is required'),
+    firstName: Yup.string().required('First Name is required'),
+    lastName: Yup.string().required('Last Name is required'),
+    password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+    confirmPassword: Yup.string().oneOf([Yup.ref('password'), null], 'Passwords must match').required('Confirm Password is required'),
+    phone: Yup.string().length(10, 'Phone number must be 10 digits').required('Phone number is required'),
+    alternatePhone: Yup.string().length(10, 'Alternate phone number must be 10 digits').required('Alternate phone number is required'),
+    dob: Yup.date().required('Date of birth is required').nullable().max(new Date(), 'Date of birth cannot be in the future'),
+    gender: Yup.string().oneOf(['Male', 'Female', 'Other'], 'Invalid gender').required('Gender is required'),
+    country: Yup.string().required('Country is required'),
+});
+
 
 
 const Register = () => {
@@ -55,24 +57,24 @@ const Register = () => {
         <SafeAreaView style={styles.mainContainer}>
             {/* Header Section */}
             <View style={styles.header}>
-                <CustomHeader title={"Register"}/>
+                <CustomHeader title={"Register"} />
             </View>
 
             <View style={styles.scrollContainer}>
                 <ScrollView showsVerticalScrollIndicator={false}>
                     <Formik
-                      initialValues={{
-                        email: '',
-                        firstName: '',
-                        lastName: '',
-                        password: '',
-                        confirmPassword: '',
-                        phone: '',
-                        alternatePhone: '',
-                        dob: '', 
-                        gender: '', 
-                        country: '', 
-                    }}
+                        initialValues={{
+                            email: '',
+                            firstName: '',
+                            lastName: '',
+                            password: '',
+                            confirmPassword: '',
+                            phone: '',
+                            alternatePhone: '',
+                            dob: '',
+                            gender: '',
+                            country: '',
+                        }}
                         validationSchema={validationSchema}
                         onSubmit={(values) => {
                             console.log(values);
@@ -82,7 +84,7 @@ const Register = () => {
                             <View style={styles.formContainer}>
                                 {/* Email Input */}
                                 <View style={styles.inputWrapper}>
-                                    <TextInput
+                                    <CustomTextInpt
                                         style={styles.emailInput}
                                         placeholder="Official Email ID"
                                         placeholderTextColor={COLORS.placeholder}
@@ -106,7 +108,7 @@ const Register = () => {
                                                 style={styles.icon}
                                             />
                                         </View>
-                                        <TextInput
+                                        <CustomTextInpt
                                             style={styles.input}
                                             placeholder={field === 'firstName' ? 'First Name' : 'Last Name'}
                                             placeholderTextColor={COLORS.placeholder}
@@ -130,7 +132,7 @@ const Register = () => {
                                                 style={styles.icon}
                                             />
                                         </View>
-                                        <TextInput
+                                        <CustomTextInpt
                                             style={styles.input}
                                             placeholder={field === 'password' ? 'Password' : 'Confirm Password'}
                                             placeholderTextColor={COLORS.placeholder}
@@ -155,7 +157,7 @@ const Register = () => {
                                                 style={styles.icon}
                                             />
                                         </View>
-                                        <TextInput
+                                        <CustomTextInpt
                                             style={styles.input}
                                             placeholder="YYYY/MM/DD"
                                             placeholderTextColor={COLORS.placeholder}
@@ -176,9 +178,9 @@ const Register = () => {
                                         />
                                     </View>
                                     <View style={styles.countryCode}>
-                                        <Text style={styles. countryCodeText}>+91</Text>
+                                        <Text style={styles.countryCodeText}>+91</Text>
                                     </View>
-                                    <TextInput
+                                    <CustomTextInpt
                                         style={styles.input}
                                         placeholder="Mobile Number"
                                         placeholderTextColor={COLORS.placeholder}
@@ -202,9 +204,9 @@ const Register = () => {
                                         />
                                     </View>
                                     <View style={styles.countryCode}>
-                                    <Text style={styles. countryCodeText}>+91</Text>
+                                        <Text style={styles.countryCodeText}>+91</Text>
                                     </View>
-                                    <TextInput
+                                    <CustomTextInpt
                                         style={styles.input}
                                         placeholder="Alternate Mobile Number"
                                         placeholderTextColor={COLORS.placeholder}
@@ -263,10 +265,12 @@ const Register = () => {
                                     </View>
                                 </View>
 
-                                {/* Sign Up Button */}
-                                <TouchableOpacity style={styles.signUpButton} onPress={handleSubmit}>
-                                    <Text style={styles.signUpButtonText}>Sign Up</Text>
-                                </TouchableOpacity>
+                                <CustomButton
+                                    title="Sign Up"
+                                    onPress={handleSubmit}
+                                    widthSize="100%"
+
+                                />
                             </View>
                         )}
                     </Formik>
@@ -300,52 +304,49 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.primary,
         alignItems: 'center',
         paddingHorizontal: 25,
-        paddingVertical: 20,
+        paddingVertical: 10,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 3 },
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 5,
     },
-    headerText: {
-        fontSize: 22,
-        color: COLORS.white,
-        fontWeight: 'bold',
-    },
+    
     scrollContainer: {
         flex: 1,
-        marginTop: 20,
+        marginTop: 10,
         paddingHorizontal: 20,
     },
     formContainer: {
-        paddingBottom: 20,
+        paddingBottom: 10,
+        backgroundColor: '#F2F2F2',
     },
-    inputWrapper: {
-        height: height / 15,
-        width: width - 40,
-        marginTop: 25,
-        alignSelf: 'center',
-        backgroundColor: COLORS.white,
-        borderRadius: 8,
-        justifyContent: 'center',
-        paddingHorizontal: 15,
-        elevation: 2,
-    },
+    // inputWrapper: {
+    //     height: height / 15.5,
+    //     width: width - 40,
+    //     marginTop: 10,
+    //     alignSelf: 'center',
+    //     backgroundColor: COLORS.white,
+    //     borderRadius: 8,
+    //     justifyContent: 'center',
+    //     paddingHorizontal: 15,
+    //     elevation: 2,
+    // },
     emailInput: {
-        height: height / 15,
+        height: 48,
         fontSize: 16,
         color: COLORS.text,
         textAlignVertical: 'center',
     },
     inputContainer: {
-        height: height / 15,
+        height: height / 15.5,
         width: width - 40,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: COLORS.white,
         marginTop: 15,
         borderRadius: 8,
-        elevation: 2,
+
         paddingHorizontal: 15,
     },
     iconContainer: {
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
         paddingLeft: 12,
     },
     phoneContainer: {
-        height: height / 15,
+        height: height / 15.5,
         width: width - 40,
         flexDirection: 'row',
         alignItems: 'center',
@@ -391,24 +392,24 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
     },
     genderContainer: {
-        height: height / 15,
+        height: height / 15.5,
         width: width - 40,
         marginTop: 20,
         alignSelf: 'center',
         backgroundColor: COLORS.white,
         borderRadius: 8,
         flexDirection: 'row',
-        elevation: 2,
+    
     },
     countryContainer: {
-        height: height / 15,
+        height: height / 15.5,
         width: width - 40,
         marginTop: 20,
         alignSelf: 'center',
         backgroundColor: COLORS.white,
         borderRadius: 8,
         flexDirection: 'row',
-        elevation: 2,
+   
     },
     selectionIcon: {
         marginTop: 15,
@@ -418,8 +419,9 @@ const styles = StyleSheet.create({
     },
     radioContainer: {
         flexDirection: 'row',
+        justifyContent:'center',
         alignItems: 'center',
-        marginLeft: 20,
+     
         flex: 1,
     },
     radioOption: {
@@ -437,21 +439,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 5,
     },
-    signUpButton: {
-        height: 50,
-        width: width - 40,
-        backgroundColor: COLORS.primary,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 8,
-        marginTop: 20,
-        elevation: 3,
-    },
-    signUpButtonText: {
-        color: COLORS.white,
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
+  
 });
 
 

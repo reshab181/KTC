@@ -17,14 +17,17 @@ const styles = StyleSheet.create({
     marginTop : 32 , 
     height: 48,
     backgroundColor: '#3C3567',
+    borderRadius: 4,
+    justifyContent: 'center', 
+    alignItems: 'center', 
     // borderRadius: 4,
     justifyContent: 'center', // Center text vertically
     alignItems: 'center', // Center text horizontally
     opacity: 1,
   },
   buttonText: {
-    color: '#FFFFFF', // Button text color
-    fontSize: 16,
+    color: '#FFFFFF', 
+    fontSize: 18,
     fontWeight: '600',
   },
 });
