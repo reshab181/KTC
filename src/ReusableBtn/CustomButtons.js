@@ -5,7 +5,7 @@ const CustomButton = ({ title, onPress ,widthSize = "100%", borderRadius }) => {
     const widthsize = widthSize;
   return (
     <TouchableOpacity 
-    style={[styles.button, { width: widthSize }]} 
+    style={[styles.button, { width: widthSize , borderRadius: borderRadius}]} 
     onPress={onPress}>
       <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>

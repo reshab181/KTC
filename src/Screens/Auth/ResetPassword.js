@@ -51,8 +51,8 @@ function useStyles() {
     },
     content: {
       marginTop: 24,
-      marginStart : 10 ,  // Push content below the header (header height is 80px)
-      paddingHorizontal: 16, // Add some horizontal padding
+      marginStart : 10 ,  
+      paddingHorizontal: 16, 
     },
   });
 }

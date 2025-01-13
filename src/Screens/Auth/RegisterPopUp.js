@@ -167,7 +167,7 @@ const RegisterPOPUP = () => {
                 title="Submit" 
                 onPress={handleSubmit} 
                 widthSize="100%" 
-                borderRadius={5} 
+                borderRadius={0} 
                 loading={loader}
               />
             </View>
@@ -187,15 +187,15 @@ const styles = StyleSheet.create({
     padding: 20,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
+    shadowOpacity: 1,
     shadowRadius: 8,
-    elevation: 5,
   },
   formContainer: {
     width: '100%',
-    padding: 15,
+    // padding: 15,
     marginVertical: height / 4,
     backgroundColor: '#F2F2F2',
+    elevation: 5,
   },
   header: {
     flexDirection: 'row',
