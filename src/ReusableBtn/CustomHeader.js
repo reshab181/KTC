@@ -1,7 +1,6 @@
 import React from 'react';
 import { useWindowDimensions } from 'react-native';
 import { StyleSheet, Text, View, Image } from 'react-native';
-import Backarrow from '../Assets/backarrow';
 
 const CustomHeader = ({ title, imgPath, iconPath, iconHeight, iconWidth }) => {
   const styles = useStyles();

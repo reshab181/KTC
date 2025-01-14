@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 const CustomButton = ({ title, onPress ,widthSize = "100%", borderRadius = 4}) => {
-    const widthsize = widthSize;
+  
   return (
     <TouchableOpacity 
     style={[styles.button, { width: widthSize , borderRadius : borderRadius}]} 

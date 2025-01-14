@@ -5,8 +5,8 @@ import RegisterPOPUP from "./src/Screens/Auth/RegisterPopUp";
 import Register from "./src/Screens/Auth/Register";
 import SignInCorporate from "./src/Screens/Auth/SignIn";
 import ForgotPassword from "./src/Screens/Auth/ForgotPassword";
-import {NavigationContainer} from '@react-navigation/native'
-import {createNativeStackNavigator} from '@react-navigation/native-stack'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ForgotPasswordOTP from "./src/Screens/Auth/ForgotPasswordOTP";
 import PersonalRegister from "./src/Screens/Auth/PersonalRegister";
 import ResetPassword from "./src/Screens/Auth/ResetPassword";
@@ -17,46 +17,68 @@ import HomeScreen1 from "./src/Screens/Pages/HomeScreen1";
 import CarGroup from "./src/Screens/Pages/CarGroup";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CarSelection from "./src/Screens/Pages/CarSelection";
+import OTPRegister from "./src/Screens/Auth/OtpRegister";
+
+
+const Stack = createNativeStackNavigator();
 
 
 
+const App = () => {
+  return (
+    <GestureHandlerRootView>
+      <NavigationContainer>
+      <Stack.Navigator initialRouteName="Splash">
+        {/* Splash Screen */}
+        <Stack.Screen
+          name="Splash"
+          component={Splash}
+          options={{ headerShown: false }}
+        />
 
-const stack=createNativeStackNavigator()
-const App = ()=>{
-  return ( 
-    <NavigationContainer>
-        <stack.Navigator initialRouteName="Splash">
-        <stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-        <stack.Screen name="ModuleSelectionUI" component={ModuleSelectionUI}options={{ headerShown: false }} />
-        <stack.Screen name="RegisterPopUp" component={RegisterPOPUP} options={{ headerShown: false }} />
-        <stack.Screen name="RegisterPage" component={Register} />
-        <stack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
+        {/* Module Selection Screen */}
+        <Stack.Screen
+          name="ModuleSelectionUI"
+          component={ModuleSelectionUI}
+          options={{ headerShown: false }}
+        />
 
-      </stack.Navigator>
+
+        <Stack.Screen
+          name="SignInCorporate"
+          component={SignInCorporate}  
+          options={{ headerShown: false }}
+        />
+          <Stack.Screen 
+        name="RegisterPOPUP" 
+        component={RegisterPOPUP} 
+        options={{
+          presentation: 'modal',
+          headerShown: false,
+        }} 
+      />
+
+        {/* Other Screens */}
+        <Stack.Screen name="RegisterPage" component={Register} />
+        <Stack.Screen name="OTPRegister" component={OTPRegister} options={{ headerShown: false }} />
+        <Stack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
+
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
+        <Stack.Screen name="PersonalRegister" component={PersonalRegister} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} />
+        <Stack.Screen name="CorporateModule1" component={CorporateModule1} />
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="PickUpLocation" component={PickUpLocation} />
+        <Stack.Screen name="HomeScreen1" component={HomeScreen1} />
+        <Stack.Screen name="CarGroup" component={CarGroup} />
+        <Stack.Screen name="CarSelection" component={CarSelection} />
+      </Stack.Navigator>
     </NavigationContainer>
-
-
-    // <NavigationContainer>
-    //     <stack.Navigator initialRouteName="Splash">
-    //     <stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-    //     <stack.Screen name="ModuleSelectionUI" component={ModuleSelectionUI}options={{ headerShown: false }} />
-    //     <stack.Screen name="RegisterPopUp" component={RegisterPOPUP} options={{ headerShown: false }} />
-    //     <stack.Screen name="RegisterPage" component={Register} />
-    //   </stack.Navigator>
-    // </NavigationContainer>
-    // <Register/>
-    // <CorporateModule1/>
-    // <CorporateModule1/>
-    // <PickUpLocation/>
-    // <GestureHandlerRootView>
-        // {/* <HomeScreen1/> */}
-        // {/* <CarGroup/> */}
-        // <CarSelection/>
-    // {/* </GestureHandlerRootView> */}
-    // <CarGroup/>
-
+    </GestureHandlerRootView>
+    // <OTPRegister/>
     
-   );
-}
  
-export default App
+  );
+};
+
+export default App;

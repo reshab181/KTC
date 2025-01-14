@@ -8,24 +8,27 @@ import {
   View,
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native'; 
+import { useNavigation } from '@react-navigation/native';
 
 const ModuleSelectionUI = () => {
-  const navigation = useNavigation(); 
-
-  const handleCorporatePress = () => {
-    console.log("Clicked corporate")
-    navigation.navigate('RegisterPopUp'); 
+  const navigation = useNavigation();
+  const handleNavigate = () => {
+    navigation.navigate('SignInCorporate', {
+      screen: 'RegisterPOPUP',  
+      params: { presentation: 'modal' },  
+    });
   };
-
+  
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.mainContainer}>
         <View style={styles.topContainer}>
           <Image resizeMode="contain" source={require('../../Assets/ktc.png')} />
         </View>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 15 }}>
-          <TouchableOpacity style={styles.moduleContainer} onPress={handleCorporatePress}>
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 15 }}
+        >
+          <TouchableOpacity style={styles.moduleContainer} onPress={handleNavigate}>
             <View style={styles.module}>
               <View style={styles.moduleHeader}>
                 <Text style={styles.CorporateText}>Corporate</Text>
@@ -61,7 +64,6 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     backgroundColor: '#F5F5F5',
-  
   },
   topContainer: {
     height: 70,
@@ -70,38 +72,35 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    
     shadowColor: '#000',
     shadowOpacity: 0.4,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
-    elevation: 3, 
+  
   },
   moduleContainer: {
     width: '100%',
-    paddingHorizontal: 20,  
-    paddingTop: 15,  
+  
+    paddingTop: 15,
   },
   module: {
     width: '100%',
     height: 220,
     backgroundColor: '#F2F2F2',
-   
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 4 },
-    elevation: 8,  
+    elevation: 8,
     marginBottom: 20,
   },
   moduleHeader: {
     width: '100%',
-    height: '35%',  
+    height: '25%',
     backgroundColor: '#3C3567',
     justifyContent: 'center',
     alignItems: 'center',
-  
-    paddingVertical: 15,  
+    paddingVertical: 15,
   },
   moduleBody: {
     flex: 1,
@@ -111,17 +110,15 @@ const styles = StyleSheet.create({
   },
   CorporateText: {
     color: '#FFFFFF',
-    fontSize: 20,  
+    fontSize: 18,
     fontWeight: '600',
-    textAlign: 'center', 
+    textAlign: 'center',
   },
   ChauffeurText: {
     color: '#212121',
-    fontSize: 20, 
+    fontSize: 18,
     marginTop: 20,
     fontWeight: '600',
     textAlign: 'center',
-
-
   },
 });
