@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     width: 50,
     textAlign: 'center',
     color: '#000',
-    fontSize: 14, // Adjusted size for balance
+    fontSize: 14,
   },
   Create: {
     height: Dimensions.get('screen').height / 13,
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderWidth: 1,
     justifyContent: 'center',
-    paddingVertical: 10, // Added vertical padding
+    paddingVertical: 10, 
   },
   Text5: {
     alignSelf: 'center',
