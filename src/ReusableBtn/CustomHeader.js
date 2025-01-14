@@ -20,13 +20,12 @@ function useStyles(){
     const { width: winwidth, height: winheight } = useWindowDimensions();
     return styles = StyleSheet.create({
         header: {
-        //   position: 'absolute', // Makes it stick to the top
-          width: winwidth, // Fixed width as per given properties
+          width: winwidth, 
           height: 60,
           backgroundColor: '#3C3567',
           flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
+          // justifyContent: 'center',
+          alignItems: 'center',
         },
         title: {
           fontSize: 24,

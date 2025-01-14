@@ -21,6 +21,8 @@ import OTPRegister from "./src/Screens/Auth/OtpRegister";
 
 
 const Stack = createNativeStackNavigator();
+import BookingConfirmation from "./src/Screens/Pages/BookingConfirmation";
+import PaymentMethod from "./src/Screens/Pages/PaymentMethod";
 
 
 
