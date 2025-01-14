@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -12,9 +12,20 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+import RegisterPOPUP from './RegisterPopUp';
+
 const SignInCorporate = () => {
   const { height, width } = Dimensions.get('screen');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isModalVisible, setisModalVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setisModalVisible(true); 
+    }, 3000); 
+    
+    return () => clearTimeout(timer);
+  }, []);
 
   const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email').required('Email is required'),
@@ -37,7 +48,9 @@ const SignInCorporate = () => {
             <Text style={styles.skipText}>Skip</Text>
           </TouchableOpacity>
         </View>
-
+        
+            {isModalVisible && <RegisterPOPUP onClose={() => setisModalVisible(false)} />}
+        
         {/* Formik Form */}
         <Formik
           initialValues={{ email: '', password: '' }}
@@ -58,7 +71,7 @@ const SignInCorporate = () => {
                 <View style={styles.Email2}>
                   <TextInput
                     style={styles.Text1}
-                    placeholder="Email ID & Mobile no"
+                    placeholder="Official Email ID "
                     placeholderTextColor="#000"
                     keyboardType="email-address"
                     maxLength={80}
@@ -147,15 +160,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#3C3567',
     alignItems: 'center',
     paddingHorizontal: 25,
-    paddingVertical: 15, // Increased vertical padding for better balance
-    shadowColor: '#000', 
+    paddingVertical: 15,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 5,
   },
   headerText: {
-    fontSize: 20, // Increased font size for prominence
+    fontSize: 20,
     fontWeight: 'bold',
     color: '#FFF',
   },
@@ -171,30 +184,30 @@ const styles = StyleSheet.create({
     height: Dimensions.get('screen').height / 15,
     width: Dimensions.get('screen').width / 1.1,
     backgroundColor: '#FFF',
-    borderRadius: 8, // Rounded corners for a modern feel
-    marginBottom: 20, // Added margin for spacing between inputs
-    elevation: 2, // Added subtle shadow for depth
+
+    marginBottom: 10,
+    elevation: 2,
     justifyContent: 'center',
-    paddingHorizontal: 15, // Padding for better input alignment
+    paddingHorizontal: 15,
   },
   Text1: {
     height: Dimensions.get('screen').height / 15,
     color: '#212121',
-    fontSize: 16, // Slightly larger font for better readability
+    fontSize: 16,
     backgroundColor: '#FFF',
   },
   password1: {
-    marginTop: 30,
+    marginTop: 20,
     alignSelf: 'center',
   },
   password2: {
     height: Dimensions.get('screen').height / 15,
     width: Dimensions.get('screen').width / 1.1,
     backgroundColor: '#FFF',
-    borderRadius: 8, // Rounded corners
-    elevation: 2, // Added shadow
+
+    elevation: 2,
     justifyContent: 'center',
-    paddingHorizontal: 15, // Added padding for consistency with email input
+    paddingHorizontal: 15,
   },
   Text2: {
     height: Dimensions.get('screen').height / 15,
@@ -211,16 +224,16 @@ const styles = StyleSheet.create({
     height: Dimensions.get('screen').height / 15,
     width: Dimensions.get('screen').width / 1.1,
     backgroundColor: '#3C3567',
-    borderRadius: 8,
+    // borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
     marginTop: 20,
-    elevation: 3, // Subtle elevation for a floating effect
+    elevation: 3,
   },
   buttonText: {
     color: '#FFF',
-    fontSize: 18, // Larger font size for prominence
+    fontSize: 18,
     fontWeight: 'bold',
   },
   forgot: {
@@ -229,7 +242,7 @@ const styles = StyleSheet.create({
   },
   Text4: {
     color: '#3C3567',
-    fontSize: 16, // Increased font size for better readability
+    fontSize: 16,
   },
   divider: {
     flexDirection: 'row',
