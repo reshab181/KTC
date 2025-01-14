@@ -1,0 +1,211 @@
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
+
+// Reusable components
+import CarCard from '../../ReusableBtn/CarCard';
+import CustomHeader from '../../ReusableBtn/CustomHeader';
+import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
+import CustomDropdown from '../../ReusableBtn/CustomDropdown';
+import CustomButton from '../../ReusableBtn/CustomButtons';
+import { RadioButton } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { Characters } from '../../Constants/Strings'
+import { SafeAreaView } from 'react-native';
+import CustomModal from '../../ReusableBtn/CustomModals';
+
+const BookingConfirmation = () => {
+    const [check1, setCheck1] = useState(false);
+    const [checked, setChecked] = useState(false);
+    const [visible, setvisible] = useState(false)
+    const [selectPaymentMethod, setSelectPaymentMethod] = useState('');
+    const [checkTA, setCheckTA] = useState(false);
+    const cityData = [
+        { label: 'New York', value: 'ny' },
+        { label: 'Los Angeles', value: 'la' },
+        { label: 'Chicago', value: 'chi' },
+    ];
+
+    return (
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#F1F1F3' }}>
+            <ScrollView>
+                <View>
+                    <CustomHeader
+                        title={'Booking Confirmation'}
+                        iconPath={require('../../Assets/icbackarrow.png')}
+                        iconHeight={24}
+                        iconWidth={24}
+                    />
+                    <View style={{ marginHorizontal: 16, marginTop: 10 }}>
+                        {/* Car Card */}
+                        <CarCard
+                            iconPath={require('../../Assets/infobtn.png')}
+                            isSaved={true}
+                            height={146}
+                            imgPath={require('../../Assets/cardemo.png')}
+                        />
+                        <View style={{ width: 300, marginTop: 10, marginBottom: 4 }}>
+                            <Text style={{ fontSize: 12, color: "#737373" }}>
+                                {Characters.bct1}
+                            </Text>
+                        </View>
+
+                        {/* Payment Method */}
+                        <View style={styles.rowStyle}>
+                            <View style={styles.radioContainer}>
+                                {[Characters.cash, Characters.credit].map((item) => (
+                                    <View key={item} style={styles.radioOption}>
+                                        <RadioButton
+                                            value={item.toLowerCase()}
+                                            status={selectPaymentMethod === item.toLowerCase() ? 'checked' : 'unchecked'}
+                                            onPress={() => setSelectPaymentMethod(item.toLowerCase())}
+                                            uncheckedColor='#737373'
+                                        />
+                                        <Text style={styles.radioText}>{item}</Text>
+                                    </View>
+                                ))}
+                            </View>
+                        </View>
+
+                        {/* Flight Input */}
+                        <CustomTextInpt placeholder={"Flight"} />
+                    </View>
+
+                    {/* Rental Amount Section */}
+                    <View>
+                        <View style={styles.rentalHeader}>
+                            <Text style={styles.rentalText}>Rental Amount: ₹20,402</Text>
+                            <TouchableOpacity onPress={() => setCheck1(!check1)} style={{ marginRight: 16, marginTop: 16 }}>
+                                <Icon name={check1 ? 'chevron-down' : 'chevron-up'} size={16} />
+                            </TouchableOpacity>
+                        </View>
+
+                        {/* Order Summary (Conditionally rendered) */}
+                        {check1 && (
+                            <View style={styles.summaryContainer}>
+                                <Text style={styles.orderSummaryText}>My Order Summary</Text>
+                                {['Basic Rental', 'Sub Total', 'GST(12%)', 'Total Amount'].map((label, index) => {
+                                    const values = ['₹18,645', '₹18,645', '₹1,757', '₹20,402'];
+                                    return (
+                                        <View key={index} style={styles.summaryRow}>
+                                            <Text>{label}</Text>
+                                            <Text>{values[index]}</Text>
+                                        </View>
+                                    );
+                                })}
+                            </View>
+                        )}
+                    </View>
+
+                    {/* Terms and Conditions */}
+                    <View style={styles.termsContainer}>
+                        <TouchableOpacity onPress={() => setCheckTA(!checkTA)}>
+                            <Icon name={checkTA ? 'check-square' : 'square-o'} size={24} color={'#4B713D'} />
+                        </TouchableOpacity>
+                        <Text style={styles.termsText}>
+                            {Characters.tnA}{' '}
+                            <Text style={styles.termsLink}>{Characters.tnC}</Text>
+                        </Text>
+                    </View>
+
+
+                </View>
+                {
+                    visible ? <>
+                        <View>
+                            <CustomModal onClose={() => setvisible(!visible)}
+                                message1={"Your Payment has been Successfull"}
+                                message2={"The vehicle details will be shared shortly"}
+                                isButtonVisible={false}
+                            />
+                        </View>
+                    </> : null
+                }
+            </ScrollView>
+            <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
+                <CustomButton title={'Proceed'} borderRadius={0} onPress={() => setvisible(!visible)} />
+            </View>
+        </SafeAreaView>
+    );
+};
+
+export default BookingConfirmation;
+
+const styles = StyleSheet.create({
+    rowStyle: {
+        backgroundColor: '#FFFFFF',
+        height: 48,
+        width: '100%',
+        marginTop: 10,
+        borderRadius: 4,
+        elevation: 1,
+    },
+    radioContainer: {
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        flex: 1,
+        paddingLeft: 20,
+    },
+    radioOption: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginRight: 15,
+    },
+    radioText: {
+        fontSize: 16,
+        color: '#666666',
+        marginLeft: 5,
+    },
+    rentalHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: '#FFFFFF',
+        height: 48,
+        marginHorizontal: 16,
+        marginTop: 16,
+
+    },
+    rentalText: {
+        paddingLeft: 20,
+        paddingTop: 15,
+    },
+    summaryContainer: {
+        backgroundColor: '#FFFFFF',
+        marginHorizontal: 16,
+        marginTop: 1,
+        elevation: 3,
+    },
+    orderSummaryText: {
+        padding: 16,
+        color: '#212121',
+        fontWeight: '600',
+        fontSize: 14,
+        marginBottom: 5,
+    },
+    summaryRow: {
+        paddingHorizontal: 16,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        fontSize: 14,
+        borderBottomColor: '#E5E5E5',
+        borderBottomWidth: 2,
+        paddingBottom: 10,
+        marginTop: 10,
+    },
+    termsContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 16,
+        marginStart: 20,
+    },
+    termsText: {
+        flexDirection: 'row',
+        marginStart: 10,
+    },
+    termsLink: {
+        fontSize: 14,
+        color: '#3C3567',
+        fontWeight: '600',
+        textDecorationLine: 'underline',
+    },
+});

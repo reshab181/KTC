@@ -17,6 +17,8 @@ import HomeScreen1 from "./src/Screens/Pages/HomeScreen1";
 import CarGroup from "./src/Screens/Pages/CarGroup";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CarSelection from "./src/Screens/Pages/CarSelection";
+import BookingConfirmation from "./src/Screens/Pages/BookingConfirmation";
+import PaymentMethod from "./src/Screens/Pages/PaymentMethod";
 
 
 
@@ -24,37 +26,30 @@ import CarSelection from "./src/Screens/Pages/CarSelection";
 const stack=createNativeStackNavigator()
 const App = ()=>{
   return ( 
-    <NavigationContainer>
-        <stack.Navigator initialRouteName="Splash">
-        <stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
-        <stack.Screen name="ModuleSelectionUI" component={ModuleSelectionUI}options={{ headerShown: false }} />
-        <stack.Screen name="RegisterPopUp" component={RegisterPOPUP} options={{ headerShown: false }} />
-        <stack.Screen name="RegisterPage" component={Register} />
-        <stack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
-
-      </stack.Navigator>
-    </NavigationContainer>
-
-
     // <NavigationContainer>
     //     <stack.Navigator initialRouteName="Splash">
     //     <stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
     //     <stack.Screen name="ModuleSelectionUI" component={ModuleSelectionUI}options={{ headerShown: false }} />
     //     <stack.Screen name="RegisterPopUp" component={RegisterPOPUP} options={{ headerShown: false }} />
     //     <stack.Screen name="RegisterPage" component={Register} />
+    //     <stack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
+
     //   </stack.Navigator>
     // </NavigationContainer>
     // <Register/>
     // <CorporateModule1/>
     // <CorporateModule1/>
     // <PickUpLocation/>
-    // <GestureHandlerRootView>
-        // {/* <HomeScreen1/> */}
-        // {/* <CarGroup/> */}
-        // <CarSelection/>
-    // {/* </GestureHandlerRootView> */}
-    // <CarGroup/>
-
+    <GestureHandlerRootView>
+      {/* <CarGroup/> */}
+      {/* <CorporateModule1/> */}
+      {/* <PickUpLocation/> */}
+      {/* <CarSelection/> */}
+      {/* <Register/> */}
+      {/* <BookingConfirmation/> */}
+      {/* <ResetPassword/> */}
+      <PaymentMethod/>
+    </GestureHandlerRootView>
     
    );
 }

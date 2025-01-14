@@ -18,22 +18,24 @@ const ResetPassword = () => {
 
       {/* Content */}
       <View style={styles.content}>
-        <CustomTextInpt placeholder="New Password" secureTextEntry={true}/>
-        <CustomTextInpt placeholder="Confirm Password" secureTextEntry={true}/>
-        <CustomButton title={"Submit"} onPress={()=> setisVisible(!isVisible)}/>      
+        <CustomTextInpt placeholder="New Password" secureTextEntry={true} />
+        <CustomTextInpt placeholder="Confirm Password" secureTextEntry={true} />
+        <View style={{ marginTop: 16 }}>
+          <CustomButton title={"Submit"} onPress={() => setisVisible(!isVisible)} />
+        </View>
       </View>
       {
-        isVisible ? 
-        <>
+        isVisible ?
+          <>
             <View>
-                <CustomModal onClose={()=>setisVisible(!isVisible)} 
-                isButtonVisible={true} 
-                message1={"Your Password has been set Successfully"} 
+              <CustomModal onClose={() => setisVisible(!isVisible)}
+                isButtonVisible={true}
+                message1={"Your Password has been set Successfully"}
                 message2={"Please login using the set Password"}
-                btnText={"Login Now"} 
-                />
+                btnText={"Login Now"}
+              />
             </View>
-        </> : null 
+          </> : null
       }
     </View>
   );
@@ -51,7 +53,7 @@ function useStyles() {
     },
     content: {
       marginTop: 24,
-      marginStart : 10 ,  // Push content below the header (header height is 80px)
+      marginStart: 10,  // Push content below the header (header height is 80px)
       paddingHorizontal: 16, // Add some horizontal padding
     },
   });
