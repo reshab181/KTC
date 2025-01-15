@@ -1,4 +1,7 @@
-import React, { useState,useEffect } from 'react';
+//**Author---- Reshab Kumar Pandey
+// Component----SignIn.js */
+
+import React, { useState, useEffect } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -7,147 +10,227 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Alert,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-
+import CryptoJS from 'crypto-js';
+import { useNavigation } from '@react-navigation/native';
 import RegisterPOPUP from './RegisterPopUp';
+import Api from '../../Services/Api';
+import { fetchJwtAccess } from '../../Utils/JwtHelper';
 
-const SignInCorporate = () => {
-  const { height, width } = Dimensions.get('screen');
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+const SignInCorporate = ({ route }) => {
+  const { email } = route.params;
+  const navigation = useNavigation();
   const [isModalVisible, setisModalVisible] = useState(false);
+  const [accessToken, setAccessToken] = useState('');
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setisModalVisible(true); 
-    }, 3000); 
-    
+      setisModalVisible(true);
+    }, 0);
+
     return () => clearTimeout(timer);
   }, []);
 
   const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Email is required'),
+    // email: Yup.string().email('Invalid email').required('Email is required'),
     password: Yup.string()
       .min(6, 'Password must be at least 6 characters')
       .required('Password is required'),
   });
 
-  const handleSignIn = (values) => {
-    console.log('Form Submitted:', values);
+
+
+
+  useEffect(() => {
+    const getAccessToken = async () => {
+      const token = await fetchJwtAccess();
+      if (token) {
+        setAccessToken(token);
+      }
+    };
+
+    getAccessToken();
+  }, []);
+
+  const encryptPayload = (data) => {
+    const ClientID = '!IV@_$2123456789';
+    const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
+    const CryptoJsCI = CryptoJS.enc.Utf8.parse(ClientID);
+    const CryptoJsCK = CryptoJS.enc.Utf8.parse(ClientKey);
+    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), CryptoJsCK, {
+      iv: CryptoJsCI,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
+    });
+
+    return encryptedData.ciphertext.toString(CryptoJS.enc.Base64);
   };
 
+  const handleSignIn = async (values) => {
+    setLoading(true);
+    try {
+      const payload = {
+        email_id: email,
+        password: values.password,
+        type: Platform.OS === 'android' ? 'GSM' : 'FCM',
+        tokenid: await AsyncStorage.getItem('fcmToken') || 'dummy-token',
+      };
+
+      const encryptedPayload = encryptPayload(payload);
+      const formBody = new URLSearchParams({ request_data: encryptedPayload }).toString();
+
+      console.log("Access Token:", accessToken);
+      console.log("Request Payload:", formBody);
+
+      const response = await fetch(Api.USER_LOGIN, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          jwt: accessToken,
+        },
+        body: formBody,
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        console.log("API Response Data:", data);
+        if (data?.message === 'Password Not Match') {
+          Alert.alert('Error', 'Password Not Match');
+        } else {
+          Alert.alert('Error', 'Failed to sign in. Please try again.');
+        }
+        return;
+      }
+
+      const data = await response.json();
+      if (data?.jwt) {
+        await AsyncStorage.setItem('token', data.jwt);
+        Alert.alert('Success', 'Logged in successfully!');
+        navigation.navigate("CorporateModule1");
+      } else {
+        Alert.alert('Error', 'Unexpected response from server.');
+      }
+    } catch (error) {
+      console.error('Error in handleSignIn:', error);
+      Alert.alert('Error', 'Failed to sign in. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleNavigate = (module) => {
+    if (navigation.isFocused()) {
+      navigation.navigate('SignInCorporate', {
+        screen: 'RegisterPOPUP',
+        params: { presentation: 'modal', module },
+      });
+    }
+  };
   return (
-    <SafeAreaView>
-      <View style={styles.mainContainer}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Sign In</Text>
-          <TouchableOpacity>
-            <Text style={styles.skipText}>Skip</Text>
-          </TouchableOpacity>
-        </View>
-        
-            {isModalVisible && <RegisterPOPUP onClose={() => setisModalVisible(false)} />}
-        
-        {/* Formik Form */}
-        <Formik
-          initialValues={{ email: '', password: '' }}
-          validationSchema={validationSchema}
-          onSubmit={handleSignIn}
-        >
-          {({
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            values,
-            errors,
-            touched,
-          }) => (
-            <>
-              {/* Email Input */}
-              <View style={styles.Email1}>
-                <View style={styles.Email2}>
-                  <TextInput
-                    style={styles.Text1}
-                    placeholder="Official Email ID "
-                    placeholderTextColor="#000"
-                    keyboardType="email-address"
-                    maxLength={80}
-                    onChangeText={handleChange('email')}
-                    onBlur={handleBlur('email')}
-                    value={values.email}
-                  />
-                </View>
-                {touched.email && errors.email && (
-                  <Text style={styles.errorText}>{errors.email}</Text>
-                )}
-              </View>
+    <SafeAreaView style={styles.mainContainer}>
 
-              {/* Password Input */}
-              <View style={styles.password1}>
-                <View style={styles.password2}>
-                  <TextInput
-                    style={styles.Text2}
-                    secureTextEntry={!isPasswordVisible}
-                    placeholder="Password"
-                    placeholderTextColor="#212121"
-                    onChangeText={handleChange('password')}
-                    onBlur={handleBlur('password')}
-                    value={values.password}
-                  />
-                  {/* <TouchableOpacity
-                    style={styles.eye}
-                    onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-                  >
-                    <Icon
-                      name={isPasswordVisible ? 'eye' : 'eye-off'}
-                      size={30}
-                      color="#212121"
-                    />
-                  </TouchableOpacity> */}
-                </View>
-                {touched.password && errors.password && (
-                  <Text style={styles.errorText}>{errors.password}</Text>
-                )}
-              </View>
-
-              {/* Sign In Button */}
-              <TouchableOpacity onPress={handleSubmit}>
-                <View style={styles.buttonContainer}>
-                  <Text style={styles.buttonText}>Sign In</Text>
-                </View>
-              </TouchableOpacity>
-            </>
-          )}
-        </Formik>
-
-        {/* Forgot Password */}
-        <View style={styles.forgot}>
-          <TouchableOpacity>
-            <Text style={styles.Text4}>Forgot Password?</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* OR Divider */}
-        <View style={styles.divider}>
-          <View style={styles.line} />
-          <Text style={styles.orText}>OR</Text>
-          <View style={styles.line} />
-        </View>
-
-        {/* Create New Account */}
-        <TouchableOpacity>
-          <View style={styles.Create}>
-            <Text style={styles.Text5}>Create New Account</Text>
-          </View>
+      <View style={styles.header}>
+        <Text style={styles.headerText}>Sign In</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={styles.skipText}>Skip</Text>
         </TouchableOpacity>
       </View>
+
+      {isModalVisible && <RegisterPOPUP onClose={() => setisModalVisible(false)} />}
+
+
+      <Formik
+        initialValues={{ email: email || '', password: '' }}
+        validationSchema={validationSchema}
+        onSubmit={handleSignIn}
+      >
+        {({
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          values,
+          errors,
+          touched,
+        }) => (
+          <>
+
+            <View style={styles.Email1}>
+              <View style={styles.Email2}>
+                <TextInput
+                  style={styles.Text1}
+                  placeholder="Official Email ID "
+                  placeholderTextColor="#000"
+                  keyboardType="email-address"
+                  maxLength={80}
+                  onChangeText={handleChange('email')}
+                  onBlur={handleBlur('email')}
+                  value={email}
+                  editable={false}
+                />
+              </View>
+              {touched.email && errors.email && (
+                <Text style={styles.errorText}>{errors.email}</Text>
+              )}
+            </View>
+
+            <View style={styles.password1}>
+              <View style={styles.password2}>
+                <TextInput
+                  style={styles.Text2}
+                  secureTextEntry
+                  placeholder="Password"
+                  placeholderTextColor="#212121"
+                  onChangeText={handleChange('password')}
+                  onBlur={handleBlur('password')}
+                  value={values.password}
+                />
+              </View>
+              {touched.password && errors.password && (
+                <Text style={styles.errorText}>{errors.password}</Text>
+              )}
+            </View>
+
+            <TouchableOpacity onPress={handleSubmit} disabled={loading}>
+              <View style={styles.buttonContainer}>
+                {loading ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  <Text style={styles.submitButtonText}>Sign In</Text>
+                )}
+              </View>
+            </TouchableOpacity>
+          </>
+        )}
+      </Formik>
+
+      <View style={styles.forgot}>
+        <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword", { email })}>
+          <Text style={styles.Text4}>Forgot Password?</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.divider}>
+        <View style={styles.line} />
+        <Text style={styles.orText}>OR</Text>
+        <View style={styles.line} />
+      </View>
+
+      <TouchableOpacity onPress={() => handleNavigate('Corporate')}>
+        <View style={styles.Create}>
+          <Text style={styles.Text5}>Create New Account</Text>
+        </View>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
-
+export default SignInCorporate;
 const styles = StyleSheet.create({
   mainContainer: {
     height: Dimensions.get('screen').height,
@@ -259,7 +342,7 @@ const styles = StyleSheet.create({
     width: 50,
     textAlign: 'center',
     color: '#000',
-    fontSize: 14, // Adjusted size for balance
+    fontSize: 14,
   },
   Create: {
     height: Dimensions.get('screen').height / 13,
@@ -270,7 +353,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderWidth: 1,
     justifyContent: 'center',
-    paddingVertical: 10, // Added vertical padding
+    paddingVertical: 10,
   },
   Text5: {
     alignSelf: 'center',
@@ -286,4 +369,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default SignInCorporate;
+

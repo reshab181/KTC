@@ -1,13 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Dimensions, SafeAreaView, StyleSheet, Text, View, TouchableOpacity, Image, Alert, Modal } from 'react-native';
+//**Author---Reshab Kumar Pandey
+// Component---RegisterPopUp.js */
+
+
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  Dimensions,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Alert,
+  Modal,
+} from 'react-native';
 import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import CryptoJS from 'crypto-js';
+import debounce from 'lodash.debounce';
 import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
 import CustomButton from '../../ReusableBtn/CustomButtons';
 import Api from '../../Services/Api';
-import Static from '../../Services/Static';
 
+import { fetchJwtAccess } from '../../Utils/JwtHelper';
 
 const { height } = Dimensions.get('screen');
 
@@ -15,157 +30,108 @@ const RegisterPOPUP = ({ onClose }) => {
   const navigation = useNavigation();
   const [accessToken, setAccessToken] = useState('');
   const [loader, setLoader] = useState(false);
-  const [userType, setUserType] = useState('corporate'); 
+  const [userType, setUserType] = useState('corporate');
+  const [visible, setVisible] = useState(true);
+
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
+ 
   useEffect(() => {
-    getJwtAccess();
+    const getAccessToken = async () => {
+      const token = await fetchJwtAccess(); 
+      if (token) {
+        setAccessToken(token);
+      }
+    };
+
+    getAccessToken();
   }, []);
 
-  const getJwtAccess = async () => {
-    try {
-      const headers = new Headers();
-      headers.append('jwt', '');
-      headers.append('Content-Type', 'application/x-www-form-urlencoded');
-  
-      const body = `access_codename_jwt=${Static.ACCESS_CODE_NAME}&access_codepass_jwt=${Static.ACCESS_CODE_PASS}`;
-      const url = `${Api.BASE_URL}${Api.Jwt_TOKEN}`;
-  
-      const response = await fetch(url, {
-        method: 'POST',
-        body,
-        headers
-      });
-  
-      const data = await response.text();
-      console.log('Response Data:', data); 
-  
-      const res = JSON.parse(data)?.jwt;
-      if (res) {
-        setAccessToken(res);
-      }
-    } catch (error) {
-      console.error('JWT Fetch Error:', error);
-      Alert.alert('Error', 'Failed to retrieve access token.');
-    }
-  };
-  
 
-  const encryptData = async (data) => {
+
+  const encryptData = (data) => {
     const ClientID = '!IV@_$2123456789';
-    const Clientkey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
+    const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
     const CryptoJsCI = CryptoJS.enc.Utf8.parse(ClientID);
-    const CryptoJsCK = CryptoJS.enc.Utf8.parse(Clientkey);
-    
-    const EncryptedData = CryptoJS.AES.encrypt(
-      JSON.stringify(data),
-      CryptoJsCK,
-      {
-        iv: CryptoJsCI,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.Pkcs7,
-      }
-    );
-    
-    return EncryptedData.toString();
+    const CryptoJsCK = CryptoJS.enc.Utf8.parse(ClientKey);
+
+    return CryptoJS.AES.encrypt(JSON.stringify(data), CryptoJsCK, {
+      iv: CryptoJsCI,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
+    }).toString();
   };
 
-  const navigateToOTP = () => {
-    navigation.navigate('OTPRegister');
-  };
-
-  const registrationHandler = async (email) => {
-    if (!emailRegex.test(email)) {
-      Alert.alert('Validation Error', 'Please enter a valid email address.');
-      return;
-    }
-  
+  const registrationHandler = debounce(async (email) => {
     setLoader(true);
     try {
       const payload = {
         email_id: email,
         verify: userType === 'corporate' ? 'KTCMMI' : 'PERSONAL',
       };
-  
-      const encryptedPayload = await encryptData(payload);
-      const requestData = { request_data: encryptedPayload };
-      const formBody = Object.entries(requestData)
-        .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-        .join('&');
-  
-      const response = await fetch(`${Api.USER_REGISTRATION}`, {
+
+      const encryptedPayload = encryptData(payload);
+      const response = await fetch(Api.USER_REGISTRATION, {
         method: 'POST',
-        body: formBody,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
           jwt: accessToken,
         },
+        body: `request_data=${encodeURIComponent(encryptedPayload)}`,
       });
-  
+
       const data = await response.json();
-      console.log("API Response Data:", data);
-      handleApiResponse(data, email); 
+      handleApiResponse(data, email);
     } catch (error) {
       console.error('Registration Error:', error);
       Alert.alert('Error', 'Failed to register. Please try again.');
     } finally {
       setLoader(false);
     }
-  };
-  
+  }, 300);
+
   const handleApiResponse = (data, email) => {
-    if (!data) {
-      console.error('Error: No data received from API');
-      return;
-    }
-  
-    console.log('API Response:', data);  
-  
-   
-    if (data?.message === 'success') {
-      if (data?.newuser === 'No') {
-        setTimeout(() => {
-          navigation.navigate('SignInCorporate', { email });
-        }, 0);
-      } else if (data?.newuser === 'Yes') {
-      
-        navigateToOTP();
-      }
-    } else if (data?.message === 'Invalid Domain Name.') {
-     
-      Alert.alert(
-        'Invalid Domain!',
-        'Please contact KTC Admin',
-        [
-          { text: 'OK', onPress: () => navigation.navigate('ModuleSelectionUI') }
-        ]
-      );
-    } else {
-     
-      Alert.alert('Error', data?.message || 'Unknown error occurred');
+    if (!data) return Alert.alert('Error', 'No data received from the server.');
+
+    switch (data.message) {
+      case 'success':
+        if (data.newuser === 'No') {
+            Alert.alert('Success', 'Registered in successfully!');
+          setVisible(false);
+          navigation.navigate('SignInCorporate', { email: email });
+        } else {
+          navigateToOTP();
+        }
+        break;
+      case 'Invalid Domain Name.':
+        Alert.alert(
+          'Invalid Domain!',
+          'Please contact KTC Admin',
+          [{ text: 'OK', onPress: () => navigation.navigate('ModuleSelectionUI') }],
+        );
+        break;
+      default:
+        Alert.alert('Error', data.message || 'Unknown error occurred.');
     }
   };
-  
+
+  const navigateToOTP = () => {
+    navigation.navigate('OTPRegister');
+  };
+
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={true} 
-    >
+    <Modal animationType="slide" transparent visible={visible}>
       <SafeAreaView style={styles.overlay}>
         <View style={styles.modalContainer}>
           <Formik
             initialValues={{ email: '' }}
             validate={(values) => {
               const errors = {};
-              if (!values.email) {
-                errors.email = 'Email is required';
-              } else if (!emailRegex.test(values.email)) {
-                errors.email = 'Invalid email address';
-              }
+              if (!values.email) errors.email = 'Email is required';
+              else if (!emailRegex.test(values.email)) errors.email = 'Invalid email address';
               return errors;
             }}
-            onSubmit={(values) => registrationHandler(values.email)}
+            onSubmit={({ email }) => registrationHandler(email)}
           >
             {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
               <View style={styles.formContainer}>
@@ -175,9 +141,7 @@ const RegisterPOPUP = ({ onClose }) => {
                     <Image source={require('../../Assets/close.png')} />
                   </TouchableOpacity>
                 </View>
-
                 <Text style={styles.instruction}>Please enter your official email ID</Text>
-
                 <CustomTextInpt
                   placeholder="Email ID"
                   value={values.email}
@@ -186,7 +150,6 @@ const RegisterPOPUP = ({ onClose }) => {
                   secureTextEntry={false}
                 />
                 {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-
                 <CustomButton
                   title="Submit"
                   onPress={handleSubmit}
@@ -203,7 +166,7 @@ const RegisterPOPUP = ({ onClose }) => {
   );
 };
 
-export default RegisterPOPUP;
+export default React.memo(RegisterPOPUP);
 
 const styles = StyleSheet.create({
   overlay: {
@@ -261,4 +224,4 @@ const styles = StyleSheet.create({
     marginLeft: 18, 
     fontWeight: '500', 
   },
-});
+}); 
