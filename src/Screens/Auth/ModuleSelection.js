@@ -1,3 +1,7 @@
+//**Author---Reshab Kumar Pandey
+// Component-- ModuleSelection.js */
+
+
 import React from 'react';
 import {
   Image,
@@ -7,51 +11,56 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-
 import { useNavigation } from '@react-navigation/native';
 
 const ModuleSelectionUI = () => {
   const navigation = useNavigation();
-  const handleNavigate = () => {
-    navigation.navigate('SignInCorporate', {
-      screen: 'RegisterPOPUP',  
-      params: { presentation: 'modal' },  
-    });
+
+  const handleNavigate = (module) => {
+    if (navigation.isFocused()) {
+      navigation.navigate('SignInCorporate', {
+        screen: 'RegisterPOPUP',
+        params: { presentation: 'modal', module },
+      });
+    }
   };
   
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.mainContainer}>
-        <View style={styles.topContainer}>
-          <Image resizeMode="contain" source={require('../../Assets/ktc.png')} />
+  const ModuleCard = ({ title, image, description, onPress }) => (
+    <TouchableOpacity style={styles.moduleContainer} onPress={onPress} activeOpacity={0.9}>
+      <View style={styles.module}>
+        <View style={styles.moduleHeader}>
+          <Text style={styles.moduleHeaderText}>{title}</Text>
         </View>
-        <View
-          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 15 }}
-        >
-          <TouchableOpacity style={styles.moduleContainer} onPress={handleNavigate}>
-            <View style={styles.module}>
-              <View style={styles.moduleHeader}>
-                <Text style={styles.CorporateText}>Corporate</Text>
-              </View>
-              <View style={styles.moduleBody}>
-                <Image source={require('../../Assets/Corporate.png')} />
-                <Text style={styles.ChauffeurText}>Chauffeur Corporate</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
+        <View style={styles.moduleBody}>
+          <Image source={image} style={styles.moduleImage} />
+          <Text style={styles.moduleBodyText}>{description}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
 
-          <TouchableOpacity style={styles.moduleContainer}>
-            <View style={styles.module}>
-              <View style={styles.moduleHeader}>
-                <Text style={styles.CorporateText}>Personal</Text>
-              </View>
-              <View style={styles.moduleBody}>
-                <Image source={require('../../Assets/Personal.png')} />
-                <Text style={styles.ChauffeurText}>Personal Module</Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </View>
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.topContainer}>
+        <Image
+          resizeMode="contain"
+          source={require('../../Assets/ktc.png')}
+          style={styles.logo}
+        />
+      </View>
+      <View style={styles.contentContainer}>
+        <ModuleCard
+          title="Corporate"
+          image={require('../../Assets/Corporate.png')}
+          description="Chauffeur Corporate"
+          onPress={() => handleNavigate('Corporate')}
+        />
+        <ModuleCard
+          title="Personal"
+          image={require('../../Assets/Personal.png')}
+          description="Personal Module"
+          onPress={() => handleNavigate('Personal')}
+        />
       </View>
     </SafeAreaView>
   );
@@ -60,47 +69,58 @@ const ModuleSelectionUI = () => {
 export default ModuleSelectionUI;
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    width: '100%',
-    height: '100%',
+  container: {
+    flex: 1,
     backgroundColor: '#F5F5F5',
   },
   topContainer: {
     height: 70,
-    width: '100%',
     backgroundColor: '#3C3567',
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOpacity: 0.4,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
+  },
+  logo: {
   
+    height: '100%',
+    resizeMode: 'contain',
+  },
+  contentContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 15,
   },
   moduleContainer: {
     width: '100%',
-  
-    paddingTop: 15,
+    marginBottom: 20,
   },
   module: {
     width: '100%',
     height: 220,
     backgroundColor: '#F2F2F2',
+   
     shadowColor: '#000',
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.8,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 4 },
     elevation: 8,
-    marginBottom: 20,
   },
   moduleHeader: {
-    width: '100%',
-    height: '25%',
+    height: '22%',
     backgroundColor: '#3C3567',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 15,
+
+  },
+  moduleHeaderText: {
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '600',
+    textAlign: 'center',
   },
   moduleBody: {
     flex: 1,
@@ -108,17 +128,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
   },
-  CorporateText: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  ChauffeurText: {
+  moduleBodyText: {
     color: '#212121',
-    fontSize: 18,
+    fontSize: 16,
     marginTop: 20,
     fontWeight: '600',
     textAlign: 'center',
+  },
+  moduleImage: {
+    height: 60,
+    resizeMode: 'contain',
   },
 });

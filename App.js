@@ -68,7 +68,7 @@ const App = () => {
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
         <Stack.Screen name="PersonalRegister" component={PersonalRegister} />
         <Stack.Screen name="ResetPassword" component={ResetPassword} />
-        <Stack.Screen name="CorporateModule1" component={CorporateModule1} />
+        <Stack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }}/>
         <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="PickUpLocation" component={PickUpLocation} />
         <Stack.Screen name="HomeScreen1" component={HomeScreen1} />
