@@ -38,12 +38,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   input: {
-    width:"90%",
     height: 48, 
     backgroundColor: '#FFFFFF',
-    borderWidth:0,
+    borderWidth:1.5,
     borderColor: '#E5E5E5',
-    marginLeft: 18,
     borderRadius: 4,
     paddingHorizontal: 16,
     fontSize: 16,

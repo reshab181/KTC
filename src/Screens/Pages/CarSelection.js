@@ -6,6 +6,7 @@ import CarCard from '../../ReusableBtn/CarCard'
 import { ScrollView } from 'react-native-gesture-handler'
 
 const CarSelection = () => {
+    
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#F1F1F3' }}>
             <ScrollView >

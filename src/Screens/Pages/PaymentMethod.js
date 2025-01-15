@@ -1,70 +1,102 @@
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import CustomHeader from '../../ReusableBtn/CustomHeader';
-import PaymentCustomButton from '../../ReusableBtn/PaymentCustomButton.js';
+import PaymentCustomButton from '../../ReusableBtn/PaymentCustomButton';
+import CustomButton from '../../ReusableBtn/CustomButtons';
+import CardFormModal from '../../ReusableBtn/CardFormModal';
+import WalletnUpi from '../../ReusableBtn/WalletnUpi';
+import CustomModal from '../../ReusableBtn/CustomModals';
 
 const PaymentMethod = () => {
-  const [selectedButton, setSelectedButton] = useState('Debit'); // Initial selected button
+  const [selectedButton, setSelectedButton] = useState('Debit');
+  const [visible, setvisible] = useState(false);
 
-  const handleButtonPress = (buttonName) => {
-    setSelectedButton(buttonName);
-  };
+
+  const paymentMethods = [
+    {
+      title: 'Debit',
+      activeImg: require('../../Assets/credit_cardi.png'),
+      inactiveImg: require('../../Assets/DebitCardi.png'),
+    },
+    {
+      title: 'Credit',
+      activeImg: require('../../Assets/credit_cardi.png'),
+      inactiveImg: require('../../Assets/DebitCardi.png'),
+    },
+    {
+      title: 'Net Banking',
+      activeImg: require('../../Assets/net-Bankingi.png'),
+      inactiveImg: require('../../Assets/net-Bankingi.png'),
+    },
+    {
+      title: 'Wallets & UPI',
+      activeImg: require('../../Assets/accountbalancewalletwhite.png'),
+      inactiveImg: require('../../Assets/Wallett&upii.png'),
+    },
+  ];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#F1F1F3' }}>
+    <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View>
-          <CustomHeader title="Payment" iconPath={require('../../Assets/icbackarrow.png')} iconHeight={24} iconWidth={24} />
-          <View style={{ marginTop: 20 }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-              <View>
-                <PaymentCustomButton
-                  title="Debit"
-                  widthSize={158}
-                  fontWeight="normal"
-                  textSize={12}
-                  isSelected={selectedButton === 'Debit'}
-                  onPress={() => handleButtonPress('Debit')} // Change state on click
-                />
-              </View>
-              <View>
-                <PaymentCustomButton
-                  title="Credit"
-                  widthSize={158}
-                  fontWeight="normal"
-                  textSize={12}
-                  isSelected={selectedButton === 'Credit'}
-                  onPress={() => handleButtonPress('Credit')}
-                />
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 12 }}>
-              <View>
-                <PaymentCustomButton
-                  title="Net Banking"
-                  widthSize={158}
-                  fontWeight="normal"
-                  textSize={12}
-                  isSelected={selectedButton === 'Net Banking'}
-                  onPress={() => handleButtonPress('Net Banking')}
-                />
-              </View>
-              <View>
-                <PaymentCustomButton
-                  title="Wallets & UPI"
-                  widthSize={158}
-                  fontWeight="normal"
-                  textSize={12}
-                  isSelected={selectedButton === 'Wallets & UPI'}
-                  onPress={() => handleButtonPress('Wallets & UPI')}
-                />
-              </View>
-            </View>
-          </View>
+        {/* Header */}
+        <CustomHeader
+          title="Payment"
+          iconPath={require('../../Assets/icbackarrow.png')}
+          iconHeight={24}
+          iconWidth={24}
+        />
+
+        <View style={styles.buttonsContainer}>
+          {paymentMethods.map((method) => (
+            <PaymentCustomButton
+              key={method.title}
+              title={method.title}
+              imgpath={selectedButton === method.title ? method.activeImg : method.inactiveImg}
+              widthSize={158}
+              fontWeight="normal"
+              textSize={12}
+              isSelected={selectedButton === method.title}
+              onPress={() => setSelectedButton(method.title)}
+            />
+          ))}
         </View>
+
+        {['Debit', 'Credit', 'Net Banking'].includes(selectedButton) ? (
+          <CardFormModal />
+        ) : (
+          <View style={{ marginHorizontal: 16 }}>
+            <WalletnUpi />
+          </View>
+        )}
       </ScrollView>
+
+      <CustomButton title="Pay ₹20,402" borderRadius={0} onPress={()=>setvisible(!visible)} />
+      {
+        visible ? <>
+          <View>
+            <CustomModal onClose={() => setvisible(!visible)}
+              message1={"Your Payment has been Successfull"}
+              message2={"The vehicle details will be shared shortly"}
+              isButtonVisible={false}
+            />
+          </View>
+        </> : null
+      }
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
+  buttonsContainer: {
+    marginTop: 16,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-evenly',
+  },
+});
 
 export default PaymentMethod;
