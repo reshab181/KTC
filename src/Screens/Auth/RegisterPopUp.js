@@ -2,7 +2,7 @@
 // Component---RegisterPopUp.js */
 
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dimensions,
   SafeAreaView,
@@ -16,13 +16,19 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
+<<<<<<< HEAD
 import CryptoJS from 'crypto-js';
 import debounce from 'lodash.debounce';
 import CustomTextInpt from '../../Reusables/CustomTextInpt';
 import CustomButton from '../../Reusables/CustomButtons';
 import Api from '../../Services/Api';
+=======
+>>>>>>> 6d0d8cd9a832ff329eac666d16e650ef1b4f2d8e
 
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
+import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
+import CustomButton from '../../ReusableBtn/CustomButtons';
+import { registrationHandler } from '../../Api/Authentication';
 
 const { height } = Dimensions.get('screen');
 
@@ -35,7 +41,10 @@ const RegisterPOPUP = ({ onClose }) => {
 
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 6d0d8cd9a832ff329eac666d16e650ef1b4f2d8e
   useEffect(() => {
     const getAccessToken = async () => {
       const token = await fetchJwtAccess();
@@ -47,50 +56,7 @@ const RegisterPOPUP = ({ onClose }) => {
     getAccessToken();
   }, []);
 
-
-
-  const encryptData = (data) => {
-    const ClientID = '!IV@_$2123456789';
-    const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
-    const CryptoJsCI = CryptoJS.enc.Utf8.parse(ClientID);
-    const CryptoJsCK = CryptoJS.enc.Utf8.parse(ClientKey);
-
-    return CryptoJS.AES.encrypt(JSON.stringify(data), CryptoJsCK, {
-      iv: CryptoJsCI,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    }).toString();
-  };
-
-  const registrationHandler = debounce(async (email) => {
-    setLoader(true);
-    try {
-      const payload = {
-        email_id: email,
-        verify: userType === 'corporate' ? 'KTCMMI' : 'PERSONAL',
-      };
-
-      const encryptedPayload = encryptData(payload);
-      const response = await fetch(Api.USER_REGISTRATION, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          jwt: accessToken,
-        },
-        body: `request_data=${encodeURIComponent(encryptedPayload)}`,
-      });
-
-      const data = await response.json();
-      handleApiResponse(data, email);
-    } catch (error) {
-      console.error('Registration Error:', error);
-      Alert.alert('Error', 'Failed to register. Please try again.');
-    } finally {
-      setLoader(false);
-    }
-  }, 300);
-
-  const handleApiResponse = (data, email) => {
+ const handleApiResponse = (data, email) => {
     if (!data) return Alert.alert('Error', 'No data received from the server.');
 
     switch (data.message) {
@@ -120,7 +86,7 @@ const RegisterPOPUP = ({ onClose }) => {
   };
 
   return (
-    <Modal animationType="slide" transparent visible={visible}>
+    <Modal  propagateSwipe={true} animationType="slide" transparent visible={visible}>
       <SafeAreaView style={styles.overlay}>
         <View style={styles.modalContainer}>
           <Formik
@@ -131,7 +97,7 @@ const RegisterPOPUP = ({ onClose }) => {
               else if (!emailRegex.test(values.email)) errors.email = 'Invalid email address';
               return errors;
             }}
-            onSubmit={({ email }) => registrationHandler(email)}
+            onSubmit={({ email }) =>registrationHandler(email, userType, accessToken, handleApiResponse, setLoader)}
           >
             {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
               <View style={styles.formContainer}>
@@ -166,8 +132,7 @@ const RegisterPOPUP = ({ onClose }) => {
     </Modal>
   );
 };
-
-export default React.memo(RegisterPOPUP);
+export default RegisterPOPUP
 
 const styles = StyleSheet.create({
   overlay: {

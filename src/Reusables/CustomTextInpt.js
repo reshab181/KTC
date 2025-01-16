@@ -45,6 +45,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderWidth:1.5,
     borderColor: '#E5E5E5',
+<<<<<<< HEAD:src/Reusables/CustomTextInpt.js
+=======
+    marginLeft: 18,
+    marginBottom:18,
+>>>>>>> 6d0d8cd9a832ff329eac666d16e650ef1b4f2d8e:src/ReusableBtn/CustomTextInpt.js
     borderRadius: 4,
     paddingHorizontal: 16,
     fontSize: 16,
