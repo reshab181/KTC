@@ -1,28 +1,177 @@
+// import React, { useEffect, useState } from 'react';
+// import {
+//   Dimensions,
+//   Text,
+//   TextInput,
+//   TouchableOpacity,
+//   View,
+//   StyleSheet,
+//   SafeAreaView,
+//   ActivityIndicator,
+//   Alert,
+// } from 'react-native';
+// import { useNavigation } from '@react-navigation/native';
+// import { fetchJwtAccess } from '../../Utils/JwtHelper';
+// import { emailsms } from '../../Api/Authentication';
+
+// const { height, width } = Dimensions.get('screen');
+
+// const ForgotPassword = ({ route, navigation }) => {
+//   const { email } = route.params; 
+//   const [accessToken, setAccessToken] = useState('');
+//   const [loading, setLoading] = useState(false);
+//   const [error, setError] = useState(null);
+
+ 
+//   useEffect(() => {
+//     const getAccessToken = async () => {
+//       try {
+//         console.log('Fetching JWT Access Token...');
+//         const token = await fetchJwtAccess();
+//         console.log('Fetched JWT Access Token:', token);
+//         if (token) {
+//           setAccessToken(token);
+//         }
+//       } catch (error) {
+//         console.error('Error fetching JWT access token:', error.message);
+//         setError('Failed to fetch access token.');
+//       }
+//     };
+
+//     getAccessToken();
+//   }, []);
+
+
+//   const sendForgotOTP = () => {
+//     emailsms(email, accessToken, navigation, setLoading); 
+//   };
+
+//   return (
+//     <SafeAreaView style={styles.mainContainer}>
+//       <View style={styles.headerContainer}>
+//         <Text style={styles.headerText}>Forgot Password</Text>
+//         <TouchableOpacity onPress={() => navigation.goBack()}>
+//           <Text style={styles.skipText}>Skip</Text>
+//         </TouchableOpacity>
+//       </View>
+
+//       <View style={styles.emailContainer}>
+//         <TextInput
+//           editable={false}
+//           value={email}
+//           style={styles.emailText}
+//           placeholder="Please use prefilled email id"
+//           placeholderTextColor="#212121"
+//         />
+//       </View>
+
+//       <TouchableOpacity onPress={sendForgotOTP} disabled={loading}>
+//         <View style={[styles.submitButton, { alignItems: 'center', justifyContent: 'center' }]}>
+//           {loading ? (
+//             <ActivityIndicator color="#fff" />
+//           ) : (
+//             <Text style={styles.submitButtonText}>Next</Text>
+//           )}
+//         </View>
+//       </TouchableOpacity>
+
+//       {error && <Text style={styles.errorText}>{error}</Text>}
+//     </SafeAreaView>
+//   );
+// };
+
+// export default ForgotPassword;
+
+// const styles = StyleSheet.create({
+//   mainContainer: {
+//     height: height,
+//     width: width,
+//     backgroundColor: '#F1F1F3',
+//   },
+//   headerContainer: {
+//     flexDirection: 'row',
+//     justifyContent: 'space-between',
+//     backgroundColor: '#3C3567',
+//     alignItems: 'center',
+//     paddingHorizontal: 25,
+//     paddingVertical: 20,
+//     shadowColor: '#000',
+//     shadowOffset: { width: 0, height: 4 },
+//     shadowOpacity: 0.1,
+//     shadowRadius: 6,
+//     elevation: 5,
+//   },
+//   headerText: {
+//     fontSize: 20,
+//     fontWeight: 'bold',
+//     color: '#FFF',
+//   },
+//   skipText: {
+//     fontSize: 16,
+//     color: '#FFF',
+//   },
+//   emailContainer: {
+//     height: height / 15,
+//     width: width / 1.1,
+//     backgroundColor: '#FFFFFF',
+//     marginTop: 50,
+//     alignSelf: 'center',
+//     paddingHorizontal: 15,
+//     justifyContent: 'center',
+//     elevation: 3,
+//   },
+//   emailText: {
+//     height: height / 13,
+//     fontSize: 16,
+//     color: '#212121',
+//     paddingLeft: 10,
+//   },
+//   submitButton: {
+//     height: height / 12,
+//     width: width / 1.1,
+//     backgroundColor: '#3C3567',
+//     marginTop: 60,
+//     alignSelf: 'center',
+//     justifyContent: 'center',
+//     elevation: 4,
+//   },
+//   submitButtonText: {
+//     alignSelf: 'center',
+//     color: '#FFFFFF',
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//   },
+//   errorText: {
+//     color: 'red',
+//     fontSize: 16,
+//     alignSelf: 'center',
+//     marginTop: 20,
+//   },
+// });
+
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
   StyleSheet,
   SafeAreaView,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import { emailsms } from '../../Api/Authentication';
+import CustomButton from '../../ReusableBtn/CustomButtons';
+import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
 
 const { height, width } = Dimensions.get('screen');
 
 const ForgotPassword = ({ route, navigation }) => {
-  const { email } = route.params; 
+  const { email } = route.params;
   const [accessToken, setAccessToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
- 
   useEffect(() => {
     const getAccessToken = async () => {
       try {
@@ -41,39 +190,38 @@ const ForgotPassword = ({ route, navigation }) => {
     getAccessToken();
   }, []);
 
-
   const sendForgotOTP = () => {
-    emailsms(email, accessToken, navigation, setLoading); 
+    emailsms(email, accessToken, navigation, setLoading);
   };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>Forgot Password</Text>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.skipText}>Skip</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.emailContainer}>
-        <TextInput
-          editable={false}
-          value={email}
-          style={styles.emailText}
-          placeholder="Please use prefilled email id"
-          placeholderTextColor="#212121"
+        <CustomButton
+          title="Skip"
+          onPress={() => navigation.goBack()}
+          buttonStyle={styles.skipButton}
+          textStyle={styles.skipText}
         />
       </View>
 
-      <TouchableOpacity onPress={sendForgotOTP} disabled={loading}>
-        <View style={[styles.submitButton, { alignItems: 'center', justifyContent: 'center' }]}>
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.submitButtonText}>Next</Text>
-          )}
-        </View>
-      </TouchableOpacity>
+      <CustomTextInpt
+        value={email}
+        editable={false}
+        placeholder="Please use prefilled email id"
+        placeholderTextColor="#212121"
+        inputStyle={styles.emailText}
+        containerStyle={styles.emailContainer}
+      />
+
+      <CustomButton
+        title={loading ? <ActivityIndicator color="#fff" /> : 'Next'}
+        onPress={sendForgotOTP}
+        buttonStyle={styles.submitButton}
+        textStyle={styles.submitButtonText}
+        disabled={loading}
+      />
 
       {error && <Text style={styles.errorText}>{error}</Text>}
     </SafeAreaView>
@@ -106,6 +254,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#FFF',
   },
+  skipButton: {
+    backgroundColor: 'transparent',
+  },
   skipText: {
     fontSize: 16,
     color: '#FFF',
@@ -136,7 +287,6 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   submitButtonText: {
-    alignSelf: 'center',
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
