@@ -1,6 +1,7 @@
 //**Author---- Reshab Kumar Pandey
 // Component----SignIn.js */
 
+
 import React, { useState, useEffect } from 'react';
 import {
   Dimensions,
@@ -10,18 +11,17 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Alert,
-  Platform,
-  ActivityIndicator,
+ 
+ 
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import CryptoJS from 'crypto-js';
 import { useNavigation } from '@react-navigation/native';
 import RegisterPOPUP from './RegisterPopUp';
-import Api from '../../Services/Api';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
+import { handleSignIn } from '../../Api/Authentication';
+import CustomButton from '../../ReusableBtn/CustomButtons';
 
 
 const SignInCorporate = ({ route }) => {
@@ -39,16 +39,6 @@ const SignInCorporate = ({ route }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  const validationSchema = Yup.object().shape({
-    // email: Yup.string().email('Invalid email').required('Email is required'),
-    password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
-  });
-
-
-
-
   useEffect(() => {
     const getAccessToken = async () => {
       const token = await fetchJwtAccess();
@@ -60,71 +50,12 @@ const SignInCorporate = ({ route }) => {
     getAccessToken();
   }, []);
 
-  const encryptPayload = (data) => {
-    const ClientID = '!IV@_$2123456789';
-    const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
-    const CryptoJsCI = CryptoJS.enc.Utf8.parse(ClientID);
-    const CryptoJsCK = CryptoJS.enc.Utf8.parse(ClientKey);
-    const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), CryptoJsCK, {
-      iv: CryptoJsCI,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    });
+  const validationSchema = Yup.object().shape({
+    password: Yup.string()
+      .min(6, 'Password must be at least 6 characters')
+      .required('Password is required'),
+  });
 
-    return encryptedData.ciphertext.toString(CryptoJS.enc.Base64);
-  };
-
-  const handleSignIn = async (values) => {
-    setLoading(true);
-    try {
-      const payload = {
-        email_id: email,
-        password: values.password,
-        type: Platform.OS === 'android' ? 'GSM' : 'FCM',
-        tokenid: await AsyncStorage.getItem('fcmToken') || 'dummy-token',
-      };
-
-      const encryptedPayload = encryptPayload(payload);
-      const formBody = new URLSearchParams({ request_data: encryptedPayload }).toString();
-
-      console.log("Access Token:", accessToken);
-      console.log("Request Payload:", formBody);
-
-      const response = await fetch(Api.USER_LOGIN, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          jwt: accessToken,
-        },
-        body: formBody,
-      });
-
-      if (!response.ok) {
-        const data = await response.json();
-        console.log("API Response Data:", data);
-        if (data?.message === 'Password Not Match') {
-          Alert.alert('Error', 'Password Not Match');
-        } else {
-          Alert.alert('Error', 'Failed to sign in. Please try again.');
-        }
-        return;
-      }
-
-      const data = await response.json();
-      if (data?.jwt) {
-        await AsyncStorage.setItem('token', data.jwt);
-        Alert.alert('Success', 'Logged in successfully!');
-        navigation.navigate("CorporateModule1");
-      } else {
-        Alert.alert('Error', 'Unexpected response from server.');
-      }
-    } catch (error) {
-      console.error('Error in handleSignIn:', error);
-      Alert.alert('Error', 'Failed to sign in. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
   const handleNavigate = (module) => {
     if (navigation.isFocused()) {
       navigation.navigate('SignInCorporate', {
@@ -133,9 +64,9 @@ const SignInCorporate = ({ route }) => {
       });
     }
   };
+
   return (
     <SafeAreaView style={styles.mainContainer}>
-
       <View style={styles.header}>
         <Text style={styles.headerText}>Sign In</Text>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -145,11 +76,10 @@ const SignInCorporate = ({ route }) => {
 
       {isModalVisible && <RegisterPOPUP onClose={() => setisModalVisible(false)} />}
 
-
       <Formik
         initialValues={{ email: email || '', password: '' }}
         validationSchema={validationSchema}
-        onSubmit={handleSignIn}
+        onSubmit={(values) => handleSignIn(email, values.password, accessToken, navigation, setLoading)}
       >
         {({
           handleChange,
@@ -160,7 +90,6 @@ const SignInCorporate = ({ route }) => {
           touched,
         }) => (
           <>
-
             <View style={styles.Email1}>
               <View style={styles.Email2}>
                 <TextInput
@@ -197,15 +126,13 @@ const SignInCorporate = ({ route }) => {
               )}
             </View>
 
-            <TouchableOpacity onPress={handleSubmit} disabled={loading}>
-              <View style={styles.buttonContainer}>
-                {loading ? (
-                  <ActivityIndicator color="#fff" />
-                ) : (
-                  <Text style={styles.submitButtonText}>Sign In</Text>
-                )}
-              </View>
-            </TouchableOpacity>
+            <CustomButton
+                  title="Sign In"
+                  onPress={handleSubmit}
+                  widthSize="100%"
+                  borderRadius={0}
+                  // loading={loader}
+                />
           </>
         )}
       </Formik>
@@ -307,7 +234,7 @@ const styles = StyleSheet.create({
     height: Dimensions.get('screen').height / 15,
     width: Dimensions.get('screen').width / 1.1,
     backgroundColor: '#3C3567',
-    // borderRadius: 8,
+  
     justifyContent: 'center',
     alignItems: 'center',
     alignSelf: 'center',
