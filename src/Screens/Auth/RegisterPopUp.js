@@ -18,8 +18,8 @@ import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 import CryptoJS from 'crypto-js';
 import debounce from 'lodash.debounce';
-import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
-import CustomButton from '../../ReusableBtn/CustomButtons';
+import CustomTextInpt from '../../Reusables/CustomTextInpt';
+import CustomButton from '../../Reusables/CustomButtons';
 import Api from '../../Services/Api';
 
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
@@ -35,10 +35,10 @@ const RegisterPOPUP = ({ onClose }) => {
 
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
- 
+
   useEffect(() => {
     const getAccessToken = async () => {
-      const token = await fetchJwtAccess(); 
+      const token = await fetchJwtAccess();
       if (token) {
         setAccessToken(token);
       }
@@ -96,7 +96,7 @@ const RegisterPOPUP = ({ onClose }) => {
     switch (data.message) {
       case 'success':
         if (data.newuser === 'No') {
-            Alert.alert('Success', 'Registered in successfully!');
+          Alert.alert('Success', 'Registered in successfully!');
           setVisible(false);
           navigation.navigate('SignInCorporate', { email: email });
         } else {
@@ -141,19 +141,20 @@ const RegisterPOPUP = ({ onClose }) => {
                     <Image source={require('../../Assets/close.png')} />
                   </TouchableOpacity>
                 </View>
-                <Text style={styles.instruction}>Please enter your official email ID</Text>
-                <CustomTextInpt
-                  placeholder="Email ID"
-                  value={values.email}
-                  onChangeText={handleChange('email')}
-                  keyboardType="email-address"
-                  secureTextEntry={false}
-                />
+                <View style={{marginHorizontal: 16 , marginTop: 14 , marginBottom: 19}}>
+                  <Text style={styles.instruction}>Enter your official Email ID</Text>
+                  <CustomTextInpt
+                    placeholder="Official Email ID"
+                    value={values.email}
+                    onChangeText={handleChange('email')}
+                    keyboardType="email-address"
+                    secureTextEntry={false}
+                  />
+                </View>
                 {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
                 <CustomButton
                   title="Submit"
                   onPress={handleSubmit}
-                  widthSize="100%"
                   borderRadius={0}
                   loading={loader}
                 />
@@ -174,22 +175,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
-    backgroundColor: 'rgba(0,0,0,0.9)', 
+    backgroundColor: 'rgba(0,0,0,0.9)',
   },
   modalContainer: {
-    width: '100%', 
-    marginHorizontal: 20,
-    borderRadius: 12,
+    width: '99%',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 5, 
   },
   formContainer: {
-    margin: 10, 
+    margin: 10,
     backgroundColor: '#F2F2F2',
-    borderRadius: 8
   },
   header: {
     flexDirection: 'row',
@@ -205,23 +199,22 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   headerText: {
+    marginLeft: '35%',
     color: '#FFFFFF',
-    fontSize: 18, 
+    fontSize: 18,
     fontWeight: '600',
     textAlign: 'center',
   },
   instruction: {
     color: '#212121',
-    fontSize: 16, 
-    marginTop: 20,
-    marginLeft: 18,
-    lineHeight: 24, 
+    fontSize: 16,
+    lineHeight: 24,
   },
   errorText: {
     color: 'red',
-    fontSize: 14, 
+    fontSize: 14,
     marginTop: 5,
-    marginLeft: 18, 
-    fontWeight: '500', 
+    marginLeft: 18,
+    fontWeight: '500',
   },
 }); 

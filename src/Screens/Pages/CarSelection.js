@@ -1,8 +1,8 @@
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import CustomHeader from '../../ReusableBtn/CustomHeader'
-import CustomButton from '../../ReusableBtn/CustomButtons'
-import CarCard from '../../ReusableBtn/CarCard'
+import CustomHeader from '../../Reusables/CustomHeader'
+import CustomButton from '../../Reusables/CustomButtons'
+import CarCard from '../../Reusables/CarCard'
 import { ScrollView } from 'react-native-gesture-handler'
 
 const CarSelection = () => {

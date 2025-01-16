@@ -1,200 +1,96 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Dimensions,
-  Image,
   StyleSheet,
-  ScrollView,
   SafeAreaView,
-  Text,
-  TextInput,
-  TouchableOpacity,
   View,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
-import CustomHeader from '../../ReusableBtn/CustomHeader';
-import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
-
-const { height, width } = Dimensions.get('screen');
+import CustomHeader from '../../Reusables/CustomHeader';
+import CustomIconTextInput from '../../Reusables/CustomIconTextInput';
+import CustomButton from '../../Reusables/CustomButtons';
 
 const Profile = ({ navigation }) => {
-  const [f_name, setf_name] = useState('');
-  const [l_name, setl_name] = useState('');
-  const [email_id, setemail_id] = useState('');
-  const [bithdate, setbithdate] = useState('');
-  const [mobile_number, setmobile_number] = useState('');
-  const [loader, setloader] = useState(false);
-  const [resetPass, setResetPass] = useState('');
+  const [loader, setLoader] = useState(false);
+
+  // States for input fields
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    birthDate: '',
+    mobileNumber: '',
+    password: '',
+  });
 
   const handleDeleteAccount = () => {
+    console.log(formData.firstName); // Logs the first name entered
+    console.log(formData.email); // Logs the email entered
+
     Alert.alert(
-      "Alert", 
-      "are you sure you want to Delete Your Account?",
+      'Alert',
+      'Are you sure you want to delete your account?',
       [
         { text: 'Cancel', onPress: () => null },
-        { text: "OK", onPress: () => { /* Handle delete */ }}
+        { text: 'OK', onPress: () => console.log('Account deleted') }, // Replace with actual delete logic
       ]
     );
   };
 
-  return (
-    <SafeAreaView>
-      <View style={styles.mainContainer}>
-        {/* Header */}
-        <View>
-          <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.goBack()}>
-              <Image 
-                source={require('../../Assets/ic_back_arrow_white_24.png')}
-                style={styles.backButton}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            <CustomHeader title={"Profile"}/>
-            {/* <TouchableOpacity onPress={() => navigation.navigate('MessageScreen')}>
-              <Image 
-                source={require('../../Assets/bell.png')}
-                style={styles.notificationIcon}
-                resizeMode="contain"
-              />
-            </TouchableOpacity> */}
-          </View>
-        </View>
+  const inputs = [
+    { placeholder: "First Name", icon1: require('../../Assets/manicon.png'), value: formData.firstName, key: 'firstName' },
+    { placeholder: "Last Name", icon1: require('../../Assets/manicon.png'), value: formData.lastName, key: 'lastName' },
+    { placeholder: "Email", icon1: require('../../Assets/email.png'), value: formData.email, key: 'email' },
+    { placeholder: "MM/DD/YYYY", icon1: require('../../Assets/DOB.png'), value: formData.birthDate, key: 'birthDate' },
+    { placeholder: "Mobile Number", icon1: require('../../Assets/phone.png'), value: formData.mobileNumber, key: 'mobileNumber' , type: "numeric" },
+    { placeholder: "Change Password", icon1: require('../../Assets/lock.png'), value: formData.password, key: 'password' },
+  ];
 
-        {/* Loading Indicator */}
+  // Function to handle text changes
+  const handleInputChange = (key, value) => {
+    setFormData(prevState => ({
+      ...prevState,
+      [key]: value,
+    }));
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.mainContainer}>
+        <CustomHeader
+          title="Profile"
+          iconPath={require('../../Assets/icbackarrow.png')}
+          iconHeight={24}
+          iconWidth={24}
+        />
+
         {loader && (
           <View style={styles.loaderContainer}>
             <ActivityIndicator size="large" color="#3C3567" />
           </View>
         )}
 
-        {/* Form Fields */}
-        <View>
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Image 
-                source={require('../../Assets/manicon.png')}
-                style={styles.fieldIcon}
-                resizeMode="contain"
+        <View style={styles.inputContainer}>
+          {inputs.map((input, index) => (
+            <View style={{ marginTop: 16 }} key={index}>
+              <CustomIconTextInput
+                keyboardType= {input.type}
+                placeholder={input.placeholder}
+                icon1={input.icon1}
+                value={input.value}
+                onChangeText={(value) => handleInputChange(input.key, value)} // Update state
               />
             </View>
-            <View style={styles.inputWrapper}>
-              <CustomTextInpt
-                style={styles.input}
-                placeholder="First Name"
-                placeholderTextColor="#737373"
-                value={f_name}
-                onChangeText={setf_name}
-              />
-            </View>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Image 
-                source={require('../../Assets/manicon.png')}
-                style={styles.fieldIcon}
-                resizeMode="contain"
-              />
-            </View>
-            <View style={styles.inputWrapper}>
-              <CustomTextInpt
-                style={styles.input}
-                placeholder="Last Name"
-                placeholderTextColor="#737373"
-                value={l_name}
-                onChangeText={setl_name}
-              />
-            </View>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Image 
-                source={require('../../Assets/email.png')}
-                style={styles.fieldIcon}
-                resizeMode="contain"
-              />
-            </View>
-            <View style={styles.inputWrapper}>
-              <CustomTextInpt
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor="#737373"
-                value={email_id}
-                onChangeText={setemail_id}
-              />
-            </View>
-          </View>
-
-          <View style={styles.inputContainer}>
-            <View style={styles.iconContainer}>
-              <Image 
-                source={require('../../Assets/DOB.png')}
-                style={styles.fieldIcon}
-                resizeMode="contain"
-              />
-            </View>
-            <View style={styles.inputWrapper}>
-              <CustomTextInpt
-                style={styles.input}
-                placeholder="MM/DD/YYYY"
-                placeholderTextColor="#737373"
-                value={bithdate}
-                onChangeText={setbithdate}
-                keyboardType="numeric"
-              />
-            </View>
-          </View>
-
-          <View style={styles.phoneContainer}>
-            <View style={styles.countryCode}>
-              <Image
-                source={require('../../Assets/phone.png')}
-                style={styles.fieldIcon}
-                resizeMode="contain"
-              />
-              <Text style={styles.countryCodeText}>+91</Text>
-            </View>
-            <View style={styles.phoneInputWrapper}>
-              <CustomTextInpt
-                style={styles.phoneInput}
-                placeholder="Mobile Number"
-                placeholderTextColor="#737373"
-                value={mobile_number}
-                onChangeText={setmobile_number}
-                keyboardType="numeric"
-              />
-            </View>
-          </View>
-
-          <TouchableOpacity onPress={() => {}}>
-            <View style={styles.inputContainer}>
-              <View style={styles.iconContainer}>
-                <Image 
-                  source={require('../../Assets/lock.png')}
-                  style={styles.fieldIcon}
-                  resizeMode="contain"
-                />
-              </View>
-              <View style={styles.inputWrapper}>
-                <CustomTextInpt
-                  style={styles.input}
-                  placeholder="Change Password"
-                  placeholderTextColor="#737373"
-                  value={resetPass}
-                  editable={false}
-                />
-              </View>
-            </View>
-          </TouchableOpacity>
+          ))}
         </View>
 
-        {/* Delete Account Button */}
-        <View>
-          <TouchableOpacity onPress={handleDeleteAccount} style={styles.deleteButton}>
-            <Text style={styles.deleteButtonText}>Delete Account</Text>
-          </TouchableOpacity>
+        <View style={{ position: 'absolute', width: '100%', bottom: 0.5 }}>
+          <CustomButton
+            title="Delete Account"
+            onPress={handleDeleteAccount}
+            borderRadius={0}
+          />
         </View>
       </View>
     </SafeAreaView>
@@ -202,116 +98,25 @@ const Profile = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    height: height,
-    width: width,
+  container: {
+    flex: 1,
     backgroundColor: '#F1F1F3',
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#3C3567',
-    alignItems: 'center',
-    paddingHorizontal: 25,
-    paddingVertical: 15, 
-    shadowColor: '#000', 
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-
-  backButton: {
-    height: 24,
-    width: 24,
-  },
-  notificationIcon: {
-    height: 24,
-    width: 24,
+  mainContainer: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#F1F1F3',
   },
   loaderContainer: {
     position: 'absolute',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'transparent',
-    zIndex: 999,
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -25 }, { translateY: -25 }],
+    zIndex: 1,
   },
   inputContainer: {
-    height: 70,
-    width: '90%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    borderRadius: 5,
-    backgroundColor: '#FFFFFF',
-    marginLeft: 20,
-    marginTop: 20,
-  },
-  iconContainer: {
-    width: '15%',
-    alignItems: 'flex-end',
-    paddingRight: 10,
-  },
-  fieldIcon: {
-    height: 30,
-    width: 30,
-  },
-  inputWrapper: {
-    width: '85%',
-    alignItems: 'flex-start',
-  },
-  input: {
-    color: '#000',
-    fontSize: 15,
-  },
-  phoneContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    marginTop: 20,
-    marginHorizontal: 5,
-  },
-  countryCode: {
-    flexDirection: 'row',
-    borderRadius: 6,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    width: '20%',
-    height: 65,
-    paddingLeft: 10,
-  },
-  countryCodeText: {
-    fontSize: 14,
-    color: '#737373',
-    marginLeft: 0,
-  },
-  phoneInputWrapper: {
-    backgroundColor: '#fff',
-    borderRadius: 6,
-    width: '60%',
-    height: 65,
-    justifyContent: 'center',
-  },
-  phoneInput: {
-    textAlign: 'center',
-    color: '#000',
-    fontSize: 15,
-  },
-  deleteButton: {
-    backgroundColor: '#3C3567',
-    width: '90%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 15,
-    borderRadius: 10,
-    marginVertical: 30,
-    marginHorizontal: 20,
-  },
-  deleteButtonText: {
-    color: 'white',
-    fontSize: 16,
+    marginHorizontal: 16,
+    marginTop: 16,
   },
 });
 

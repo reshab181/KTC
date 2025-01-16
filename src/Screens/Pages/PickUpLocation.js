@@ -1,10 +1,10 @@
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import CustomButton from '../../ReusableBtn/CustomButtons'
-import CustomHeader from '../../ReusableBtn/CustomHeader'
-import CustomTextInpt from '../../ReusableBtn/CustomTextInpt'
-import CustomTextInput from '../../ReusableBtn/CustomIconTextInput'
-import SearchResultList from '../../ReusableBtn/SearchResultList'
+import CustomButton from '../../Reusables/CustomButtons'
+import CustomHeader from '../../Reusables/CustomHeader'
+import CustomTextInpt from '../../Reusables/CustomTextInpt'
+import CustomTextInput from '../../Reusables/CustomIconTextInput'
+import SearchResultList from '../../Reusables/SearchResultList'
 const DATA = [
     {
         id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',

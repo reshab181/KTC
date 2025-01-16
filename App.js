@@ -60,9 +60,7 @@ const App = () => {
           headerShown: false,
         }} 
       />
-
-    //     {/* Other Screens */}
-        <Stack.Screen name="RegisterPage" component={Register} />
+        <Stack.Screen name="RegisterPage" component={Register} options={{headerShown: false}} />
         <Stack.Screen name="OTPRegister" component={OTPRegister} options={{ headerShown: false }} />
         <Stack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
 
@@ -78,7 +76,14 @@ const App = () => {
       </Stack.Navigator>
     </NavigationContainer>
     </GestureHandlerRootView>
-    // <OTPRegister/>
+    // // <OTPRegister/>
+    // <GestureHandlerRootView>
+    //   {/* <PaymentMethod/> */}
+    //   {/* <MyBooking/> */}
+    //   {/* <Profile/> */}
+    //   {/* <PersonalRegister/> */}
+    //   {/* <SignInCorporate/> */}
+    // {/* </GestureHandlerRootView> */}
 
  
   );

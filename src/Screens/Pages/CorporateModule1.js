@@ -1,14 +1,14 @@
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
-import CustomHeader from '../../ReusableBtn/CustomHeader'
+import CustomHeader from '../../Reusables/CustomHeader'
 import { useWindowDimensions } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
-import CustomDropdown from '../../ReusableBtn/CustomDropdown';
-import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
+import CustomDropdown from '../../Reusables/CustomDropdown';
+import CustomTextInpt from '../../Reusables/CustomTextInpt';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
-import CustomCalender from '../../ReusableBtn/CustomCalender';
-import CustomButton from '../../ReusableBtn/CustomButtons';
+import CustomCalender from '../../Reusables/CustomCalender';
+import CustomButton from '../../Reusables/CustomButtons';
 
 const data = [
     { label: 'Item 1', value: '1' },
