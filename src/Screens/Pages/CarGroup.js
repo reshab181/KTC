@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import CustomHeader from '../../ReusableBtn/CustomHeader'
-import CustomCarGrouptile from '../../ReusableBtn/CustomCarGrouptile'
+import CustomHeader from '../../Reusables/CustomHeader'
+import CustomCarGrouptile from '../../Reusables/CustomCarGrouptile'
 
 const CarGroup = () => {
     const carGroupTitles = [

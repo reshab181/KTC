@@ -1,30 +1,37 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons'; // Import Ionicons from vector icons
 
-const CustomIconTextInput = ({placeholder , icon1, icon2 }) => {
+const CustomIconTextInput = ({
+  placeholder,
+  icon1,
+  icon2,
+  keyboardType = 'default',
+  value,
+  onChangeText, // New prop to handle text input changes
+}) => {
   // States to toggle visibility of icons
-  const [showLeftIcon, setShowLeftIcon] = useState(icon1? true :false);
-  const [showRightIcon, setShowRightIcon] = useState(icon2? true :false);
+  const [showLeftIcon, setShowLeftIcon] = useState(icon1 ? true : false);
+  const [showRightIcon, setShowRightIcon] = useState(icon2 ? true : false);
 
   return (
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         {/* Left Icon */}
-        {showLeftIcon && (
-          <Image style={styles.icon1} source={icon1} />
-        )}
+        {showLeftIcon && <Image style={styles.icon1} source={icon1} />}
         
         <TextInput
           style={styles.textInput}
           placeholder={placeholder}
-          placeholderTextColor="#A9A9A9" 
+          keyboardType={keyboardType}
+          placeholderTextColor="#A9A9A9"
+          value={value} // Controlled value
+          onChangeText={onChangeText} // Pass input changes to the parent
         />
         
         {/* Right Icon */}
         {showRightIcon && (
           <TouchableOpacity onPress={() => setShowRightIcon(false)}>
-          <Image style={styles.icon2} source={icon2} />
+            <Image style={styles.icon2} source={icon2} />
           </TouchableOpacity>
         )}
       </View>
@@ -44,17 +51,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   icon1: {
-    height : 24, 
+    height: 24,
     width: 24,
     marginRight: 10,
   },
   icon2: {
-    height : 24, 
-    width: 24, 
-    marginRight: 0, 
+    height: 24,
+    width: 24,
+    marginRight: 0,
   },
   textInput: {
-    flex: 1, 
+    flex: 1,
     height: 40,
     fontSize: 14,
     color: '#737373',

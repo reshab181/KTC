@@ -7,9 +7,11 @@ const CustomTextInpt = ({
   onChangeText, 
   keyboardType = 'default', 
   secureTextEntry = false,
-  error = '', // For error handling
-  style, // Custom styles for TextInput
-  containerStyle // Custom styles for container
+  error = '',
+  style,
+  containerStyle ,
+  editable=true
+
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -25,6 +27,7 @@ const CustomTextInpt = ({
         secureTextEntry={secureTextEntry}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+        editable={editable}
       />
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
     </View>
@@ -42,8 +45,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderWidth:1.5,
     borderColor: '#E5E5E5',
+<<<<<<< HEAD:src/Reusables/CustomTextInpt.js
+=======
     marginLeft: 18,
     marginBottom:18,
+>>>>>>> 6d0d8cd9a832ff329eac666d16e650ef1b4f2d8e:src/ReusableBtn/CustomTextInpt.js
     borderRadius: 4,
     paddingHorizontal: 16,
     fontSize: 16,

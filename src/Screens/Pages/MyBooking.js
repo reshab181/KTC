@@ -1,29 +1,16 @@
-// import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
-// import React from 'react'
-// import CustomHeader from '../../ReusableBtn/CustomHeader'
-
-// const MyBooking = () => {
-//     const bookingStatus = [
-        // { text :'Admin Approval' ,  icon : 'circle' },
-        // { text :'Booking Confirmed' ,  icon : 'circle' },
-        // { text :'Vehicle Assigned' ,  icon : 'circle-o' },
-        // { text :'Journey Completed' ,  icon : 'circle-o' },
-        
-import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import React from 'react';
-import CustomHeader from '../../ReusableBtn/CustomHeader';
-import { Icon } from 'react-native-vector-icons/FontAwesome';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
+import CustomHeader from '../../Reusables/CustomHeader';
+import ProgessCard from '../../Reusables/ProgessCard';
+import { Image } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import CustomButton from '../../Reusables/CustomButtons';
 
 const MyBooking = () => {
-  const bookingStatus = [
-    { text :'Admin Approval' ,  icon : 'circle' },
-    { text :'Booking Confirmed' ,  icon : 'circle' },
-    { text :'Vehicle Assigned' ,  icon : 'circle-o' },
-    { text :'Journey Completed' ,  icon : 'circle-o' },
-  ];
+
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.root}>
       <ScrollView>
         <CustomHeader
           title="My Booking"
@@ -31,13 +18,30 @@ const MyBooking = () => {
           iconHeight={24}
           iconWidth={24}
         />
-        <View style={styles.statusContainer}>
-          {bookingStatus.map((status, index) => (
-            <View key={index} style={styles.statusItem}>
-              <Text style={styles.text}>{status.text}</Text>
-              {/* <Icon style={styles.icon}>{status.icon}</Icon> */}
+        <ProgessCard />
+        <View style={{ marginTop: 21, backgroundColor: "#FFFFFF", marginHorizontal: 16, borderRadius: 4, elevation: 5, borderColor: '#DBDBDB' }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 15, marginTop: 9 }}>
+            <View>
+              <Text style={{ color: '#555555' }}>Mercedes Benz CLS</Text>
             </View>
-          ))}
+            <View>
+              <Text>Booking ID: 229675</Text>
+            </View>
+          </View>
+          <Image source={require('../../Assets/cardemo.png')} />
+          <View style={{ marginHorizontal: 14 , paddingBottom: 10 , }}>
+            <Text style={{color: '#212121', fontWeight: '500', marginVertical: 10 , fontSize: 14}}>Santosh Kumar Jha</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center' , marginBottom: 10 }}>
+              <Icon name='envelope-o' size={15} />
+              <Text style={{marginLeft: 9 , }}>Email ID: santosh@ktc.com</Text>
+            </View>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center' , marginBottom: 10}}>
+              <Icon name='calendar' size={15} />
+              <Text style={{marginLeft: 9 , }}>Booking Date: 10-05-2022</Text>
+            </View>
+              <CustomButton title={'Track Chauffeur'} btnHeight={32} textSize={14} fontWeight={400}/>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -45,27 +49,11 @@ const MyBooking = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  root: {
     flex: 1,
     backgroundColor: '#F1F1F3',
   },
-  statusContainer: {
-    marginTop: 100,
-    paddingHorizontal: 16,
-  },
-  statusItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  icon: {
-    fontSize: 24,  // Adjust size as needed
-    marginRight: 10,
-  },
-  text: {
-    fontSize: 16,
-    color: '#000',
-  },
+
 });
 
 export default MyBooking;

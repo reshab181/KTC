@@ -1,5 +1,5 @@
-//**Author---- Reshab Kumar Pandey
-// Component----SignIn.js */
+// Author: Reshab Kumar Pandey
+// Component: SignIn.js
 
 
 import React, { useState, useEffect } from 'react';
@@ -11,171 +11,161 @@ import {
   TextInput,
   TouchableOpacity,
   View,
- 
- 
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
-
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import CryptoJS from 'crypto-js';
 import { useNavigation } from '@react-navigation/native';
-import RegisterPOPUP from './RegisterPopUp';
+import Api from '../../Services/Api';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
-import { handleSignIn } from '../../Api/Authentication';
-import CustomButton from '../../ReusableBtn/CustomButtons';
-
+import RegisterPopUp from './RegisterPopUp';
+import CustomHeader from '../../Reusables/CustomHeader';
+import CustomTextInpt from '../../Reusables/CustomTextInpt';
+import CustomButton from '../../Reusables/CustomButtons';
 
 const SignInCorporate = ({ route }) => {
-  const { email } = route.params;
+  const { email } = route.params || {};
   const navigation = useNavigation();
-  const [isModalVisible, setisModalVisible] = useState(false);
+  const [isModalVisible, setisModalVisible] = useState(true);
+  const [password, setPassword] = useState('');
   const [accessToken, setAccessToken] = useState('');
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setisModalVisible(true);
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    const getAccessToken = async () => {
+    const fetchAccessToken = async () => {
       const token = await fetchJwtAccess();
-      if (token) {
-        setAccessToken(token);
-      }
+      setAccessToken(token || '');
     };
-
-    getAccessToken();
+    fetchAccessToken();
   }, []);
 
-  const validationSchema = Yup.object().shape({
-    password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
-  });
+  const encryptPayload = (data) => {
+    const ClientID = '!IV@_$2123456789';
+    const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
+    const iv = CryptoJS.enc.Utf8.parse(ClientID);
+    const key = CryptoJS.enc.Utf8.parse(ClientKey);
 
-  const handleNavigate = (module) => {
-    if (navigation.isFocused()) {
-      navigation.navigate('SignInCorporate', {
-        screen: 'RegisterPOPUP',
-        params: { presentation: 'modal', module },
+    return CryptoJS.AES.encrypt(JSON.stringify(data), key, {
+      iv,
+      mode: CryptoJS.mode.CBC,
+      padding: CryptoJS.pad.Pkcs7,
+    }).toString();
+  };
+
+  const handleSignIn = async () => {
+    if (password.trim().length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const token = await AsyncStorage.getItem('fcmToken') || 'dummy-token';
+      const payload = { email_id: email, password, type: 'GSM', tokenid: token };
+      const encryptedPayload = encryptPayload(payload);
+
+      const response = await fetch(Api.USER_LOGIN, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          jwt: accessToken,
+        },
+        body: new URLSearchParams({ request_data: encryptedPayload }).toString(),
       });
+
+      const data = await response.json();
+      if (response.ok && data.jwt) {
+        await AsyncStorage.setItem('token', data.jwt);
+        Alert.alert('Success', 'Logged in successfully!');
+        navigation.navigate('CorporateModule1');
+      } else {
+        Alert.alert('Error', data.message || 'Failed to sign in.');
+      }
+    } catch (error) {
+      console.error('SignIn Error:', error);
+      Alert.alert('Error', 'Failed to sign in. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <View style={styles.header}>
+    <SafeAreaView style={styles.container}>
+      {isModalVisible && <RegisterPopUp onClose={() => setisModalVisible(false)} />}
+        <CustomHeader title={"Sign In"} leftTitle={"Skip"} handlePress={() => navigation.goBack()}/>
+      {/* <View style={styles.header}>
         <Text style={styles.headerText}>Sign In</Text>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text style={styles.skipText}>Skip</Text>
         </TouchableOpacity>
+      </View> */}
+
+      <View style={styles.form}>
+        {/* <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Official Email ID"
+            value={email}
+            // editable={false}
+          />
+        </View> */}
+      <CustomTextInpt placeholder={"Official Email Id"} value={email} editable={false}/>
+      <CustomTextInpt placeholder={"Password"} value={password} onChangeText={setPassword} />
+      <View style={{marginTop: 32}}> 
+        <CustomButton title={"Sign In"} onPress={handleSignIn} textSize={18}/>
       </View>
+        {/* <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+        </View> */}
 
-      {isModalVisible && <RegisterPOPUP onClose={() => setisModalVisible(false)} />}
+        {/* <TouchableOpacity
+          style={styles.button}
+          onPress={handleSignIn}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="#FFF" />
+          ) : (
+            <Text style={styles.buttonText}>Sign In</Text>
+          )}
+        </TouchableOpacity> */}
 
-      <Formik
-        initialValues={{ email: email || '', password: '' }}
-        validationSchema={validationSchema}
-        onSubmit={(values) => handleSignIn(email, values.password, accessToken, navigation, setLoading)}
-      >
-        {({
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          values,
-          errors,
-          touched,
-        }) => (
-          <>
-            <View style={styles.Email1}>
-              <View style={styles.Email2}>
-                <TextInput
-                  style={styles.Text1}
-                  placeholder="Official Email ID "
-                  placeholderTextColor="#000"
-                  keyboardType="email-address"
-                  maxLength={80}
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  value={email}
-                  editable={false}
-                />
-              </View>
-              {touched.email && errors.email && (
-                <Text style={styles.errorText}>{errors.email}</Text>
-              )}
-            </View>
-
-            <View style={styles.password1}>
-              <View style={styles.password2}>
-                <TextInput
-                  style={styles.Text2}
-                  secureTextEntry
-                  placeholder="Password"
-                  placeholderTextColor="#212121"
-                  onChangeText={handleChange('password')}
-                  onBlur={handleBlur('password')}
-                  value={values.password}
-                />
-              </View>
-              {touched.password && errors.password && (
-                <Text style={styles.errorText}>{errors.password}</Text>
-              )}
-            </View>
-
-            <CustomButton
-                  title="Sign In"
-                  onPress={handleSubmit}
-                  widthSize="100%"
-                  borderRadius={0}
-                  // loading={loader}
-                />
-          </>
-        )}
-      </Formik>
-
-      <View style={styles.forgot}>
-        <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword", { email })}>
-          <Text style={styles.Text4}>Forgot Password?</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword', { email })}>
+          <Text style={styles.linkText}>Forgot Password?</Text>
         </TouchableOpacity>
-      </View>
 
-      <View style={styles.divider}>
-        <View style={styles.line} />
-        <Text style={styles.orText}>OR</Text>
-        <View style={styles.line} />
-      </View>
-
-      <TouchableOpacity onPress={() => handleNavigate('Corporate')}>
-        <View style={styles.Create}>
-          <Text style={styles.Text5}>Create New Account</Text>
+        <View style={styles.divider}>
+          <View style={styles.line} />
+          <Text style={styles.orText}>OR</Text>
+          <View style={styles.line} />
         </View>
-      </TouchableOpacity>
+        <CustomButton title={"Create New Account"} backgroundColor={"#F1F1F3"} borderWidth={1} textColor={"#0F2541"} textSize={16} onPress={() => navigation.navigate('RegisterPage')}/>
+      </View>
     </SafeAreaView>
   );
 };
+
 export default SignInCorporate;
+
 const styles = StyleSheet.create({
-  mainContainer: {
-    height: Dimensions.get('screen').height,
-    width: Dimensions.get('screen').width,
+  container: {
+    flex: 1,
     backgroundColor: '#F1F1F3',
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#3C3567',
     alignItems: 'center',
-    paddingHorizontal: 25,
+    backgroundColor: '#3C3567',
     paddingVertical: 15,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
+    paddingHorizontal: 16,
   },
   headerText: {
     fontSize: 20,
@@ -186,73 +176,38 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#FFF',
   },
-  Email1: {
-    marginTop: 30,
-    alignSelf: 'center',
-  },
-  Email2: {
-    height: Dimensions.get('screen').height / 15,
-    width: Dimensions.get('screen').width / 1.1,
-    backgroundColor: '#FFF',
-
-    marginBottom: 10,
-    elevation: 2,
-    justifyContent: 'center',
-    paddingHorizontal: 15,
-  },
-  Text1: {
-    height: Dimensions.get('screen').height / 15,
-    color: '#212121',
-    fontSize: 16,
-    backgroundColor: '#FFF',
-  },
-  password1: {
+  form: {
     marginTop: 20,
-    alignSelf: 'center',
+    marginHorizontal: 16,
   },
-  password2: {
-    height: Dimensions.get('screen').height / 15,
-    width: Dimensions.get('screen').width / 1.1,
+  inputContainer: {
+    marginBottom: 16,
+  },
+  input: {
     backgroundColor: '#FFF',
-
-    elevation: 2,
-    justifyContent: 'center',
-    paddingHorizontal: 15,
-  },
-  Text2: {
-    height: Dimensions.get('screen').height / 15,
-    color: '#212121',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    height: 48,
     fontSize: 16,
+    elevation: 2,
   },
-  eye: {
-    position: 'absolute',
-    top: '50%',
-    right: '8%',
-    transform: [{ translateY: -10 }],
-  },
-  buttonContainer: {
-    height: Dimensions.get('screen').height / 15,
-    width: Dimensions.get('screen').width / 1.1,
+  button: {
     backgroundColor: '#3C3567',
-  
-    justifyContent: 'center',
+    borderRadius: 8,
+    paddingVertical: 12,
     alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: 20,
-    elevation: 3,
+    marginTop: 16,
   },
   buttonText: {
     color: '#FFF',
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
   },
-  forgot: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  Text4: {
+  linkText: {
     color: '#3C3567',
     fontSize: 16,
+    textAlign: 'left',
+    marginVertical: 16,
   },
   divider: {
     flexDirection: 'row',
@@ -263,37 +218,16 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 1,
     backgroundColor: 'gray',
-    marginHorizontal: 20,
   },
   orText: {
-    width: 50,
-    textAlign: 'center',
-    color: '#000',
+    marginHorizontal: 10,
     fontSize: 14,
+    color: '#000',
   },
-  Create: {
-    height: Dimensions.get('screen').height / 13,
-    width: Dimensions.get('screen').width / 1.1,
-    backgroundColor: '#FFFFFF00',
-    borderRadius: 7,
-    marginTop: 20,
-    alignSelf: 'center',
-    borderWidth: 1,
-    justifyContent: 'center',
-    paddingVertical: 10,
-  },
-  Text5: {
-    alignSelf: 'center',
-    color: '#3C3567',
-    fontSize: 17,
-  },
-  errorText: {
-    color: 'red',
-    fontSize: 12,
-    marginLeft: 25,
-    marginTop: 5,
-  },
+  createAccount: {
+    backgroundColor: "#FFFFFF", 
+    borderRadius: 4, 
+    elevation: 1, 
+    
+  }
 });
-
-
-

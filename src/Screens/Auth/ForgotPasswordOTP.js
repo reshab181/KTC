@@ -2,8 +2,8 @@ import { StyleSheet, Text, View, Image } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import React from 'react';
 import { TextInput } from 'react-native-paper';
-import CustomButton from '../../ReusableBtn/CustomButtons';
-import CustomHeader from '../../ReusableBtn/CustomHeader';
+import CustomButton from '../../Reusables/CustomButtons';
+import CustomHeader from '../../Reusables/CustomHeader';
 
 const ForgotPasswordOTP = () => {
   const styles = useStyles();

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
-import CustomHeader from '../../ReusableBtn/CustomHeader';
-import PaymentCustomButton from '../../ReusableBtn/PaymentCustomButton';
-import CustomButton from '../../ReusableBtn/CustomButtons';
-import CardFormModal from '../../ReusableBtn/CardFormModal';
-import WalletnUpi from '../../ReusableBtn/WalletnUpi';
-import CustomModal from '../../ReusableBtn/CustomModals';
+import CustomHeader from '../../Reusables/CustomHeader';
+import PaymentCustomButton from '../../Reusables/PaymentCustomButton';
+import CustomButton from '../../Reusables/CustomButtons';
+import CardFormModal from '../../Reusables/CardFormModal';
+import WalletnUpi from '../../Reusables/WalletnUpi';
+import CustomModal from '../../Reusables/CustomModals';
 
 const PaymentMethod = () => {
   const [selectedButton, setSelectedButton] = useState('Debit');

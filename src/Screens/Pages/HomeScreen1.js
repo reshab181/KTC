@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image } from 'react-native';
-import CustomHeader from '../../ReusableBtn/CustomHeader';
-import CustomIconTextInput from '../../ReusableBtn/CustomIconTextInput';
-import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
-import CustomButton from '../../ReusableBtn/CustomButtons';
+import CustomHeader from '../../Reusables/CustomHeader';
+import CustomIconTextInput from '../../Reusables/CustomIconTextInput';
+import CustomTextInpt from '../../Reusables/CustomTextInpt';
+import CustomButton from '../../Reusables/CustomButtons';
 import { ScrollView } from 'react-native-gesture-handler';
 
 const HomeScreen1 = () => {

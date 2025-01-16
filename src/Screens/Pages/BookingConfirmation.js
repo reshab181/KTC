@@ -2,16 +2,16 @@ import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-nati
 import React, { useState } from 'react';
 
 // Reusable components
-import CarCard from '../../ReusableBtn/CarCard';
-import CustomHeader from '../../ReusableBtn/CustomHeader';
-import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
-import CustomDropdown from '../../ReusableBtn/CustomDropdown';
-import CustomButton from '../../ReusableBtn/CustomButtons';
+import CarCard from '../../Reusables/CarCard';
+import CustomHeader from '../../Reusables/CustomHeader';
+import CustomTextInpt from '../../Reusables/CustomTextInpt';
+import CustomDropdown from '../../Reusables/CustomDropdown';
+import CustomButton from '../../Reusables/CustomButtons';
 import { RadioButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Characters } from '../../Constants/Strings'
 import { SafeAreaView } from 'react-native';
-import CustomModal from '../../ReusableBtn/CustomModals';
+import CustomModal from '../../Reusables/CustomModals';
 
 const BookingConfirmation = () => {
     const [check1, setCheck1] = useState(false);

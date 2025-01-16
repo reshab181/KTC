@@ -1,7 +1,8 @@
 import React from 'react';
-import { useWindowDimensions, StyleSheet, Text, View, Image } from 'react-native';
+import { useWindowDimensions, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
-const CustomHeader = ({ title, imgPath, iconPath, iconHeight = 30, iconWidth = 36 }) => {
+const CustomHeader = ({ title, imgPath, iconPath, iconHeight = 30,handleLeftIcon,  iconWidth = 36 , leftTitle, handlePress}) => {
   const { width: winWidth } = useWindowDimensions();
 
   const styles = StyleSheet.create({
@@ -28,13 +29,26 @@ const CustomHeader = ({ title, imgPath, iconPath, iconHeight = 30, iconWidth = 3
       width: 69,
       marginStart: 20,
     },
+    ltitle:{
+      position: 'absolute',
+      right: 20, 
+    },
+    ltitletxt: {
+      color: "#FFFFFF", 
+
+    }
   });
 
   return (
     <View style={styles.header}>
+      <TouchableOpacity onPress={handleLeftIcon}>
       {iconPath && <Image source={iconPath} style={styles.icon} />}
+      </TouchableOpacity>
       {imgPath && <Image source={imgPath} style={styles.img} />}
       <Text style={styles.title}>{title}</Text>
+      <TouchableOpacity style={styles.ltitle} onPress={handlePress}>
+        <Text style={styles.ltitletxt}>{leftTitle}</Text>
+      </TouchableOpacity>
     </View>
   );
 };
