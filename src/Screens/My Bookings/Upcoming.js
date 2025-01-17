@@ -34,7 +34,7 @@ const Upcoming = () => {
     },
   ];
 
-  const [selectedTab, setSelectedTab] = useState('Upcoming'); // Default tab
+  const [selectedTab, setSelectedTab] = useState('Upcoming');
   const [list, setList] = useState(upcomingData);
   const [reject, setReject] = useState('');
   const [modalVisible, setModalVisible] = useState({ isVisible: false, values: {} });
@@ -255,8 +255,8 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     backgroundColor: '#3C3567',
-    paddingVertical: 10,
-    paddingHorizontal: 15,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
     borderRadius: 5,
   },
   cancelText: {
