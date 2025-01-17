@@ -1,3 +1,5 @@
+// Author: Ashutosh Rai
+// Component: Booking Confirmation
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import CustomHeader from '../../Reusables/CustomHeader'

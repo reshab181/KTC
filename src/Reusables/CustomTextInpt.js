@@ -1,3 +1,5 @@
+// Author: Ashutosh Rai
+// Component: Booking Confirmation
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, View, Text } from 'react-native';
 

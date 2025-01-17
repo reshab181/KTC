@@ -15,13 +15,20 @@ const Track = ({
 }) => {
     return (
         <SafeAreaView style={styles.safeArea}>
+            {/* //Ashutosh  */}
+            <CustomHeader iconPath={require('../../Assets/ic_back_arrow_white_24.png')}
+                title={"Track Chauffer"}
+                iconHeight={24}
+                iconWidth={24}
+            />
             {/* Header */}
-            <View style={styles.header}>
+
+            {/* <View style={styles.header}>
                 <TouchableOpacity onPress={onBack} style={styles.backButton}>
                     <Image source={require('../../Assets/ic_back_arrow_white_24.png')} />
                 </TouchableOpacity>
                 <CustomHeader title="Track Chauffeur" />
-            </View>
+            </View> */}
 
             {/* Map View */}
             {/* <View style={styles.mapContainer}>

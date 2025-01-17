@@ -1,7 +1,7 @@
+// Author: Ashutosh Rai
+// Component: Booking Confirmation
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-
-// Reusable components
 import CarCard from '../../Reusables/CarCard';
 import CustomHeader from '../../Reusables/CustomHeader';
 import CustomTextInpt from '../../Reusables/CustomTextInpt';

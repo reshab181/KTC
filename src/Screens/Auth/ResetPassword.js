@@ -1,3 +1,5 @@
+// Author: Ashutosh Rai
+// Component: Booking Confirmation
 import { StyleSheet, Text, View } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import React, { useState } from 'react';

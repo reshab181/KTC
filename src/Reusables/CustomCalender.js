@@ -1,3 +1,5 @@
+// Author: Ashutosh Rai
+// Component: Booking Confirmation
 import { StyleSheet, Text, View, Image } from 'react-native';
 import React, { useState } from 'react';
 import CalendarPicker from "react-native-calendar-picker";
