@@ -18,9 +18,8 @@ import CarGroup from "./src/Screens/Pages/CarGroup";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CarSelection from "./src/Screens/Pages/CarSelection";
 import OTPRegister from "./src/Screens/Auth/OtpRegister";
-import BookingConfirmation from "./src/Screens/Pages/BookingConfirmation";
-import PaymentMethod from "./src/Screens/Pages/PaymentMethod";
-import MyBooking from "./src/Screens/Pages/MyBooking";
+import Track from "./src/Screens/My Bookings/Track";
+import Upcoming from "./src/Screens/My Bookings/Upcoming";
 
 
 
@@ -30,6 +29,7 @@ const Stack = createNativeStackNavigator();
 
 const App = () => {
   return (
+<<<<<<< HEAD
     <GestureHandlerRootView>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Splash">
@@ -85,8 +85,65 @@ const App = () => {
     // <GestureHandlerRootView>
     //   <HomeScreen1 />
     // </GestureHandlerRootView>
+=======
+    // <GestureHandlerRootView>
+    //   <NavigationContainer>
+    //     <Stack.Navigator initialRouteName="Splash">
+    //       {/* Splash Screen */}
+    //       <Stack.Screen
+    //         name="Splash"
+    //         component={Splash}
+    //         options={{ headerShown: false }}
+    //       />
+
+    //       {/* Module Selection Screen */}
+    //       <Stack.Screen
+    //         name="ModuleSelectionUI"
+    //         component={ModuleSelectionUI}
+    //         options={{ headerShown: false }}
+    //       />
+
+
+
+    //       <Stack.Screen
+    //         name="SignInCorporate"
+    //         component={SignInCorporate}
+    //         options={{ headerShown: false }}
+    //       />
+    //       <Stack.Screen
+    //         name="RegisterPOPUP"
+    //         component={RegisterPOPUP}
+    //         options={{
+    //           presentation: 'modal',
+    //           headerShown: false,
+    //         }}
+    //       />
+
+    //     {/* Other Screens */}
+    //       <Stack.Screen name="RegisterPage" component={Register} />
+    //       <Stack.Screen name="OTPRegister" component={OTPRegister} options={{ headerShown: false }} />
+    //       <Stack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
+
+    //       <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
+    //       <Stack.Screen name="PersonalRegister" component={PersonalRegister} />
+    //       <Stack.Screen name="ResetPassword" component={ResetPassword} />
+    //       <Stack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} />
+    //       <Stack.Screen name="Profile" component={Profile} />
+    //       <Stack.Screen name="PickUpLocation" component={PickUpLocation} />
+    //       <Stack.Screen name="HomeScreen1" component={HomeScreen1} />
+    //       <Stack.Screen name="CarGroup" component={CarGroup} />
+    //       <Stack.Screen name="CarSelection" component={CarSelection} />
+    //     </Stack.Navigator>
+    //   </NavigationContainer>
+    // </GestureHandlerRootView>
+    <Upcoming/>
+
+  
+
+
+>>>>>>> 8d8c6f16a375935bb86a4ce01d819278e19136b8
 
   );
 };
 
-export default App;
+export default App

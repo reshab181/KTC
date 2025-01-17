@@ -1,5 +1,5 @@
-//**Author---Reshab Kumar Pandey
-// Component---RegisterPopUp.js */
+// //**Author---Reshab Kumar Pandey
+// // Component---RegisterPopUp.js */
 
 
 import React, { useState, useEffect } from 'react';
@@ -54,7 +54,7 @@ const RegisterPOPUP = ({ onClose }) => {
       case 'success':
         if (data.newuser === 'No') {
           Alert.alert('Success', 'Registered in successfully!');
-          setVisible(false);
+          // setVisible(false);
           navigation.navigate('SignInCorporate', { email: email });
         } else {
           navigateToOTP();
@@ -174,3 +174,5 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 }); 
+
+
