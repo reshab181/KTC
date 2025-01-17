@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: CustomTextInpt
 import React, { useState } from 'react';
 import { StyleSheet, TextInput, View, Text } from 'react-native';
 

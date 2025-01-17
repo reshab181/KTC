@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: PaymentCustomButton
 import { TouchableOpacity, Text, StyleSheet, Image, View } from 'react-native';
 import React from 'react';
 

@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: CustomHeader
 import React from 'react';
 import { useWindowDimensions, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
