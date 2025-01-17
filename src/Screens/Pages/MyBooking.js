@@ -5,8 +5,9 @@ import ProgessCard from '../../Reusables/ProgessCard';
 import { Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomButton from '../../Reusables/CustomButtons';
+import { useNavigation } from '@react-navigation/native';
 
-const MyBooking = () => {
+const MyBooking = ({navigation}) => {
 
 
   return (
@@ -17,6 +18,7 @@ const MyBooking = () => {
           iconPath={require('../../Assets/icbackarrow.png')}
           iconHeight={24}
           iconWidth={24}
+          handleLeftIcon={()=>{navigation.goBack()}}
         />
         <ProgessCard />
         <View style={{ marginTop: 21, backgroundColor: "#FFFFFF", marginHorizontal: 16, borderRadius: 4, elevation: 5, borderColor: '#DBDBDB' }}>

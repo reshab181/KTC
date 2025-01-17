@@ -1,15 +1,17 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const CustomCarGrouptile = ({ title, onPress}) => {
+
+const CustomCarGrouptile = ({ title, onPress , iconName}) => {
   return (
-        <TouchableOpacity onPress={()=>{onPress} } style={styles.contianer}>
+        <TouchableOpacity onPress={onPress} style={styles.contianer}>
             <View style={{flexDirection: 'row' , justifyContent: 'space-between'}}>
             <Text >
                 {title}
             </Text>
-            <View style={{}}>
-                <Image source={require('../Assets/navigatenext.png')} style={{height: 24, width : 24 , marginEnd : 20 }}/>
+            <View style={{marginRight: 16}}>
+                <Icon name={iconName} />
             </View>
             </View>
         </TouchableOpacity>
@@ -25,7 +27,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         backgroundColor : "#FFFFFF",
         color: '#666666',
-        elevation : 4, 
-        height : 48 , 
+        elevation : 2, 
+        height : 48 ,
+        // borderWidth: 0.05,
+        borderRadius:4 , 
     }
 })

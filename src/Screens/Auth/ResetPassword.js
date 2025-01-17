@@ -7,16 +7,13 @@ import CustomButton from '../../Reusables/CustomButtons';
 import Modal from "react-native-modal";
 import CustomModal from '../../Reusables/CustomModals';
 
-const ResetPassword = () => {
+const ResetPassword = ({navigation}) => {
   const styles = useStyles();
   const [isVisible, setisVisible] = useState(false);
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <CustomHeader title="Reset Password" />
-
-      {/* Content */}
       <View style={styles.content}>
         <CustomTextInpt placeholder="New Password" secureTextEntry={true} />
         <CustomTextInpt placeholder="Confirm Password" secureTextEntry={true} />
@@ -33,6 +30,7 @@ const ResetPassword = () => {
                 message1={"Your Password has been set Successfully"}
                 message2={"Please login using the set Password"}
                 btnText={"Login Now"}
+                handlePress={()=>{navigation.navigate('SignInCorporate')}}
               />
             </View>
           </> : null

@@ -10,7 +10,7 @@ const PaymentCustomButton = ({ title, onPress, widthSize, textSize, isSelected, 
     borderWidth: 1, 
     borderColor: '#D2D2D2',
     alignItems: 'center',
-    flexDirection: 'row', // Align image and text horizontally
+    flexDirection: 'row', 
     justifyContent: 'flex-start',
     paddingStart : 26, 
     marginTop: 10 , 

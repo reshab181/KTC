@@ -54,99 +54,64 @@ const SignInCorporate = ({ route }) => {
   };
 
   const handleSignIn = async () => {
-    if (password.trim().length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters.');
-      return;
-    }
+    navigation.navigate('CorporateModule1')
 
-    setLoading(true);
-    try {
-      const token = await AsyncStorage.getItem('fcmToken') || 'dummy-token';
-      const payload = { email_id: email, password, type: 'GSM', tokenid: token };
-      const encryptedPayload = encryptPayload(payload);
+    // if (password.trim().length < 6) {
+    //   Alert.alert('Error', 'Password must be at least 6 characters.');
+    //   return;
+    // }
 
-      const response = await fetch(Api.USER_LOGIN, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          jwt: accessToken,
-        },
-        body: new URLSearchParams({ request_data: encryptedPayload }).toString(),
-      });
+    // setLoading(true);
+    // try {
+    //   const token = await AsyncStorage.getItem('fcmToken') || 'dummy-token';
+    //   const payload = { email_id: email, password, type: 'GSM', tokenid: token };
+    //   const encryptedPayload = encryptPayload(payload);
 
-      const data = await response.json();
-      if (response.ok && data.jwt) {
-        await AsyncStorage.setItem('token', data.jwt);
-        Alert.alert('Success', 'Logged in successfully!');
-        navigation.navigate('CorporateModule1');
-      } else {
-        Alert.alert('Error', data.message || 'Failed to sign in.');
-      }
-    } catch (error) {
-      console.error('SignIn Error:', error);
-      Alert.alert('Error', 'Failed to sign in. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    //   const response = await fetch(Api.USER_LOGIN, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    //       jwt: accessToken,
+    //     },
+    //     body: new URLSearchParams({ request_data: encryptedPayload }).toString(),
+    //   });
+
+    //   const data = await response.json();
+    //   if (response.ok && data.jwt) {
+    //     await AsyncStorage.setItem('token', data.jwt);
+    //     Alert.alert('Success', 'Logged in successfully!');
+    //     navigation.navigate('CorporateModule1');
+    //   } else {
+    //     Alert.alert('Error', data.message || 'Failed to sign in.');
+    //   }
+    // } catch (error) {
+    //   console.error('SignIn Error:', error);
+    //   Alert.alert('Error', 'Failed to sign in. Please try again.');
+    // } finally {
+    //   setLoading(false);
+    // }
   };
 
   return (
     <SafeAreaView style={styles.container}>
       {isModalVisible && <RegisterPopUp onClose={() => setisModalVisible(false)} />}
         <CustomHeader title={"Sign In"} leftTitle={"Skip"} handlePress={() => navigation.goBack()}/>
-      {/* <View style={styles.header}>
-        <Text style={styles.headerText}>Sign In</Text>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={styles.skipText}>Skip</Text>
-        </TouchableOpacity>
-      </View> */}
-
+      
       <View style={styles.form}>
-        {/* <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Official Email ID"
-            value={email}
-            // editable={false}
-          />
-        </View> */}
-      <CustomTextInpt placeholder={"Official Email Id"} value={email} editable={false}/>
+      <CustomTextInpt placeholder={"Email ID or Mobile"} value={email} editable={false}/>
       <CustomTextInpt placeholder={"Password"} value={password} onChangeText={setPassword} />
       <View style={{marginTop: 32}}> 
         <CustomButton title={"Sign In"} onPress={handleSignIn} textSize={18}/>
       </View>
-        {/* <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
-        </View> */}
-
-        {/* <TouchableOpacity
-          style={styles.button}
-          onPress={handleSignIn}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#FFF" />
-          ) : (
-            <Text style={styles.buttonText}>Sign In</Text>
-          )}
-        </TouchableOpacity> */}
-
-        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword', { email })}>
+        <TouchableOpacity style={{marginTop: 10}}onPress={() => navigation.navigate('ForgotPassword', { email })}>
           <Text style={styles.linkText}>Forgot Password?</Text>
         </TouchableOpacity>
-
         <View style={styles.divider}>
           <View style={styles.line} />
           <Text style={styles.orText}>OR</Text>
           <View style={styles.line} />
         </View>
-        <CustomButton title={"Create New Account"} backgroundColor={"#F1F1F3"} borderWidth={1} textColor={"#0F2541"} textSize={16} onPress={() => navigation.navigate('RegisterPage')}/>
+        <CustomButton title={"Create New Account"} backgroundColor={"#F1F1F3"} borderWidth={1} textColor={"#0F2541"} textSize={16} onPress={() => navigation.navigate('PersonalRegister')}/>
       </View>
     </SafeAreaView>
   );
@@ -212,7 +177,8 @@ const styles = StyleSheet.create({
   divider: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginVertical: 20,
+    marginTop: 16,
+    marginBottom: 24
   },
   line: {
     flex: 1,

@@ -19,7 +19,6 @@ import { RadioButton } from 'react-native-paper';
 
 const { height, width } = Dimensions.get('window');
 
-// Colors constant for consistent theming
 const COLORS = {
     primary: '#3C3567',
     background: '#F5F5F5',
@@ -29,9 +28,7 @@ const COLORS = {
     gray: '#666666',
 };
 
-// Validation schema using Yup
 const validationSchema = Yup.object().shape({
-    // email: Yup.string().email('Invalid email address').required('Email is required'),
     firstName: Yup.string().required('First Name is required'),
     lastName: Yup.string().required('Last Name is required'),
     password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
@@ -44,25 +41,22 @@ const validationSchema = Yup.object().shape({
 });
 
 const Register = ({navigation}) => {
-    const [selectedGender, setSelectedGender] = useState('');
+    const [selectedGender, setSelectedGender] = useState('Male');
     const [selectedCountry, setSelectedCountry] = useState('India');
     const [accessToken, setAccessToken] = useState('');
 
-    // Array of form fields
     const inputFields = [
-        { placeholder: 'Official Email ID', icon: require('../../Assets/email.png'), name: 'email' },
         { placeholder: 'First Name', icon: require('../../Assets/manicon.png'), name: 'firstName' },
         { placeholder: 'Last Name', icon: require('../../Assets/manicon.png'), name: 'lastName' },
-        { placeholder: 'Password', icon: require('../../Assets/lock.png'), name: 'password', secureTextEntry: true },
-        { placeholder: 'Confirm Password', icon: require('../../Assets/lock.png'), name: 'confirmPassword', secureTextEntry: true },
+        { placeholder: 'Official Email ID', icon: require('../../Assets/email.png'), name: 'email' },
+        { placeholder: '16/09/2002', icon: require('../../Assets/cake_blackk.png'), name: 'email' },
         { placeholder: 'Mobile Number', icon: require('../../Assets/phone.png'), name: 'phone', keyboardType: 'numeric' },
-        { placeholder: 'Alternate Mobile Number', icon: require('../../Assets/phone.png'), name: 'alternatePhone', keyboardType: 'numeric' },
+        { placeholder: 'Password', icon: require('../../Assets/lock.png'), name: 'password', secureTextEntry: true },
     ];
 
     return (
      <SafeAreaView style={styles.root}>
-                {/* Header Section */}
-                <CustomHeader title="Register" iconPath={require('../../Assets/icbackarrow.png')} iconHeight={24} iconWidth={24} handleLeftIcon={() => navigation.goBack()} />
+                <CustomHeader title="Profile" iconPath={require('../../Assets/icbackarrow.png')} iconHeight={24} iconWidth={24} handleLeftIcon={() => navigation.goBack()} />
 
                 <View style={styles.scrollContainer}>
                     <Formik
@@ -84,7 +78,6 @@ const Register = ({navigation}) => {
                         {({ values, handleChange, handleBlur, handleSubmit, errors, touched }) => (
                             <>
                                 <ScrollView contentContainerStyle={styles.formContainer} showsVerticalScrollIndicator={false}>
-                                    {/* Dynamically render TextInputs */}
                                     {inputFields.map((field, index) => (
                                         <View key={index} style={styles.inputContainer}>
                                             <CustomIconTextInput
@@ -102,60 +95,10 @@ const Register = ({navigation}) => {
                                         </View>
                                     ))}
 
-                                    <View style={styles.selectionContainer}>
-                                        <Image
-                                            source={require('../../Assets/Gender.png')}
-                                            style={styles.selectionIcon}
-                                        />
-                                        <View style={styles.radioContainer}>
-                                            {['Male', 'Female', 'Others'].map((gender) => (
-                                                <View key={gender} style={styles.radioOption}>
-                                                    <RadioButton
-                                                        value={gender.toLowerCase()}
-                                                        status={selectedGender === gender.toLowerCase() ? 'checked' : 'unchecked'}
-                                                        onPress={() => setSelectedGender(gender.toLowerCase())}
-                                                        color={COLORS.primary}
-                                                    />
-                                                    <Text style={styles.radioText}>{gender}</Text>
-                                                </View>
-                                            ))}
-                                        </View>
-                                    </View>
-
-                                    <View style={styles.selectionContainer}>
-                                        <Image
-                                            source={require('../../Assets/flag_black_24dp.png')}
-                                            style={styles.selectionIcon}
-                                        />
-                                        <View style={styles.radioContainer}>
-                                            {['India', 'Others'].map((country) => (
-                                                <View key={country} style={styles.radioOption}>
-                                                    <RadioButton
-                                                        value={country}
-                                                        status={selectedCountry === country ? 'checked' : 'unchecked'}
-                                                        onPress={() => setSelectedCountry(country)}
-                                                        color={COLORS.primary}
-                                                    />
-                                                    <Text style={styles.radioText}>{country}</Text>
-                                                </View>
-                                            ))}
-                                        </View>
-
-                                        {touched.country && errors.country && (
-                                            <Text style={styles.errorText}>{errors.country}</Text>
-                                        )}
-                                    </View>
                                 </ScrollView>
 
                                 <View style={styles.buttonContainer}>
-                                    <CustomButton
-                                        title="Sign Up"
-                                        onPress={handleSubmit}
-                                        widthSize="100%"
-                                        textSize={18}
-                                        borderRadius={0}
-                                        isSelected={true}
-                                    />
+                                   
                                 </View>
                             </>
                         )}
@@ -177,11 +120,9 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         flex: 1,
-        // paddingHorizontal: 20,
     },
     formContainer: {
         marginTop: 16,
-        // paddingBottom: 20,
     },
     inputContainer: {
         marginBottom: 16,

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 
-const CustomModal = ({ message1, message2, isVisible, onClose, isButtonVisible = true, btnText }) => {
+const CustomModal = ({ message1, message2, isVisible, onClose, isButtonVisible = true, btnText , handlePress }) => {
   const styles = useStyles();
 
   return (
@@ -28,7 +28,7 @@ const CustomModal = ({ message1, message2, isVisible, onClose, isButtonVisible =
               <Text style={styles.modalText}>{message1}</Text>
               <Text style={styles.modalText}>{message2}</Text>
               {isButtonVisible ? (
-                <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+                <TouchableOpacity onPress={handlePress} style={styles.closeButton}>
                   <Text style={styles.closeButtonText}>{btnText}</Text>
                 </TouchableOpacity>
               ) : null}

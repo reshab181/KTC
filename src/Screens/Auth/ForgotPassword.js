@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
@@ -6,11 +5,8 @@ import {
   View,
   StyleSheet,
   SafeAreaView,
-  ActivityIndicator,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
-import { emailsms } from '../../Api/Authentication';
 import CustomHeader from '../../Reusables/CustomHeader';
 import CustomTextInpt from '../../Reusables/CustomTextInpt';
 import CustomButton from '../../Reusables/CustomButtons';
@@ -18,7 +14,7 @@ import CustomButton from '../../Reusables/CustomButtons';
 const { height, width } = Dimensions.get('screen');
 
 const ForgotPassword = ({ route, navigation }) => {
-  const [email, setEmail] = useState(route?.params?.email || '');
+  const [email, setemail]  = useState(route.params);
   const [accessToken, setAccessToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -36,44 +32,20 @@ const ForgotPassword = ({ route, navigation }) => {
     getAccessToken();
   }, []);
 
-  const sendForgotOTP = async () => {
-    if (!email || !email.includes('@')) {
-      setError('Invalid email address.');
-      return;
-    }
-
-    try {
-      setLoading(true);
-      await emailsms(email, accessToken,navigation,setLoading);
-      navigation.navigate('OTPRegister');
-    } catch (err) {
-      setError('Failed to send OTP. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+  const sendForgotOTP = () => {
+    // emailsms(email, accessToken, navigation, setLoading);
+    navigation.navigate("ForgotpasswordOTP")
   };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-      <CustomHeader
-        title="Forgot Password"
-        leftTitle="Skip"
-        handlePress={() => navigation.goBack()}
-      />
 
       <View style={styles.emailContainer}>
-        <CustomTextInpt
-          placeholder="Enter your registered email ID"
-          value={email}
-          editable={false}
-        />
-        <View style={{ marginTop: 16 }}>
-         
-          <CustomButton title={loading ? <ActivityIndicator color="#fff" />:"Next"} onPress={sendForgotOTP} disabled={loading} />
+        <CustomTextInpt placeholder={"Enter your registered email ID"} value={email} editable={false} />
+        <View style={{marginTop: 94}}>
+        <CustomButton title={"Next"} onPress={sendForgotOTP} />
         </View>
       </View>
-
-      
       {error && <Text style={styles.errorText}>{error}</Text>}
     </SafeAreaView>
   );

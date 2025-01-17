@@ -11,18 +11,13 @@ const OtpRegister = () => {
   return (
     <View style={styles.root}>
         <CustomHeader title={"Register"}/>
-      {/* Image Section */}
       <Image
         source={require('../../Assets/frgtpwdotp.png')}
         style={styles.img}
       />
-
-      {/* Text Section */}
       <Text style={styles.txt}>
         Please enter the OTP received on your registered email address.
       </Text>
-
-      {/* OTP Input Section */}
       <View style={styles.txtInputBox}>
         {Array.from({ length: 4 }).map((_, index) => (
           <TextInput
@@ -34,13 +29,9 @@ const OtpRegister = () => {
           />
         ))}
       </View>
-
-      {/* Button Section */}
       <View style={styles.btn}>
       <CustomButton title="Next" onPress={()=>console.warn("Clicked")} />
       </View>
-  
-      {/* Footer Text Section */}
       <View>
       <Text style={styles.footerText}>
         Didn't receive the OTP? 

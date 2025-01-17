@@ -5,24 +5,19 @@ import { TextInput } from 'react-native-paper';
 import CustomButton from '../../Reusables/CustomButtons';
 import CustomHeader from '../../Reusables/CustomHeader';
 
-const ForgotPasswordOTP = () => {
+const ForgotPasswordOTP = ({navigation}) => {
   const styles = useStyles();
 
   return (
     <View style={styles.root}>
-        <CustomHeader title={"Forgot Password"}/>
-      {/* Image Section */}
+      <CustomHeader title={"Forgot Password"} />
       <Image
         source={require('../../Assets/frgtpwdotp.png')}
         style={styles.img}
       />
-
-      {/* Text Section */}
       <Text style={styles.txt}>
         Please enter the OTP received on your registered email address.
       </Text>
-
-      {/* OTP Input Section */}
       <View style={styles.txtInputBox}>
         {Array.from({ length: 4 }).map((_, index) => (
           <TextInput
@@ -34,22 +29,18 @@ const ForgotPasswordOTP = () => {
           />
         ))}
       </View>
-
-      {/* Button Section */}
       <View style={styles.btn}>
-      <CustomButton title="Next" onPress={()=>console.warn("Clicked")} />
+        <CustomButton title="Next" onPress={() => navigation.navigate('ResetPassword')} />
       </View>
-  
-      {/* Footer Text Section */}
       <View>
-      <Text style={styles.footerText}>
-        Didn't receive the OTP? 
-      </Text>
-      <Text style={styles.footerText2}>
-      Resend code in 00:11
-      </Text>
+        <Text style={styles.footerText}>
+          Didn't receive the OTP?
+        </Text>
+        <Text style={styles.footerText2}>
+          Resend code in 00:11
+        </Text>
       </View>
-      
+
     </View>
   );
 };
@@ -61,20 +52,20 @@ function useStyles() {
 
   return StyleSheet.create({
     root: {
-        flex: 1,
-        backgroundColor: '#F1F1F3',
-        alignItems: 'center', 
+      flex: 1,
+      backgroundColor: '#F1F1F3',
+      alignItems: 'center',
     },
     img: {
-      marginTop : 47 ,
-      marginBottom: 32, 
+      marginTop: 47,
+      marginBottom: 32,
       width: 122.1,
       height: 100,
       resizeMode: 'contain',
     },
     txt: {
       width: winwidth * 0.8,
-      marginBottom: 32, 
+      marginBottom: 32,
       textAlign: 'center',
       fontSize: 16,
       fontStyle: 'normal',
@@ -92,25 +83,25 @@ function useStyles() {
       width: 40,
       height: 40,
       fontSize: 20,
-      textAlign: 'center', 
+      textAlign: 'center',
       borderBottomWidth: 1,
       borderBottomColor: '#1C4096',
       backgroundColor: '#F1F1F3',
     },
     footerText: {
-      marginTop: 110, 
+      marginTop: 110,
       fontSize: 15,
-      color: '#212121', 
+      color: '#212121',
     },
-    footerText2 : {
-        marginTop: 10, 
-        fontSize: 14,
-        textAlign :'center',
-        color: '#212121', 
-        opacity : 0.54 
+    footerText2: {
+      marginTop: 10,
+      fontSize: 14,
+      textAlign: 'center',
+      color: '#212121',
+      opacity: 0.54
     },
     btn: {
-        width: winwidth*0.90
+      width: winwidth * 0.90
     }
   });
 }
