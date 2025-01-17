@@ -13,7 +13,7 @@ import { Characters } from '../../Constants/Strings'
 import { SafeAreaView } from 'react-native';
 import CustomModal from '../../Reusables/CustomModals';
 
-const BookingConfirmation = () => {
+const BookingConfirmation = ({navigation}) => {
     const [check1, setCheck1] = useState(false);
     const [checked, setChecked] = useState(false);
     const [visible, setvisible] = useState(false)
@@ -34,6 +34,7 @@ const BookingConfirmation = () => {
                         iconPath={require('../../Assets/icbackarrow.png')}
                         iconHeight={24}
                         iconWidth={24}
+                        handleLeftIcon={()=>{navigation.goBack()}}
                     />
                     <View style={{ marginHorizontal: 16, marginTop: 10 }}>
                         {/* Car Card */}
@@ -122,7 +123,7 @@ const BookingConfirmation = () => {
                 }
             </ScrollView>
             <View style={{ position: 'absolute', bottom: 0, width: '100%' }}>
-                <CustomButton title={'Proceed'} borderRadius={0} onPress={() => setvisible(!visible)} />
+                <CustomButton title={'Proceed'} borderRadius={0} onPress={() => navigation.navigate('Payment')} />
             </View>
         </SafeAreaView>
     );

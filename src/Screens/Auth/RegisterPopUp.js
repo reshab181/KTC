@@ -16,18 +16,13 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
-<<<<<<< HEAD
 import CryptoJS from 'crypto-js';
 import debounce from 'lodash.debounce';
 import CustomTextInpt from '../../Reusables/CustomTextInpt';
 import CustomButton from '../../Reusables/CustomButtons';
 import Api from '../../Services/Api';
-=======
->>>>>>> 6d0d8cd9a832ff329eac666d16e650ef1b4f2d8e
 
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
-import CustomTextInpt from '../../ReusableBtn/CustomTextInpt';
-import CustomButton from '../../ReusableBtn/CustomButtons';
 import { registrationHandler } from '../../Api/Authentication';
 
 const { height } = Dimensions.get('screen');
@@ -41,10 +36,6 @@ const RegisterPOPUP = ({ onClose }) => {
 
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 6d0d8cd9a832ff329eac666d16e650ef1b4f2d8e
   useEffect(() => {
     const getAccessToken = async () => {
       const token = await fetchJwtAccess();

@@ -2,11 +2,12 @@ import React from 'react';
 import { useWindowDimensions, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { white } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 
-const CustomHeader = ({ title, imgPath, iconPath, iconHeight = 30,handleLeftIcon,  iconWidth = 36 , leftTitle, handlePress}) => {
+const CustomHeader = ({ title,justifyContent, imgPath, iconPath, iconHeight = 30,handleLeftIcon,  iconWidth = 36 , leftTitle, handlePress}) => {
   const { width: winWidth } = useWindowDimensions();
 
   const styles = StyleSheet.create({
     header: {
+      justifyContent: justifyContent? justifyContent: '',
       width: winWidth,
       height: 60,
       backgroundColor: '#3C3567',

@@ -4,7 +4,6 @@ import { Picker } from '@react-native-picker/picker'
 
 const CardFormModal = () => {
      const [selectedButton, setSelectedButton] = useState('Debit');
-
       const [selectedMonth, setSelectedMonth] = useState('');
       const [selectedYear, setSelectedYear] = useState('');
     

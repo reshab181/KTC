@@ -15,6 +15,7 @@ import CustomHeader from '../../Reusables/CustomHeader';
 import CustomButton from '../../Reusables/CustomButtons';
 import CustomIconTextInput from '../../Reusables/CustomIconTextInput';
 import { RadioButton } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 const { height, width } = Dimensions.get('window');
 
@@ -42,7 +43,7 @@ const validationSchema = Yup.object().shape({
     country: Yup.string().required('Country is required'),
 });
 
-const PersonalRegister = () => {
+const PersonalRegister = ({navigation}) => {
     const [selectedGender, setSelectedGender] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('India');
 
@@ -59,8 +60,12 @@ const PersonalRegister = () => {
 
     return (
         <SafeAreaView style={styles.mainContainer}>
-            {/* Header Section */}
-            <CustomHeader title="Register" iconPath={require('../../Assets/icbackarrow.png')} iconHeight={24} iconWidth={24} />
+            <CustomHeader 
+                title="Register" 
+                iconPath={require('../../Assets/icbackarrow.png')} 
+                iconHeight={24} iconWidth={24}  
+                handleLeftIcon={() => navigation.goBack()}
+                />
 
             <View style={styles.scrollContainer}>
                 <Formik
@@ -82,7 +87,6 @@ const PersonalRegister = () => {
                     {({ values, handleChange, handleBlur, handleSubmit, errors, touched }) => (
                         <>
                             <ScrollView contentContainerStyle={styles.formContainer} showsVerticalScrollIndicator={false}>
-                                {/* Dynamically render TextInputs */}
                                 {inputFields.map((field, index) => (
                                     <View key={index} style={styles.inputContainer}>
                                         <CustomIconTextInput

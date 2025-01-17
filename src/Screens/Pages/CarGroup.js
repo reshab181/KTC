@@ -2,8 +2,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import CustomHeader from '../../Reusables/CustomHeader'
 import CustomCarGrouptile from '../../Reusables/CustomCarGrouptile'
+import CustomButton from '../../Reusables/CustomButtons'
 
-const CarGroup = () => {
+const CarGroup = ({navigation}) => {
     const carGroupTitles = [
         "Mercedes Benz Or Similar",
         "BMW 6 Series Or Similar",
@@ -13,12 +14,15 @@ const CarGroup = () => {
       ];      
   return (
     <View style={styles.root}>
-        <CustomHeader title={"Car Group"} iconPath={require('../../Assets/icbackarrow.png')} iconHeight={24} iconWidth={24}/>
+        <CustomHeader title={"Car Group"} iconPath={require('../../Assets/icbackarrow.png')} iconHeight={24} iconWidth={24} handleLeftIcon={()=>{navigation.goBack()}}/>
         {
             carGroupTitles.map((item,id)=>
-                <CustomCarGrouptile title={item}/>
+                <CustomCarGrouptile key={id} title={item} onPress={()=>navigation.navigate('CarSelection')} iconName={'chevron-right'} />
             )
         }
+        {/* <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
+            <CustomButton title={"Next"} borderRadius={0} onPress={()=>{}}/>
+        </View> */}
 
     </View>
   )

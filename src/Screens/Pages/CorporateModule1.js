@@ -9,6 +9,9 @@ import CustomTextInpt from '../../Reusables/CustomTextInpt';
 import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
 import CustomCalender from '../../Reusables/CustomCalender';
 import CustomButton from '../../Reusables/CustomButtons';
+import { useNavigation } from '@react-navigation/native';
+import CustomCarGrouptile from '../../Reusables/CustomCarGrouptile';
+import TimeTracker from '../../Reusables/TimeTracker';
 
 const data = [
     { label: 'Item 1', value: '1' },
@@ -20,7 +23,8 @@ const data = [
     { label: 'Item 7', value: '7' },
     { label: 'Item 8', value: '8' },
 ];
-const CorporateModule1 = () => {
+const CorporateModule1 = ({ navigation }) => {
+
     const [value, setValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
     const cityData = [
@@ -92,21 +96,20 @@ const CorporateModule1 = () => {
                             <Text style={styles.txt}>Car Reporting Details</Text>
                         </View>
                         <View style={{ backgroundColor: "#FFFFFF" }}>
+                            
                             <CustomCalender />
+
                         </View>
                         <View style={[styles.container2, { height: 140 }]}>
-                            <View style={{marginHorizontal:  10}}>
-                            <CustomDropdown
-                                data={cityData}
-                                placeholder="Pickup Address"
-                                searchPlaceholder="Search City..."
-                                onChange={(item) => console.log('Selected City:', item)}
-                            />
-                            <CustomTextInpt placeholder={"Reporting Landmark (Optional)"} />
+                            <View style={{ marginHorizontal: 10 }}>
+                                <CustomCarGrouptile
+                                    title={"Pickup Address"}
+                                    onPress={() => navigation.navigate('PickUpLocation')}
+                                    iconName={'chevron-down'} />
+                                <CustomTextInpt placeholder={"Reporting Landmark (Optional)"} />
                             </View>
                         </View>
                     </View>
-
                 </View>
                 <View style={styles.container}>
                     <View>
@@ -114,21 +117,21 @@ const CorporateModule1 = () => {
                             <Text style={styles.txt}>Other Information</Text>
                         </View>
                         <View style={[styles.container2, { height: 208 }]}>
-                           <View style={{marginHorizontal:  10}}>
-                           <CustomTextInpt placeholder={"Flight/Train info"} />
-                            <CustomTextInpt placeholder={"Special Instruction (Optional)"} />
-                            <CustomDropdown
-                                data={cityData}
-                                placeholder="Payment Mode"
-                                searchPlaceholder="Search City..."
-                                onChange={(item) => console.log('Selected City:', item)}
-                            />
-                           </View>
+                            <View style={{ marginHorizontal: 10 }}>
+                                <CustomTextInpt placeholder={"Flight/Train info"} />
+                                <CustomTextInpt placeholder={"Special Instruction (Optional)"} />
+                                <CustomDropdown
+                                    data={cityData}
+                                    placeholder="Payment Mode"
+                                    searchPlaceholder="Search City..."
+                                    onChange={(item) => console.log('Selected City:', item)}
+                                />
+                            </View>
                         </View>
                     </View>
 
                 </View>
-                <CustomButton title={"Next"} borderRadius={0} />
+                <CustomButton title={"Next"} borderRadius={0} onPress={() => { navigation.navigate('HomeScreen1') }} />
             </View>
         </ScrollView>
     )

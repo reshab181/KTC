@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import CustomHeader from '../../Reusables/CustomHeader';
 
 const ModuleSelectionUI = () => {
   const navigation = useNavigation();
@@ -41,13 +42,7 @@ const ModuleSelectionUI = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.topContainer}>
-        <Image
-          resizeMode="contain"
-          source={require('../../Assets/ktc.png')}
-          style={styles.logo}
-        />
-      </View>
+      <CustomHeader imgPath={require('../../Assets/ktclogo.png')} justifyContent={'center'}/>
       <View style={styles.contentContainer}>
         <ModuleCard
           title="Corporate"

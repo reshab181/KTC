@@ -48,7 +48,6 @@ const App = () => {
           />
 
 
-<<<<<<< HEAD
         <Stack.Screen
           name="SignInCorporate"
           component={SignInCorporate}  
@@ -64,53 +63,28 @@ const App = () => {
       />
         <Stack.Screen name="RegisterPage" component={Register} options={{headerShown: false}} />
         <Stack.Screen name="OTPRegister" component={OTPRegister} options={{ headerShown: false }} />
-        <Stack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
-=======
-          <Stack.Screen
-            name="SignInCorporate"
-            component={SignInCorporate}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="RegisterPOPUP"
-            component={RegisterPOPUP}
-            options={{
-              presentation: 'modal',
-              headerShown: false,
-            }}
-          />
-
-        {/* Other Screens */}
-          <Stack.Screen name="RegisterPage" component={Register} />
-          <Stack.Screen name="OTPRegister" component={OTPRegister} options={{ headerShown: false }} />
-          <Stack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
->>>>>>> 6d0d8cd9a832ff329eac666d16e650ef1b4f2d8e
+        <Stack.Screen name="ForgotpasswordOTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
 
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
-          <Stack.Screen name="PersonalRegister" component={PersonalRegister} />
-          <Stack.Screen name="ResetPassword" component={ResetPassword} />
+          <Stack.Screen name="PersonalRegister" component={PersonalRegister} options={{headerShown: false}}/>
+          <Stack.Screen name="ResetPassword" component={ResetPassword} options={{headerShown: false}}/>
           <Stack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} />
           <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="PickUpLocation" component={PickUpLocation} />
-          <Stack.Screen name="HomeScreen1" component={HomeScreen1} />
-          <Stack.Screen name="CarGroup" component={CarGroup} />
-          <Stack.Screen name="CarSelection" component={CarSelection} />
+          <Stack.Screen name="PickUpLocation" component={PickUpLocation} options={{headerShown: false}}/>
+          <Stack.Screen name="HomeScreen1" component={HomeScreen1} options={{headerShown: false}} />
+          <Stack.Screen name="CarGroup" component={CarGroup} options={{headerShown: false}}/>
+          <Stack.Screen name="CarSelection" component={CarSelection} options={{headerShown:false}} />
+          <Stack.Screen name="BookingConfirmation" component={BookingConfirmation} options={{headerShown:false}} />
+          <Stack.Screen name="Payment" component={PaymentMethod} options={{headerShown:false}} />
+          <Stack.Screen name="MyBooking" component={MyBooking} options={{headerShown:false}} />
+
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
-<<<<<<< HEAD
-    // // <OTPRegister/>
+    // <OTPRegister/>
     // <GestureHandlerRootView>
-    //   {/* <PaymentMethod/> */}
-    //   {/* <MyBooking/> */}
-    //   {/* <Profile/> */}
-    //   {/* <PersonalRegister/> */}
-    //   {/* <SignInCorporate/> */}
-    // {/* </GestureHandlerRootView> */}
-=======
-    // <Register/>
-
->>>>>>> 6d0d8cd9a832ff329eac666d16e650ef1b4f2d8e
+    //   <HomeScreen1 />
+    // </GestureHandlerRootView>
 
   );
 };

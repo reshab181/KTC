@@ -7,7 +7,7 @@ import CardFormModal from '../../Reusables/CardFormModal';
 import WalletnUpi from '../../Reusables/WalletnUpi';
 import CustomModal from '../../Reusables/CustomModals';
 
-const PaymentMethod = () => {
+const PaymentMethod = ({navigation}) => {
   const [selectedButton, setSelectedButton] = useState('Debit');
   const [visible, setvisible] = useState(false);
 
@@ -44,6 +44,7 @@ const PaymentMethod = () => {
           iconPath={require('../../Assets/icbackarrow.png')}
           iconHeight={24}
           iconWidth={24}
+          handleLeftIcon={()=>{navigation.goBack()}}
         />
 
         <View style={styles.buttonsContainer}>
@@ -70,7 +71,15 @@ const PaymentMethod = () => {
         )}
       </ScrollView>
 
-      <CustomButton title="Pay ₹20,402" borderRadius={0} onPress={()=>setvisible(!visible)} />
+      <CustomButton title="Pay ₹20,402" borderRadius={0} 
+        onPress={()=>{
+          setvisible(true)
+          setTimeout(() => {
+            setvisible(false)
+            navigation.navigate('MyBooking')            
+          }, 2000);
+          }
+          } />
       {
         visible ? <>
           <View>
@@ -92,10 +101,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   buttonsContainer: {
-    marginTop: 16,
+    marginTop: 10,
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-between',
+    marginHorizontal: 16
   },
 });
 
