@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: TimeTracker
 import React, { useEffect, useState, useRef } from 'react';
 import {
   StyleSheet,

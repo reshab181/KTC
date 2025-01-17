@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: ResetPassword
 import { StyleSheet, Text, View } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import React, { useState } from 'react';

@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: WalletnUpi
 import { Image, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 import { RadioButton } from 'react-native-paper';

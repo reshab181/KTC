@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: ProgessCard
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Svg, Line } from 'react-native-svg';
