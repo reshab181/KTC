@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: SearchResultList
 import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
 

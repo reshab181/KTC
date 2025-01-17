@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: PaymentMethod
 
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
@@ -41,7 +41,6 @@ const PaymentMethod = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        {/* Header */}
         <CustomHeader
           title="Payment"
           iconPath={require('../../Assets/icbackarrow.png')}

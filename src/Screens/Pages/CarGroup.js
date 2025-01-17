@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: Car Group
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import CustomHeader from '../../Reusables/CustomHeader'
@@ -22,9 +22,7 @@ const CarGroup = ({navigation}) => {
                 <CustomCarGrouptile key={id} title={item} onPress={()=>navigation.navigate('CarSelection')} iconName={'chevron-right'} />
             )
         }
-        {/* <View style={{position: 'absolute', bottom: 0, width: '100%'}}>
-            <CustomButton title={"Next"} borderRadius={0} onPress={()=>{}}/>
-        </View> */}
+       
 
     </View>
   )

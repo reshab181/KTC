@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: CustomModal
 import React from 'react';
 import {
   Modal,

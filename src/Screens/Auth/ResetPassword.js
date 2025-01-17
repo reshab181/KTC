@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: ResetPassword
 import { StyleSheet, Text, View } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import React, { useState } from 'react';
@@ -32,7 +32,7 @@ const ResetPassword = ({navigation}) => {
                 message1={"Your Password has been set Successfully"}
                 message2={"Please login using the set Password"}
                 btnText={"Login Now"}
-                handlePress={()=>{navigation.navigate('SignInCorporate')}}
+                handlePress={()=>{navigation.replace('SignInCorporate')}}
               />
             </View>
           </> : null

@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: PickUpLocation
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import CustomButton from '../../Reusables/CustomButtons'

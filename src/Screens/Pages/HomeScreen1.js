@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: HomeScreen1
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
 import CustomHeader from '../../Reusables/CustomHeader';
@@ -10,7 +10,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CalendarTimePicker from '../../Reusables/CalendarTimePicker';
 import Ionicons from 'react-native-vector-icons/FontAwesome';
 
-const HomeScreen1 = ({navigation}) => {
+const HomeScreen1 = ({ navigation }) => {
     const [isVisible, setisVisible] = useState(false);
     const [rentalType, setRentalType] = useState('Rental Type');
     const cityData = [
@@ -21,8 +21,8 @@ const HomeScreen1 = ({navigation}) => {
     ];
 
     const handleItemPress = (item) => {
-        setRentalType(item.label); 
-        setisVisible(false); 
+        setRentalType(item.label);
+        setisVisible(false);
     };
 
     return (
@@ -42,7 +42,6 @@ const HomeScreen1 = ({navigation}) => {
                         placeholder={'Delhi NCR'}
                     />
                     <CustomTextInpt placeholder={'MapmyIndia Head Office New Delhi, 237, Okh...'} />
-                    {/* Rental Type Dropdown */}
                     <View style={styles.dropdownContainer}>
                         <TouchableOpacity onPress={() => setisVisible(!isVisible)} style={styles.dropdown}>
                             <Text style={styles.dropdownText}>{rentalType}</Text>
@@ -50,7 +49,7 @@ const HomeScreen1 = ({navigation}) => {
                         </TouchableOpacity>
                         {isVisible && (
                             <View style={styles.dropdownList}>
-                                {cityData.map((item,index) => {
+                                {cityData.map((item, index) => {
                                     return (<TouchableOpacity key={index} onPress={() => handleItemPress(item)} style={styles.listItemContainer}>
                                         <Text style={styles.listItem}>{item.label}</Text>
                                     </TouchableOpacity>)
@@ -58,26 +57,24 @@ const HomeScreen1 = ({navigation}) => {
                             </View>
                         )}
                     </View>
-                    {/* Trip Section */}
                     <View style={styles.tripContainer}>
                         <View style={styles.tripRow}>
                             <Image source={require('../../Assets/car-bg.png')} style={styles.tripIcon} />
-                             <TouchableOpacity >
-                             <Text style={styles.tripText}>Start Trip</Text>
-                             </TouchableOpacity>
-                            <Icon name='chevron-right'/>
+                            <TouchableOpacity >
+                                <Text style={styles.tripText}>Start Trip</Text>
+                            </TouchableOpacity>
+                            <Icon name='chevron-right' />
                             <TouchableOpacity>
-                            <Text style={styles.tripText}>End Trip</Text>
+                                <Text style={styles.tripText}>End Trip</Text>
                             </TouchableOpacity>
                             <Image source={require('../../Assets/carbw.png')} style={styles.tripIcon} />
                         </View>
-                    <CalendarTimePicker/>
-
+                        <CalendarTimePicker />
                     </View>
                 </View>
             </ScrollView>
             <View style={styles.footer}>
-                <CustomButton title="Continue" widthSize="100%" borderRadius={0} onPress={()=>navigation.navigate('CarGroup')} />
+                <CustomButton title="Continue" widthSize="100%" borderRadius={0} onPress={() => navigation.navigate('CarGroup')} />
             </View>
         </SafeAreaView>
     );
@@ -126,7 +123,7 @@ const styles = StyleSheet.create({
         borderBottomColor: '#E5E5E5',
     },
     tripContainer: {
-        flex:1,
+        flex: 1,
         backgroundColor: '#FFFFFF',
         marginTop: 16,
         elevation: 5,

@@ -178,11 +178,9 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         flex: 1,
-        // paddingHorizontal: 20,
     },
     formContainer: {
         marginTop: 16
-        // paddingBottom: 20,
     },
     inputContainer: {
         marginBottom: 16,

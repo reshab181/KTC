@@ -6,6 +6,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import CustomHeader from '../../Reusables/CustomHeader';
+import Upcoming from './Upcoming';
 // import MapIndex from '../Map/MapIndex';
 
 
@@ -17,6 +18,7 @@ const Track = ({
     onViewLandmark,
     onCancelRide,
     onBack,
+    navigation
 }) => {
     return (
         <SafeAreaView style={styles.safeArea}>
@@ -25,6 +27,7 @@ const Track = ({
                 title={"Track Chauffer"}
                 iconHeight={24}
                 iconWidth={24}
+                handleLeftIcon={()=>{navigation.navigate('Upcoming')}}
             />
             {/* Header */}
 

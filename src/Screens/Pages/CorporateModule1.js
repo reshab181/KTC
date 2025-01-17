@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: CorporateModule1
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import CustomHeader from '../../Reusables/CustomHeader'

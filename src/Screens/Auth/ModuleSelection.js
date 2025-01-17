@@ -1,7 +1,6 @@
 //**Author---Reshab Kumar Pandey
 // Component-- ModuleSelection.js */
 
-
 import React from 'react';
 import {
   Image,

@@ -9,7 +9,7 @@ import { StyleSheet, View, SafeAreaView, FlatList, Text, TouchableOpacity, Modal
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomHeader from '../../Reusables/CustomHeader';
 
-const Upcoming = () => {
+const Upcoming = ({navigation}) => {
   const upcomingData = [
     {
       guestName: 'Santosh Jha',

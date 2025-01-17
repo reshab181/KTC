@@ -57,8 +57,6 @@ const AuthNavigator = () => (
     <AuthStack.Screen name="ResetPassword" component={ResetPassword}options={{ headerShown: false }}  />
   </AuthStack.Navigator>
 );
-
-
 const MainAppNavigator = () => (
   <AppStack.Navigator initialRouteName="HomeScreen1">
     <AppStack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} />
@@ -71,6 +69,7 @@ const MainAppNavigator = () => (
     <AppStack.Screen name="Payment" component={PaymentMethod}options={{ headerShown: false }} />
     <AppStack.Screen name="MyBooking" component={MyBooking}options={{ headerShown: false }} />
     <AppStack.Screen name="Track" component={Track}options={{ headerShown: false }} />
+    <AppStack.Screen name="Upcoming" component={Upcoming}options={{ headerShown: false }} />
 
   </AppStack.Navigator>
 );

@@ -5,6 +5,7 @@ import {
   View,
   StyleSheet,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import CustomHeader from '../../Reusables/CustomHeader';
@@ -23,9 +24,14 @@ const ForgotPassword = ({ route, navigation }) => {
   useEffect(() => {
     const getAccessToken = async () => {
       try {
+        console.log('Fetching JWT Access Token...');
         const token = await fetchJwtAccess();
-        if (token) setAccessToken(token);
-      } catch (err) {
+        console.log('Fetched JWT Access Token:', token);
+        if (token) {
+          setAccessToken(token);
+        }
+      } catch (error) {
+        console.error('Error fetching JWT access token:', error.message);
         setError('Failed to fetch access token.');
       }
     };
@@ -34,14 +40,15 @@ const ForgotPassword = ({ route, navigation }) => {
   }, []);
 
   const sendForgotOTP = () => {
-    emailsms(email, accessToken, navigation, setLoading);
-    // navigation.navigate("OTP")
+    // emailsms(email, accessToken, navigation, setLoading);
+    navigation.replace("OTP")
   };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
          <CustomHeader title={"Forgot Password"} leftTitle={"Skip"} handlePress={() => navigation.goBack()}/>
 
+      <CustomHeader title={"Forgot Password"} leftTitle={"Skip"} handlePress={() => navigation.goBack()} />
       <View style={styles.emailContainer}>
         <CustomTextInpt placeholder={"Enter your registered email ID"} value={email} editable={false} />
         <View style={{marginTop: 94}}>
@@ -57,17 +64,62 @@ export default ForgotPassword;
 
 const styles = StyleSheet.create({
   mainContainer: {
-    flex: 1,
+    height: height,
+    width: width,
     backgroundColor: '#F1F1F3',
+  },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    backgroundColor: '#3C3567',
+    alignItems: 'center',
+    paddingHorizontal: 25,
+    paddingVertical: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    elevation: 5,
+  },
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#FFF',
+  },
+  skipButton: {
+    backgroundColor: 'transparent',
+  },
+  skipText: {
+    fontSize: 16,
+    color: '#FFF',
   },
   emailContainer: {
     marginHorizontal: 16,
-    marginTop: 10,
+     marginTop: 10 , 
+  },
+  emailText: {
+    fontSize: 16,
+    color: '#212121',
+    paddingLeft: 10,
+  },
+  submitButton: {
+    height: height / 12,
+    width: width / 1.1,
+    backgroundColor: '#3C3567',
+    marginTop: 60,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    elevation: 4,
+  },
+  submitButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
   errorText: {
     color: 'red',
     fontSize: 16,
-    textAlign: 'center',
+    alignSelf: 'center',
     marginTop: 20,
   },
 });

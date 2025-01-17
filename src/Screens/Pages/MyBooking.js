@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: MyBooking 
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import CustomHeader from '../../Reusables/CustomHeader';
@@ -10,7 +10,6 @@ import CustomButton from '../../Reusables/CustomButtons';
 import { useNavigation } from '@react-navigation/native';
 
 const MyBooking = ({navigation}) => {
-
 
   return (
     <SafeAreaView style={styles.root}>

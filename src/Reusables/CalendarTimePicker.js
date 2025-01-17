@@ -1,5 +1,5 @@
 // Author: Ashutosh Rai
-// Component: Booking Confirmation
+// Component: CalendarTimePicker
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import CalendarPicker from "react-native-calendar-picker";

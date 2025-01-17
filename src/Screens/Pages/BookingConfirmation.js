@@ -37,7 +37,6 @@ const BookingConfirmation = ({navigation}) => {
                         handleLeftIcon={()=>{navigation.goBack()}}
                     />
                     <View style={{ marginHorizontal: 16, marginTop: 10 }}>
-                        {/* Car Card */}
                         <CarCard
                             iconPath={require('../../Assets/infobtn.png')}
                             isSaved={true}
@@ -50,7 +49,6 @@ const BookingConfirmation = ({navigation}) => {
                             </Text>
                         </View>
 
-                        {/* Payment Method */}
                         <View style={styles.rowStyle}>
                             <View style={styles.radioContainer}>
                                 {[Characters.cash, Characters.credit].map((item) => (
@@ -67,11 +65,9 @@ const BookingConfirmation = ({navigation}) => {
                             </View>
                         </View>
 
-                        {/* Flight Input */}
                         <CustomTextInpt placeholder={"Flight"} />
                     </View>
 
-                    {/* Rental Amount Section */}
                     <View>
                         <View style={styles.rentalHeader}>
                             <Text style={styles.rentalText}>Rental Amount: ₹20,402</Text>
@@ -80,7 +76,6 @@ const BookingConfirmation = ({navigation}) => {
                             </TouchableOpacity>
                         </View>
 
-                        {/* Order Summary (Conditionally rendered) */}
                         {check1 && (
                             <View style={styles.summaryContainer}>
                                 <Text style={styles.orderSummaryText}>My Order Summary</Text>
@@ -97,7 +92,6 @@ const BookingConfirmation = ({navigation}) => {
                         )}
                     </View>
 
-                    {/* Terms and Conditions */}
                     <View style={styles.termsContainer}>
                         <TouchableOpacity onPress={() => setCheckTA(!checkTA)}>
                             <Icon name={checkTA ? 'check-square' : 'square-o'} size={24} color={'#4B713D'} />
