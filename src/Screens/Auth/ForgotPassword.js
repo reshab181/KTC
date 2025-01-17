@@ -10,11 +10,12 @@ import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import CustomHeader from '../../Reusables/CustomHeader';
 import CustomTextInpt from '../../Reusables/CustomTextInpt';
 import CustomButton from '../../Reusables/CustomButtons';
+import { emailsms } from '../../Api/Authentication';
 
 const { height, width } = Dimensions.get('screen');
 
 const ForgotPassword = ({ route, navigation }) => {
-  const [email, setemail]  = useState(route.params);
+  const { email } = route.params || {};
   const [accessToken, setAccessToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -33,12 +34,13 @@ const ForgotPassword = ({ route, navigation }) => {
   }, []);
 
   const sendForgotOTP = () => {
-    // emailsms(email, accessToken, navigation, setLoading);
-    navigation.navigate("ForgotpasswordOTP")
+    emailsms(email, accessToken, navigation, setLoading);
+    // navigation.navigate("OTP")
   };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
+         <CustomHeader title={"Forgot Password"} leftTitle={"Skip"} handlePress={() => navigation.goBack()}/>
 
       <View style={styles.emailContainer}>
         <CustomTextInpt placeholder={"Enter your registered email ID"} value={email} editable={false} />

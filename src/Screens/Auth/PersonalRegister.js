@@ -1,3 +1,7 @@
+//**Author---Reshab Kumar Pandey
+// Component---PersonalRegister.js */
+
+
 import React, { useState } from 'react';
 import {
     SafeAreaView,
@@ -19,7 +23,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const { height, width } = Dimensions.get('window');
 
-// Colors constant for consistent theming
+
 const COLORS = {
     primary: '#3C3567',
     background: '#F5F5F5',
@@ -29,7 +33,7 @@ const COLORS = {
     gray: '#666666',
 };
 
-// Validation schema using Yup
+
 const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid email address').required('Email is required'),
     firstName: Yup.string().required('First Name is required'),
@@ -47,7 +51,7 @@ const PersonalRegister = ({navigation}) => {
     const [selectedGender, setSelectedGender] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('India');
 
-    // Array of form fields
+ 
     const inputFields = [
         { placeholder: 'Official Email ID', icon: require('../../Assets/email.png'), name: 'email' },
         { placeholder: 'First Name', icon: require('../../Assets/manicon.png'), name: 'firstName' },
@@ -78,8 +82,8 @@ const PersonalRegister = ({navigation}) => {
                         phone: '',
                         alternatePhone: '',
                         dob: '',
-                        gender: '', // Added for gender
-                        country: '', // Added for country
+                        gender: '', 
+                        country: '', 
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values) => console.log(values)}

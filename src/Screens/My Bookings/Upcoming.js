@@ -1,3 +1,9 @@
+//**Author---Reshab Kumar Pandey
+// Component--- Upcoming.js */
+
+
+
+
 import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, FlatList, Text, TouchableOpacity, Modal, TextInput, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -58,6 +64,9 @@ const Upcoming = () => {
       <TouchableOpacity style={styles.card}>
         <View style={styles.rowContainer}>
           <Image source={require('../../Assets/cardemo.png')} style={styles.image} />
+
+          {/* Divider Line */}
+          <View style={styles.divider} />
 
           <View style={styles.textContainer}>
             <Text style={styles.name}>{item.guestName}</Text>
@@ -190,7 +199,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
-    // padding: 5,
   },
   tab: {
     flex: 1,
@@ -212,11 +220,12 @@ const styles = StyleSheet.create({
   },
   card: {
     width: '92%',
+    height: 190,
     backgroundColor: '#fff',
     marginVertical: 16,
     marginHorizontal: 16,
-    padding: 15,
-    borderRadius: 10,
+    padding: 10,
+    borderRadius: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
@@ -229,15 +238,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    height: 150, 
   },
   image: {
     width: 150,
     height: 150,
     resizeMode: 'contain',
   },
+  divider: {
+    width: 1,
+    backgroundColor: '#ddd',
+    height: '100%',
+    marginHorizontal: 14,
+  },
   textContainer: {
     flex: 1,
-    paddingLeft: 15,
+    paddingLeft: 12,
   },
   name: {
     fontSize: 16,
@@ -247,7 +263,7 @@ const styles = StyleSheet.create({
   detail: {
     fontSize: 14,
     color: '#212121',
-    marginBottom: 10,
+    marginBottom: 5,
   },
   actionContainer: {
     flexDirection: 'row',
@@ -256,7 +272,7 @@ const styles = StyleSheet.create({
   cancelButton: {
     backgroundColor: '#3C3567',
     paddingVertical: 8,
-    paddingHorizontal: 8,
+    paddingHorizontal: 6,
     borderRadius: 5,
   },
   cancelText: {
@@ -266,7 +282,7 @@ const styles = StyleSheet.create({
   trackButton: {
     backgroundColor: '#3C3567',
     paddingVertical: 8,
-    paddingHorizontal: 8,
+    paddingHorizontal: 4,
     borderRadius: 5,
   },
   trackText: {

@@ -12,7 +12,7 @@ import Ionicons from 'react-native-vector-icons/FontAwesome';
 
 const HomeScreen1 = ({navigation}) => {
     const [isVisible, setisVisible] = useState(false);
-    const [rentalType, setRentalType] = useState('Rental Type'); // State to hold the selected rental type
+    const [rentalType, setRentalType] = useState('Rental Type');
     const cityData = [
         { label: 'Local Run - Full day', value: 'FD' },
         { label: 'Local Run - Half day', value: 'HD' },
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         borderRadius: 4,
         elevation: 5,
-        maxHeight: 150, // Limit dropdown height for scrolling
+        maxHeight: 150, 
     },
     listItemContainer: {
         paddingVertical: 8,

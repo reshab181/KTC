@@ -20,6 +20,12 @@ import CarGroup from "./src/Screens/Pages/CarGroup";
 import CarSelection from "./src/Screens/Pages/CarSelection";
 import OTPRegister from "./src/Screens/Auth/OtpRegister";
 import BookingConfirmation from "./src/Screens/Pages/BookingConfirmation";
+import PaymentMethod from "./src/Screens/Pages/PaymentMethod";
+import MyBooking from "./src/Screens/Pages/MyBooking";
+import Upcoming from "./src/Screens/My Bookings/Upcoming";
+import Feedback from "./src/Screens/Feedback";
+import Help from "./src/Screens/Help";
+import Track from "./src/Screens/My Bookings/Track";
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -47,8 +53,8 @@ const AuthNavigator = () => (
     <AuthStack.Screen name="OTPRegister" component={OTPRegister} options={{ headerShown: false }} />
     <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
     <AuthStack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
-    <AuthStack.Screen name="PersonalRegister" component={PersonalRegister} />
-    <AuthStack.Screen name="ResetPassword" component={ResetPassword} />
+    <AuthStack.Screen name="PersonalRegister" component={PersonalRegister} options={{ headerShown: false }} />
+    <AuthStack.Screen name="ResetPassword" component={ResetPassword}options={{ headerShown: false }}  />
   </AuthStack.Navigator>
 );
 
@@ -56,12 +62,16 @@ const AuthNavigator = () => (
 const MainAppNavigator = () => (
   <AppStack.Navigator initialRouteName="HomeScreen1">
     <AppStack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} />
-    <AppStack.Screen name="Profile" component={Profile} />
-    <AppStack.Screen name="PickUpLocation" component={PickUpLocation} />
-    <AppStack.Screen name="HomeScreen1" component={HomeScreen1} />
-    <AppStack.Screen name="CarGroup" component={CarGroup} />
-    <AppStack.Screen name="CarSelection" component={CarSelection} />
-    <AppStack.Screen name ="BookingConfirmation" component={BookingConfirmation}/>
+    <AppStack.Screen name="Profile" component={Profile}options={{ headerShown: false }}  />
+    <AppStack.Screen name="PickUpLocation" component={PickUpLocation} options={{ headerShown: false }} />
+    <AppStack.Screen name="HomeScreen1" component={HomeScreen1} options={{ headerShown: false }} />
+    <AppStack.Screen name="CarGroup" component={CarGroup} options={{ headerShown: false }} />
+    <AppStack.Screen name="CarSelection" component={CarSelection} options={{ headerShown: false }} />
+    <AppStack.Screen name ="BookingConfirmation" component={BookingConfirmation}options={{ headerShown: false }} />
+    <AppStack.Screen name="Payment" component={PaymentMethod}options={{ headerShown: false }} />
+    <AppStack.Screen name="MyBooking" component={MyBooking}options={{ headerShown: false }} />
+    <AppStack.Screen name="Track" component={Track}options={{ headerShown: false }} />
+
   </AppStack.Navigator>
 );
 
@@ -93,6 +103,10 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
+    // // <Upcoming/>
+    // // <Feedback/>
+    // // <Help/>
+    // <ForgotPasswordOTP/>
   );
 };
 

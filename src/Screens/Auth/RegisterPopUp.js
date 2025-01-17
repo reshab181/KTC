@@ -16,11 +16,10 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
-import CryptoJS from 'crypto-js';
-import debounce from 'lodash.debounce';
+
 import CustomTextInpt from '../../Reusables/CustomTextInpt';
 import CustomButton from '../../Reusables/CustomButtons';
-import Api from '../../Services/Api';
+
 
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import { registrationHandler } from '../../Api/Authentication';

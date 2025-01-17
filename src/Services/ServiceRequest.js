@@ -39,12 +39,15 @@ export async function tokenFromMMI() {
 
     const result = await response.text();
     const parsedResult = JSON.parse(result);
-
+    console.log(parsedResult,"access_token");
+  
     return parsedResult;
+  
   } catch (error) {
     console.error('Error fetching MMI token:', error);
     throw error;
   }
+  
 }
 
   

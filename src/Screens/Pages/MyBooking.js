@@ -44,7 +44,14 @@ const MyBooking = ({navigation}) => {
               <Icon name='calendar' size={15} />
               <Text style={{marginLeft: 9 , }}>Booking Date: 10-05-2022</Text>
             </View>
-              <CustomButton title={'Track Chauffeur'} btnHeight={32} textSize={14} fontWeight={400}/>
+              <CustomButton title={'Track Chauffeur'} btnHeight={32} textSize={14} fontWeight={400}  onPress={()=>{
+          // setvisible(true)
+          setTimeout(() => {
+            // setvisible(false)
+            navigation.navigate('Track')            
+          }, 2000);
+          }
+          }/>
           </View>
         </View>
       </ScrollView>

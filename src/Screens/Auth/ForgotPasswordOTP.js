@@ -1,18 +1,61 @@
-// Author: Ashutosh Rai
-// Component: Booking Confirmation
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Alert,TextInput } from 'react-native';
 import { useWindowDimensions } from 'react-native';
-import React from 'react';
-import { TextInput } from 'react-native-paper';
+import React, { useState } from 'react';
+// import { TextInput } from 'react-native-paper';
 import CustomButton from '../../Reusables/CustomButtons';
 import CustomHeader from '../../Reusables/CustomHeader';
+import { verifyOTP } from '../../Api/Authentication';
 
-const ForgotPasswordOTP = ({navigation}) => {
+
+
+const ForgotPasswordOTP = ({ navigation }) => {
   const styles = useStyles();
+  
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const [isError, setIsError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleChangeOtp = (value, index) => {
+    let newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+    setIsError(false);
+  };
+
+  const handleSubmit = async () => {
+    
+    if (otp.some(value => value === "")) {
+      setIsError(true);
+      Alert.alert("Error", "Please fill all OTP fields.");
+      return;
+    }
+
+    
+    const passPhrase = otp.join("");
+    
+    setIsLoading(true);
+
+    try {
+  
+      const url = 'https://anchor.mapmyindia.com/api/otp/otp1737110437i939524096/validate';
+      
+    
+      const response = await verifyOTP(passPhrase, url);
+
+   
+      if (response) {
+        navigation.navigate('ResetPassword');
+      } else {
+        setIsError(true);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <View style={styles.root}>
-      <CustomHeader title={"Forgot Password"} />
+      <CustomHeader title={"Forgot Password"}  />
       <Image
         source={require('../../Assets/frgtpwdotp.png')}
         style={styles.img}
@@ -21,18 +64,24 @@ const ForgotPasswordOTP = ({navigation}) => {
         Please enter the OTP received on your registered email address.
       </Text>
       <View style={styles.txtInputBox}>
-        {Array.from({ length: 4 }).map((_, index) => (
+        {Array.from({ length: 6 }).map((_, index) => (
           <TextInput
             key={index}
-            style={styles.input}
+            style={[styles.input, isError && otp[index] === "" && styles.errorInput]}
             theme={{ colors: { background: '#F1F1F3' } }}
             keyboardType="number-pad"
             maxLength={1}
+            value={otp[index]}
+            onChangeText={value => handleChangeOtp(value, index)}
           />
         ))}
       </View>
       <View style={styles.btn}>
-        <CustomButton title="Next" onPress={() => navigation.navigate('ResetPassword')} />
+        <CustomButton 
+          title={isLoading ? "Verifying..." : "Next"} 
+          onPress={handleSubmit} 
+          disabled={isLoading} 
+        />
       </View>
       <View>
         <Text style={styles.footerText}>
@@ -42,7 +91,6 @@ const ForgotPasswordOTP = ({navigation}) => {
           Resend code in 00:11
         </Text>
       </View>
-
     </View>
   );
 };
@@ -89,6 +137,9 @@ function useStyles() {
       borderBottomWidth: 1,
       borderBottomColor: '#1C4096',
       backgroundColor: '#F1F1F3',
+    },
+    errorInput: {
+      borderBottomColor: '#D32F2F',
     },
     footerText: {
       marginTop: 110,
