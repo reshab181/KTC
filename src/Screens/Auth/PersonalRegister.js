@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import {
     SafeAreaView,
@@ -47,7 +48,6 @@ const PersonalRegister = ({navigation}) => {
     const [selectedGender, setSelectedGender] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('India');
 
-    // Array of form fields
     const inputFields = [
         { placeholder: 'Official Email ID', icon: require('../../Assets/email.png'), name: 'email' },
         { placeholder: 'First Name', icon: require('../../Assets/manicon.png'), name: 'firstName' },
@@ -78,8 +78,8 @@ const PersonalRegister = ({navigation}) => {
                         phone: '',
                         alternatePhone: '',
                         dob: '',
-                        gender: '', // Added for gender
-                        country: '', // Added for country
+                        gender: '', 
+                        country: '',
                     }}
                     validationSchema={validationSchema}
                     onSubmit={(values) => console.log(values)}
@@ -174,11 +174,9 @@ const styles = StyleSheet.create({
     },
     scrollContainer: {
         flex: 1,
-        // paddingHorizontal: 20,
     },
     formContainer: {
         marginTop: 16
-        // paddingBottom: 20,
     },
     inputContainer: {
         marginBottom: 16,
