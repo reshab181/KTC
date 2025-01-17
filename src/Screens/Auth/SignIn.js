@@ -54,7 +54,7 @@ const SignInCorporate = ({ route }) => {
   };
 
   const handleSignIn = async () => {
-    navigation.navigate('MainApp', {
+    navigation.replace('MainApp', {
       screen: 'CorporateModule1',
     });
   };
@@ -70,7 +70,7 @@ const SignInCorporate = ({ route }) => {
       <View style={{marginTop: 32}}> 
         <CustomButton title={"Sign In"} onPress={handleSignIn} textSize={18}/>
       </View>
-        <TouchableOpacity style={{marginTop: 10}}onPress={() => navigation.navigate('ForgotPassword', { email })}>
+        <TouchableOpacity style={{marginTop: 10}}onPress={() => navigation.replace('ForgotPassword', { email })}>
           <Text style={styles.linkText}>Forgot Password?</Text>
         </TouchableOpacity>
         <View style={styles.divider}>

@@ -32,7 +32,7 @@ const ResetPassword = ({navigation}) => {
                 message1={"Your Password has been set Successfully"}
                 message2={"Please login using the set Password"}
                 btnText={"Login Now"}
-                handlePress={()=>{navigation.navigate('SignInCorporate')}}
+                handlePress={()=>{navigation.replace('SignInCorporate')}}
               />
             </View>
           </> : null

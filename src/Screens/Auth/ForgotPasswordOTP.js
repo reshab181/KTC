@@ -32,7 +32,7 @@ const ForgotPasswordOTP = ({navigation}) => {
         ))}
       </View>
       <View style={styles.btn}>
-        <CustomButton title="Next" onPress={() => navigation.navigate('ResetPassword')} />
+        <CustomButton title="Next" onPress={() => navigation.replace('ResetPassword')} />
       </View>
       <View>
         <Text style={styles.footerText}>

@@ -41,7 +41,6 @@ const PaymentMethod = ({navigation}) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        {/* Header */}
         <CustomHeader
           title="Payment"
           iconPath={require('../../Assets/icbackarrow.png')}

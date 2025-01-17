@@ -11,7 +11,6 @@ import { useNavigation } from '@react-navigation/native';
 
 const MyBooking = ({navigation}) => {
 
-
   return (
     <SafeAreaView style={styles.root}>
       <ScrollView>

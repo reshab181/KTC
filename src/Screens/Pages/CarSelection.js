@@ -19,7 +19,6 @@ const CarSelection = ({ navigation }) => {
           handleLeftIcon={() => navigation.goBack()}
         />
 
-        {/* City Info Section */}
         <View style={styles.cityInfoContainer}>
           <View style={styles.cityLabelContainer}>
             <Text style={styles.cityLabel}>City</Text>
@@ -31,8 +30,6 @@ const CarSelection = ({ navigation }) => {
             </Text>
           </View>
         </View>
-
-        {/* Date & Time Section */}
         <View style={styles.dateTimeContainer}>
           <View>
             <View style={styles.dateTimeRow}>
@@ -56,7 +53,6 @@ const CarSelection = ({ navigation }) => {
           </View>
         </View>
 
-        {/* Car Cards */}
         <View style={styles.carCardsContainer}>
           {[...Array(4)].map((_, index) => (
             <CarCard
@@ -68,7 +64,6 @@ const CarSelection = ({ navigation }) => {
         </View>
       </ScrollView>
 
-      {/* Footer Button */}
       <View style={styles.footer}>
         <CustomButton title="Continue" borderRadius={0} onPress={()=>{navigation.navigate('BookingConfirmation')}}/>
       </View>
