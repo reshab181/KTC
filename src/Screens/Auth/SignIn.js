@@ -54,42 +54,9 @@ const SignInCorporate = ({ route }) => {
   };
 
   const handleSignIn = async () => {
-    navigation.navigate('CorporateModule1')
-
-    // if (password.trim().length < 6) {
-    //   Alert.alert('Error', 'Password must be at least 6 characters.');
-    //   return;
-    // }
-
-    // setLoading(true);
-    // try {
-    //   const token = await AsyncStorage.getItem('fcmToken') || 'dummy-token';
-    //   const payload = { email_id: email, password, type: 'GSM', tokenid: token };
-    //   const encryptedPayload = encryptPayload(payload);
-
-    //   const response = await fetch(Api.USER_LOGIN, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-    //       jwt: accessToken,
-    //     },
-    //     body: new URLSearchParams({ request_data: encryptedPayload }).toString(),
-    //   });
-
-    //   const data = await response.json();
-    //   if (response.ok && data.jwt) {
-    //     await AsyncStorage.setItem('token', data.jwt);
-    //     Alert.alert('Success', 'Logged in successfully!');
-    //     navigation.navigate('CorporateModule1');
-    //   } else {
-    //     Alert.alert('Error', data.message || 'Failed to sign in.');
-    //   }
-    // } catch (error) {
-    //   console.error('SignIn Error:', error);
-    //   Alert.alert('Error', 'Failed to sign in. Please try again.');
-    // } finally {
-    //   setLoading(false);
-    // }
+    navigation.navigate('MainApp', {
+      screen: 'CorporateModule1',
+    });
   };
 
   return (

@@ -19,12 +19,13 @@ import HomeScreen1 from "./src/Screens/Pages/HomeScreen1";
 import CarGroup from "./src/Screens/Pages/CarGroup";
 import CarSelection from "./src/Screens/Pages/CarSelection";
 import OTPRegister from "./src/Screens/Auth/OtpRegister";
+import BookingConfirmation from "./src/Screens/Pages/BookingConfirmation";
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
 const AppStack = createNativeStackNavigator();
 
-// Nested Auth Stack
+
 const AuthNavigator = () => (
     <AuthStack.Navigator initialRouteName="ModuleSelectionUI">
     <AuthStack.Screen
@@ -51,7 +52,7 @@ const AuthNavigator = () => (
   </AuthStack.Navigator>
 );
 
-// Nested App Stack
+
 const MainAppNavigator = () => (
   <AppStack.Navigator initialRouteName="HomeScreen1">
     <AppStack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} />
@@ -60,6 +61,7 @@ const MainAppNavigator = () => (
     <AppStack.Screen name="HomeScreen1" component={HomeScreen1} />
     <AppStack.Screen name="CarGroup" component={CarGroup} />
     <AppStack.Screen name="CarSelection" component={CarSelection} />
+    <AppStack.Screen name ="BookingConfirmation" component={BookingConfirmation}/>
   </AppStack.Navigator>
 );
 
