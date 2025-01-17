@@ -1,3 +1,6 @@
+// Author: Ashutosh Rai
+// Component: Booking Confirmation
+
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View, ScrollView } from 'react-native';
 import CustomHeader from '../../Reusables/CustomHeader';

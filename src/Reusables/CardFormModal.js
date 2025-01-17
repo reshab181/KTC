@@ -1,3 +1,5 @@
+// Author: Ashutosh Rai
+// Component: Booking Confirmation
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import { Picker } from '@react-native-picker/picker'

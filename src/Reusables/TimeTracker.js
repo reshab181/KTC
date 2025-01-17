@@ -1,3 +1,5 @@
+// Author: Ashutosh Rai
+// Component: Booking Confirmation
 import React, { useEffect, useState, useRef } from 'react';
 import {
   StyleSheet,

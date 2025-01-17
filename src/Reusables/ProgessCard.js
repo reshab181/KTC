@@ -1,3 +1,5 @@
+// Author: Ashutosh Rai
+// Component: Booking Confirmation
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Svg, Line } from 'react-native-svg';

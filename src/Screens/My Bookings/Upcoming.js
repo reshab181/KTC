@@ -111,12 +111,11 @@ const Upcoming = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.headerContainer}>
-        <TouchableOpacity style={styles.backButton}>
-          <Image source={require('../../Assets/ic_back_arrow_white_24.png')} />
-        </TouchableOpacity>
-        <CustomHeader title="My Bookings" />
-      </View>
+      <CustomHeader iconPath={require('../../Assets/ic_back_arrow_white_24.png')}
+        title={"My Booking"}
+        iconHeight={24}
+        iconWidth={24}
+      />
 
       <View style={styles.tabContainer}>
         <TouchableOpacity
@@ -205,7 +204,7 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 16,
     color: '#000',
-    fontWeight:'600'
+    fontWeight: '600'
   },
   activeTabText: {
     color: '#3C3567',
