@@ -54,7 +54,7 @@ const RegisterPOPUP = ({ onClose }) => {
       case 'success':
         if (data.newuser === 'No') {
           Alert.alert('Success', 'Registered in successfully!');
-          // setVisible(false);
+          setVisible(false);
           navigation.navigate('SignInCorporate', { email: email });
         } else {
           navigateToOTP();
