@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import React from 'react'
 import CustomButton from './CustomButtons'
 
-const CarCard = ({imgPath, iconPath, isSaved=false , height=126}) => {
+const CarCard = ({imgPath, iconPath, isSaved=false , height=126 , onIconPress , onBtnPress}) => {
     return (
 
             <View style={{ flexDirection: "row",height: height, width: "100%", backgroundColor: "#FFFFFF", elevation: 3, borderRadius: 4, marginBottom : 10 }}>
@@ -25,7 +25,7 @@ const CarCard = ({imgPath, iconPath, isSaved=false , height=126}) => {
                         </Text>
                     </View>
                     <View style={{}}>
-                        <CustomButton title={"Book Now"} textSize={12} btnHeight={24} />
+                        <CustomButton title={"Book Now"} textSize={12} btnHeight={24} onPress={onBtnPress}/>
                     </View>
                 </View>
             </View>

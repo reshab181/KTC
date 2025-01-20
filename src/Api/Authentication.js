@@ -205,6 +205,7 @@ export const registrationHandler = debounce(async (email, userType, accessToken,
     setLoader(false);
   }
 }, 300);
+
 export const NewUser = async (accessToken, details) => {
     try {
       const formBody = [];

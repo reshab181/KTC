@@ -7,14 +7,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons'; // Icon package
 import TimeTracker from './TimeTracker';
 
 const CalendarTimePicker = () => {
-      const [selected, setSelected] = useState('');
-     
-        const disablePastDates = (date) => {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // Reset time to midnight for comparison
-            return date < today; // Return true for dates in the past
-        };
+    const [selected, setSelected] = useState('');
+
+    const disablePastDates = (date) => {
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return date < today;
+    };
+    const today = new Date();
     return (
         <View>
             <View style={styles.calendarWrapper}>
@@ -40,7 +40,7 @@ const CalendarTimePicker = () => {
                             <Ionicons
                                 name="chevron-forward"
                                 size={24}
-                                color="#D3D3D3" 
+                                color="#D3D3D3"
                             />
                         </View>
                     }
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
     },
-   
+
     disabledDatesText: {
         color: '#d3d3d3', // Grey color for disabled dates
         textDecorationLine: 'line-through', // Optional: strike-through effect

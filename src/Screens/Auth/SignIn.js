@@ -62,15 +62,15 @@ const SignInCorporate = ({ route }) => {
   return (
     <SafeAreaView style={styles.container}>
       {isModalVisible && <RegisterPopUp onClose={() => setisModalVisible(false)} />}
-        <CustomHeader title={"Sign In"} leftTitle={"Skip"} handlePress={() => navigation.goBack()}/>
-      
+      <CustomHeader title={"Sign In"} leftTitle={"Skip"} handlePress={() => navigation.goBack()} />
+
       <View style={styles.form}>
-      <CustomTextInpt placeholder={"Email ID or Mobile"} value={email} editable={false}/>
-      <CustomTextInpt placeholder={"Password"} value={password} onChangeText={setPassword} />
-      <View style={{marginTop: 32}}> 
-        <CustomButton title={"Sign In"} onPress={handleSignIn} textSize={18}/>
-      </View>
-        <TouchableOpacity style={{marginTop: 10}}onPress={() => navigation.replace('ForgotPassword', { email })}>
+        <CustomTextInpt placeholder={"Email ID or Mobile"} value={email} editable={false} />
+        <CustomTextInpt placeholder={"Password"} value={password} onChangeText={setPassword} />
+        <View style={{ marginTop: 32 }}>
+          <CustomButton title={"Sign In"} onPress={handleSignIn} textSize={18} />
+        </View>
+        <TouchableOpacity style={{ marginTop: 10 }} onPress={() => navigation.replace('ForgotPassword', { email })}>
           <Text style={styles.linkText}>Forgot Password?</Text>
         </TouchableOpacity>
         <View style={styles.divider}>
@@ -78,7 +78,13 @@ const SignInCorporate = ({ route }) => {
           <Text style={styles.orText}>OR</Text>
           <View style={styles.line} />
         </View>
-        <CustomButton title={"Create New Account"} backgroundColor={"#F1F1F3"} borderWidth={1} textColor={"#0F2541"} textSize={16} onPress={() => navigation.navigate('PersonalRegister')}/>
+        <CustomButton
+          title={"Create New Account"}
+          backgroundColor={"#F1F1F3"}
+          borderWidth={1}
+          textColor={"#0F2541"}
+          textSize={16}
+          onPress={() => navigation.navigate('PersonalRegister')} />
       </View>
     </SafeAreaView>
   );
@@ -158,9 +164,9 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   createAccount: {
-    backgroundColor: "#FFFFFF", 
-    borderRadius: 4, 
-    elevation: 1, 
-    
+    backgroundColor: "#FFFFFF",
+    borderRadius: 4,
+    elevation: 1,
+
   }
 });

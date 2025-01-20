@@ -12,8 +12,8 @@ const CustomCalender = () => {
  
     const disablePastDates = (date) => {
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Reset time to midnight for comparison
-        return date < today; // Return true for dates in the past
+        today.setHours(0, 0, 0, 0); 
+        return date < today; 
     };
     const today = new Date();
 
@@ -42,12 +42,14 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#E5E5E5",
         borderRadius: 8,
+        paddingBottom: 10
     },
     header: {
         flexDirection: "row",
         marginStart: 20,
         marginTop: 20,
         alignItems: "center",
+
     },
     headerText: {
         fontFamily: 'Open Sans',
@@ -73,8 +75,8 @@ const styles = StyleSheet.create({
     },
    
     disabledDatesText: {
-        color: '#d3d3d3', // Grey color for disabled dates
-        textDecorationLine: 'line-through', // Optional: strike-through effect
+        color: '#d3d3d3', 
+        textDecorationLine: 'line-through', 
     },
 
     disabledIconWrapper: {

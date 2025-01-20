@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F1F1F3',
+
   },
   cityInfoContainer: {
     height: 93,
@@ -116,7 +117,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 4,
     elevation: 3,
-    margin: 16,
+    marginHorizontal: 16,
+    marginBottom: 16, 
     padding: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',

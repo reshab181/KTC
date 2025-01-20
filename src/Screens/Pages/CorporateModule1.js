@@ -97,7 +97,7 @@ const CorporateModule1 = ({ navigation }) => {
                         <View style={styles.container1}>
                             <Text style={styles.txt}>Car Reporting Details</Text>
                         </View>
-                        <View style={{ backgroundColor: "#FFFFFF" }}>
+                        <View style={{ backgroundColor: "#FFFFFF"  }}>
                             
                             <CustomCalender />
 
