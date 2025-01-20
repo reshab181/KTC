@@ -46,11 +46,10 @@ const ForgotPassword = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-         <CustomHeader title={"Forgot Password"} leftTitle={"Skip"} handlePress={() => navigation.goBack()}/>
+         <CustomHeader title={"Forgot Password"} leftTitle={"Skip"} handlePress={() => navigation.goBack()} />
 
-      <CustomHeader title={"Forgot Password"} leftTitle={"Skip"} handlePress={() => navigation.goBack()} />
       <View style={styles.emailContainer}>
-        <CustomTextInpt placeholder={"Enter your registered email ID"} value={email} editable={false} />
+        <CustomTextInpt placeholder={email} value={email} editable={false} style={{backgroundColor:"#EEE"}} />
         <View style={{marginTop: 94}}>
         <CustomButton title={"Next"} onPress={sendForgotOTP} />
         </View>
