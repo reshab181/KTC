@@ -106,6 +106,7 @@ const App = () => {
     // // <Feedback/>
     // // <Help/>
     // <ForgotPasswordOTP/>
+    // <ResetPassword/>
   );
 };
 

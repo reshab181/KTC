@@ -40,18 +40,18 @@ const SignInCorporate = ({ route }) => {
     fetchAccessToken();
   }, []);
 
-  const encryptPayload = (data) => {
-    const ClientID = '!IV@_$2123456789';
-    const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
-    const iv = CryptoJS.enc.Utf8.parse(ClientID);
-    const key = CryptoJS.enc.Utf8.parse(ClientKey);
+  // const encryptPayload = (data) => {
+  //   const ClientID = '!IV@_$2123456789';
+  //   const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
+  //   const iv = CryptoJS.enc.Utf8.parse(ClientID);
+  //   const key = CryptoJS.enc.Utf8.parse(ClientKey);
 
-    return CryptoJS.AES.encrypt(JSON.stringify(data), key, {
-      iv,
-      mode: CryptoJS.mode.CBC,
-      padding: CryptoJS.pad.Pkcs7,
-    }).toString();
-  };
+  //   return CryptoJS.AES.encrypt(JSON.stringify(data), key, {
+  //     iv,
+  //     mode: CryptoJS.mode.CBC,
+  //     padding: CryptoJS.pad.Pkcs7,
+  //   }).toString();
+  // };
 
   const handleSignIn = async () => {
     navigation.replace('MainApp', {
@@ -61,7 +61,7 @@ const SignInCorporate = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {isModalVisible && <RegisterPopUp onClose={() => setisModalVisible(false)} />}
+      {/* {isModalVisible && <RegisterPopUp onClose={() => setisModalVisible(false)} />} */}
       <CustomHeader title={"Sign In"} leftTitle={"Skip"} handlePress={() => navigation.goBack()} />
 
       <View style={styles.form}>

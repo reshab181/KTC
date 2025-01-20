@@ -19,7 +19,7 @@ const OtpRegister = () => {
         Please enter the OTP received on your registered email address.
       </Text>
       <View style={styles.txtInputBox}>
-        {Array.from({ length: 4 }).map((_, index) => (
+        {Array.from({ length: 6 }).map((_, index) => (
           <TextInput
             key={index}
             style={styles.input}

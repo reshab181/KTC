@@ -40,8 +40,8 @@ const ForgotPassword = ({ route, navigation }) => {
   }, []);
 
   const sendForgotOTP = () => {
-    // emailsms(email, accessToken, navigation, setLoading);
-    navigation.replace("OTP")
+    emailsms(email, accessToken, navigation, setLoading);
+    // navigation.replace("OTP")
   };
 
   return (

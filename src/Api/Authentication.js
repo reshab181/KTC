@@ -382,3 +382,47 @@ export const verifyOTP = async (passPhrase, url) => {
     return null; // Return null on failure
   }
 };
+
+
+export const resetPassword = async (email, newPassword, confirmPassword, accessToken, setLoading) => {
+  setLoading(true);
+
+  if (newPassword !== confirmPassword) {
+    Alert.alert('Error', 'Passwords do not match.');
+    setLoading(false);
+    return;
+  }
+
+  try {
+    const payload = {
+      "email_id": email,
+       "type":'UPDATE',
+       "password": newPassword,
+    };
+
+    const encryptedPayload = encryptPayload(payload);
+    const formBody = new URLSearchParams({ request_data: encryptedPayload }).toString();
+
+    const response = await fetch(Api.USER_RESETPASSWORD, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        jwt: accessToken,
+      },
+      body: formBody,
+    });
+
+    const data = await response.json();
+
+    if (data?.status === 'success') {
+      Alert.alert('Success', 'Password reset successfully.');
+    } else {
+      Alert.alert('Error', 'Failed to reset password. Please try again.');
+    }
+  } catch (error) {
+    console.error('Error in resetPassword:', error);
+    Alert.alert('Error', 'Failed to reset password. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
