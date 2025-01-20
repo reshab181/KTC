@@ -9,10 +9,12 @@ import CustomButton from '../../Reusables/CustomButtons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CalendarTimePicker from '../../Reusables/CalendarTimePicker';
 import Ionicons from 'react-native-vector-icons/FontAwesome';
+import SidebarMenu from '../../Reusables/SidebarMenu';
 
 const HomeScreen1 = ({ navigation }) => {
     const [isVisible, setisVisible] = useState(false);
     const [rentalType, setRentalType] = useState('Rental Type');
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const cityData = [
         { label: 'Local Run - Full day', value: 'FD' },
         { label: 'Local Run - Half day', value: 'HD' },
@@ -24,17 +26,23 @@ const HomeScreen1 = ({ navigation }) => {
         setRentalType(item.label);
         setisVisible(false);
     };
+    
+  const handleMenuPress = () => {
+    setIsSidebarVisible(true);
+  };
 
     return (
         <SafeAreaView style={styles.root}>
             <ScrollView>
-                <CustomHeader
-                    iconHeight={30}
-                    iconWidth={39}
-                    islogo={true}
-                    imgPath={require('../../Assets/ktclogo.png')}
-                    iconPath={require('../../Assets/menuu.png')}
-                />
+            <CustomHeader
+            iconHeight={30}
+            iconWidth={39}
+            islogo={true}
+            imgPath={require('../../Assets/ktclogo.png')}
+            iconPath={require('../../Assets/menuu.png')}
+            onMenuPress={handleMenuPress}
+            isSidebarVisible={isSidebarVisible} 
+          />
                 <View style={styles.container}>
                     <CustomIconTextInput
                         icon1={require('../../Assets/place.png')}
@@ -76,6 +84,10 @@ const HomeScreen1 = ({ navigation }) => {
             <View style={styles.footer}>
                 <CustomButton title="Continue" widthSize="100%" borderRadius={0} onPress={() => navigation.navigate('CarGroup')} />
             </View>
+            <SidebarMenu
+        isVisible={isSidebarVisible}
+        onClose={() => setIsSidebarVisible(false)}
+      />
         </SafeAreaView>
     );
 };

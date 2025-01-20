@@ -141,7 +141,7 @@ const CorporateModule1 = ({ navigation }) => {
         </View>
       </ScrollView>
 
-      {/* Sidebar Menu */}
+     
       <SidebarMenu
         isVisible={isSidebarVisible}
         onClose={() => setIsSidebarVisible(false)}

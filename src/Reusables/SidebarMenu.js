@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,7 @@ import {
   Modal,
   Image,
   Dimensions,
+  Animated,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -14,6 +15,7 @@ const windowWidth = Dimensions.get('window').width;
 
 const SidebarMenu = ({ isVisible, onClose }) => {
   const navigation = useNavigation();
+  const translateX = useRef(new Animated.Value(-windowWidth * 0.8)).current; // Initial position off-screen
 
   const menuItems = [
     { name: 'Home', route: 'CorporateModule1' },
@@ -28,18 +30,40 @@ const SidebarMenu = ({ isVisible, onClose }) => {
     navigation.navigate(route);
   };
 
+
+  useEffect(() => {
+    if (isVisible) {
+    
+      Animated.timing(translateX, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      
+      Animated.timing(translateX, {
+        toValue: -windowWidth * 0.8,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [isVisible]);
+
   return (
     <Modal
       visible={isVisible}
-      animationType="slide"
+      animationType="none"
       transparent={true}
       onRequestClose={onClose}
     >
       <View style={styles.container}>
+      
         <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={onClose} />
 
-   
-        <View style={[styles.menu, { left: 0, transform: [{ translateX: 0 }] }]}>
+    
+        <Animated.View
+          style={[styles.menu, { transform: [{ translateX }] }]}
+        >
           <View style={styles.header}>
             <Image source={require('../Assets/ktclogo.png')} style={styles.logo} resizeMode="contain" />
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -49,12 +73,16 @@ const SidebarMenu = ({ isVisible, onClose }) => {
 
           <View style={styles.menuItems}>
             {menuItems.map((item, index) => (
-              <TouchableOpacity key={index} style={styles.menuItem} onPress={() => handleNavigation(item.route)}>
+              <TouchableOpacity
+                key={index}
+                style={styles.menuItem}
+                onPress={() => handleNavigation(item.route)}
+              >
                 <Text style={styles.menuText}>{item.name}</Text>
               </TouchableOpacity>
             ))}
           </View>
-        </View>
+        </Animated.View>
       </View>
     </Modal>
   );
@@ -67,20 +95,20 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
   },
   menu: {
     width: windowWidth * 0.8,
     height: '100%',
     backgroundColor: '#FFFFFF',
     paddingBottom: 30,
-    alignSelf: 'flex-start',
+    position: 'absolute',
+    left: 0,
     elevation: 5,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
-    transition: 'transform 0.3s ease-in-out',
   },
   header: {
     flexDirection: 'row',
@@ -110,7 +138,7 @@ const styles = StyleSheet.create({
   },
   menuText: {
     fontSize: 20,
-    color: '#374852',
+    color: ' #666666',
     fontWeight: '500',
   },
 });
