@@ -1,3 +1,8 @@
+//**Author--- Reshab Kumar pandey
+// Component--- Track.js
+//  */
+
+
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image } from 'react-native';
 import CustomHeader from '../../Reusables/CustomHeader';

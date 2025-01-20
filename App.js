@@ -22,8 +22,10 @@ import OTPRegister from "./src/Screens/Auth/OtpRegister";
 import BookingConfirmation from "./src/Screens/Pages/BookingConfirmation";
 import PaymentMethod from "./src/Screens/Pages/PaymentMethod";
 import MyBooking from "./src/Screens/Pages/MyBooking";
-import Track from "./src/Screens/My Bookings/Track";
 import Upcoming from "./src/Screens/My Bookings/Upcoming";
+import Feedback from "./src/Screens/Feedback";
+import Help from "./src/Screens/Help";
+import Track from "./src/Screens/My Bookings/Track";
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -100,6 +102,10 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
+    // // <Upcoming/>
+    // // <Feedback/>
+    // // <Help/>
+    // <ForgotPasswordOTP/>
   );
 };
 

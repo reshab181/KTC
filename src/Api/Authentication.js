@@ -284,10 +284,11 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
   }
 };
 
+
 export const emailsms = async (email, accessToken, navigation, setLoading) => {
   if (!accessToken) {
     Alert.alert('Error', 'Access token is not available.');
-    return;
+    return null;
   }
 
   try {
@@ -321,14 +322,63 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
         from: 'ForgotPassword',
         accessToken,
       });
+
+      console.log(locationUrl, "URL retrieved successfully.");
+      console.log(accessToken,"aa gya token chalo ghumne");
+      
+      return locationUrl; 
     } else {
       const errorData = await response.json();
       Alert.alert('Error', 'Failed to send OTP. Please try again.');
+      return null;
     }
   } catch (error) {
     console.error('Error in emailsms:', error.message);
     Alert.alert('Error', error.message || 'An unexpected error occurred.');
+    return null;
   } finally {
     setLoading(false);
+  }
+};
+
+export const verifyOTP = async (passPhrase, url) => {
+  try {
+    const makeApiCall = await tokenFromMMI();
+
+    if (makeApiCall?.access_token) {
+      const fullUrl = `${url}?passPhrase=${passPhrase}`;
+      console.log('Full URL:', fullUrl); 
+      console.log('Access Token:', makeApiCall?.access_token);
+
+      const apiResp = await fetch(fullUrl, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${makeApiCall?.access_token}`,
+        },
+      });
+
+      const responseText = await apiResp.text(); 
+      console.log('API Response:', responseText);  
+
+      if (apiResp.ok) {
+        if (responseText.trim() === '') {
+          throw new Error('Empty response from server');
+        }
+        const responseData = JSON.parse(responseText);  // Parse the response body
+        return responseData;
+      } else {
+        if (responseText.trim() === '') {
+          throw new Error('Empty response from server');
+        }
+        const errorData = JSON.parse(responseText);
+        throw new Error(errorData?.message || 'Failed to verify OTP.');
+      }
+    } else {
+      throw new Error('Access token is missing.');
+    }
+  } catch (error) {
+    Alert.alert('Error', error.message || 'An unexpected error occurred.');
+    console.error('verifyOTP error:', error);
+    return null; // Return null on failure
   }
 };

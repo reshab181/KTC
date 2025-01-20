@@ -65,12 +65,12 @@ const SignInCorporate = ({ route }) => {
       <CustomHeader title={"Sign In"} leftTitle={"Skip"} handlePress={() => navigation.goBack()} />
 
       <View style={styles.form}>
-        <CustomTextInpt placeholder={"Email ID or Mobile"} value={email} editable={false} />
-        <CustomTextInpt placeholder={"Password"} value={password} onChangeText={setPassword} />
-        <View style={{ marginTop: 32 }}>
-          <CustomButton title={"Sign In"} onPress={handleSignIn} textSize={18} />
-        </View>
-        <TouchableOpacity style={{ marginTop: 10 }} onPress={() => navigation.replace('ForgotPassword', { email })}>
+      <CustomTextInpt placeholder={"Email ID or Mobile"} value={email} editable={false} style={{backgroundColor:"#EEE"}}/>
+      <CustomTextInpt placeholder={"Password"} value={password} onChangeText={setPassword} />
+      <View style={{marginTop: 32}}> 
+        <CustomButton title={"Sign In"} onPress={handleSignIn} textSize={18}/>
+      </View>
+        <TouchableOpacity style={{marginTop: 10}}onPress={() => navigation.replace('ForgotPassword', { email })}>
           <Text style={styles.linkText}>Forgot Password?</Text>
         </TouchableOpacity>
         <View style={styles.divider}>

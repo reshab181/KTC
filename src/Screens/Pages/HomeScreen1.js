@@ -12,7 +12,7 @@ import Ionicons from 'react-native-vector-icons/FontAwesome';
 
 const HomeScreen1 = ({ navigation }) => {
     const [isVisible, setisVisible] = useState(false);
-    const [rentalType, setRentalType] = useState('Rental Type'); 
+    const [rentalType, setRentalType] = useState('Rental Type');
     const cityData = [
         { label: 'Local Run - Full day', value: 'FD' },
         { label: 'Local Run - Half day', value: 'HD' },
