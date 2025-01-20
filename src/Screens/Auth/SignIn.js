@@ -23,6 +23,7 @@ import RegisterPopUp from './RegisterPopUp';
 import CustomHeader from '../../Reusables/CustomHeader';
 import CustomTextInpt from '../../Reusables/CustomTextInpt';
 import CustomButton from '../../Reusables/CustomButtons';
+import { handleSignIn } from '../../Api/Authentication';
 
 const SignInCorporate = ({ route }) => {
   const { email } = route.params || {};
@@ -53,10 +54,11 @@ const SignInCorporate = ({ route }) => {
   //   }).toString();
   // };
 
-  const handleSignIn = async () => {
-    navigation.replace('MainApp', {
-      screen: 'CorporateModule1',
-    });
+  const handleSignInn = async () => {
+    // navigation.replace('MainApp', {
+    //   screen: 'CorporateModule1',
+    // });
+    handleSignIn(email, password, accessToken, navigation, setLoading)
   };
 
   return (
@@ -68,7 +70,7 @@ const SignInCorporate = ({ route }) => {
       <CustomTextInpt placeholder={"Email ID or Mobile"} value={email} editable={false} style={{backgroundColor:"#EEE"}}/>
       <CustomTextInpt placeholder={"Password"} value={password} onChangeText={setPassword} />
       <View style={{marginTop: 32}}> 
-        <CustomButton title={"Sign In"} onPress={handleSignIn} textSize={18}/>
+        <CustomButton title={"Sign In"} onPress={handleSignInn} textSize={18}/>
       </View>
         <TouchableOpacity style={{marginTop: 10}}onPress={() => navigation.replace('ForgotPassword', { email })}>
           <Text style={styles.linkText}>Forgot Password?</Text>
