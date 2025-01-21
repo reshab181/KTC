@@ -26,6 +26,7 @@ import Upcoming from "./src/Screens/My Bookings/Upcoming";
 import Feedback from "./src/Screens/Feedback";
 import Help from "./src/Screens/Help";
 import Track from "./src/Screens/My Bookings/Track";
+import Notification from "./src/Screens/Notification";
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -70,6 +71,7 @@ const MainAppNavigator = () => (
     <AppStack.Screen name="MyBooking" component={MyBooking}options={{ headerShown: false }} />
     <AppStack.Screen name="Track" component={Track}options={{ headerShown: false }} />
     <AppStack.Screen name="Upcoming" component={Upcoming}options={{ headerShown: false }} />
+    <AppStack.Screen name="Notifications" component={Notification}options={{ headerShown: false }} />
 
   </AppStack.Navigator>
 );
@@ -107,6 +109,7 @@ const App = () => {
     // // <Help/>
     // <ForgotPasswordOTP/>
     // <ResetPassword/>
+    // <Notification/>
   );
 };
 

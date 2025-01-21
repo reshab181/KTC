@@ -1,13 +1,15 @@
-import React, { useRef, useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
+import React, { useState, useRef, useEffect } from 'react';
+import { 
+  View, 
+  Text, 
+  StyleSheet, 
+  TouchableOpacity, 
   Modal,
   Image,
   Dimensions,
   Animated,
+  Alert,
+  AsyncStorage 
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
@@ -15,37 +17,75 @@ const windowWidth = Dimensions.get('window').width;
 
 const SidebarMenu = ({ isVisible, onClose }) => {
   const navigation = useNavigation();
-  const translateX = useRef(new Animated.Value(-windowWidth * 0.8)).current; // Initial position off-screen
+  const translateX = useRef(new Animated.Value(-windowWidth * 0.8)).current; 
 
   const menuItems = [
-    { name: 'Home', route: 'CorporateModule1' },
-    { name: 'My Bookings', route: 'Bookings' },
-    { name: 'Profile', route: 'Profile' },
-    { name: 'Notifications', route: 'Notification' },
-    { name: 'Logout', route: 'Login' },
+    { name: 'Home', route: 'CorporateModule1', icon: require('../Assets/home.png') },
+    { name: 'My Bookings', route: 'Bookings', icon: require('../Assets/bookings.png') },
+    { name: 'Profile', route: 'Profile', icon: require('../Assets/my-profile.png') },
+    { name: 'Notifications', route: 'Notifications', icon: require('../Assets/notifications.png') },
+    { name: 'Logout', route: 'logout', icon: require('../Assets/logout.png') }, 
   ];
 
   const handleNavigation = (route) => {
-    onClose();
-    navigation.navigate(route);
+    if (route === 'logout') {
+      handleLogout(); 
+    } else {
+      onClose();
+      navigation.navigate(route);
+    }
   };
 
+  const handleLogout = () => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Logout',
+          onPress: async () => {
+            await clearUserData(); 
+            onClose();
+            navigation.replace('Auth', {
+              screen: 'SignInCorporate',
+            });
+          },
+        },
+      ]
+    );
+  };
+
+  const clearUserData = async () => {
+    try {
+      await AsyncStorage.removeItem('userToken'); 
+    } catch (error) {
+      console.error('Error clearing user data:', error);
+    }
+  };
+
+  const handleClose = () => {
+    Animated.timing(translateX, {
+      toValue: -windowWidth * 0.8,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      onClose(); 
+    });
+  };
 
   useEffect(() => {
     if (isVisible) {
-    
       Animated.timing(translateX, {
         toValue: 0,
         duration: 300,
         useNativeDriver: true,
       }).start();
     } else {
-      
-      Animated.timing(translateX, {
-        toValue: -windowWidth * 0.8,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
+      handleClose();
     }
   }, [isVisible]);
 
@@ -54,19 +94,14 @@ const SidebarMenu = ({ isVisible, onClose }) => {
       visible={isVisible}
       animationType="none"
       transparent={true}
-      onRequestClose={onClose}
+      onRequestClose={handleClose}
     >
       <View style={styles.container}>
-      
-        <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={onClose} />
-
-    
-        <Animated.View
-          style={[styles.menu, { transform: [{ translateX }] }]}
-        >
+        <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={handleClose} />
+        <Animated.View style={[styles.menu, { transform: [{ translateX }] }]}>
           <View style={styles.header}>
             <Image source={require('../Assets/ktclogo.png')} style={styles.logo} resizeMode="contain" />
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Text style={styles.closeText}>✕</Text>
             </TouchableOpacity>
           </View>
@@ -78,6 +113,7 @@ const SidebarMenu = ({ isVisible, onClose }) => {
                 style={styles.menuItem}
                 onPress={() => handleNavigation(item.route)}
               >
+                <Image source={item.icon} style={styles.menuIcon} />
                 <Text style={styles.menuText}>{item.name}</Text>
               </TouchableOpacity>
             ))}
@@ -114,6 +150,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: '#3C3567',
     paddingVertical: 5,
+    paddingHorizontal: 10,
     justifyContent: 'space-between',
     alignItems: 'center',
   },
@@ -133,12 +170,19 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   menuItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 20,
   },
+  menuIcon: {
+    width: 28,
+    height: 28,
+    marginRight: 15,
+  },
   menuText: {
     fontSize: 20,
-    color: ' #666666',
+    color: '#666666',
     fontWeight: '500',
   },
 });
