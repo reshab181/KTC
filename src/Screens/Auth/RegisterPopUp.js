@@ -2,6 +2,10 @@
 // Component---RegisterPopUp.js */
 
 
+
+
+
+
 // import React, { useState, useEffect } from 'react';
 // import {
 //   Dimensions,
@@ -16,10 +20,14 @@
 // } from 'react-native';
 // import { Formik } from 'formik';
 // import { useNavigation } from '@react-navigation/native';
+
 // import CustomTextInpt from '../../Reusables/CustomTextInpt';
 // import CustomButton from '../../Reusables/CustomButtons';
-// import { getToken } from '../../Axios/AxiosInstancee';
+
+
+// import { fetchJwtAccess } from '../../Utils/JwtHelper';
 // import { registrationHandler } from '../../Api/Authentication';
+// import { getToken } from '../../Axios/AxiosInstancee';
 
 // const { height } = Dimensions.get('screen');
 
@@ -27,75 +35,66 @@
 //   const navigation = useNavigation();
 //   const [accessToken, setAccessToken] = useState('');
 //   const [loader, setLoader] = useState(false);
-//   const [userType] = useState('corporate'); // Default user type
+//   const [userType, setUserType] = useState('corporate');
 //   const [visible, setVisible] = useState(true);
 
 //   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-//   // Fetch access token
 //   useEffect(() => {
-//     const fetchAccessToken = async () => {
-//       const token = await getToken();
-//       if (token) {
+//     const getAccessToken = async () => {
+//       const token = await fetchJwtAccess();
+//       // const token = await getToken();
+
+//       if (token) {  
 //         setAccessToken(token);
-//       } else {
-//         Alert.alert('Error', 'Failed to fetch access token.');
 //       }
 //     };
 
-//     fetchAccessToken();
+//     getAccessToken();
 //   }, []);
 
-//   const handleApiResponse = (data, email) => {
-//     if (!data) {
-//       Alert.alert('Error', 'No data received from the server.');
-//       return;
-//     }
+//  const handleApiResponse = (data, email) => {
+//     if (!data) return Alert.alert('Error', 'No data received from the server.');
 
 //     switch (data.message) {
 //       case 'success':
 //         if (data.newuser === 'No') {
-//           Alert.alert('Success', 'Registered successfully!');
+//           Alert.alert('Success', 'Registered in successfully!');
 //           setVisible(false);
-//           navigation.navigate('SignInCorporate', { email });
+//           navigation.navigate('SignInCorporate', { email: email });
 //         } else {
-//           navigation.navigate('OTPRegister');
+//           navigateToOTP();
 //         }
 //         break;
 //       case 'Invalid Domain Name.':
 //         Alert.alert(
 //           'Invalid Domain!',
-//           'Please contact KTC Admin.',
-//           [{ text: 'OK', onPress: () => navigation.navigate('ModuleSelectionUI') }]
+//           'Please contact KTC Admin',
+//           [{ text: 'OK', onPress: () => navigation.navigate('ModuleSelectionUI') }],
 //         );
 //         break;
 //       default:
-//         Alert.alert('Error', data.message || 'An unknown error occurred.');
+//         Alert.alert('Error', data.message || 'Unknown error occurred.');
 //     }
 //   };
 
-//   const validateForm = (values) => {
-//     const errors = {};
-//     if (!values.email) {
-//       errors.email = 'Email is required';
-//     } else if (!emailRegex.test(values.email)) {
-//       errors.email = 'Invalid email address';
-//     }
-//     return errors;
-//   };
-
-//   const handleSubmit = async ({ email }) => {
-//     await registrationHandler(email, userType, accessToken, handleApiResponse, setLoader);
+//   const navigateToOTP = () => {
+//     navigation.navigate('OTPRegister');
 //   };
 
 //   return (
-//     <Modal propagateSwipe animationType="slide" transparent visible={visible}>
+//     <Modal  propagateSwipe={true} animationType="slide" transparent visible={visible}>
 //       <SafeAreaView style={styles.overlay}>
 //         <View style={styles.modalContainer}>
 //           <Formik
 //             initialValues={{ email: '' }}
-//             validate={validateForm}
-//             onSubmit={handleSubmit}
+//             validate={(values) => {
+//               const errors = {};
+//               if (!values.email) errors.email = 'Email is required';
+//               else if (!emailRegex.test(values.email)) errors.email = 'Invalid email address';
+//               return errors;
+//             }}
+//             onSubmit={({ email }) =>registrationHandler(email, userType, accessToken, handleApiResponse, setLoader)}
 //           >
 //             {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
 //               <View style={styles.formContainer}>
@@ -105,16 +104,16 @@
 //                     <Image source={require('../../Assets/close.png')} />
 //                   </TouchableOpacity>
 //                 </View>
-//                 <View style={styles.inputContainer}>
+//                 <View style={{marginHorizontal: 16 , marginTop: 14 , marginBottom: 19}}>
 //                   <Text style={styles.instruction}>Enter your official Email ID</Text>
 //                   <CustomTextInpt
 //                     placeholder="Official Email ID"
 //                     value={values.email}
 //                     onChangeText={handleChange('email')}
 //                     keyboardType="email-address"
+//                     secureTextEntry={false}
 //                   />
 //                 </View>
-
 //                 {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 //                 <CustomButton
 //                   title="Submit"
@@ -130,10 +129,8 @@
 //     </Modal>
 //   );
 // };
+// export default RegisterPOPUP
 
-// export default RegisterPOPUP;
-
-// // Styles
 // const styles = StyleSheet.create({
 //   overlay: {
 //     flex: 1,
@@ -142,7 +139,7 @@
 //     backgroundColor: 'rgba(0,0,0,0.9)',
 //   },
 //   modalContainer: {
-//     width: '95%',
+//     width: '92.7%',
 //     backgroundColor: '#fff',
 //     borderRadius: 10,
 //     shadowColor: '#000',
@@ -186,7 +183,6 @@
 // });
 
 
-
 import React, { useState, useEffect } from 'react';
 import {
   Dimensions,
@@ -205,10 +201,8 @@ import { useNavigation } from '@react-navigation/native';
 import CustomTextInpt from '../../Reusables/CustomTextInpt';
 import CustomButton from '../../Reusables/CustomButtons';
 
-
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import { registrationHandler } from '../../Api/Authentication';
-import { getToken } from '../../Axios/AxiosInstancee';
 
 const { height } = Dimensions.get('screen');
 
@@ -224,47 +218,15 @@ const RegisterPOPUP = ({ onClose }) => {
   useEffect(() => {
     const getAccessToken = async () => {
       const token = await fetchJwtAccess();
-      // const token = await getToken();
-
-      if (token) {  
+      if (token) {
         setAccessToken(token);
       }
     };
-
     getAccessToken();
   }, []);
 
- const handleApiResponse = (data, email) => {
-    if (!data) return Alert.alert('Error', 'No data received from the server.');
-
-    switch (data.message) {
-      case 'success':
-        if (data.newuser === 'No') {
-          Alert.alert('Success', 'Registered in successfully!');
-          setVisible(false);
-          navigation.navigate('SignInCorporate', { email: email });
-        } else {
-          navigateToOTP();
-        }
-        break;
-      case 'Invalid Domain Name.':
-        Alert.alert(
-          'Invalid Domain!',
-          'Please contact KTC Admin',
-          [{ text: 'OK', onPress: () => navigation.navigate('ModuleSelectionUI') }],
-        );
-        break;
-      default:
-        Alert.alert('Error', data.message || 'Unknown error occurred.');
-    }
-  };
-
-  const navigateToOTP = () => {
-    navigation.navigate('OTPRegister');
-  };
-
   return (
-    <Modal  propagateSwipe={true} animationType="slide" transparent visible={visible}>
+    <Modal propagateSwipe={true} animationType="slide" transparent visible={visible}>
       <SafeAreaView style={styles.overlay}>
         <View style={styles.modalContainer}>
           <Formik
@@ -275,7 +237,9 @@ const RegisterPOPUP = ({ onClose }) => {
               else if (!emailRegex.test(values.email)) errors.email = 'Invalid email address';
               return errors;
             }}
-            onSubmit={({ email }) =>registrationHandler(email, userType, accessToken, handleApiResponse, setLoader)}
+            onSubmit={({ email }) => {
+              registrationHandler(email, userType, accessToken, navigation, setLoader);
+            }}
           >
             {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
               <View style={styles.formContainer}>
@@ -285,7 +249,7 @@ const RegisterPOPUP = ({ onClose }) => {
                     <Image source={require('../../Assets/close.png')} />
                   </TouchableOpacity>
                 </View>
-                <View style={{marginHorizontal: 16 , marginTop: 14 , marginBottom: 19}}>
+                <View style={{ marginHorizontal: 16, marginTop: 14, marginBottom: 19 }}>
                   <Text style={styles.instruction}>Enter your official Email ID</Text>
                   <CustomTextInpt
                     placeholder="Official Email ID"
@@ -310,7 +274,8 @@ const RegisterPOPUP = ({ onClose }) => {
     </Modal>
   );
 };
-export default RegisterPOPUP
+
+export default RegisterPOPUP;
 
 const styles = StyleSheet.create({
   overlay: {
@@ -320,7 +285,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.9)',
   },
   modalContainer: {
-    width: '95%',
+    width: '92.7%',
     backgroundColor: '#fff',
     borderRadius: 10,
     shadowColor: '#000',
@@ -329,9 +294,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  formContainer: {
-    // padding: 20,
-  },
+  formContainer: {},
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -346,11 +309,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  inputContainer: {
-    marginHorizontal: 10,
-    marginTop: 15,
-    marginBottom: 20,
-  },
   instruction: {
     fontSize: 16,
     color: '#212121',
@@ -362,6 +320,4 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
 });
-
-
 

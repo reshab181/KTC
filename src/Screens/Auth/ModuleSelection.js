@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     color: '#212121',
     fontSize: 16,
     marginTop: 20,
-    fontWeight: '600',
+    fontWeight: '500',
     textAlign: 'center',
   },
   moduleImage: {
