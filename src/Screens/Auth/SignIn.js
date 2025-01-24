@@ -18,6 +18,7 @@ import CustomHeader from '../../Reusables/CustomHeader';
 import CustomTextInpt from '../../Reusables/CustomTextInpt';
 import CustomButton from '../../Reusables/CustomButtons';
 import { handleSignIn } from '../../Api/Authentication';
+import CorporateModule1 from '../Pages/CorporateModule1';
 
 const SignInCorporate = ({ route }) => {
   const { email: prefilledEmail } = route.params || {};
@@ -64,7 +65,10 @@ const SignInCorporate = ({ route }) => {
     setLoading(true);
 
     try {
-      await handleSignIn(email, password, accessToken, navigation, setLoading);
+      // await handleSignIn(email, password, accessToken, navigation, setLoading);
+      navigation.replace('MainApp', {
+        screen: 'CorporateModule1',
+      })
     } catch (error) {
       Alert.alert('Sign In Error', error.message || 'Unable to sign in.');
     } finally {
@@ -132,7 +136,7 @@ const SignInCorporate = ({ route }) => {
           borderWidth={1}
           textColor="#0F2541"
           textSize={16}
-          onPress={() => navigation.navigate('PersonalRegister')}
+          onPress={() => navigation.navigate('Register')}
         />
       </View>
     </SafeAreaView>

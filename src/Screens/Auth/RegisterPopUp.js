@@ -238,10 +238,11 @@ const RegisterPOPUP = ({ onClose }) => {
               return errors;
             }}
             onSubmit={({ email }) => {
-              registrationHandler(email, userType, accessToken, navigation, setLoader);
+              // navigation.navigate('OTPRegister');
+              registrationHandler(email, userType, accessToken,navigation, setLoader)
             }}
           >
-            {({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+            {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
               <View style={styles.formContainer}>
                 <View style={styles.header}>
                   <Text style={styles.headerText}>Register</Text>
@@ -255,11 +256,13 @@ const RegisterPOPUP = ({ onClose }) => {
                     placeholder="Official Email ID"
                     value={values.email}
                     onChangeText={handleChange('email')}
+                    onBlur={handleBlur('email')} 
                     keyboardType="email-address"
                     secureTextEntry={false}
                   />
+                
+                  {errors.email && touched.email && <Text style={styles.errorText}>{errors.email}</Text>}
                 </View>
-                {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
                 <CustomButton
                   title="Submit"
                   onPress={handleSubmit}

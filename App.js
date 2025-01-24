@@ -50,7 +50,7 @@ const AuthNavigator = () => (
       component={RegisterPOPUP}
       options={{ presentation: "modal", headerShown: false }}
     />
-    <AuthStack.Screen name="RegisterPage" component={Register} />
+    <AuthStack.Screen name="RegisterPage" component={Register} options={{ headerShown: false }} />
     <AuthStack.Screen name="OTPRegister" component={OTPRegister} options={{ headerShown: false }} />
     <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
     <AuthStack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
@@ -104,6 +104,7 @@ const App = () => {
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>
+    // <Register/>
     // // <Upcoming/>
     // // <Feedback/>
     // // <Help/>

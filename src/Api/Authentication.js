@@ -53,12 +53,13 @@ const encryptPayload = (data) => {
 // }, 300);
 
 
+
 export const registrationHandler = debounce(
   async (email, userType, accessToken, navigation, setLoader) => {
     setLoader(true);
 
     try {
-    
+   
       const payload = {
         email_id: email,
         verify: userType === 'corporate' ? 'KTCMMI' : 'PERSONAL',
@@ -66,7 +67,7 @@ export const registrationHandler = debounce(
 
       const encryptedPayload = encryptPayload(payload);
 
-   
+
       const response = await fetch(Api.USER_REGISTRATION, {
         method: 'POST',
         headers: {
@@ -77,51 +78,51 @@ export const registrationHandler = debounce(
       });
 
       const data = await response.json();
-      console.log(data,"aa gya data");
+      console.log(data,"oo hello ye kya h");
       
 
-  
+   
       if (data?.message === 'Invalid Domain Name.') {
         Alert.alert('Invalid Domain!', 'Please contact KTC Admin', [
           {
             text: 'OK',
-            onPress: () => navigation.navigate('ModuleSelectionUI'), 
+            onPress: () => navigation.navigate('ModuleSelectionUI'),
           },
         ]);
         return;
       }
 
+
       if (data?.newuser === 'No') {
         navigation.navigate('SignInCorporate', {
-         email,
-          from: 'RegisterPOPUP', 
+          email,
+          from: 'RegisterPOPUP',
         });
       } else if (data?.newuser === 'Yes') {
-      
+       
         const otpPayload = { email_id: email };
-        const encryptedOtpPayload =  encryptPayload(otpPayload);
+        const encryptedOtpPayload = encryptPayload(otpPayload);
 
         const mmiToken = await tokenFromMMI();
         const headersList = {
           Authorization: `Bearer ${mmiToken?.access_token}`,
         };
 
-        
+      
         const otpUrl = `https://anchor.mapmyindia.com/api/users/authenticate?handle=${email}&autoMigrate`;
         const responseRef = await fetch(otpUrl, {
           method: 'POST',
           headers: headersList,
         });
 
+     
         if (responseRef.status >= 200 && responseRef.status < 300) {
-          const otpScreen = userType === 'corporate' ? 'OTPRegister' : 'PersonalOTPScreen';
+          const otpScreen = userType === 'corporate' ? 'OTPRegister' : null;
           navigation.navigate(otpScreen, {
             emailId: email,
             client_id: userType === 'corporate' ? data?.client_id : 'PERSONAL',
             url: responseRef?.headers?.map?.location,
           });
-       
-          
         }
       }
     } catch (error) {
@@ -163,15 +164,14 @@ export const NewUser = async (accessToken, details) => {
   
       const data = await response.json();
   
-      // Handle success (e.g., decrypt user_id, dispatch action)
-      // ... your success handling logic here ...
+      
   
       return data; 
   
     } catch (error) {
       console.error('Registration Error:', error);
       Alert.alert('Error', 'Failed to register. Please try again.');
-      throw error; // Re-throw the error for proper error handling in the calling component
+      throw error; 
     }
   };
 export const handleSignIn = async (email, password, accessToken, navigation, setLoading) => {
@@ -205,7 +205,7 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
       screen: 'CorporateModule1',
     });
     } else {
-      Alert.alert('Error', 'Unexpected response from server.');
+      Alert.alert('OOPs!', 'Login Failed Try Again');
     }
   } catch (error) {
     console.error('Error in handleSignIn:', error);
@@ -319,12 +319,14 @@ export const resetPassword = async (email, newPassword, confirmPassword, accessT
 };
 
 
-export const verifyOTP = async (passPhrase, url) => {
+export const verifyOTP = async (url,passPhrase) => {
   try {
     const makeApiCall = await tokenFromMMI();
 
     if (makeApiCall?.access_token) {
       const fullUrl = `${url}?passPhrase=${passPhrase}`;
+      console.log(fullUrl,"url");
+      
 
       const apiResp = await fetch(fullUrl, {
         method: 'GET',
@@ -357,3 +359,37 @@ export const verifyOTP = async (passPhrase, url) => {
     return null;
   }
 };
+
+
+// export const verifyOTP = async (passPhrase, url) => {
+//   const makeApiCall = await tokenFromMMI()
+//   if (makeApiCall?.access_token) {
+//     try {
+
+//       const apiResp = await fetch(`${url}?passPhrase=${passPhrase}`, {
+//         method: 'GET',
+//         headers: {
+//           'Authorization': `Bearer ${makeApiCall?.access_token}`
+//         }
+//       }).then(async response => {
+//         const res =  response
+   
+//         return res;
+//       }).catch(err => {
+//         Alert.alert('Error:', err.message)
+//         return err
+//       })
+//       console.log(apiResp,"full url");
+//       console.log(makeApiCall.access_token,"tochan");
+      
+      
+//       return apiResp;
+//     } catch (error) {
+//       Alert.alert("Error", "Error" + error)
+//       return error;
+//     }
+
+//   } else {
+//     return null;
+//   }
+// }

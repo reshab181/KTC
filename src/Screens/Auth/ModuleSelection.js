@@ -8,6 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Alert
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../Reusables/CustomHeader';
@@ -28,8 +29,17 @@ const ModuleSelectionUI = () => {
   }, [navigation]);
 
   const handleModuleClick = (module) => {
-    setSelectedModule(module); 
-    setIsModalVisible(true); 
+    if (module === 'Personal') {
+      Alert.alert(
+        'Coming Soon',
+        'The Personal Module is coming soon!',
+        [{ text: 'OK', onPress: () => {} }],
+        { cancelable: true }
+      );
+      return; 
+    }
+    setSelectedModule(module);
+    setIsModalVisible(true);
   };
 
   const closeModal = () => {
@@ -87,9 +97,10 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start', 
     alignItems: 'center',
-    padding: 15,
+    paddingTop: 80, 
+    paddingHorizontal: 15,
   },
   moduleContainer: {
     width: '100%',
@@ -97,7 +108,7 @@ const styles = StyleSheet.create({
   },
   module: {
     width: '100%',
-    height: 220,
+    height: 240,
     backgroundColor: '#F2F2F2',
     shadowColor: '#000',
     shadowOpacity: 0.8,
@@ -129,12 +140,12 @@ const styles = StyleSheet.create({
     color: '#212121',
     fontSize: 16,
     marginTop: 20,
-    fontWeight: '500',
+    fontWeight: '400',
     textAlign: 'center',
   },
   moduleImage: {
-    height: 60,
-    resizeMode: 'contain',
+    height: 80,
+    resizeMode: 'cover',
   },
 });
 
