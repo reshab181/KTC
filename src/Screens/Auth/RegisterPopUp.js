@@ -238,8 +238,8 @@ const RegisterPOPUP = ({ onClose }) => {
               return errors;
             }}
             onSubmit={({ email }) => {
-              // navigation.navigate('OTPRegister');
-              registrationHandler(email, userType, accessToken,navigation, setLoader)
+              navigation.navigate('OTPRegister');
+              // registrationHandler(email, userType, accessToken,navigation, setLoader)
             }}
           >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (

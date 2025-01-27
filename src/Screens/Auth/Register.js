@@ -85,7 +85,7 @@ const Register = () => {
                 iconPath={require('../../Assets/icbackarrow.png')}
                 iconHeight={24}
                 iconWidth={24}
-                handleLeftIcon={() => navigation.goBack()}
+                onMenuPress={() => navigation.goBack()}
             />
 
             <View style={styles.scrollContainer}>

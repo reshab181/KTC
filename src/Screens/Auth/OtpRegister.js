@@ -317,7 +317,6 @@ const OtpRegister = ({ route }) => {
     newOtp[index] = value;
     setOtp(newOtp.join(''));
 
-    // Move to next input if value is entered
     if (value && index < inputRefs.current.length - 1) {
       inputRefs.current[index + 1]?.focus();
     }
@@ -328,7 +327,7 @@ const OtpRegister = ({ route }) => {
     newOtp[index] = '';
     setOtp(newOtp.join(''));
 
-    // Move to previous input if backspace is pressed on empty field
+
     if (index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -346,7 +345,7 @@ const OtpRegister = ({ route }) => {
         if ( response.status === 204) {
           setLoader(false);
           Alert.alert('Success', 'OTP verified successfully!');
-          navigation.navigate('Register', { emailId, client_id });
+          navigation.navigate('RegisterPage', { emailId, client_id });
         } else {
           setLoader(false);
           Alert.alert('Error', 'Incorrect OTP, please try again.');
