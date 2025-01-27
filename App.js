@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -27,6 +27,7 @@ import Feedback from "./src/Screens/Feedback";
 import Help from "./src/Screens/Help";
 import Track from "./src/Screens/My Bookings/Track";
 import Notification from "./src/Screens/Notification";
+import SplashScreen from "@exodus/react-native-splash-screen";
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -77,6 +78,10 @@ const MainAppNavigator = () => (
 );
 
 const App = () => {
+
+  useEffect(() => {
+    SplashScreen.hide()
+  }, [])
   return (
     <GestureHandlerRootView>
       <NavigationContainer>
