@@ -7,14 +7,13 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import CustomHeader from '../../Reusables/CustomHeader';
-import CustomIconTextInput from '../../Reusables/CustomIconTextInput';
-import CustomButton from '../../Reusables/CustomButtons';
+import CustomHeader from '../../component/CustomHeader';
+import CustomIconTextInput from '../../component/CustomIconTextInput';
+import CustomButton from '../../component/CustomButtons';
 
 const Profile = ({ navigation }) => {
   const [loader, setLoader] = useState(false);
 
-  // States for input fields
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -25,29 +24,28 @@ const Profile = ({ navigation }) => {
   });
 
   const handleDeleteAccount = () => {
-    console.log(formData.firstName); // Logs the first name entered
-    console.log(formData.email); // Logs the email entered
+    console.log(formData.firstName);
+    console.log(formData.email); 
 
     Alert.alert(
       'Alert',
       'Are you sure you want to delete your account?',
       [
         { text: 'Cancel', onPress: () => null },
-        { text: 'OK', onPress: () => console.log('Account deleted') }, // Replace with actual delete logic
+        { text: 'OK', onPress: () => console.log('Account deleted') }, 
       ]
     );
   };
 
   const inputs = [
-    { placeholder: "First Name", icon1: require('../../Assets/manicon.png'), value: formData.firstName, key: 'firstName' },
-    { placeholder: "Last Name", icon1: require('../../Assets/manicon.png'), value: formData.lastName, key: 'lastName' },
-    { placeholder: "Email", icon1: require('../../Assets/email.png'), value: formData.email, key: 'email' },
-    { placeholder: "MM/DD/YYYY", icon1: require('../../Assets/DOB.png'), value: formData.birthDate, key: 'birthDate' },
-    { placeholder: "Mobile Number", icon1: require('../../Assets/phone.png'), value: formData.mobileNumber, key: 'mobileNumber' , type: "numeric" },
-    { placeholder: "Change Password", icon1: require('../../Assets/lock.png'), value: formData.password, key: 'password' },
+    { placeholder: "First Name", icon1: require('../../assets/manicon.png'), value: formData.firstName, key: 'firstName' },
+    { placeholder: "Last Name", icon1: require('../../assets/manicon.png'), value: formData.lastName, key: 'lastName' },
+    { placeholder: "Email", icon1: require('../../assets/email.png'), value: formData.email, key: 'email' },
+    { placeholder: "MM/DD/YYYY", icon1: require('../../assets/DOB.png'), value: formData.birthDate, key: 'birthDate' },
+    { placeholder: "Mobile Number", icon1: require('../../assets/phone.png'), value: formData.mobileNumber, key: 'mobileNumber' , type: "numeric" },
+    { placeholder: "Change Password", icon1: require('../../assets/lock.png'), value: formData.password, key: 'password' },
   ];
 
-  // Function to handle text changes
   const handleInputChange = (key, value) => {
     setFormData(prevState => ({
       ...prevState,
@@ -60,9 +58,10 @@ const Profile = ({ navigation }) => {
       <View style={styles.mainContainer}>
         <CustomHeader
           title="Profile"
-          iconPath={require('../../Assets/icbackarrow.png')}
+          iconPath={require('../../assets/ic_back_arrow_white_24.png')}
           iconHeight={24}
           iconWidth={24}
+      onMenuPress ={() => navigation.goBack()} 
         />
 
         {loader && (
@@ -75,11 +74,11 @@ const Profile = ({ navigation }) => {
           {inputs.map((input, index) => (
             <View style={{ marginTop: 16 }} key={index}>
               <CustomIconTextInput
-                keyboardType= {input.type}
+                keyboardType={input.type}
                 placeholder={input.placeholder}
                 icon1={input.icon1}
                 value={input.value}
-                onChangeText={(value) => handleInputChange(input.key, value)} // Update state
+                onChangeText={(value) => handleInputChange(input.key, value)}
               />
             </View>
           ))}
@@ -100,7 +99,6 @@ const Profile = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F1F1F3',
   },
   mainContainer: {
     height: '100%',

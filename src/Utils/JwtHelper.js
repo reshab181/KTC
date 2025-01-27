@@ -1,8 +1,8 @@
 // jwtHelper.js
 
 import { Alert } from 'react-native';
-import Api from '../Services/Api';
-import Static from '../Services/Static';
+import Api from '../services/Api';
+import Static from '../services/Static';
 
 export const fetchJwtAccess = async () => {
   try {
@@ -23,7 +23,7 @@ export const fetchJwtAccess = async () => {
     return token;
   } catch (error) {
     console.error('JWT Fetch Error:', error);
-    Alert.alert('Error', 'Failed to retrieve access token.');
+    // Alert.alert('Error', 'Failed to retrieve access token.');
     return null;
   }
 };

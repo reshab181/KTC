@@ -1,7 +1,7 @@
 import { SafeAreaView, StyleSheet, Text, View, Dimensions, TouchableOpacity, ScrollView } from 'react-native'
 import React from 'react'
 import { RadioButton, TextInput } from 'react-native-paper'
-import CustomHeader from '../Reusables/CustomHeader'
+import CustomHeader from '../component/CustomHeader'
 
 const { height, width } = Dimensions.get('screen')
 

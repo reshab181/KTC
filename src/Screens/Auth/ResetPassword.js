@@ -1,42 +1,157 @@
 // Author: Ashutosh Rai
 // Component: ResetPassword
-import { StyleSheet, Text, View } from 'react-native';
-import { useWindowDimensions } from 'react-native';
-import React, { useState } from 'react';
-import CustomHeader from '../../Reusables/CustomHeader';
-import CustomTextInpt from '../../Reusables/CustomTextInpt';
-import CustomButton from '../../Reusables/CustomButtons';
-import Modal from "react-native-modal";
-import CustomModal from '../../Reusables/CustomModals';
+// import { StyleSheet, Text, View } from 'react-native';
+// import { useWindowDimensions } from 'react-native';
+// import React, { useState } from 'react';
+// import CustomHeader from '../../Component/CustomHeader';
+// import CustomTextInpt from '../../Component/CustomTextInpt';
+// import CustomButton from '../../Component/CustomButtons';
+// import Modal from "react-native-modal";
+// import CustomModal from '../../Component/CustomModals';
+// import { fetchJwtAccess } from '../../Utils/JwtHelper';
 
-const ResetPassword = ({navigation}) => {
+// const ResetPassword = ({navigation}) => {
+//   const styles = useStyles();
+//   const [isVisible, setisVisible] = useState(false);
+//   const [accessToken, setAccessToken] = useState('');
+
+
+//    useEffect(() => {
+//       const fetchAccessToken = async () => {
+//         const token = await fetchJwtAccess();
+//         setAccessToken(token || '');
+//       };
+//       fetchAccessToken();
+//     }, []);
+
+//   return (
+//     <View style={styles.container}>
+//       <CustomHeader title="Reset Password" />
+//       <View style={styles.content}>
+//         <CustomTextInpt placeholder="New Password" secureTextEntry={true} />
+//         <CustomTextInpt placeholder="Confirm Password" secureTextEntry={true} />
+//         <View style={{ marginTop: 16 }}>
+//           <CustomButton title={"Submit"} onPress={() => setisVisible(!isVisible)} />
+//         </View>
+//       </View>
+//       {
+//         isVisible ?
+//           <>
+//             <View>
+//               <CustomModal onClose={() => setisVisible(!isVisible)}
+//                 isButtonVisible={true}
+//                 message1={"Your Password has been set Successfully"}
+//                 message2={"Please login using the set Password"}
+//                 btnText={"Login Now"}
+//                 handlePress={()=>{navigation.replace('SignInCorporate')}}
+//               />
+//             </View>
+//           </> : null
+//       }
+//     </View>
+//   );
+// };
+
+// export default ResetPassword;
+
+// function useStyles() {
+//   const { width: winwidth, height: winheight } = useWindowDimensions();
+
+//   return StyleSheet.create({
+//     container: {
+//       flex: 1,
+//       backgroundColor: '#F1F1F3',
+//     },
+//     content: {
+//       marginTop: 24,
+//       marginStart : 10 ,  
+//       paddingHorizontal: 16, 
+//     },
+//   });
+// }
+import { StyleSheet, View, Alert } from 'react-native';
+import { useWindowDimensions } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import CustomHeader from '../../component/CustomHeader';
+import CustomTextInpt from '../../component/CustomTextInpt';
+import CustomButton from '../../component/CustomButtons';
+import Modal from "react-native-modal";
+import { useNavigation, useRoute } from '@react-navigation/native';
+import CustomModal from '../../component/CustomModals';
+import { fetchJwtAccess } from '../../Utils/JwtHelper';
+import { resetPassword } from '../../Api/Authentication';
+
+const ResetPassword = () => {
+
+
+ 
+  const navigation = useNavigation();
+  
   const styles = useStyles();
-  const [isVisible, setisVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [accessToken, setAccessToken] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  useEffect(() => {
+    const fetchAccessToken = async () => {
+      const token = await fetchJwtAccess();
+      setAccessToken(token || '');
+    };
+    fetchAccessToken();
+  }, []);
+
+  const handleSubmit = async () => {
+    if (!newPassword || !confirmPassword || !email) {
+      Alert.alert('Error', 'Please fill in all fields.');
+      return;
+    }
+
+    await resetPassword(email, newPassword, confirmPassword, accessToken, (loading) => {
+      console.log('Loading state:', loading);
+    });
+
+    setIsVisible(true);
+  };
 
   return (
     <View style={styles.container}>
       <CustomHeader title="Reset Password" />
       <View style={styles.content}>
-        <CustomTextInpt placeholder="New Password" secureTextEntry={true} />
-        <CustomTextInpt placeholder="Confirm Password" secureTextEntry={true} />
+        {/* <CustomTextInpt
+          placeholder="Email"
+          value={email}
+      
+          editable={false}
+        /> */}
+        <CustomTextInpt
+          placeholder="New Password"
+          secureTextEntry={true}
+          value={newPassword}
+          onChangeText={setNewPassword}  
+        />
+        <CustomTextInpt
+          placeholder="Confirm Password"
+          secureTextEntry={true}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}  
+        />
         <View style={{ marginTop: 16 }}>
-          <CustomButton title={"Submit"} onPress={() => setisVisible(!isVisible)} />
+          <CustomButton title={"Submit"} onPress={handleSubmit} />
         </View>
       </View>
-      {
-        isVisible ?
-          <>
-            <View>
-              <CustomModal onClose={() => setisVisible(!isVisible)}
-                isButtonVisible={true}
-                message1={"Your Password has been set Successfully"}
-                message2={"Please login using the set Password"}
-                btnText={"Login Now"}
-                handlePress={()=>{navigation.replace('SignInCorporate')}}
-              />
-            </View>
-          </> : null
-      }
+      {isVisible && (
+        <View>
+          <CustomModal
+            onClose={() => setIsVisible(false)}
+            isButtonVisible={true}
+            message1={"Your Password has been set Successfully"}
+            message2={"Please login using the set Password"}
+            btnText={"Login Now"}
+            handlePress={() => navigation.replace('SignInCorporate')}
+          />
+        </View>
+      )}
     </View>
   );
 };
@@ -44,7 +159,7 @@ const ResetPassword = ({navigation}) => {
 export default ResetPassword;
 
 function useStyles() {
-  const { width: winwidth, height: winheight } = useWindowDimensions();
+  const { width: winWidth, height: winHeight } = useWindowDimensions();
 
   return StyleSheet.create({
     container: {
@@ -53,8 +168,8 @@ function useStyles() {
     },
     content: {
       marginTop: 24,
-      marginStart : 10 ,  
-      paddingHorizontal: 16, 
+      marginStart: 10,
+      paddingHorizontal: 16,
     },
   });
 }

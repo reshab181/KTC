@@ -20,7 +20,7 @@ const CustomCalender = () => {
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <Image source={require('../Assets/car.png')} />
+                <Image source={require('../assets/car.png')} />
                 <Text style={styles.headerText}>
                     Select Date & Reporting Time
                 </Text>

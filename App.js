@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Provider } from "react-redux"; 
+import store from "./src/Redux/store"; 
 
-import Splash from "./src/Screens/Basic/Splash";
+import Splash from "./src/Screens/basic/Splash";
 import ModuleSelectionUI from "./src/Screens/Auth/ModuleSelection";
 import RegisterPOPUP from "./src/Screens/Auth/RegisterPopUp";
 import Register from "./src/Screens/Auth/Register";
@@ -13,7 +15,7 @@ import ForgotPasswordOTP from "./src/Screens/Auth/ForgotPasswordOTP";
 import PersonalRegister from "./src/Screens/Auth/PersonalRegister";
 import ResetPassword from "./src/Screens/Auth/ResetPassword";
 import CorporateModule1 from "./src/Screens/Pages/CorporateModule1";
-import Profile from "./src/Screens/Basic/Profile";
+import Profile from "./src/Screens/basic/Profile";
 import PickUpLocation from "./src/Screens/Pages/PickUpLocation";
 import HomeScreen1 from "./src/Screens/Pages/HomeScreen1";
 import CarGroup from "./src/Screens/Pages/CarGroup";
@@ -26,14 +28,15 @@ import Upcoming from "./src/Screens/My Bookings/Upcoming";
 import Feedback from "./src/Screens/Feedback";
 import Help from "./src/Screens/Help";
 import Track from "./src/Screens/My Bookings/Track";
+import Notification from "./src/Screens/Notification";
+import SplashScreen from "@exodus/react-native-splash-screen";
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
 const AppStack = createNativeStackNavigator();
 
-
 const AuthNavigator = () => (
-    <AuthStack.Navigator initialRouteName="ModuleSelectionUI">
+  <AuthStack.Navigator initialRouteName="ModuleSelectionUI">
     <AuthStack.Screen
       name="ModuleSelectionUI"
       component={ModuleSelectionUI}
@@ -49,7 +52,7 @@ const AuthNavigator = () => (
       component={RegisterPOPUP}
       options={{ presentation: "modal", headerShown: false }}
     />
-    <AuthStack.Screen name="RegisterPage" component={Register} />
+    <AuthStack.Screen name="RegisterPage" component={Register} options={{ headerShown: false }} />
     <AuthStack.Screen name="OTPRegister" component={OTPRegister} options={{ headerShown: false }} />
     <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
     <AuthStack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
@@ -57,6 +60,7 @@ const AuthNavigator = () => (
     <AuthStack.Screen name="ResetPassword" component={ResetPassword}options={{ headerShown: false }}  />
   </AuthStack.Navigator>
 );
+
 const MainAppNavigator = () => (
   <AppStack.Navigator initialRouteName="HomeScreen1">
     <AppStack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} />
@@ -70,42 +74,44 @@ const MainAppNavigator = () => (
     <AppStack.Screen name="MyBooking" component={MyBooking}options={{ headerShown: false }} />
     <AppStack.Screen name="Track" component={Track}options={{ headerShown: false }} />
     <AppStack.Screen name="Upcoming" component={Upcoming}options={{ headerShown: false }} />
-
+    <AppStack.Screen name="Notifications" component={Notification}options={{ headerShown: false }} />
   </AppStack.Navigator>
 );
 
 const App = () => {
+  useEffect(() => {
+    SplashScreen.hide()
+  }, []);
+
   return (
     <GestureHandlerRootView>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Splash">
-          {/* Splash Screen */}
-          <Stack.Screen
-            name="Splash"
-            component={Splash}
-            options={{ headerShown: false }}
-          />
+      <Provider store={store}> 
+        <NavigationContainer>
+          <Stack.Navigator initialRouteName="Splash">
+      
+            <Stack.Screen
+              name="Splash"
+              component={Splash}
+              options={{ headerShown: false }}
+            />
 
-          {/* Auth Stack */}
-          <Stack.Screen
-            name="Auth"
-            component={AuthNavigator}
-            options={{ headerShown: false }}
-          />
+           
+            <Stack.Screen
+              name="Auth"
+              component={AuthNavigator}
+              options={{ headerShown: false }}
+            />
 
-          {/* Main App Stack */}
-          <Stack.Screen
-            name="MainApp"
-            component={MainAppNavigator}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+        
+            <Stack.Screen
+              name="MainApp"
+              component={MainAppNavigator}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
     </GestureHandlerRootView>
-    // // <Upcoming/>
-    // // <Feedback/>
-    // // <Help/>
-    // <ForgotPasswordOTP/>
   );
 };
 

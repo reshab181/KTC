@@ -2,8 +2,8 @@ import { StyleSheet, Text, View, Image, Alert,TextInput } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import React, { useState } from 'react';
 // import { TextInput } from 'react-native-paper';
-import CustomButton from '../../Reusables/CustomButtons';
-import CustomHeader from '../../Reusables/CustomHeader';
+import CustomButton from '../../component/CustomButtons';
+import CustomHeader from '../../component/CustomHeader';
 import { verifyOTP } from '../../Api/Authentication';
 
 
@@ -57,7 +57,7 @@ const ForgotPasswordOTP = ({ navigation }) => {
     <View style={styles.root}>
       <CustomHeader title={"Forgot Password"}  />
       <Image
-        source={require('../../Assets/frgtpwdotp.png')}
+        source={require('../../assets/frgtpwdotp.png')}
         style={styles.img}
       />
       <Text style={styles.txt}>

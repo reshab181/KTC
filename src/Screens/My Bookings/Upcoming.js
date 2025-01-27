@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, SafeAreaView, FlatList, Text, TouchableOpacity, Modal, TextInput, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import CustomHeader from '../../Reusables/CustomHeader';
+import CustomHeader from '../../component/CustomHeader';
 
 const Upcoming = ({navigation}) => {
   const upcomingData = [
@@ -63,7 +63,7 @@ const Upcoming = ({navigation}) => {
     return (
       <TouchableOpacity style={styles.card}>
         <View style={styles.rowContainer}>
-          <Image source={require('../../Assets/cardemo.png')} style={styles.image} />
+          <Image source={require('../../assets/cardemo.png')} style={styles.image} />
 
           {/* Divider Line */}
           <View style={styles.divider} />
@@ -87,7 +87,7 @@ const Upcoming = ({navigation}) => {
                     style={styles.arrowButton}
                     onPress={() => setModalVisible({ isVisible: true, values: item })}
                   >
-                    <Image source={require('../../Assets/RightArrow.png')} style={styles.arrowIcon} />
+                    <Image source={require('../../assets/RightArrow.png')} style={styles.arrowIcon} />
                   </TouchableOpacity>
                 </>
               ) : (
@@ -102,7 +102,7 @@ const Upcoming = ({navigation}) => {
                     style={styles.arrowButton}
                     onPress={() => onPressTrack(item)}
                   >
-                    <Image source={require('../../Assets/RightArrow.png')} style={styles.arrowIcon} />
+                    <Image source={require('../../assets/RightArrow.png')} style={styles.arrowIcon} />
                   </TouchableOpacity>
                 </>
               )}
@@ -120,7 +120,7 @@ const Upcoming = ({navigation}) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <CustomHeader iconPath={require('../../Assets/ic_back_arrow_white_24.png')}
+      <CustomHeader iconPath={require('../../assets/ic_back_arrow_white_24.png')}
         title={"My Booking"}
         iconHeight={24}
         iconWidth={24}

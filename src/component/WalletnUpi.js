@@ -8,9 +8,9 @@ const WalletnUpi = () => {
   const [selectedOption, setSelectedOption] = useState('option1');
 
   const options = [
-    { id: 'option1', image: require('../Assets/PhonePeLogo.png') },
-    { id: 'option2', image: require('../Assets/Paytm.png') },
-    { id: 'option3', image: require('../Assets/Google.png') },
+    { id: 'option1', image: require('../assets/PhonePeLogo.png') },
+    { id: 'option2', image: require('../assets/Paytm.png') },
+    { id: 'option3', image: require('../assets/Google.png') },
   ];
 
   return (

@@ -8,6 +8,7 @@ const { height, width } = Dimensions.get('screen');
 
 const Splash = props => {
   const navigation = useNavigation();
+
   useEffect(() => {
     setTimeout(() => {
       navigation.replace("Auth", { screen: "ModuleSelectionUI" });
@@ -21,7 +22,7 @@ const Splash = props => {
   return (
     <View style={styles.mainContainer}>
       <Image 
-      source={require('../../Assets/ktc-logo.png')}
+      source={require('../../assets/ktc-logo.png')}
       />
     </View>
   );
@@ -29,8 +30,8 @@ const Splash = props => {
 export default Splash;
 const styles = StyleSheet.create({
   mainContainer: {
-    height: height / 1,
-    width: width / 1,
+    height: '100%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#3C3567',

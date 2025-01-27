@@ -2,9 +2,9 @@
 // Component: Car Group
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import CustomHeader from '../../Reusables/CustomHeader'
-import CustomCarGrouptile from '../../Reusables/CustomCarGrouptile'
-import CustomButton from '../../Reusables/CustomButtons'
+import CustomHeader from '../../component/CustomHeader'
+import CustomCarGrouptile from '../../component/CustomCarGrouptile'
+import CustomButton from '../../component/CustomButtons'
 
 const CarGroup = ({navigation}) => {
     const carGroupTitles = [
@@ -16,7 +16,7 @@ const CarGroup = ({navigation}) => {
       ];      
   return (
     <View style={styles.root}>
-        <CustomHeader title={"Car Group"} iconPath={require('../../Assets/icbackarrow.png')} iconHeight={24} iconWidth={24} handleLeftIcon={()=>{navigation.goBack()}}/>
+        <CustomHeader title={"Car Group"} iconPath={require('../../assets/icbackarrow.png')} iconHeight={24} iconWidth={24} handleLeftIcon={()=>{navigation.goBack()}}/>
         {
             carGroupTitles.map((item,id)=>
                 <CustomCarGrouptile key={id} title={item} onPress={()=>navigation.navigate('CarSelection')} iconName={'chevron-right'} />
