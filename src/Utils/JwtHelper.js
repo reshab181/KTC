@@ -9,7 +9,7 @@ export const fetchJwtAccess = async () => {
     const response = await fetch(`${Api.BASE_URL}${Api.Jwt_TOKEN}`, {
       method: 'POST',
       headers: {
-        jwt: '',
+        'jwt': '',
         'Content-Type': 'application/x-www-form-urlencoded',
       },
       body: `access_codename_jwt=${Static.ACCESS_CODE_NAME}&access_codepass_jwt=${Static.ACCESS_CODE_PASS}`,

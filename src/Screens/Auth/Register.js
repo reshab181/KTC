@@ -331,7 +331,9 @@ const validationSchema = Yup.object().shape({
     alternatePhone: Yup.string().length(10, 'Alternate phone number must be 10 digits').required('Alternate phone number is required'),
 });
 
-const Register = () => {
+const Register = ({route}) => {
+    const {  emailId,client_id} = route.params || {};
+    
     const [selectedGender, setSelectedGender] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('India');
     const [dob, setDob] = useState('');
@@ -373,15 +375,15 @@ const Register = () => {
             // if (!jwt) throw new Error('Failed to obtain JWT token');
 
             const userData = {
-                email_id: values.email,
+                email_id:   emailId,
                 f_name: values.firstName,
                 l_name: values.lastName,
                 gender: selectedGender,
                 birthdate: dob,
                 mobile_number: values.phone,
                 password: values.password,
-                client_id: "9pBFq6HkjWY+tfqk+82+yw==",
-                sub_enitity:"iLP9r7kLuFskHpdCMao9KQtxBQlCloYnjY5E/IWbAECmPiQeK4cka7b88sZV9O3vY3V4xrq7oJdXuwEwycaR75eIhDFb88m2U6p76tsGgOZMyTGfksK+RdmMFwVKp3n1ZnCGuvKOU7mLxQi3j3vOU5a1jEga6ZWj/Akr79u3oiIq5TaiB++2JSHQfOn7s5OyCVJj37/FG2gB4XNhWOqZQfUwP1mPeMNv1IcaL7m3uldzVofMCKoUYI58BM/ZUHj6",
+                client_id: client_id,
+                sub_enitityid:"iLP9r7kLuFskHpdCMao9KQtxBQlCloYnjY5E/IWbAECmPiQeK4cka7b88sZV9O3vY3V4xrq7oJdXuwEwycaR75eIhDFb88m2U6p76tsGgOZMyTGfksK+RdmMFwVKp3n1ZnCGuvKOU7mLxQi3j3vOU5a1jEga6ZWj/Akr79u3oiIq5TaiB++2JSHQfOn7s5OyCVJj37/FG2gB4XNhWOqZQfUwP1mPeMNv1IcaL7m3uldzVofMCKoUYI58BM/ZUHj6",
                 country: selectedCountry,
                 alternative_no: values.alternatePhone,
             };
@@ -393,6 +395,11 @@ const Register = () => {
                     email: values.email,
                     userId: responseData.user_id
                 }));
+// const data= responseData.json();
+// console.log(data,"heelo");
+                    console.log(responseData,"hello");
+
+
 
                 Alert.alert(
                     'Successfully Signup!',
@@ -402,7 +409,8 @@ const Register = () => {
                         onPress: () => navigation.navigate('SignInCorporate', { email_id: values.email })
                     }]
                 );
-            } else {
+            } 
+            else {
                 throw new Error(responseData?.message || 'Registration failed');
             }
         } catch (error) {

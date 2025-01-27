@@ -49,8 +49,8 @@ const SignInCorporate = ({ route }) => {
 
     if (!password) {
       validationErrors.password = 'Password is required.';
-    } else if (password.length < 6) {
-      validationErrors.password = 'Password must be at least 6 characters.';
+    } else if (password.length < 4) {
+      validationErrors.password = 'Password must be at least 4 characters.';
     }
 
     setErrors(validationErrors);

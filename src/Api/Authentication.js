@@ -92,7 +92,7 @@ if (data?.newuser === 'No') {
   );
 
   if (otpResponse.status >= 200 && otpResponse.status < 300) {
-    const otpScreen = userType === 'corporate' ? 'OTPRegister' : null;
+    const otpScreen = userType === 'corporate' ? 'RegisterPage' : null;
     navigation.navigate(otpScreen, {
       emailId: email,
       client_id: userType === 'corporate' ? data?.client_id : 'PERSONAL',
@@ -122,7 +122,7 @@ export const registerUser = async (userData, accessToken) => {
           method: 'POST',
           headers: {
               'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-              jwt: accessToken
+              'jwt': accessToken
           },
           body: formBody
       });
