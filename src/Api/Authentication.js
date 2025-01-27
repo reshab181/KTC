@@ -92,7 +92,7 @@ if (data?.newuser === 'No') {
   );
 
   if (otpResponse.status >= 200 && otpResponse.status < 300) {
-    const otpScreen = userType === 'corporate' ? 'RegisterPage' : null;
+    const otpScreen = userType === 'corporate' ? 'OTPRegister' : null;
     navigation.navigate(otpScreen, {
       emailId: email,
       client_id: userType === 'corporate' ? data?.client_id : 'PERSONAL',
@@ -176,7 +176,6 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
     setLoading(false);
   }
 };
-
 export const emailsms = async (email, accessToken, navigation, setLoading) => {
   if (!accessToken) {
     Alert.alert('Error', 'Access token is not available.');
@@ -186,21 +185,28 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
   try {
     setLoading(true);
 
+
     const mmiToken = await tokenFromMMI();
     if (!mmiToken?.access_token) {
       throw new Error('Failed to retrieve MMI access token.');
     }
 
+  
     const apiUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
 
-    const response = await axios.post(apiUrl, null, {
-      headers: {
-        Authorization: `Bearer ${mmiToken.access_token}`,
-      },
-    });
 
-    const locationUrl = response.headers.location;
+    const response = await axios.post(
+      apiUrl,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${mmiToken.access_token}`,
+        },
+      }
+    );
 
+    
+    const locationUrl = response?.headers?.location;
     if (locationUrl) {
       navigation.navigate('OTP', {
         url: locationUrl,
@@ -222,7 +228,6 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
     setLoading(false);
   }
 };
-
 export const resetPassword = async (email, newPassword, confirmPassword, accessToken, setLoading) => {
   setLoading(true);
 
