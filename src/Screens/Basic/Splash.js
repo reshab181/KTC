@@ -22,7 +22,7 @@ const Splash = props => {
   return (
     <View style={styles.mainContainer}>
       <Image 
-      source={require('../../Assets/ktc-logo.png')}
+      source={require('../../assets/ktc-logo.png')}
       />
     </View>
   );

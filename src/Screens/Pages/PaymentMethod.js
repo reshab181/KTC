@@ -3,12 +3,12 @@
 
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
-import CustomHeader from '../../Reusables/CustomHeader';
-import PaymentCustomButton from '../../Reusables/PaymentCustomButton';
-import CustomButton from '../../Reusables/CustomButtons';
-import CardFormModal from '../../Reusables/CardFormModal';
-import WalletnUpi from '../../Reusables/WalletnUpi';
-import CustomModal from '../../Reusables/CustomModals';
+import CustomHeader from '../../component/CustomHeader';
+import PaymentCustomButton from '../../component/PaymentCustomButton';
+import CustomButton from '../../component/CustomButtons';
+import CardFormModal from '../../component/CardFormModal';
+import WalletnUpi from '../../component/WalletnUpi';
+import CustomModal from '../../component/CustomModals';
 
 const PaymentMethod = ({navigation}) => {
   const [selectedButton, setSelectedButton] = useState('Debit');
@@ -18,23 +18,23 @@ const PaymentMethod = ({navigation}) => {
   const paymentMethods = [
     {
       title: 'Debit',
-      activeImg: require('../../Assets/credit_cardi.png'),
-      inactiveImg: require('../../Assets/DebitCardi.png'),
+      activeImg: require('../../assets/credit_cardi.png'),
+      inactiveImg: require('../../assets/DebitCardi.png'),
     },
     {
       title: 'Credit',
-      activeImg: require('../../Assets/credit_cardi.png'),
-      inactiveImg: require('../../Assets/DebitCardi.png'),
+      activeImg: require('../../assets/credit_cardi.png'),
+      inactiveImg: require('../../assets/DebitCardi.png'),
     },
     {
       title: 'Net Banking',
-      activeImg: require('../../Assets/net-Bankingi.png'),
-      inactiveImg: require('../../Assets/net-Bankingi.png'),
+      activeImg: require('../../assets/net-Bankingi.png'),
+      inactiveImg: require('../../assets/net-Bankingi.png'),
     },
     {
       title: 'Wallets & UPI',
-      activeImg: require('../../Assets/accountbalancewalletwhite.png'),
-      inactiveImg: require('../../Assets/Wallett&upii.png'),
+      activeImg: require('../../assets/accountbalancewalletwhite.png'),
+      inactiveImg: require('../../assets/Wallett&upii.png'),
     },
   ];
 
@@ -43,7 +43,7 @@ const PaymentMethod = ({navigation}) => {
       <ScrollView>
         <CustomHeader
           title="Payment"
-          iconPath={require('../../Assets/icbackarrow.png')}
+          iconPath={require('../../assets/icbackarrow.png')}
           iconHeight={24}
           iconWidth={24}
           handleLeftIcon={()=>{navigation.goBack()}}

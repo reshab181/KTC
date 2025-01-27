@@ -26,7 +26,7 @@ const CustomModal = ({ message1, message2, isVisible, onClose, isButtonVisible =
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback>
             <View style={styles.modalContainer}>
-              <Image source={require('../Assets/tickbuttn.png')} style={styles.img} />
+              <Image source={require('../assets/tickbuttn.png')} style={styles.img} />
               <Text style={styles.modalText}>{message1}</Text>
               <Text style={styles.modalText}>{message2}</Text>
               {isButtonVisible ? (

@@ -2,16 +2,16 @@
 // Component: Booking Confirmation
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-import CarCard from '../../Reusables/CarCard';
-import CustomHeader from '../../Reusables/CustomHeader';
-import CustomTextInpt from '../../Reusables/CustomTextInpt';
-import CustomDropdown from '../../Reusables/CustomDropdown';
-import CustomButton from '../../Reusables/CustomButtons';
+import CarCard from '../../component/CarCard';
+import CustomHeader from '../../component/CustomHeader';
+import CustomTextInpt from '../../component/CustomTextInpt';
+import CustomDropdown from '../../component/CustomDropdown';
+import CustomButton from '../../component/CustomButtons';
 import { RadioButton } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Characters } from '../../Constants/Strings'
+import { Characters } from '../../constants/Strings'
 import { SafeAreaView } from 'react-native';
-import CustomModal from '../../Reusables/CustomModals';
+import CustomModal from '../../component/CustomModals';
 
 const BookingConfirmation = ({navigation}) => {
     const [check1, setCheck1] = useState(false);
@@ -31,17 +31,17 @@ const BookingConfirmation = ({navigation}) => {
                 <View>
                     <CustomHeader
                         title={'Booking Confirmation'}
-                        iconPath={require('../../Assets/icbackarrow.png')}
+                        iconPath={require('../../assets/icbackarrow.png')}
                         iconHeight={24}
                         iconWidth={24}
                         handleLeftIcon={()=>{navigation.goBack()}}
                     />
                     <View style={{ marginHorizontal: 16, marginTop: 10 }}>
                         <CarCard
-                            iconPath={require('../../Assets/infobtn.png')}
+                            iconPath={require('../../assets/infobtn.png')}
                             isSaved={true}
                             height={146}
-                            imgPath={require('../../Assets/cardemo.png')}
+                            imgPath={require('../../assets/cardemo.png')}
                         />
                         <View style={{ width: 300, marginTop: 10, marginBottom: 4 }}>
                             <Text style={{ fontSize: 12, color: "#737373" }}>

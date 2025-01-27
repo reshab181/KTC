@@ -15,9 +15,9 @@
 // } from 'react-native';
 // import { Formik } from 'formik';
 // import * as Yup from 'yup';
-// import CustomHeader from '../../Reusables/CustomHeader';
-// import CustomButton from '../../Reusables/CustomButtons';
-// import CustomIconTextInput from '../../Reusables/CustomIconTextInput';
+// import CustomHeader from '../../component/CustomHeader';
+// import CustomButton from '../../component/CustomButtons';
+// import CustomIconTextInput from '../../component/CustomIconTextInput';
 // import { RadioButton } from 'react-native-paper';
 // import { useNavigation } from '@react-navigation/native';
 
@@ -53,20 +53,20 @@
 
  
 //     const inputFields = [
-//         { placeholder: 'Official Email ID', icon: require('../../Assets/email.png'), name: 'email' },
-//         { placeholder: 'First Name', icon: require('../../Assets/manicon.png'), name: 'firstName' },
-//         { placeholder: 'Last Name', icon: require('../../Assets/manicon.png'), name: 'lastName' },
-//         { placeholder: 'Password', icon: require('../../Assets/lock.png'), name: 'password', secureTextEntry: true },
-//         { placeholder: 'Confirm Password', icon: require('../../Assets/lock.png'), name: 'confirmPassword', secureTextEntry: true },
-//         { placeholder: 'Mobile Number', icon: require('../../Assets/phone.png'), name: 'phone', keyboardType: 'numeric' },
-//         { placeholder: 'Alternate Mobile Number', icon: require('../../Assets/phone.png'), name: 'alternatePhone', keyboardType: 'numeric' },
+//         { placeholder: 'Official Email ID', icon: require('../../assets/email.png'), name: 'email' },
+//         { placeholder: 'First Name', icon: require('../../assets/manicon.png'), name: 'firstName' },
+//         { placeholder: 'Last Name', icon: require('../../assets/manicon.png'), name: 'lastName' },
+//         { placeholder: 'Password', icon: require('../../assets/lock.png'), name: 'password', secureTextEntry: true },
+//         { placeholder: 'Confirm Password', icon: require('../../assets/lock.png'), name: 'confirmPassword', secureTextEntry: true },
+//         { placeholder: 'Mobile Number', icon: require('../../assets/phone.png'), name: 'phone', keyboardType: 'numeric' },
+//         { placeholder: 'Alternate Mobile Number', icon: require('../../assets/phone.png'), name: 'alternatePhone', keyboardType: 'numeric' },
 //     ];
 
 //     return (
 //         <SafeAreaView style={styles.mainContainer}>
 //             <CustomHeader 
 //                 title="Register" 
-//                 iconPath={require('../../Assets/icbackarrow.png')} 
+//                 iconPath={require('../../assets/icbackarrow.png')} 
 //                 iconHeight={24} iconWidth={24}  
 //                 handleLeftIcon={() => navigation.goBack()}
 //                 />
@@ -110,7 +110,7 @@
 
 //                                 <View style={styles.selectionContainer}>
 //                                     <Image
-//                                         source={require('../../Assets/Gender.png')}
+//                                         source={require('../../assets/Gender.png')}
 //                                         style={styles.selectionIcon}
 //                                     />
 //                                     <View style={styles.radioContainer}>
@@ -130,7 +130,7 @@
 
 //                                 <View style={styles.selectionContainer}>
 //                                     <Image
-//                                         source={require('../../Assets/flag_black_24dp.png')}
+//                                         source={require('../../assets/flag_black_24dp.png')}
 //                                         style={styles.selectionIcon}
 //                                     />
 //                                     <View style={styles.radioContainer}>
@@ -253,9 +253,9 @@ import {
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import CustomHeader from '../../Reusables/CustomHeader';
-import CustomButton from '../../Reusables/CustomButtons';
-import CustomIconTextInput from '../../Reusables/CustomIconTextInput';
+import CustomHeader from '../../component/CustomHeader';
+import CustomButton from '../../component/CustomButtons';
+import CustomIconTextInput from '../../component/CustomIconTextInput';
 import { RadioButton } from 'react-native-paper';
 
 const { height, width } = Dimensions.get('window');
@@ -294,13 +294,13 @@ const PersonalRegister = ({ navigation }) => {
     const [showDatePicker, setShowDatePicker] = useState(false);
 
     const inputFields = [
-        { placeholder: 'Official Email ID', icon: require('../../Assets/email.png'), name: 'email' },
-        { placeholder: 'First Name', icon: require('../../Assets/manicon.png'), name: 'firstName' },
-        { placeholder: 'Last Name', icon: require('../../Assets/manicon.png'), name: 'lastName' },
-        { placeholder: 'Password', icon: require('../../Assets/lock.png'), name: 'password', secureTextEntry: true },
-        { placeholder: 'Confirm Password', icon: require('../../Assets/lock.png'), name: 'confirmPassword', secureTextEntry: true },
-        { placeholder: 'Mobile Number', icon: require('../../Assets/phone.png'), name: 'phone', keyboardType: 'numeric' },
-        { placeholder: 'Alternate Mobile Number', icon: require('../../Assets/phone.png'), name: 'alternatePhone', keyboardType: 'numeric' },
+        { placeholder: 'Official Email ID', icon: require('../../assets/email.png'), name: 'email' },
+        { placeholder: 'First Name', icon: require('../../assets/manicon.png'), name: 'firstName' },
+        { placeholder: 'Last Name', icon: require('../../assets/manicon.png'), name: 'lastName' },
+        { placeholder: 'Password', icon: require('../../assets/lock.png'), name: 'password', secureTextEntry: true },
+        { placeholder: 'Confirm Password', icon: require('../../assets/lock.png'), name: 'confirmPassword', secureTextEntry: true },
+        { placeholder: 'Mobile Number', icon: require('../../assets/phone.png'), name: 'phone', keyboardType: 'numeric' },
+        { placeholder: 'Alternate Mobile Number', icon: require('../../assets/phone.png'), name: 'alternatePhone', keyboardType: 'numeric' },
     ];
 
     const handleDateChange = (event, selectedDate) => {
@@ -314,7 +314,7 @@ const PersonalRegister = ({ navigation }) => {
         <SafeAreaView style={styles.mainContainer}>
             <CustomHeader
                 title="Register"
-                iconPath={require('../../Assets/icbackarrow.png')}
+                iconPath={require('../../assets/icbackarrow.png')}
                 iconHeight={24}
                 iconWidth={24}
                 handleLeftIcon={() => navigation.goBack()}
@@ -363,7 +363,7 @@ const PersonalRegister = ({ navigation }) => {
                                     onPress={() => setShowDatePicker(true)}
                                 >
                                     <Image
-                                        source={require('../../Assets/DOB.png')}
+                                        source={require('../../assets/DOB.png')}
                                         style={styles.selectionIcon}
                                     />
                                     <Text style={styles.dobText}>{dob || 'Select Date of Birth'}</Text>
@@ -387,7 +387,7 @@ const PersonalRegister = ({ navigation }) => {
                                 {/* Gender and Country Fields */}
                                 <View style={styles.selectionContainer}>
                                     <Image
-                                        source={require('../../Assets/Gender.png')}
+                                        source={require('../../assets/Gender.png')}
                                         style={styles.selectionIcon}
                                     />
                                     <View style={styles.radioContainer}>
@@ -407,7 +407,7 @@ const PersonalRegister = ({ navigation }) => {
 
                                 <View style={styles.selectionContainer}>
                                     <Image
-                                        source={require('../../Assets/flag_black_24dp.png')}
+                                        source={require('../../assets/flag_black_24dp.png')}
                                         style={styles.selectionIcon}
                                     />
                                     <View style={styles.radioContainer}>

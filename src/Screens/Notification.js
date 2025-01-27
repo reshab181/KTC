@@ -1,30 +1,34 @@
 import { StyleSheet, Text, View, Image, Dimensions, SafeAreaView, ScrollView } from 'react-native';
 import React from 'react';
 import { Card } from 'react-native-paper';
-import CustomHeader from '../Reusables/CustomHeader';
+import CustomHeader from '../component/CustomHeader';
 
 const { height, width } = Dimensions.get('screen');
 
 const Notification = () => {
   return (
     <SafeAreaView style={styles.safeArea}>
-      <CustomHeader title={'Notifications'} />
+      <CustomHeader title={'Notifications'}
+          iconPath={require('../assets/ic_back_arrow_white_24.png')}
+          iconHeight={24}
+          iconWidth={24}
+      onMenuPress ={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.scrollView}>
         {/* Notification 1 */}
         <Card style={styles.cardStyle}>
           <View style={styles.cardContent}>
             <View style={styles.flex1}>
               <View style={styles.flexDirectionRow}>
-                <Image source={require('../Assets/info1.png')} style={styles.icon} />
+                <Image source={require('../assets/info1.png')} style={styles.icon} />
                 <Text style={styles.textColor}>Duty Rejection By Admin</Text>
               </View>
               <Text style={styles.rejectionText}>Your Booking Request is rejected by the Admin</Text>
             </View>
           </View>
           <View style={styles.cardFooter}>
-            <Image source={require('../Assets/calendar.png')} style={styles.icon} />
+            <Image source={require('../assets/calendar.png')} style={styles.icon} />
             <Text style={styles.footerText}>09-AUG-2022</Text>
-            <Image source={require('../Assets/watch.png')} style={styles.icon} />
+            <Image source={require('../assets/watch.png')} style={styles.icon} />
             <Text style={styles.footerText}>01:30 AM</Text>
           </View>
         </Card>
@@ -34,7 +38,7 @@ const Notification = () => {
           <View style={styles.cardContent}>
             <View style={styles.flex1}>
               <View style={styles.flexDirectionRow}>
-                <Image source={require('../Assets/info1.png')} style={styles.icon} />
+                <Image source={require('../assets/info1.png')} style={styles.icon} />
                 <Text style={styles.textColor}>Booking Confirmation By KTC</Text>
               </View>
               <Text style={styles.confirmationText}>
@@ -43,9 +47,9 @@ const Notification = () => {
             </View>
           </View>
           <View style={styles.cardFooter}>
-            <Image source={require('../Assets/calendar.png')} style={styles.icon} />
+            <Image source={require('../assets/calendar.png')} style={styles.icon} />
             <Text style={styles.footerText}>09-AUG-2022</Text>
-            <Image source={require('../Assets/watch.png')} style={styles.icon} />
+            <Image source={require('../assets/watch.png')} style={styles.icon} />
             <Text style={styles.footerText}>01:30 AM</Text>
           </View>
         </Card>
@@ -55,16 +59,16 @@ const Notification = () => {
           <View style={styles.cardContent}>
             <View style={styles.flex1}>
               <View style={styles.flexDirectionRow}>
-                <Image source={require('../Assets/info1.png')} style={styles.icon} />
+                <Image source={require('../assets/info1.png')} style={styles.icon} />
                 <Text style={styles.textColor}>Booking Rejected By KTC</Text>
               </View>
               <Text style={styles.rejectionText}>Apologies! No ride is available currently</Text>
             </View>
           </View>
           <View style={styles.cardFooter}>
-            <Image source={require('../Assets/calendar.png')} style={styles.icon} />
+            <Image source={require('../assets/calendar.png')} style={styles.icon} />
             <Text style={styles.footerText}>09-AUG-2022</Text>
-            <Image source={require('../Assets/watch.png')} style={styles.icon} />
+            <Image source={require('../assets/watch.png')} style={styles.icon} />
             <Text style={styles.footerText}>01:30 AM</Text>
           </View>
         </Card>
@@ -74,32 +78,32 @@ const Notification = () => {
           <View style={styles.cardContent}>
             <View style={styles.flex1}>
               <View style={styles.flexDirectionRow}>
-                <Image source={require('../Assets/info1.png')} style={styles.icon} />
+                <Image source={require('../assets/info1.png')} style={styles.icon} />
                 <Text style={[styles.textColor, styles.greenText]}>Booking Details</Text>
               </View>
               <Text style={styles.detailsText}>Thanks for choosing KTC!</Text>
             </View>
           </View>
           <View style={styles.detailRow}>
-            <Image source={require('../Assets/360.png')} style={styles.icon} />
+            <Image source={require('../assets/360.png')} style={styles.icon} />
             <Text style={styles.detailText}>Your reference no. is xxxxx</Text>
           </View>
           <View style={styles.detailRow}>
-            <Image source={require('../Assets/car-1.png')} style={styles.icon} />
+            <Image source={require('../assets/car-1.png')} style={styles.icon} />
             <Text style={styles.detailText}>Mercedes xxxx</Text>
           </View>
           <View style={styles.detailRow}>
-            <Image source={require('../Assets/driver.png')} style={styles.icon} />
+            <Image source={require('../assets/driver.png')} style={styles.icon} />
             <Text style={styles.detailText}>Dambar</Text>
           </View>
           <View style={styles.detailRow}>
-            <Image source={require('../Assets/cal.png')} style={styles.icon} />
+            <Image source={require('../assets/cal.png')} style={styles.icon} />
             <Text style={styles.detailText}>9835000000</Text>
           </View>
           <View style={styles.cardFooter}>
-            <Image source={require('../Assets/calendar.png')} style={styles.icon} />
+            <Image source={require('../assets/calendar.png')} style={styles.icon} />
             <Text style={styles.footerText}>09-AUG-2022</Text>
-            <Image source={require('../Assets/watch.png')} style={styles.icon} />
+            <Image source={require('../assets/watch.png')} style={styles.icon} />
             <Text style={styles.footerText}>01:30 AM</Text>
           </View>
         </Card>

@@ -2,14 +2,14 @@
 // Component: HomeScreen1
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, SafeAreaView, ScrollView } from 'react-native';
-import CustomHeader from '../../Reusables/CustomHeader';
-import CustomIconTextInput from '../../Reusables/CustomIconTextInput';
-import CustomTextInpt from '../../Reusables/CustomTextInpt';
-import CustomButton from '../../Reusables/CustomButtons';
+import CustomHeader from '../../component/CustomHeader';
+import CustomIconTextInput from '../../component/CustomIconTextInput';
+import CustomTextInpt from '../../component/CustomTextInpt';
+import CustomButton from '../../component/CustomButtons';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import CalendarTimePicker from '../../Reusables/CalendarTimePicker';
+import CalendarTimePicker from '../../component/CalendarTimePicker';
 import Ionicons from 'react-native-vector-icons/FontAwesome';
-import SidebarMenu from '../../Reusables/SidebarMenu';
+import SidebarMenu from '../../component/SidebarMenu';
 
 const HomeScreen1 = ({ navigation }) => {
     const [isVisible, setisVisible] = useState(false);
@@ -38,15 +38,15 @@ const HomeScreen1 = ({ navigation }) => {
                     iconHeight={30}
                     iconWidth={39}
                     islogo={true}
-                    imgPath={require('../../Assets/ktclogo.png')}
-                    iconPath={require('../../Assets/menuu.png')}
+                    imgPath={require('../../assets/ktclogo.png')}
+                    iconPath={require('../../assets/menuu.png')}
                     onMenuPress={handleMenuPress}
                     isSidebarVisible={isSidebarVisible}
                 />
                 <View style={styles.container}>
                     <CustomIconTextInput
-                        icon1={require('../../Assets/place.png')}
-                        icon2={require('../../Assets/navigateback.png')}
+                        icon1={require('../../assets/place.png')}
+                        icon2={require('../../assets/navigateback.png')}
                         placeholder={'Delhi NCR'}
                     />
                     <CustomTextInpt placeholder={'MapmyIndia Head Office New Delhi, 237, Okh...'} />
@@ -67,7 +67,7 @@ const HomeScreen1 = ({ navigation }) => {
                     </View>
                     <View style={styles.tripContainer}>
                         <View style={styles.tripRow}>
-                            <Image source={require('../../Assets/car-bg.png')} style={styles.tripIcon} />
+                            <Image source={require('../../assets/car-bg.png')} style={styles.tripIcon} />
                             <TouchableOpacity >
                                 <Text style={styles.tripText}>Start Trip</Text>
                             </TouchableOpacity>
@@ -75,7 +75,7 @@ const HomeScreen1 = ({ navigation }) => {
                             <TouchableOpacity>
                                 <Text style={styles.tripText}>End Trip</Text>
                             </TouchableOpacity>
-                            <Image source={require('../../Assets/carbw.png')} style={styles.tripIcon} />
+                            <Image source={require('../../assets/carbw.png')} style={styles.tripIcon} />
                         </View>
                         <CalendarTimePicker />
                     </View>

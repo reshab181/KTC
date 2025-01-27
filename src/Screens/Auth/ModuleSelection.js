@@ -11,7 +11,7 @@ import {
   Alert
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import CustomHeader from '../../Reusables/CustomHeader';
+import CustomHeader from '../../component/CustomHeader';
 import RegisterPOPUP from './RegisterPopUp';
 
 const ModuleSelectionUI = () => {
@@ -69,17 +69,17 @@ const ModuleSelectionUI = () => {
           onClose={closeModal} 
         />
       )}
-      <CustomHeader imgPath={require('../../Assets/ktclogo.png')} justifyContent={'center'} />
+      <CustomHeader imgPath={require('../../assets/ktclogo.png')} justifyContent={'center'} />
       <View style={styles.contentContainer}>
         <ModuleCard
           title="Corporate"
-          image={require('../../Assets/Corporate.png')}
+          image={require('../../assets/Corporate.png')}
           description="Chauffeur Corporate"
           onPress={() => handleModuleClick('Corporate')}
         />
         <ModuleCard
           title="Personal"
-          image={require('../../Assets/Personal.png')}
+          image={require('../../assets/Personal.png')}
           description="Personal Module"
           onPress={() => handleModuleClick('Personal')}
         />

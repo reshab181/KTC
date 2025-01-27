@@ -1,6 +1,7 @@
 import axios from 'axios';
-import Api from '../Services/Api';
-import Static from '../Services/Static';
+import Api from '../services/Api';
+import Static from '../services/Static';
+
 
 // Create an Axios instance with a custom configuration
 const axiosInstance = axios.create({

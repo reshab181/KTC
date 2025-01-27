@@ -4,13 +4,13 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import CustomHeader from '../../Reusables/CustomHeader';
-import CustomDropdown from '../../Reusables/CustomDropdown';
-import CustomTextInpt from '../../Reusables/CustomTextInpt';
-import CustomCalender from '../../Reusables/CustomCalender';
-import CustomButton from '../../Reusables/CustomButtons';
-import CustomCarGrouptile from '../../Reusables/CustomCarGrouptile';
-import SidebarMenu from '../../Reusables/SidebarMenu';
+import CustomHeader from '../../component/CustomHeader';
+import CustomDropdown from '../../component/CustomDropdown';
+import CustomTextInpt from '../../component/CustomTextInpt';
+import CustomCalender from '../../component/CustomCalender';
+import CustomButton from '../../component/CustomButtons';
+import CustomCarGrouptile from '../../component/CustomCarGrouptile';
+import SidebarMenu from '../../component/SidebarMenu';
 
 const CorporateModule1 = ({ navigation }) => {
   const [value, setValue] = useState(null);
@@ -50,8 +50,8 @@ const CorporateModule1 = ({ navigation }) => {
             iconHeight={30}
             iconWidth={39}
             islogo={true}
-            imgPath={require('../../Assets/ktclogo.png')}
-            iconPath={require('../../Assets/menuu.png')}
+            imgPath={require('../../assets/ktclogo.png')}
+            iconPath={require('../../assets/menuu.png')}
             onMenuPress={handleMenuPress}
             isSidebarVisible={isSidebarVisible} 
           />

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, Image } from 'react-native';
-import CustomHeader from '../../Reusables/CustomHeader';
+import CustomHeader from '../../component/CustomHeader';
 import Upcoming from './Upcoming';
 // import MapIndex from '../Map/MapIndex';
 
@@ -23,7 +23,7 @@ const Track = ({
     return (
         <SafeAreaView style={styles.safeArea}>
             {/* //Ashutosh  */}
-            <CustomHeader iconPath={require('../../Assets/ic_back_arrow_white_24.png')}
+            <CustomHeader iconPath={require('../../assets/ic_back_arrow_white_24.png')}
                 title={"Track Chauffer"}
                 iconHeight={24}
                 iconWidth={24}
@@ -33,7 +33,7 @@ const Track = ({
 
             {/* <View style={styles.header}>
                 <TouchableOpacity onPress={onBack} style={styles.backButton}>
-                    <Image source={require('../../Assets/ic_back_arrow_white_24.png')} />
+                    <Image source={require('../../assets/ic_back_arrow_white_24.png')} />
                 </TouchableOpacity>
                 <CustomHeader title="Track Chauffeur" />
             </View> */}
@@ -49,7 +49,7 @@ const Track = ({
                     <View style={styles.timeContainer}>
                         <Text style={styles.durationText}>{duration}</Text>
                         <Image
-                            source={require('../../Assets/cardemo.png')}
+                            source={require('../../assets/cardemo.png')}
                             style={styles.image}
                             onError={() => console.warn('Car image failed to load')}
                         />
@@ -64,7 +64,7 @@ const Track = ({
                 <View style={styles.actionButtonsContainer}>
                     <TouchableOpacity style={styles.actionButton} onPress={onCallDriver}>
                         <Image
-                            source={require('../../Assets/call.png')}
+                            source={require('../../assets/call.png')}
                             style={styles.bottomimage}
                         />
                         <Text style={styles.actionButtonText}>Call Driver</Text>
@@ -72,7 +72,7 @@ const Track = ({
 
                     <TouchableOpacity style={styles.actionButton} onPress={onViewLandmark}>
                         <Image
-                            source={require('../../Assets/land-mark.png')}
+                            source={require('../../assets/land-mark.png')}
                             style={styles.bottomimage}
                         />
                         <Text style={styles.actionButtonText}>Landmark</Text>
@@ -80,7 +80,7 @@ const Track = ({
 
                     <TouchableOpacity style={[styles.actionButton, styles.cancelButton]} onPress={onCancelRide}>
                         <Image
-                            source={require('../../Assets/cancel.png')}
+                            source={require('../../assets/cancel.png')}
                             style={styles.bottomimage}
                         />
                         <Text style={styles.actionButtonText}>Cancel Ride</Text>

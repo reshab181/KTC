@@ -2,11 +2,11 @@
 // Component: MyBooking 
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import CustomHeader from '../../Reusables/CustomHeader';
-import ProgessCard from '../../Reusables/ProgessCard';
+import CustomHeader from '../../component/CustomHeader';
+import ProgessCard from '../../component/ProgessCard';
 import { Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import CustomButton from '../../Reusables/CustomButtons';
+import CustomButton from '../../component/CustomButtons';
 import { useNavigation } from '@react-navigation/native';
 
 const MyBooking = ({navigation}) => {
@@ -16,7 +16,7 @@ const MyBooking = ({navigation}) => {
       <ScrollView>
         <CustomHeader
           title="My Booking"
-          iconPath={require('../../Assets/icbackarrow.png')}
+          iconPath={require('../../assets/icbackarrow.png')}
           iconHeight={24}
           iconWidth={24}
           handleLeftIcon={()=>{navigation.goBack()}}
@@ -31,7 +31,7 @@ const MyBooking = ({navigation}) => {
               <Text>Booking ID: 229675</Text>
             </View>
           </View>
-          <Image source={require('../../Assets/cardemo.png')} />
+          <Image source={require('../../assets/cardemo.png')} />
           <View style={{ marginHorizontal: 14 , paddingBottom: 10 , }}>
             <Text style={{color: '#212121', fontWeight: '500', marginVertical: 10 , fontSize: 14}}>Santosh Kumar Jha</Text>
             <View style={{ flexDirection: 'row', alignItems: 'center' , marginBottom: 10 }}>

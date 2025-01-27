@@ -3,11 +3,11 @@
 // import { StyleSheet, Text, View } from 'react-native';
 // import { useWindowDimensions } from 'react-native';
 // import React, { useState } from 'react';
-// import CustomHeader from '../../Reusables/CustomHeader';
-// import CustomTextInpt from '../../Reusables/CustomTextInpt';
-// import CustomButton from '../../Reusables/CustomButtons';
+// import CustomHeader from '../../Component/CustomHeader';
+// import CustomTextInpt from '../../Component/CustomTextInpt';
+// import CustomButton from '../../Component/CustomButtons';
 // import Modal from "react-native-modal";
-// import CustomModal from '../../Reusables/CustomModals';
+// import CustomModal from '../../Component/CustomModals';
 // import { fetchJwtAccess } from '../../Utils/JwtHelper';
 
 // const ResetPassword = ({navigation}) => {
@@ -72,12 +72,12 @@
 import { StyleSheet, View, Alert } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import CustomHeader from '../../Reusables/CustomHeader';
-import CustomTextInpt from '../../Reusables/CustomTextInpt';
-import CustomButton from '../../Reusables/CustomButtons';
+import CustomHeader from '../../component/CustomHeader';
+import CustomTextInpt from '../../component/CustomTextInpt';
+import CustomButton from '../../component/CustomButtons';
 import Modal from "react-native-modal";
 import { useNavigation, useRoute } from '@react-navigation/native';
-import CustomModal from '../../Reusables/CustomModals';
+import CustomModal from '../../component/CustomModals';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import { resetPassword } from '../../Api/Authentication';
 

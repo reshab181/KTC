@@ -8,9 +8,9 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
-import CustomHeader from '../../Reusables/CustomHeader';
-import CustomTextInpt from '../../Reusables/CustomTextInpt';
-import CustomButton from '../../Reusables/CustomButtons';
+import CustomHeader from '../../component/CustomHeader';
+import CustomTextInpt from '../../component/CustomTextInpt';
+import CustomButton from '../../component/CustomButtons';
 import { emailsms } from '../../Api/Authentication';
 
 const { height, width } = Dimensions.get('screen');

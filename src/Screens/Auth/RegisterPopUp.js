@@ -101,7 +101,7 @@
 //                 <View style={styles.header}>
 //                   <Text style={styles.headerText}>Register</Text>
 //                   <TouchableOpacity onPress={onClose}>
-//                     <Image source={require('../../Assets/close.png')} />
+//                     <Image source={require('../../assets/close.png')} />
 //                   </TouchableOpacity>
 //                 </View>
 //                 <View style={{marginHorizontal: 16 , marginTop: 14 , marginBottom: 19}}>
@@ -198,11 +198,12 @@ import {
 import { Formik } from 'formik';
 import { useNavigation } from '@react-navigation/native';
 
-import CustomTextInpt from '../../Reusables/CustomTextInpt';
-import CustomButton from '../../Reusables/CustomButtons';
+import CustomTextInpt from '../../component/CustomTextInpt';
+import CustomButton from '../../component/CustomButtons';
 
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import { registrationHandler } from '../../Api/Authentication';
+
 
 const { height } = Dimensions.get('screen');
 
@@ -238,8 +239,8 @@ const RegisterPOPUP = ({ onClose }) => {
               return errors;
             }}
             onSubmit={({ email }) => {
-              navigation.navigate('OTPRegister');
-              // registrationHandler(email, userType, accessToken,navigation, setLoader)
+              // navigation.navigate('OTPRegister');
+              registrationHandler(email, userType, accessToken,navigation, setLoader)
             }}
           >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
@@ -247,7 +248,7 @@ const RegisterPOPUP = ({ onClose }) => {
                 <View style={styles.header}>
                   <Text style={styles.headerText}>Register</Text>
                   <TouchableOpacity onPress={onClose}>
-                    <Image source={require('../../Assets/close.png')} />
+                    <Image source={require('../../assets/close.png')} />
                   </TouchableOpacity>
                 </View>
                 <View style={{ marginHorizontal: 16, marginTop: 14, marginBottom: 19 }}>

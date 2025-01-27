@@ -2,8 +2,8 @@
 // import { useWindowDimensions } from 'react-native';
 // import React from 'react';
 // import { TextInput } from 'react-native-paper';
-// import CustomButton from '../../Reusables/CustomButtons';
-// import CustomHeader from '../../Reusables/CustomHeader';
+// import CustomButton from '../../component/CustomButtons';
+// import CustomHeader from '../../component/CustomHeader';
 
 // const OtpRegister = ({route}) => {
 //   const styles = useStyles();
@@ -13,7 +13,7 @@
 //     <View style={styles.root}>
 //         <CustomHeader title={"Register"}/>
 //       <Image
-//         source={require('../../Assets/frgtpwdotp.png')}
+//         source={require('../../assets/frgtpwdotp.png')}
 //         style={styles.img}
 //       />
 //       <Text style={styles.txt}>
@@ -113,8 +113,8 @@
 // import React, { useState } from 'react';
 // import { TextInput } from 'react-native-paper';
 // import { useNavigation } from '@react-navigation/native';
-// import CustomButton from '../../Reusables/CustomButtons';
-// import CustomHeader from '../../Reusables/CustomHeader';
+// import CustomButton from '../../component/CustomButtons';
+// import CustomHeader from '../../component/CustomHeader';
 // import { verifyOTP } from '../../Api/Authentication'; 
 // import RNHash from 'react-native-hash';
 
@@ -172,7 +172,7 @@
 //     <View style={styles.root}>
 //       <CustomHeader title={"Register"} />
 //       <Image
-//         source={require('../../Assets/frgtpwdotp.png')}
+//         source={require('../../assets/frgtpwdotp.png')}
 //         style={styles.img}
 //       />
 //       <Text style={styles.txt}>
@@ -279,8 +279,8 @@ import { StyleSheet, Text, View, Image, Alert } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
-import CustomButton from '../../Reusables/CustomButtons';
-import CustomHeader from '../../Reusables/CustomHeader';
+import CustomButton from '../../component/CustomButtons';
+import CustomHeader from '../../component/CustomHeader';
 import { verifyOTP } from '../../Api/Authentication';
 import RNHash from 'react-native-hash';
 
@@ -362,7 +362,7 @@ const OtpRegister = ({ route }) => {
     <View style={styles.root}>
       <CustomHeader title="Register" />
       <Image
-        source={require('../../Assets/frgtpwdotp.png')}
+        source={require('../../assets/frgtpwdotp.png')}
         style={styles.img}
       />
       <Text style={styles.txt}>

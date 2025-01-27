@@ -3,9 +3,9 @@
 
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View, ScrollView } from 'react-native';
-import CustomHeader from '../../Reusables/CustomHeader';
-import CustomButton from '../../Reusables/CustomButtons';
-import CarCard from '../../Reusables/CarCard';
+import CustomHeader from '../../component/CustomHeader';
+import CustomButton from '../../component/CustomButtons';
+import CarCard from '../../component/CarCard';
 
 const CarSelection = ({ navigation }) => {
   return (
@@ -13,7 +13,7 @@ const CarSelection = ({ navigation }) => {
       <ScrollView>
         <CustomHeader
           title="Car Selection"
-          iconPath={require('../../Assets/icbackarrow.png')}
+          iconPath={require('../../assets/icbackarrow.png')}
           iconHeight={24}
           iconWidth={24}
           handleLeftIcon={() => navigation.goBack()}
@@ -57,8 +57,8 @@ const CarSelection = ({ navigation }) => {
           {[...Array(4)].map((_, index) => (
             <CarCard
               key={index}
-              iconPath={require('../../Assets/infobtn.png')}
-              imgPath={require('../../Assets/cardemo.png')}
+              iconPath={require('../../assets/infobtn.png')}
+              imgPath={require('../../assets/cardemo.png')}
             />
           ))}
         </View>

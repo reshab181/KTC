@@ -4,7 +4,6 @@
 
 import React, { useState, useEffect } from 'react';
 import {
-  Dimensions,
   StyleSheet,
   SafeAreaView,
   Text,
@@ -14,11 +13,11 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
-import CustomHeader from '../../Reusables/CustomHeader';
-import CustomTextInpt from '../../Reusables/CustomTextInpt';
-import CustomButton from '../../Reusables/CustomButtons';
+import CustomHeader from '../../component/CustomHeader';
+import CustomTextInpt from '../../component/CustomTextInpt';
+import CustomButton from '../../component/CustomButtons';
 import { handleSignIn } from '../../Api/Authentication';
-import CorporateModule1 from '../Pages/CorporateModule1';
+
 
 const SignInCorporate = ({ route }) => {
   const { email: prefilledEmail } = route.params || {};
@@ -65,10 +64,10 @@ const SignInCorporate = ({ route }) => {
     setLoading(true);
 
     try {
-      // await handleSignIn(email, password, accessToken, navigation, setLoading);
-      navigation.replace('MainApp', {
-        screen: 'CorporateModule1',
-      })
+      await handleSignIn(email, password, accessToken, navigation, setLoading);
+      // navigation.replace('MainApp', {
+      //   screen: 'CorporateModule1',
+      // })
     } catch (error) {
       Alert.alert('Sign In Error', error.message || 'Unable to sign in.');
     } finally {
