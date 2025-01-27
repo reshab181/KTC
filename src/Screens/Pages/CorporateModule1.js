@@ -30,9 +30,9 @@ const CorporateModule1 = ({ navigation }) => {
     const [value, setValue] = useState(null);
     const [isFocus, setIsFocus] = useState(false);
     const cityData = [
-        { label: 'New York', value: 'ny' },
-        { label: 'Los Angeles', value: 'la' },
-        { label: 'Chicago', value: 'chi' },
+        { label: 'Delhi', value: 'Delhi' },
+        { label: 'Jharkhand', value: 'Jharkhand' },
+        { label: 'Ranchi', value: 'Ranchi' },
     ];
 
     const rentalTypeData = [

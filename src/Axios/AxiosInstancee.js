@@ -5,20 +5,39 @@ import Static from '../Services/Static';
 // Create an Axios instance with a custom configuration
 const axiosInstance = axios.create({
   baseURL: Api.BASE_URL,
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded', // Default Content-Type
+  },
 });
-// `${Api.BASE_URL}${Api.Jwt_TOKEN}`
+
 export const getToken = async () => {
   try {
-    const response = await axiosInstance.post(Api.Jwt_TOKEN, {
-      headers: {
-        jwt: '',
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: `access_codename_jwt=${Static.ACCESS_CODE_NAME}&access_codepass_jwt=${Static.ACCESS_CODE_PASS}`,
-    })
+    // Construct the request body
+    const requestBody = new URLSearchParams();
+    requestBody.append('access_codename_jwt', Static.ACCESS_CODE_NAME);
+    requestBody.append('access_codepass_jwt', Static.ACCESS_CODE_PASS);
 
-    console.log("Caling from " , response);
+    const response = await axiosInstance.post(Api.Jwt_TOKEN, 
+      requestBody.toString(), 
+      {
+      headers: {
+        jwt: '', 
+      },
+
+    });
+    const token = response.data?.jwt;
+    if (!token) {
+      throw new Error('Token not retrieved');
+    }
+
+    return token;
   } catch (error) {
-    console.error('Error fetching user:', error.message);
+    console.error('JWT Fetch Error:', error);
+    Alert.alert('Error', 'Failed to retrieve access token.');
+    return null;
   }
+};
+
+export const getSignIn = async () =>{
+  
 }

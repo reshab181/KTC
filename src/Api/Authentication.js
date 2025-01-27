@@ -267,7 +267,6 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
       },
       body: formBody,
     });
-
     const data = await response.json();
     if (data?.jwt) {
       await AsyncStorage.setItem('token', data.jwt);

@@ -20,6 +20,8 @@ import CustomTextInpt from '../../Reusables/CustomTextInpt';
 import CustomButton from '../../Reusables/CustomButtons';
 import { getToken } from '../../Axios/AxiosInstancee';
 import { registrationHandler } from '../../Api/Authentication';
+import { fetchJwtAccess } from '../../Utils/JwtHelper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const { height } = Dimensions.get('screen');
 
@@ -32,12 +34,13 @@ const RegisterPOPUP = ({ onClose }) => {
 
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-  // Fetch access token
   useEffect(() => {
     const fetchAccessToken = async () => {
+      // const token = await fetchJwtAccess();
       const token = await getToken();
       if (token) {
         setAccessToken(token);
+        AsyncStorage.setItem('AccessToken', token)
       } else {
         Alert.alert('Error', 'Failed to fetch access token.');
       }
@@ -152,7 +155,6 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   formContainer: {
-    // padding: 20,
   },
   header: {
     flexDirection: 'row',
