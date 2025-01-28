@@ -5,7 +5,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux"; 
 import store from "./src/Redux/store"; 
 
-import Splash from "./src/Screens/basic/Splash";
+import Splash from "./src/Screens/Basic/Splash";
 import ModuleSelectionUI from "./src/Screens/Auth/ModuleSelection";
 import RegisterPOPUP from "./src/Screens/Auth/RegisterPopUp";
 import Register from "./src/Screens/Auth/Register";
@@ -15,7 +15,7 @@ import ForgotPasswordOTP from "./src/Screens/Auth/ForgotPasswordOTP";
 import PersonalRegister from "./src/Screens/Auth/PersonalRegister";
 import ResetPassword from "./src/Screens/Auth/ResetPassword";
 import CorporateModule1 from "./src/Screens/Pages/CorporateModule1";
-import Profile from "./src/Screens/basic/Profile";
+import Profile from "./src/Screens/Basic/Profile";
 import PickUpLocation from "./src/Screens/Pages/PickUpLocation";
 import HomeScreen1 from "./src/Screens/Pages/HomeScreen1";
 import CarGroup from "./src/Screens/Pages/CarGroup";

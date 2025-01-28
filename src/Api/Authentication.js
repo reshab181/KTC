@@ -26,11 +26,11 @@ export const decryptData = (encryptedData) => {
   const rawData = CryptoJS.enc.Base64.parse(encryptedData);
   const key = CryptoJS.enc.Latin1.parse(ClientKey);
   const iv = CryptoJS.enc.Latin1.parse(ClientID);
-  
+
   const decryptedData = CryptoJS.AES.decrypt(
-      { ciphertext: rawData },
-      key,
-      { iv: iv }
+    { ciphertext: rawData },
+    key,
+    { iv: iv }
   );
 
   return JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
@@ -49,88 +49,88 @@ export const registrationHandler = debounce(
       const encryptedPayload = encryptPayload(payload);
 
       const response = await axios.post(
-     Api.USER_REGISTRATION,
-      `request_data=${encodeURIComponent(encryptedPayload)}`,
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          jwt: accessToken,
-        },
-      }
+        Api.USER_REGISTRATION,
+        `request_data=${encodeURIComponent(encryptedPayload)}`,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            jwt: accessToken,
+          },
+        }
       );
 
-const data = response.data;
-console.log(data, "Response from USER_REGISTRATION");
+      const data = response.data;
+      console.log(data, "Response from USER_REGISTRATION");
 
-if (data?.message === 'Invalid Domain Name.') {
-  Alert.alert('Invalid Domain!', 'Please contact KTC Admin', [
-    {
-      text: 'OK',
-      onPress: () => navigation.navigate('ModuleSelectionUI'),
-    },
-  ]);
-  return;
-}
+      if (data?.message === 'Invalid Domain Name.') {
+        Alert.alert('Invalid Domain!', 'Please contact KTC Admin', [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('ModuleSelectionUI'),
+          },
+        ]);
+        return;
+      }
 
-if (data?.newuser === 'No') {
-  navigation.navigate('SignInCorporate', {
-    email,
-    from: 'RegisterPOPUP',
-  });
-} else if (data?.newuser === 'Yes') {
-  const mmiToken = await tokenFromMMI();
+      if (data?.newuser === 'No') {
+        navigation.navigate('SignInCorporate', {
+          email,
+          from: 'RegisterPOPUP',
+        });
+      } else if (data?.newuser === 'Yes') {
+        const mmiToken = await tokenFromMMI();
 
-  const otpUrl = `https://anchor.mapmyindia.com/api/users/authenticate?handle=${email}&autoMigrate`;
-  const otpResponse = await axios.post(
-    otpUrl,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${mmiToken?.access_token}`,
-      },
-    }
-  );
+        const otpUrl = `https://anchor.mapmyindia.com/api/users/authenticate?handle=${email}&autoMigrate`;
+        const otpResponse = await axios.post(
+          otpUrl,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${mmiToken?.access_token}`,
+            },
+          }
+        );
 
-  if (otpResponse.status >= 200 && otpResponse.status < 300) {
-    const otpScreen = userType === 'corporate' ? 'OTPRegister' : null;
-    navigation.navigate(otpScreen, {
-      emailId: email,
-      client_id: userType === 'corporate' ? data?.client_id : 'PERSONAL',
-      url: otpResponse?.headers?.location,
-    });
-  }
-}
+        if (otpResponse.status >= 200 && otpResponse.status < 300) {
+          const otpScreen = userType === 'corporate' ? 'OTPRegister' : null;
+          navigation.navigate(otpScreen, {
+            emailId: email,
+            client_id: userType === 'corporate' ? data?.client_id : 'PERSONAL',
+            url: otpResponse?.headers?.location,
+          });
+        }
+      }
     } catch (error) {
-  console.error('Registration Error:', error);
-  Alert.alert('Error', 'Failed to register. Please try again.');
-} finally {
-  setLoader(false);
-}
+      console.error('Registration Error:', error);
+      Alert.alert('Error', 'Failed to register. Please try again.');
+    } finally {
+      setLoader(false);
+    }
   },
-300
+  300
 );
 
 export const registerUser = async (userData, accessToken) => {
   try {
-      const encryptedPayload = encryptPayload(userData);
+    const encryptedPayload = encryptPayload(userData);
 
-      const formBody = new URLSearchParams({
-          request_data: encryptedPayload
-      }).toString();
+    const formBody = new URLSearchParams({
+      request_data: encryptedPayload
+    }).toString();
 
-      const response = await fetch('https://web.gst.fleet.ktcindia.com/user_apis_encoded/user_registration.php', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-              jwt: accessToken
-          },
-          body: formBody
-      });
+    const response = await fetch('https://web.gst.fleet.ktcindia.com/user_apis_encoded/user_registration.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        jwt: accessToken
+      },
+      body: formBody
+    });
 
-      const responseData = await response.json();
-      return responseData;
+    const responseData = await response.json();
+    return responseData;
   } catch (error) {
-      throw new Error('Registration failed. Please try again.');
+    throw new Error('Registration failed. Please try again.');
   }
 };
 
@@ -158,8 +158,8 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
     });
 
     const data = response.data;
-    console.log(data,"login data");
-    
+    console.log(data, "login data");
+
     if (data?.jwt) {
       await AsyncStorage.setItem('token', data.jwt);
       Alert.alert('Success', 'Logged in successfully!');
@@ -392,7 +392,7 @@ export const verifyOTP = async (url, passPhrase) => {
 //       setLoader(false);
 //     }
 //   },
-//   300 
+//   300
 // );
 
 
@@ -426,12 +426,12 @@ export const verifyOTP = async (url, passPhrase) => {
 
 
 
-//       return data; 
+//       return data;
 
 //     } catch (error) {
 //       console.error('Registration Error:', error);
 //       Alert.alert('Error', 'Failed to register. Please try again.');
-//       throw error; 
+//       throw error;
 //     }
 //   };
 // export const handleSignIn = async (email, password, accessToken, navigation, setLoading) => {
@@ -517,7 +517,7 @@ export const verifyOTP = async (url, passPhrase) => {
 //       console.log(locationUrl, "URL retrieved successfully.");
 //       console.log(accessToken,"aa gya token chalo ghumne");
 
-//       return locationUrl; 
+//       return locationUrl;
 //     } else {
 //       const errorData = await response.json();
 //       Alert.alert('Error', 'Failed to send OTP. Please try again.');

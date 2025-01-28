@@ -8,13 +8,13 @@ import CustomTextInpt from '../../component/CustomTextInpt';
 import CustomButton from '../../component/CustomButtons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CalendarTimePicker from '../../component/CalendarTimePicker';
-import Ionicons from 'react-native-vector-icons/FontAwesome';
 import SidebarMenu from '../../component/SidebarMenu';
 
 const HomeScreen1 = ({ navigation }) => {
     const [isVisible, setisVisible] = useState(false);
     const [rentalType, setRentalType] = useState('Rental Type');
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+
     const cityData = [
         { label: 'Local Run - Full day', value: 'FD' },
         { label: 'Local Run - Half day', value: 'HD' },
@@ -33,7 +33,8 @@ const HomeScreen1 = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.root}>
-            <ScrollView>
+            {/* Fixed Header */}
+            <View style={styles.headerContainer}>
                 <CustomHeader
                     iconHeight={30}
                     iconWidth={39}
@@ -43,6 +44,10 @@ const HomeScreen1 = ({ navigation }) => {
                     onMenuPress={handleMenuPress}
                     isSidebarVisible={isSidebarVisible}
                 />
+            </View>
+
+            {/* Scrollable Content */}
+            <ScrollView style={styles.ScrollView}>
                 <View style={styles.container}>
                     <CustomIconTextInput
                         icon1={require('../../assets/place.png')}
@@ -58,9 +63,15 @@ const HomeScreen1 = ({ navigation }) => {
                         {isVisible && (
                             <View style={styles.dropdownList}>
                                 {cityData.map((item, index) => {
-                                    return (<TouchableOpacity key={index} onPress={() => handleItemPress(item)} style={styles.listItemContainer}>
-                                        <Text style={styles.listItem}>{item.label}</Text>
-                                    </TouchableOpacity>)
+                                    return (
+                                        <TouchableOpacity
+                                            key={index}
+                                            onPress={() => handleItemPress(item)}
+                                            style={styles.listItemContainer}
+                                        >
+                                            <Text style={styles.listItem}>{item.label}</Text>
+                                        </TouchableOpacity>
+                                    );
                                 })}
                             </View>
                         )}
@@ -68,10 +79,10 @@ const HomeScreen1 = ({ navigation }) => {
                     <View style={styles.tripContainer}>
                         <View style={styles.tripRow}>
                             <Image source={require('../../assets/car-bg.png')} style={styles.tripIcon} />
-                            <TouchableOpacity >
+                            <TouchableOpacity>
                                 <Text style={styles.tripText}>Start Trip</Text>
                             </TouchableOpacity>
-                            <Icon name='chevron-right' />
+                            <Icon name="chevron-right" />
                             <TouchableOpacity>
                                 <Text style={styles.tripText}>End Trip</Text>
                             </TouchableOpacity>
@@ -81,13 +92,14 @@ const HomeScreen1 = ({ navigation }) => {
                     </View>
                 </View>
             </ScrollView>
+
+            {/* Footer */}
             <View style={styles.footer}>
                 <CustomButton title="Continue" widthSize="100%" borderRadius={0} onPress={() => navigation.navigate('CarGroup')} />
             </View>
-            <SidebarMenu
-                isVisible={isSidebarVisible}
-                onClose={() => setIsSidebarVisible(false)}
-            />
+
+            {/* Sidebar */}
+            <SidebarMenu isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
         </SafeAreaView>
     );
 };
@@ -99,8 +111,25 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F1F1F3',
     },
+    headerContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 10,
+        backgroundColor: '#FFFFFF',
+        elevation: 5, // Add shadow for Android
+        shadowColor: '#000', // Add shadow for iOS
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+    },
+    ScrollView: {
+        marginTop: 40, // Adjust to prevent overlap with header
+    },
     container: {
         margin: 16,
+        paddingTop: 16,
     },
     dropdownContainer: {
         marginTop: 16,

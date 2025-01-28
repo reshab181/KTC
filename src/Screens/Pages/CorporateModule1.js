@@ -43,20 +43,21 @@ const CorporateModule1 = ({ navigation }) => {
 
   return (
     <View style={styles.mainContainer}>
-      <ScrollView>
-        <View style={styles.root}>
-          {/* Header Section */}
-          <CustomHeader
-            iconHeight={30}
-            iconWidth={39}
-            islogo={true}
-            imgPath={require('../../assets/ktclogo.png')}
-            iconPath={require('../../assets/menuu.png')}
-            onMenuPress={handleMenuPress}
-            isSidebarVisible={isSidebarVisible} 
-          />
+      {/* Fixed Header */}
+      {/* <View style={styles.headerContainer}> */}
+        <CustomHeader
+          iconHeight={30}
+          iconWidth={39}
+          islogo={true}
+          imgPath={require('../../assets/ktclogo.png')}
+          iconPath={require('../../assets/menuu.png')}
+          onMenuPress={handleMenuPress}
+          isSidebarVisible={isSidebarVisible}
+        />
+      {/* </View> */}
 
-          {/* Car Reservation Details */}
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.root}>
           <View style={styles.container}>
             <View>
               <View style={styles.container1}>
@@ -87,7 +88,6 @@ const CorporateModule1 = ({ navigation }) => {
             </View>
           </View>
 
-          {/* Car Reporting Details */}
           <View style={styles.container}>
             <View>
               <View style={styles.container1}>
@@ -109,7 +109,6 @@ const CorporateModule1 = ({ navigation }) => {
             </View>
           </View>
 
-          {/* Other Information */}
           <View style={styles.container}>
             <View>
               <View style={styles.container1}>
@@ -130,7 +129,6 @@ const CorporateModule1 = ({ navigation }) => {
             </View>
           </View>
 
-          {/* Next Button */}
           <CustomButton
             title={'Next'}
             borderRadius={0}
@@ -141,7 +139,6 @@ const CorporateModule1 = ({ navigation }) => {
         </View>
       </ScrollView>
 
-     
       <SidebarMenu
         isVisible={isSidebarVisible}
         onClose={() => setIsSidebarVisible(false)}
@@ -150,8 +147,6 @@ const CorporateModule1 = ({ navigation }) => {
   );
 };
 
-export default CorporateModule1;
-
 // Styles
 function useStyles() {
   const { width: winwidth, height: winheight } = useWindowDimensions();
@@ -159,6 +154,10 @@ function useStyles() {
     mainContainer: {
       flex: 1,
       backgroundColor: '#F1F1F3',
+    },
+  
+    scrollContainer: {
+      paddingTop: 20, 
     },
     root: {
       flex: 1,
@@ -184,32 +183,7 @@ function useStyles() {
       color: '#FFFFFF',
       fontSize: 12,
     },
-    dropdown: {
-      marginTop: 10,
-      marginHorizontal: 10,
-      height: 50,
-      borderColor: 'gray',
-      borderWidth: 0.5,
-      borderRadius: 8,
-      paddingHorizontal: 8,
-    },
-    icon: {
-      marginRight: 5,
-    },
-    label: {
-      position: 'absolute',
-      backgroundColor: 'white',
-      left: 22,
-      top: 8,
-      zIndex: 999,
-      paddingHorizontal: 8,
-      fontSize: 14,
-    },
-    placeholderStyle: {
-      fontSize: 16,
-    },
-    selectedTextStyle: {
-      fontSize: 16,
-    },
   });
 }
+
+export default CorporateModule1;
