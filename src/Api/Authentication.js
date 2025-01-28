@@ -118,14 +118,14 @@ export const registerUser = async (userData, accessToken) => {
       request_data: encryptedPayload
     }).toString();
 
-    const response = await fetch('https://web.gst.fleet.ktcindia.com/user_apis_encoded/user_registration.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        jwt: accessToken
-      },
-      body: formBody
-    });
+      const response = await fetch('https://web.gst.fleet.ktcindia.com/user_apis_encoded/user_registration.php', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+              'jwt': accessToken
+          },
+          body: formBody
+      });
 
     const responseData = await response.json();
     return responseData;
@@ -176,7 +176,6 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
     setLoading(false);
   }
 };
-
 export const emailsms = async (email, accessToken, navigation, setLoading) => {
   if (!accessToken) {
     Alert.alert('Error', 'Access token is not available.');
@@ -186,21 +185,28 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
   try {
     setLoading(true);
 
+
     const mmiToken = await tokenFromMMI();
     if (!mmiToken?.access_token) {
       throw new Error('Failed to retrieve MMI access token.');
     }
 
+  
     const apiUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
 
-    const response = await axios.post(apiUrl, null, {
-      headers: {
-        Authorization: `Bearer ${mmiToken.access_token}`,
-      },
-    });
 
-    const locationUrl = response.headers.location;
+    const response = await axios.post(
+      apiUrl,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${mmiToken.access_token}`,
+        },
+      }
+    );
 
+    
+    const locationUrl = response?.headers?.location;
     if (locationUrl) {
       navigation.navigate('OTP', {
         url: locationUrl,
@@ -222,7 +228,6 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
     setLoading(false);
   }
 };
-
 export const resetPassword = async (email, newPassword, confirmPassword, accessToken, setLoading) => {
   setLoading(true);
 

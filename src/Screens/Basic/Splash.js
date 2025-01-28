@@ -12,7 +12,7 @@ const Splash = props => {
   useEffect(() => {
     setTimeout(() => {
       navigation.replace("Auth", { screen: "ModuleSelectionUI" });
-    }, 4000);
+    }, 3000);
   }, [navigation]);
   
 
