@@ -3,7 +3,7 @@
 import React from 'react';
 import { useWindowDimensions, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
-const CustomHeader = ({ title,justifyContent, imgPath, iconPath, iconHeight = 30,handleLeftIcon,  iconWidth = 36 , leftTitle, handlePress,onMenuPress}) => {
+const CustomHeader = ({ title,justifyContent, imgPath, iconPath, iconHeight = 30,handleLeftIcon,  iconWidth = 36 , leftTitle, handlePress}) => {
   const { width: winWidth } = useWindowDimensions();
 
   const styles = StyleSheet.create({
@@ -40,11 +40,10 @@ const CustomHeader = ({ title,justifyContent, imgPath, iconPath, iconHeight = 30
 
     }
   });
-
   return (
     <View style={styles.headerContainer}>
       <View style={styles.header}>
-      <TouchableOpacity onPress={onMenuPress}>
+      <TouchableOpacity onPress={handleLeftIcon}>
       {iconPath && <Image source={iconPath} style={styles.icon} />}
       </TouchableOpacity>
       {imgPath && <Image source={imgPath} style={styles.img} />}

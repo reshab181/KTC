@@ -1,7 +1,7 @@
 // Author: Ashutosh Rai
 // Component: CorporateModule1
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../component/CustomHeader';
@@ -11,17 +11,18 @@ import CustomCalender from '../../component/CustomCalender';
 import CustomButton from '../../component/CustomButtons';
 import CustomCarGrouptile from '../../component/CustomCarGrouptile';
 import SidebarMenu from '../../component/SidebarMenu';
+import { fetchCities } from '../../Api/CorporateModuleApis';
+import { useSelector } from 'react-redux';
+import { fetchJwtAccess } from '../../Utils/JwtHelper';
 
 const CorporateModule1 = ({ navigation }) => {
   const [value, setValue] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-
-  const cityData = [
-    { label: 'New York', value: 'ny' },
-    { label: 'Los Angeles', value: 'la' },
-    { label: 'Chicago', value: 'chi' },
-  ];
+  const userDetails = useSelector((state) => state.userprofile);
+  const [accessToken, setAccessToken] = useState('');
+  const [cityList, setcity] = useState([])
+  const cityData = cityList
 
   const rentalTypeData = [
     { label: 'Daily', value: 'daily' },
@@ -40,21 +41,28 @@ const CorporateModule1 = ({ navigation }) => {
   const handleMenuPress = () => {
     setIsSidebarVisible(true);
   };
+  useEffect(() => {
+    const getAccessToken = async () => {
+      const token = await fetchJwtAccess();
+      if (token) {
+        setAccessToken(token);
+      }
+    };
+    getAccessToken();
+  }, []);
+
 
   return (
     <View style={styles.mainContainer}>
-      {/* Fixed Header */}
-      {/* <View style={styles.headerContainer}> */}
-        <CustomHeader
-          iconHeight={30}
-          iconWidth={39}
-          islogo={true}
-          imgPath={require('../../assets/ktclogo.png')}
-          iconPath={require('../../assets/menuu.png')}
-          onMenuPress={handleMenuPress}
-          isSidebarVisible={isSidebarVisible}
-        />
-      {/* </View> */}
+      <CustomHeader
+        iconHeight={30}
+        iconWidth={39}
+        islogo={true}
+        imgPath={require('../../assets/ktclogo.png')}
+        iconPath={require('../../assets/menuu.png')}
+        handleLeftIcon={handleMenuPress}
+        isSidebarVisible={isSidebarVisible}
+      />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.root}>
@@ -63,14 +71,22 @@ const CorporateModule1 = ({ navigation }) => {
               <View style={styles.container1}>
                 <Text style={styles.txt}>Car Reservation Details</Text>
               </View>
-              <View style={[styles.container2, { height: 196 }]}>
+              <View style={[styles.container2, { height : 190  }]}>
                 <View style={{ marginHorizontal: 10 }}>
-                  <CustomDropdown
-                    data={cityData}
-                    placeholder="City"
-                    searchPlaceholder="Search City..."
-                    onChange={(item) => console.log('Selected City:', item)}
+                  <View style={{marginTop: 10}}>
+                  <CustomCarGrouptile
+                    title={'City'}
+                    onPress={async() => {
+                      const list = await fetchCities('', userDetails,accessToken, setcity , cityList)  
+                      console.log('====================================');
+                      console.log("list", list);
+                      console.log('====================================');
+                      navigation.navigate('City', {list})
+
+                    }}
+                    iconName={'chevron-right'}
                   />
+                  </View>
                   <CustomDropdown
                     data={rentalTypeData}
                     placeholder="Rental Type"
@@ -132,8 +148,8 @@ const CorporateModule1 = ({ navigation }) => {
           <CustomButton
             title={'Next'}
             borderRadius={0}
-            onPress={() => {
-              navigation.navigate('HomeScreen1');
+            onPress={async () => {
+
             }}
           />
         </View>
@@ -155,9 +171,9 @@ function useStyles() {
       flex: 1,
       backgroundColor: '#F1F1F3',
     },
-  
+
     scrollContainer: {
-      paddingTop: 20, 
+      paddingTop: 20,
     },
     root: {
       flex: 1,

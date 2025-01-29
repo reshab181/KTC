@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const TimeTracker = () => {
+const TimeTracker = ({selectTime}) => {
   const [timeArray, setTimeArray] = useState([]);
   const [currentTime, setCurrentTime] = useState('');
   const [selectedTime, setSelectedTime] = useState(null);
@@ -51,6 +51,7 @@ const TimeTracker = () => {
     generateTimeRange();
     const time = getCurrentTime();
     setCurrentTime(time);
+    
   }, []);
 
   useEffect(() => {
@@ -61,6 +62,8 @@ const TimeTracker = () => {
 
   const handleTimeSelect = (time) => {
     setSelectedTime(time);
+    // selectTime(setSelectedTime(time))
+    selectTime(time)
     console.log('Selected Time:', time); 
   };
 

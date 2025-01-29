@@ -9,11 +9,40 @@ import CustomButton from '../../component/CustomButtons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CalendarTimePicker from '../../component/CalendarTimePicker';
 import SidebarMenu from '../../component/SidebarMenu';
+import { use } from 'react';
+import { useEffect } from 'react';
 
 const HomeScreen1 = ({ navigation }) => {
     const [isVisible, setisVisible] = useState(false);
     const [rentalType, setRentalType] = useState('Rental Type');
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+    const [startTrip, setstartTrip] = useState(true);
+    const [endTrip, setendTrip] = useState(false);
+    const [selectStartDate, setSelectStartDate] = useState();
+    const [selectEndDate, setSelectEndDate] = useState();
+    const [selectStartTime, setSelectStartTime] = useState();
+    const [selectEndTime, setSelectEndTime] = useState();
+
+    useEffect(() => {
+        if(selectStartDate && selectStartTime){
+            setstartTrip(false)
+            setendTrip(true)
+        }
+    }, [selectStartDate, selectStartTime])
+    
+
+    console.log('====================================');
+    console.log("Start Date" , selectStartDate);
+    console.log("Start Time" , selectStartTime);
+    console.log('====================================');
+
+    
+    console.log('====================================');
+    console.log("End Date" , selectEndDate);
+    console.log("End Time" , selectEndTime);
+
+    console.log('====================================');
+
 
     const cityData = [
         { label: 'Local Run - Full day', value: 'FD' },
@@ -33,7 +62,6 @@ const HomeScreen1 = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.root}>
-            {/* Fixed Header */}
             <View style={styles.headerContainer}>
                 <CustomHeader
                     iconHeight={30}
@@ -41,12 +69,11 @@ const HomeScreen1 = ({ navigation }) => {
                     islogo={true}
                     imgPath={require('../../assets/ktclogo.png')}
                     iconPath={require('../../assets/menuu.png')}
-                    onMenuPress={handleMenuPress}
+                    handleLeftIcon={handleMenuPress}
                     isSidebarVisible={isSidebarVisible}
                 />
             </View>
 
-            {/* Scrollable Content */}
             <ScrollView style={styles.ScrollView}>
                 <View style={styles.container}>
                     <CustomIconTextInput
@@ -79,26 +106,33 @@ const HomeScreen1 = ({ navigation }) => {
                     <View style={styles.tripContainer}>
                         <View style={styles.tripRow}>
                             <Image source={require('../../assets/car-bg.png')} style={styles.tripIcon} />
-                            <TouchableOpacity>
-                                <Text style={styles.tripText}>Start Trip</Text>
+                            <TouchableOpacity onPress={() => {
+                                setstartTrip(true)
+                                setendTrip(false)
+                            }}>
+                                <Text style={startTrip ? styles.tripText : styles.disableTripText}>Start Trip</Text>
                             </TouchableOpacity>
                             <Icon name="chevron-right" />
-                            <TouchableOpacity>
-                                <Text style={styles.tripText}>End Trip</Text>
+                            <TouchableOpacity onPress={() => {
+                                setstartTrip(false)
+                                setendTrip(true)
+                            }}>
+                                <Text style={endTrip ? styles.tripText : styles.disableTripText}>End Trip</Text>
                             </TouchableOpacity>
                             <Image source={require('../../assets/carbw.png')} style={styles.tripIcon} />
                         </View>
-                        <CalendarTimePicker />
+                        {startTrip ? <CalendarTimePicker selectDate={setSelectStartDate} selectTime={setSelectStartTime} /> : null}
+                        {endTrip  ? <CalendarTimePicker selectDate={setSelectEndDate} selectTime={setSelectEndTime} /> : null}
+
+
                     </View>
                 </View>
             </ScrollView>
 
-            {/* Footer */}
             <View style={styles.footer}>
                 <CustomButton title="Continue" widthSize="100%" borderRadius={0} onPress={() => navigation.navigate('CarGroup')} />
             </View>
 
-            {/* Sidebar */}
             <SidebarMenu isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
         </SafeAreaView>
     );
@@ -179,6 +213,12 @@ const styles = StyleSheet.create({
     tripText: {
         fontSize: 14,
         color: '#3C3567',
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+    },
+    disableTripText: {
+        fontSize: 14,
+        color: '#B3B0C4',
         fontWeight: 'bold',
         textDecorationLine: 'underline',
     },

@@ -10,16 +10,19 @@ import {
 import CustomHeader from '../../component/CustomHeader';
 import CustomIconTextInput from '../../component/CustomIconTextInput';
 import CustomButton from '../../component/CustomButtons';
+import { useSelector } from 'react-redux';
 
 const Profile = ({ navigation }) => {
   const [loader, setLoader] = useState(false);
-
+  const userDetails = useSelector((state) => state.userprofile); 
+  const date = new Date(userDetails.bithdate * 1000);
+  console.log("DETAILS", userDetails)
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    birthDate: '',
-    mobileNumber: '',
+    firstName: userDetails.f_name ? userDetails.f_name : '',
+    lastName: userDetails.l_name ? userDetails.l_name : '',
+    email: userDetails.email_id ? userDetails.email_id :'',
+    birthDate: userDetails.bithdate ? userDetails.bithdate : '',  
+    mobileNumber: userDetails.mobile_number ? userDetails.mobile_number : '',
     password: '',
   });
 
@@ -61,7 +64,7 @@ const Profile = ({ navigation }) => {
           iconPath={require('../../assets/ic_back_arrow_white_24.png')}
           iconHeight={24}
           iconWidth={24}
-      onMenuPress ={() => navigation.goBack()} 
+          handleLeftIcon ={() => navigation.navigate('CorporateModule1')} 
         />
 
         {loader && (

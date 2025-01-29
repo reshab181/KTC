@@ -17,16 +17,22 @@ import CustomHeader from '../../component/CustomHeader';
 import CustomTextInpt from '../../component/CustomTextInpt';
 import CustomButton from '../../component/CustomButtons';
 import { handleSignIn } from '../../Api/Authentication';
+import { useDispatch } from 'react-redux';
+import { updateUserDetails } from '../../Redux/slice/Userslice';
+import { setUserProfile } from '../../Redux/slice/UserProfileSlice';
+import RegisterPOPUP from './RegisterPopUp';
 
 
 const SignInCorporate = ({ route }) => {
   const { email: prefilledEmail } = route.params || {};
   const navigation = useNavigation();
   const [email, setEmail] = useState(prefilledEmail || '');
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('AsHu@123');
   const [errors, setErrors] = useState({});
   const [accessToken, setAccessToken] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedModule, setSelectedModule] = useState(null);
 
   useEffect(() => {
     const fetchAccessToken = async () => {
@@ -35,6 +41,7 @@ const SignInCorporate = ({ route }) => {
     };
     fetchAccessToken();
   }, []);
+  const dispatch = useDispatch()
 
   const validateForm = () => {
     const validationErrors = {};
@@ -62,9 +69,32 @@ const SignInCorporate = ({ route }) => {
     if (!validateForm()) return;
 
     setLoading(true);
+    // const date = (userData.bithdate*1000).toLocaleString
 
     try {
-      await handleSignIn(email, password, accessToken, navigation, setLoading);
+      const userData = await handleSignIn(email, password, accessToken, navigation, setLoading);
+      // Methods added by Ashutosh Rai 
+      console.log('====================================');
+      console.log("USER DATA", userData);
+      console.log('====================================');
+      const date = new Date(userData.bithdate * 1000);
+      const dateobbirth = date.toLocaleDateString();
+      dispatch(
+        setUserProfile({
+          email_id: userData.email_id,
+          user_id: userData.user_id,
+          client_name: userData.client_name,
+          f_name: userData.f_name,
+          l_name: userData.l_name,
+          gender: userData.gender,
+          country: userData.country,
+          user_type: userData.user_type,
+          client_id: userData.client_id,
+          alternative_no: userData.alternative_no,
+          bithdate: dateobbirth,
+          mobile_number: userData.mobile_number,
+        })
+      );
       // navigation.replace('MainApp', {
       //   screen: 'CorporateModule1',
       // })
@@ -74,16 +104,24 @@ const SignInCorporate = ({ route }) => {
       setLoading(false);
     }
   };
-
+  const closeModal = () => {
+    setIsModalVisible(false);
+    setSelectedModule(null);
+  };
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader
         title="Sign In"
         leftTitle="Skip"
-        handlePress={() => navigation.goBack()}
+        handlePress={() => navigation.navigate('ModuleSelectionUI')}
       />
       <View style={styles.form}>
-    
+        {isModalVisible && (
+          <RegisterPOPUP
+            module={selectedModule}
+            onClose={closeModal}
+          />
+        )}
         <CustomTextInpt
           placeholder="Email ID or Mobile"
           value={email}
@@ -103,7 +141,7 @@ const SignInCorporate = ({ route }) => {
           <Text style={styles.errorText}>{errors.password}</Text>
         )}
 
-       
+
         <View style={{ marginTop: 32 }}>
           <CustomButton
             title={loading ? 'Signing In...' : 'Sign In'}
@@ -113,7 +151,7 @@ const SignInCorporate = ({ route }) => {
           />
         </View>
 
-  
+
         <TouchableOpacity
           style={{ marginTop: 10 }}
           onPress={() => navigation.replace('ForgotPassword', { email })}
@@ -121,21 +159,28 @@ const SignInCorporate = ({ route }) => {
           <Text style={styles.linkText}>Forgot Password?</Text>
         </TouchableOpacity>
 
-   
+
         <View style={styles.divider}>
           <View style={styles.line} />
           <Text style={styles.orText}>OR</Text>
           <View style={styles.line} />
         </View>
 
-       
+
         <CustomButton
           title="Create New Account"
           backgroundColor="#F1F1F3"
           borderWidth={1}
           textColor="#0F2541"
           textSize={16}
-          onPress={() => navigation.navigate('Register')}
+          onPress={() => {
+            console.log('====================================');
+            console.log("clicked");
+            setSelectedModule(module);
+            setIsModalVisible(true);
+            console.log('====================================');
+          }
+          }
         />
       </View>
     </SafeAreaView>

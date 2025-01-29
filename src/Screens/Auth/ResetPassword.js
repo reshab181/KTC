@@ -83,10 +83,7 @@ import { resetPassword } from '../../Api/Authentication';
 
 const ResetPassword = () => {
 
-
- 
   const navigation = useNavigation();
-  
   const styles = useStyles();
   const [isVisible, setIsVisible] = useState(false);
   const [accessToken, setAccessToken] = useState('');
@@ -128,13 +125,13 @@ const ResetPassword = () => {
           placeholder="New Password"
           secureTextEntry={true}
           value={newPassword}
-          onChangeText={setNewPassword}  
+          onChangeText={setNewPassword}
         />
         <CustomTextInpt
           placeholder="Confirm Password"
           secureTextEntry={true}
           value={confirmPassword}
-          onChangeText={setConfirmPassword}  
+          onChangeText={setConfirmPassword}
         />
         <View style={{ marginTop: 16 }}>
           <CustomButton title={"Submit"} onPress={handleSubmit} />

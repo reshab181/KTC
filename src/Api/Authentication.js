@@ -28,7 +28,9 @@ export const decryptData = (encryptedData) => {
   const iv = CryptoJS.enc.Latin1.parse(ClientID);
 
   const decryptedData = CryptoJS.AES.decrypt(
-    { ciphertext: rawData },
+    { 
+      ciphertext: rawData
+    },
     key,
     { iv: iv }
   );
@@ -118,14 +120,14 @@ export const registerUser = async (userData, accessToken) => {
       request_data: encryptedPayload
     }).toString();
 
-      const response = await fetch('https://web.gst.fleet.ktcindia.com/user_apis_encoded/user_registration.php', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-              'jwt': accessToken
-          },
-          body: formBody
-      });
+    const response = await fetch('https://web.gst.fleet.ktcindia.com/user_apis_encoded/user_registration.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        'jwt': accessToken
+      },
+      body: formBody
+    });
 
     const responseData = await response.json();
     return responseData;
@@ -159,6 +161,9 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
 
     const data = response.data;
     console.log(data, "login data");
+    const dataDecrypted = decryptData(data.result);
+    console.log(dataDecrypted, "Descrypted DAta ");
+    
 
     if (data?.jwt) {
       await AsyncStorage.setItem('token', data.jwt);
@@ -169,12 +174,14 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
     } else {
       Alert.alert('OOPs!', 'Login Failed Try Again');
     }
+    return dataDecrypted  
   } catch (error) {
     console.error('Error in handleSignIn:', error);
     Alert.alert('Error', 'Failed to sign in. Please try again.');
   } finally {
     setLoading(false);
   }
+
 };
 export const emailsms = async (email, accessToken, navigation, setLoading) => {
   if (!accessToken) {
@@ -191,8 +198,8 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
       throw new Error('Failed to retrieve MMI access token.');
     }
 
-  
-    const apiUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
+    // const apiUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
+    const apiUrl = `${ANCHOR_URL}?handle=${email}`;
 
 
     const response = await axios.post(
@@ -205,8 +212,11 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
       }
     );
 
-    
+
     const locationUrl = response?.headers?.location;
+    console.log('====================================');
+    console.log(locationUrl);
+    console.log('====================================');
     if (locationUrl) {
       navigation.navigate('OTP', {
         url: locationUrl,
@@ -269,19 +279,23 @@ export const resetPassword = async (email, newPassword, confirmPassword, accessT
   }
 };
 
-export const verifyOTP = async (url, passPhrase) => {
+export const verifyOTP = async (url) => {
   try {
     const mmiToken = await tokenFromMMI();
 
     if (mmiToken?.access_token) {
-      const fullUrl = `${url}?passPhrase=${passPhrase}`;
-
-      const response = await axios.get(fullUrl, {
+      // const fullUrl = `${url}?passPhrase=${passPhrase}`;
+      console.log('====================================');
+      console.log(url);
+      console.log('====================================');
+      const response = await axios.get(url, {
         headers: {
           Authorization: `Bearer ${mmiToken?.access_token}`,
         },
       });
-
+      console.log('====================================');
+      console.log(response);
+      console.log('====================================');
       return response.data;
     } else {
       throw new Error('Access token is missing.');

@@ -40,6 +40,7 @@ const ForgotPassword = ({ route, navigation }) => {
   }, []);
 
   const sendForgotOTP = () => {
+    console.log("Sending Click")
     emailsms(email, accessToken, navigation, setLoading);
     // navigation.replace("OTP")
   };
@@ -50,7 +51,7 @@ const ForgotPassword = ({ route, navigation }) => {
 
       <View style={styles.emailContainer}>
         <CustomTextInpt placeholder={email} value={email} editable={false} style={{backgroundColor:"#EEE"}} />
-        <View style={{marginTop: 94}}>
+        <View style={{marginTop: 84}}>
         <CustomButton title={"Next"} onPress={sendForgotOTP} />
         </View>
       </View>

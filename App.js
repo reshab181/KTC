@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { Provider } from "react-redux"; 
-import store from "./src/Redux/store"; 
+import { Provider } from "react-redux";
+import store from "./src/Redux/store";
 
 import Splash from "./src/Screens/Basic/Splash";
 import ModuleSelectionUI from "./src/Screens/Auth/ModuleSelection";
@@ -30,6 +30,7 @@ import Help from "./src/Screens/Help";
 import Track from "./src/Screens/My Bookings/Track";
 import Notification from "./src/Screens/Notification";
 import SplashScreen from "@exodus/react-native-splash-screen";
+import Citieslist from "./src/Screens/Pages/Citieslist";
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -57,24 +58,26 @@ const AuthNavigator = () => (
     <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
     <AuthStack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
     <AuthStack.Screen name="PersonalRegister" component={PersonalRegister} options={{ headerShown: false }} />
-    <AuthStack.Screen name="ResetPassword" component={ResetPassword}options={{ headerShown: false }}  />
+    <AuthStack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
   </AuthStack.Navigator>
 );
 
 const MainAppNavigator = () => (
   <AppStack.Navigator initialRouteName="HomeScreen1">
     <AppStack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} />
-    <AppStack.Screen name="Profile" component={Profile}options={{ headerShown: false }}  />
+    <AppStack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+    <AppStack.Screen name="City" component={Citieslist} options={{ headerShown: false }} />
+
     <AppStack.Screen name="PickUpLocation" component={PickUpLocation} options={{ headerShown: false }} />
     <AppStack.Screen name="HomeScreen1" component={HomeScreen1} options={{ headerShown: false }} />
     <AppStack.Screen name="CarGroup" component={CarGroup} options={{ headerShown: false }} />
     <AppStack.Screen name="CarSelection" component={CarSelection} options={{ headerShown: false }} />
-    <AppStack.Screen name ="BookingConfirmation" component={BookingConfirmation}options={{ headerShown: false }} />
-    <AppStack.Screen name="Payment" component={PaymentMethod}options={{ headerShown: false }} />
-    <AppStack.Screen name="MyBooking" component={MyBooking}options={{ headerShown: false }} />
-    <AppStack.Screen name="Track" component={Track}options={{ headerShown: false }} />
-    <AppStack.Screen name="Upcoming" component={Upcoming}options={{ headerShown: false }} />
-    <AppStack.Screen name="Notifications" component={Notification}options={{ headerShown: false }} />
+    <AppStack.Screen name="BookingConfirmation" component={BookingConfirmation} options={{ headerShown: false }} />
+    <AppStack.Screen name="Payment" component={PaymentMethod} options={{ headerShown: false }} />
+    <AppStack.Screen name="MyBooking" component={MyBooking} options={{ headerShown: false }} />
+    <AppStack.Screen name="Track" component={Track} options={{ headerShown: false }} />
+    <AppStack.Screen name="Upcoming" component={Upcoming} options={{ headerShown: false }} />
+    <AppStack.Screen name="Notifications" component={Notification} options={{ headerShown: false }} />
   </AppStack.Navigator>
 );
 
@@ -85,24 +88,24 @@ const App = () => {
 
   return (
     <GestureHandlerRootView>
-      <Provider store={store}> 
+      <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Splash">
-      
+
             <Stack.Screen
               name="Splash"
               component={Splash}
               options={{ headerShown: false }}
             />
 
-           
+
             <Stack.Screen
               name="Auth"
               component={AuthNavigator}
               options={{ headerShown: false }}
             />
 
-        
+
             <Stack.Screen
               name="MainApp"
               component={MainAppNavigator}

@@ -1,64 +1,69 @@
-// Author: Ashutosh Rai
-// Component: CalendarTimePicker
+// // Author: Ashutosh Rai
+// // Component: CalendarTimePicker
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import CalendarPicker from "react-native-calendar-picker";
 import Ionicons from 'react-native-vector-icons/Ionicons'; // Icon package
 import TimeTracker from './TimeTracker';
 
-const CalendarTimePicker = () => {
-    const [selected, setSelected] = useState('');
 
-    const disablePastDates = (date) => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        return date < today;
-    };
-    const today = new Date();
-    return (
-        <View>
-            <View style={styles.calendarWrapper}>
-                <CalendarPicker
-                    scrollable={true}
-                    horizontal={true}
-                    width={410}
-                    height={300}
-                    scrollDecelarationRate={2}
-                    initialDate={today}
-                    onDateChange={(date) => setSelected(date)}
-                    previousComponent={
-                        <View style={styles.disabledIconWrapper}>
-                            <Ionicons
-                                name="chevron-back"
-                                size={24}
-                                color="#D3D3D3"
-                            />
-                        </View>
-                    }
-                    nextComponent={
-                        <View style={styles.disabledIconWrapper}>
-                            <Ionicons
-                                name="chevron-forward"
-                                size={24}
-                                color="#D3D3D3"
-                            />
-                        </View>
-                    }
-                    disabledDates={disablePastDates}
-                // disabledDatesTextStyle={styles.disabledDatesText}
-                />
-            </View>
-            <TimeTracker />
-            <View style={styles.footer}>
-                <Text style={styles.footerText}>
-                    Slide to Select Date and Time
-                </Text>
-            </View>
-        </View>
-    )
-}
+// const CalendarTimePicker = ({selectDate , selectTime}) => {
+//     const [selected, setSelected] = useState('');
 
-export default CalendarTimePicker
+//     const disablePastDates = (date) => {
+//         const today = new Date();
+//         today.setHours(0, 0, 0, 0);
+//         return date < today;
+//     };
+//     const today = new Date();
+//     return (
+//         <View>
+//             <View style={styles.calendarWrapper}>
+//                 <CalendarPicker
+//                     scrollable={true}
+//                     horizontal={true}
+//                     width={410}
+//                     height={300}
+//                     scrollDecelarationRate={2}
+//                     initialDate={today}
+//                     onDateChange={(date) => { 
+//                         setSelected(date)
+//                         console.log(date.toLocaleDateString())
+//                         selectDate(setSelected(date.toLocaleDateString))
+//                     }}
+//                     previousComponent={
+//                         <View style={styles.disabledIconWrapper}>
+//                             <Ionicons
+//                                 name="chevron-back"
+//                                 size={24}
+//                                 color="#D3D3D3"
+//                             />
+//                         </View>
+//                     }
+//                     nextComponent={
+//                         <View style={styles.disabledIconWrapper}>
+//                             <Ionicons
+//                                 name="chevron-forward"
+//                                 size={24}
+//                                 color="#D3D3D3"
+//                             />
+//                         </View>
+//                     }
+//                     disabledDates={disablePastDates}
+//                 // disabledDatesTextStyle={styles.disabledDatesText}
+//                 />
+//             </View>
+//             <TimeTracker selectTime={selectTime}/>
+//             <View style={styles.footer}>
+//                 <Text style={styles.footerText}>
+//                     Slide to Select Date and Time
+//                 </Text>
+//             </View>
+//         </View>
+//     )
+// }
+
+// export default CalendarTimePicker
 
 const styles = StyleSheet.create({
     headerText: {
@@ -93,3 +98,53 @@ const styles = StyleSheet.create({
         marginHorizontal: 42
     },
 })
+const CalendarTimePicker = ({ selectDate, selectTime }) => {
+    const [selected, setSelected] = useState('');
+
+    const disablePastDates = (date) => {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return date < today;
+    };
+
+    const today = new Date();
+
+    return (
+        <View>
+            <View style={styles.calendarWrapper}>
+                <CalendarPicker
+                    scrollable={true}
+                    horizontal={true}
+                    width={410}
+                    height={300}
+                    initialDate={today}
+                    onDateChange={(date) => { 
+                        const formattedDate = date.toLocaleDateString('en-GB'); // Convert to DD/MM/YYYY
+                        setSelected(formattedDate);
+                        selectDate(formattedDate);
+                        // selectDate = selected; 
+                        // console.log(selectDate)
+                        //  Send selected date to parent component
+                    }}
+                    previousComponent={
+                        <View style={styles.disabledIconWrapper}>
+                            <Ionicons name="chevron-back" size={24} color="#D3D3D3" />
+                        </View>
+                    }
+                    nextComponent={
+                        <View style={styles.disabledIconWrapper}>
+                            <Ionicons name="chevron-forward" size={24} color="#D3D3D3" />
+                        </View>
+                    }
+                    disabledDates={disablePastDates}
+                />
+            </View>
+            <TimeTracker  selectTime={selectTime}/>
+            <View style={styles.footer}>
+                <Text style={styles.footerText}>Slide to Select Date and Time</Text>
+            </View>
+        </View>
+    );
+};
+
+export default CalendarTimePicker;

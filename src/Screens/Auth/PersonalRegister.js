@@ -317,7 +317,6 @@ const PersonalRegister = ({ navigation }) => {
                 iconPath={require('../../assets/icbackarrow.png')}
                 iconHeight={24}
                 iconWidth={24}
-                handleLeftIcon={() => navigation.goBack()}
             />
 
             <View style={styles.scrollContainer}>
@@ -357,7 +356,6 @@ const PersonalRegister = ({ navigation }) => {
                                     </View>
                                 ))}
 
-                                {/* Date of Birth Field */}
                                 <TouchableOpacity
                                     style={styles.selectionContainer}
                                     onPress={() => setShowDatePicker(true)}
@@ -384,7 +382,6 @@ const PersonalRegister = ({ navigation }) => {
                                     />
                                 )}
 
-                                {/* Gender and Country Fields */}
                                 <View style={styles.selectionContainer}>
                                     <Image
                                         source={require('../../assets/Gender.png')}

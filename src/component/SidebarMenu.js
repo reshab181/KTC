@@ -8,10 +8,10 @@ import {
   Image,
   Dimensions,
   Animated,
-  Alert,
-  AsyncStorage 
+  Alert, 
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -21,7 +21,7 @@ const SidebarMenu = ({ isVisible, onClose }) => {
 
   const menuItems = [
     { name: 'Home', route: 'CorporateModule1', icon: require('../assets/home.png') },
-    { name: 'My Bookings', route: 'Bookings', icon: require('../assets/bookings.png') },
+    { name: 'My Bookings', route: 'MyBooking', icon: require('../assets/bookings.png') },
     { name: 'Profile', route: 'Profile', icon: require('../assets/my-profile.png') },
     { name: 'Notifications', route: 'Notifications', icon: require('../assets/notifications.png') },
     { name: 'Logout', route: 'logout', icon: require('../assets/logout.png') }, 
