@@ -8,12 +8,17 @@ import TimeTracker from './TimeTracker';
 import CalendarTimePicker from './CalendarTimePicker';
 
 const CustomCalender = () => {
-    const [selected, setSelected] = useState('');
- 
-    const disablePastDates = (date) => {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0); 
-        return date < today; 
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedTime, setSelectedTime] = useState(null);
+  
+    const handleDateSelect = (date) => {
+      setSelectedDate(date);
+      console.log("Selected Date: ", date);
+    };
+  
+    const handleTimeSelect = (time) => {
+      setSelectedTime(time);
+      console.log("Selected Time: ", time);
     };
     const today = new Date();
 
@@ -25,7 +30,7 @@ const CustomCalender = () => {
                     Select Date & Reporting Time
                 </Text>
             </View>
-            <CalendarTimePicker/>
+            <CalendarTimePicker selectDate={handleDateSelect} selectTime={handleTimeSelect}/>
 
            
         </View>

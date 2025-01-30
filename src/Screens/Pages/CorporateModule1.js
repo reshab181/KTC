@@ -11,31 +11,18 @@ import CustomCalender from '../../component/CustomCalender';
 import CustomButton from '../../component/CustomButtons';
 import CustomCarGrouptile from '../../component/CustomCarGrouptile';
 import SidebarMenu from '../../component/SidebarMenu';
-import { fetchCities } from '../../Api/CorporateModuleApis';
+import { fetchCities, fetchRentalType } from '../../Api/CorporateModuleApis';
 import { useSelector } from 'react-redux';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 
-const CorporateModule1 = ({ navigation }) => {
-  const [value, setValue] = useState(null);
-  const [isFocus, setIsFocus] = useState(false);
+const CorporateModule1 = ({ navigation, route }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const userDetails = useSelector((state) => state.userprofile);
   const [accessToken, setAccessToken] = useState('');
   const [cityList, setcity] = useState([])
   const cityData = cityList
-
-  const rentalTypeData = [
-    { label: 'Daily', value: 'daily' },
-    { label: 'Weekly', value: 'weekly' },
-    { label: 'Monthly', value: 'monthly' },
-  ];
-
-  const carGroupData = [
-    { label: 'Sedan', value: 'sedan' },
-    { label: 'SUV', value: 'suv' },
-    { label: 'Hatchback', value: 'hatchback' },
-  ];
-
+  const [cargroupitem , setcargroupItem] = useState([]);
+  const { city, rentalType, carGroup } = useSelector((state) => state.corporate);
   const styles = useStyles();
 
   const handleMenuPress = () => {
@@ -50,6 +37,7 @@ const CorporateModule1 = ({ navigation }) => {
     };
     getAccessToken();
   }, []);
+
 
 
   return (
@@ -71,34 +59,52 @@ const CorporateModule1 = ({ navigation }) => {
               <View style={styles.container1}>
                 <Text style={styles.txt}>Car Reservation Details</Text>
               </View>
-              <View style={[styles.container2, { height : 190  }]}>
+              <View style={[styles.container2, { height: 190 }]}>
                 <View style={{ marginHorizontal: 10 }}>
-                  <View style={{marginTop: 10}}>
-                  <CustomCarGrouptile
-                    title={'City'}
-                    onPress={async() => {
-                      const list = await fetchCities('', userDetails,accessToken, setcity , cityList)  
-                      console.log('====================================');
-                      console.log("list", list);
-                      console.log('====================================');
-                      navigation.navigate('City', {list})
-
-                    }}
-                    iconName={'chevron-right'}
-                  />
+                  <View style={{ marginTop: 5 }}>
+                    <CustomCarGrouptile
+                      title={city || 'City'}
+                      onPress={async () => {
+                        try {
+                          const list = await fetchCities('', userDetails, accessToken, setcity);
+                          console.log("Fetched List:", list);
+                          navigation.navigate('City', { list, type: 'city' });
+                        } catch (error) {
+                          console.error("Error fetching cities:", error);
+                        }
+                      }}
+                      iconName={'chevron-right'}
+                    />
+                    <CustomCarGrouptile
+                      title={rentalType || 'Rental Type'}
+                      onPress={async () => {
+                        try {
+                          const { rentalItems, carGroupItems } = await fetchRentalType(city, userDetails, accessToken, setcity, typeoff = 'rentalType');
+                          setcargroupItem(carGroupItems) ;
+                          navigation.navigate('City', { list: rentalItems, type: 'rentalType' });
+                        } catch (error) {
+                          console.error("Error fetching rental types:", error);
+                        }
+                      }}
+                      iconName={'chevron-right'}
+                    />
+                    <CustomCarGrouptile
+                      title={carGroup || 'Car Group'}
+                      onPress={async () => {
+                        try {
+                          const list = cargroupitem ; 
+                          console.log('====================================');
+                          console.log("CARGRPITEM", cargroupitem);
+                          console.log('====================================');
+                          navigation.navigate('CarGroup', { list , type : 'carGroup' });
+                        } catch (error) {
+                          console.error("Error fetching rental types:", error);
+                        }
+                      }}
+                      iconName={'chevron-right'}
+                    />
                   </View>
-                  <CustomDropdown
-                    data={rentalTypeData}
-                    placeholder="Rental Type"
-                    searchPlaceholder="Search Rental Type..."
-                    onChange={(item) => console.log('Selected Rental Type:', item)}
-                  />
-                  <CustomDropdown
-                    data={carGroupData}
-                    placeholder="Car Groups"
-                    searchPlaceholder="Search Car Group..."
-                    onChange={(item) => console.log('Selected Car Group:', item)}
-                  />
+
                 </View>
               </View>
             </View>
@@ -163,9 +169,7 @@ const CorporateModule1 = ({ navigation }) => {
   );
 };
 
-// Styles
 function useStyles() {
-  const { width: winwidth, height: winheight } = useWindowDimensions();
   return StyleSheet.create({
     mainContainer: {
       flex: 1,

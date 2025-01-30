@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         color: '#666666',
         elevation : 2, 
         height : 48 ,
-        // borderWidth: 0.05,
+        marginTop: 10, 
         borderRadius:4 , 
     }
 })

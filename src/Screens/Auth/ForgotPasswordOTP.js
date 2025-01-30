@@ -6,12 +6,15 @@ import CustomHeader from '../../component/CustomHeader';
 import { verifyOTP } from '../../Api/Authentication';
 import { useRef, useState } from 'react';
 import RNHash from 'react-native-hash';
-const ForgotPasswordOTP = ({ navigation }) => {
+const ForgotPasswordOTP = ({ route , navigation }) => {
   const styles = useStyles();
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const {url , email , accessToken} = route.params ;
+  console.log('====================================');
+  console.log(url , email , accessToken, "AAGYA URL");
+  console.log('===================================='); 
   // Ref array to focus inputs
   const inputRefs = Array.from({ length: 6 }).map(() => useRef(null));
 
@@ -68,33 +71,28 @@ const ForgotPasswordOTP = ({ navigation }) => {
   //     setIsLoading(false);
   //   }
   // };
-  const handleSubmit = async () => {
+  const handleSubmit = async() => {
     if (otp.some(value => value === "")) {
       setIsError(true);
       Alert.alert("Error", "Please fill all OTP fields.");
       return;
     }
-  
-    // Join the OTP array into a single string
     const otpp = otp.join("");
+    console.log('====================================');
+    console.log();
     console.log('Entered OTP:', otpp);
+    console.log('====================================');
   
     try {
-      // Generate MD5 hash
       const md5hash = await RNHash.hashString(otpp, 'md5'); // Ensure you await RNHash
       console.log('MD5 Hash:', md5hash);
-  
-      // Generate SHA256 hash
       const sha256hash = await RNHash.hashString(md5hash, 'sha256'); // Ensure you await RNHash
       console.log('SHA256 Hash:', sha256hash);
-  
       const passPhrase = sha256hash;
-  
       setIsLoading(true);
-  
-      const url = `https://anchor.mapmyindia.com/api/otp/otp1738057306i1090519040/validate?passPhrase=${passPhrase}`;
-      const response = await verifyOTP(url); // Pass the correct hashed value to your API
-  
+      // const url = `https://anchor.mapmyindia.com/api/otp/otp1738057306i1090519040/validate?passPhrase=${passPhrase}&processForgotPassword`;
+      const response = await verifyOTP(url , passPhrase , 'processForgotPassword' );
+       // Pass the correct hashed value to your API
       if (response) {
         navigation.navigate('ResetPassword');
       } else {

@@ -67,7 +67,6 @@ const MainAppNavigator = () => (
     <AppStack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} />
     <AppStack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
     <AppStack.Screen name="City" component={Citieslist} options={{ headerShown: false }} />
-
     <AppStack.Screen name="PickUpLocation" component={PickUpLocation} options={{ headerShown: false }} />
     <AppStack.Screen name="HomeScreen1" component={HomeScreen1} options={{ headerShown: false }} />
     <AppStack.Screen name="CarGroup" component={CarGroup} options={{ headerShown: false }} />

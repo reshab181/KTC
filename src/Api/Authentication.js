@@ -226,7 +226,7 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
       });
 
       console.log(locationUrl, 'URL retrieved successfully.');
-      return locationUrl;
+      // return locationUrl;
     } else {
       throw new Error('Location header is missing in the response.');
     }
@@ -279,23 +279,23 @@ export const resetPassword = async (email, newPassword, confirmPassword, accessT
   }
 };
 
-export const verifyOTP = async (url) => {
+export const verifyOTP = async (url, passPhrase, processs ) => {
   try {
     const mmiToken = await tokenFromMMI();
 
     if (mmiToken?.access_token) {
-      // const fullUrl = `${url}?passPhrase=${passPhrase}`;
+      const fullUrl = `${url}?passPhrase=${passPhrase}&${processs}`;
       console.log('====================================');
-      console.log(url);
+      console.log("FULL URL " , fullUrl);
       console.log('====================================');
-      const response = await axios.get(url, {
+      const response = await axios.get(fullUrl, {
         headers: {
           Authorization: `Bearer ${mmiToken?.access_token}`,
         },
       });
       console.log('====================================');
-      console.log(response);
-      console.log('====================================');
+      console.log("repsonse" , response);
+      console.log('====================================');  
       return response.data;
     } else {
       throw new Error('Access token is missing.');

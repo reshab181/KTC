@@ -93,28 +93,26 @@ export default ModuleSelectionUI;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: '#0000001F',
   },
   contentContainer: {
     flex: 1,
     justifyContent: 'flex-start', 
     alignItems: 'center',
-    paddingTop: 80, 
-    paddingHorizontal: 15,
+    paddingTop: 50, 
+    paddingHorizontal: 16,
   },
   moduleContainer: {
     width: '100%',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   module: {
     width: '100%',
     height: 240,
     backgroundColor: '#F2F2F2',
-    shadowColor: '#000',
-    shadowOpacity: 0.8,
-    shadowRadius: 6,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 8,
+    elevation: 2,
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15, 
   },
   moduleHeader: {
     height: '22%',
