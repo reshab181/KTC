@@ -54,7 +54,6 @@ const CalendarTimePicker = ({ selectDate, selectTime }) => {
 
     return (
         <View>
-            {/* Month Section */}
             <View style={styles.monthContainer}>
                 <TouchableOpacity onPress={() => changeWeek(-1)}>
                     <Ionicons name="chevron-back" size={20} color="#3C3567" />
@@ -67,7 +66,6 @@ const CalendarTimePicker = ({ selectDate, selectTime }) => {
                 </TouchableOpacity>
             </View>
 
-            {/* Fixed Weekday Names */}
             <View style={styles.weekdayContainer}>
                 {dayNames.map((day, index) => (
                     <View key={index} style={styles.weekdayItem}>
@@ -76,7 +74,6 @@ const CalendarTimePicker = ({ selectDate, selectTime }) => {
                 ))}
             </View>
 
-            {/* Scrollable Dates Section */}
             <View style={styles.dateContainer}>
                 {weekData.map((item) => {
                     const isPast = isPastDate(item.fullDate); // Check if the date is in the past
@@ -100,7 +97,7 @@ const CalendarTimePicker = ({ selectDate, selectTime }) => {
             </View>
 
             {/* Time Picker */}
-            <TimeTracker selectTime={selectTime} />
+            <TimeTracker selectTime={selectTime} selectedDate={selectedDate} />
 
             {/* Footer */}
             <View style={styles.footer}>
