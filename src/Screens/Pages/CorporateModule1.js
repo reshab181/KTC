@@ -2,7 +2,7 @@
 // Component: CorporateModule1
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { ScrollView, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import CustomHeader from '../../component/CustomHeader';
@@ -12,7 +12,7 @@ import CustomCalender from '../../component/CustomCalender';
 import CustomButton from '../../component/CustomButtons';
 import CustomCarGrouptile from '../../component/CustomCarGrouptile';
 import SidebarMenu from '../../component/SidebarMenu';
-import { fetchCities, fetchRentalType } from '../../Api/CorporateModuleApis';
+import { fetchCities, fetchLocalities, fetchRentalType } from '../../Api/CorporateModuleApis';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 
 const CorporateModule1 = ({ navigation }) => {
@@ -20,8 +20,8 @@ const CorporateModule1 = ({ navigation }) => {
   const [accessToken, setAccessToken] = useState('');
   const [cityList, setCityList] = useState([]);
   const [carGroupList, setCarGroupList] = useState([]);
-
-  const { city, rentalType, carGroup } = useSelector((state) => state.corporate);
+  const [e_loc , seteloc ] = useState('');
+  const { city, rentalType, carGroup , pickupAddress} = useSelector((state) => state.corporate);
   const userDetails = useSelector((state) => state.userprofile);
 
   useEffect(() => {
@@ -43,8 +43,9 @@ const CorporateModule1 = ({ navigation }) => {
 
   const handleFetchRentalType = useCallback(async () => {
     try {
-      const { rentalItems, carGroupItems } = await fetchRentalType(city, userDetails, accessToken, setCityList, 'rentalType');
+      const { rentalItems, carGroupItems , e_loc} = await fetchRentalType(city, userDetails, accessToken, setCityList, 'rentalType');
       setCarGroupList(carGroupItems);
+      seteloc(e_loc);
       navigation.navigate('City', { list: rentalItems, type: 'rentalType' });
     } catch (error) {
       console.error("Error fetching rental types:", error);
@@ -70,7 +71,7 @@ const CorporateModule1 = ({ navigation }) => {
               <View style={{ marginHorizontal: 10, marginTop: 5 }}>
                 {renderCustomTile(city || 'City', handleFetchCities)}
                 {renderCustomTile(rentalType || 'Rental Type', handleFetchRentalType)}
-                {renderCustomTile(carGroup || 'Car Group', () => navigation.navigate('CarGroup', { list: carGroupList, type: 'carGroup' }))}
+                {renderCustomTile(carGroup || 'Car Group', () => navigation.navigate('City', { list: carGroupList, type: 'carGroup' }))}
               </View>
             </View>
           </Section>
@@ -81,7 +82,8 @@ const CorporateModule1 = ({ navigation }) => {
             </View>
             <View style={[styles.container2, { height: 140 }]}>
               <View style={{ marginHorizontal: 10 }}>
-                <CustomCarGrouptile title="Pickup Address" onPress={() => navigation.navigate('PickUpLocation')} iconName="chevron-down" />
+                {renderCustomTile(pickupAddress || 'Pickup Address', ()=>navigation.navigate('PickUpLocation', {eloc : e_loc}))}
+
                 <CustomTextInpt placeholder="Reporting Landmark (Optional)" />
               </View>
             </View>
@@ -102,7 +104,11 @@ const CorporateModule1 = ({ navigation }) => {
             </View>
           </Section>
 
-          <CustomButton title="Next" borderRadius={0} onPress={() => navigation.navigate('HomeScreen1')} />
+          <CustomButton title="Next" borderRadius={0} onPress={() =>
+             navigation.navigate('HomeScreen1')
+            // fetchLocalities('delhi')
+            } 
+            />
         </View>
       </ScrollView>
 
@@ -159,6 +165,7 @@ const styles = StyleSheet.create({
 });
 
 export default CorporateModule1;
+
 
 
 // import React, { useEffect, useState } from 'react';

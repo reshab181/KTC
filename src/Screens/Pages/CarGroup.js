@@ -39,8 +39,6 @@ const styles = StyleSheet.create({
     root:{
         backgroundColor :"#FFFFFF",
         flex :1 , 
-        // marginBottom: 20
-
     },
   
 })

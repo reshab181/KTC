@@ -31,6 +31,8 @@ import Track from "./src/Screens/My Bookings/Track";
 import Notification from "./src/Screens/Notification";
 import SplashScreen from "@exodus/react-native-splash-screen";
 import Citieslist from "./src/Screens/Pages/Citieslist";
+import MapplsGL from 'mappls-map-react-native';
+
 
 const Stack = createNativeStackNavigator();
 const AuthStack = createNativeStackNavigator();
@@ -81,6 +83,11 @@ const MainAppNavigator = () => (
 );
 
 const App = () => {
+  MapplsGL.setMapSDKKey( 'a3b6ecfc98829a83dd2d90f31acbfa8e');//place your mapsdkKey
+  MapplsGL.setRestAPIKey('886b8e770b7b5314cd9ed9e669676599');//your restApiKey
+  MapplsGL.setAtlasClientId('33OkryzDZsIk6jfukki-FfOGzG6jGTz_X-NBQnWydvjbP03ss7EjTOcBXKwiRpM5GJlnuBJESQ37rGeGouOH0Q==');//your atlasClientId key
+  MapplsGL.setAtlasClientSecret( 'lrFxI-iSEg9eBbkGuWL0S-z4QTwM_t31-Fla-GsyLUNUdLw-VluK9Uq3GDgMsq6L0sh4tcAPNKN-FkKeuC7tKljvi7cElTNw'); //your atlasClientSecret key
+  
   useEffect(() => {
     SplashScreen.hide()
   }, []);

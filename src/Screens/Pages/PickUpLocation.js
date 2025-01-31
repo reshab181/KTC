@@ -1,57 +1,88 @@
-// Author: Ashutosh Rai
-// Component: PickUpLocation
-import { FlatList, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import CustomButton from '../../component/CustomButtons'
-import CustomHeader from '../../component/CustomHeader'
-import CustomTextInpt from '../../component/CustomTextInpt'
-import CustomTextInput from '../../component/CustomIconTextInput'
-import SearchResultList from '../../component/SearchResultList'
-const DATA = [
-    {
-        id: '1',
-        title: 'First Item',
-    },
-    {
-        id: '2',
-        title: 'Second Item',
-    },
-    {
-        id: '3',
-        title: 'Third Item',
-    },
-    {
-        id: '4',
-        title: 'First Item',
-    },
-    {
-        id: '5',
-        title: 'Second Item',
-    },
-    {
-        id: '6',
-        title: 'Third Item',
-    },
-];
+import { FlatList, StyleSheet, Text, View, TextInput } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import CustomButton from '../../component/CustomButtons';
+import CustomHeader from '../../component/CustomHeader';
+import CustomTextInput from '../../component/CustomIconTextInput';
+import SearchResultList from '../../component/SearchResultList';
+import { fetchLocalities } from '../../Api/CorporateModuleApis';
 
-const PickUpLocation = ({navigation}) => {
+const PickUpLocation = ({ navigation, route }) => {
+    const [searchText, setSearchText] = useState('');
+    const [locations, setLocations] = useState([]); // Store API results
+    console.log('====================================');
+    console.log("Route", route.params?.eloc);
+
+    console.log('====================================');
+    useEffect(() => {
+        if (searchText.length > 3) {
+            fetchLocalities(searchText , route.params?.eloc )
+                .then(response => {
+                    console.log("Response", response);
+                    setLocations(response); // ✅ Update state with API data
+                })
+                .catch(error => {
+                    console.error("API Error:", error);
+                });
+        } else {
+            setLocations([]); // Clear results if input is less than 4 chars
+        }
+    }, [searchText]);
     return (
         <View style={{ flex: 1, backgroundColor: '#F1F1F3' }}>
-            <CustomHeader handleLeftIcon={()=>{navigation.goBack()}} islogo={true} title={"Pickup Location"} iconPath={require('../../assets/icbackarrow.png')} iconHeight={24} iconWidth={24}/>
+            <CustomHeader
+                handleLeftIcon={() => { navigation.goBack(); }}
+                islogo={true}
+                title={"Pickup Location"}
+                iconPath={require('../../assets/icbackarrow.png')}
+                iconHeight={24}
+                iconWidth={24}
+            />
+
             <View style={{ marginStart: 16, marginEnd: 16, marginTop: 10 }}>
-                <CustomTextInput placeholder={"India"} icon1={require('../../assets/Search.png')} icon2={require("../../assets/closee.png")}  />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Enter location"
+                    value={searchText}
+                    onChangeText={setSearchText}
+                />
             </View>
-            <View style={{ marginStart: 16, marginEnd: 16, marginTop: 1 }}>
-                {
-                    DATA.map((item , index)=>{
-                        <SearchResultList imgPath={require("../../assets/eye.png")} text1={"Message is 1 "} text2={"message is 2"} />
-                    })
-                }
-            </View>
+
+            <FlatList
+                data={locations}
+                keyExtractor={(item) => item.mapplsPin} // Using unique ID
+                renderItem={({ item }) => (
+                    <View style={styles.item}>
+                        <Text style={styles.placeName}>{item.placeName}</Text>
+                        <Text style={styles.placeAddress}>{item.placeAddress}</Text>
+                    </View>
+                )}
+            />
         </View>
-    )
-}
+    );
+};
 
-export default PickUpLocation
+export default PickUpLocation;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+        input: {
+            backgroundColor: '#fff',
+            padding: 10,
+            borderRadius: 5,
+            borderWidth: 1,
+            borderColor: '#ccc',
+        },
+        item: {
+            backgroundColor: '#fff',
+            padding: 10,
+            marginVertical: 5,
+            borderRadius: 5,
+        },
+        placeName: {
+            fontSize: 16,
+            fontWeight: 'bold',
+        },
+        placeAddress: {
+            fontSize: 14,
+            color: 'gray',
+        },
+});

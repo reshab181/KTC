@@ -41,6 +41,7 @@
                             iconPath={require('../../assets/icbackarrow.png')}
                             iconHeight={24}
                             iconWidth={24}
+                            handleLeftIcon={()=>navigation.goBack()}
                         />
                     </View>
                     <View style={{ marginHorizontal: 16, marginTop: 10 }}>

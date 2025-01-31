@@ -162,7 +162,7 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
     const data = response.data;
     console.log(data, "login data");  
     if(data.status === 200 ){
-      AsyncStorage.setItem('isLoggedIn' , true);
+      AsyncStorage.setItem('isLoggedInn' , 'true');
     }
     const dataDecrypted = decryptData(data.result);
     console.log(dataDecrypted, "Descrypted DAta ");

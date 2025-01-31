@@ -5,7 +5,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   city : '',
   rentalType : '',
-  carGroup :  ''
+  carGroup :  '', 
+  pickupAddress : '' , 
 };
 
 
@@ -19,8 +20,10 @@ const CorporateSlice = createSlice({
         state.city=selectedItem;
       }else if(type==="rentalType"){
         state.rentalType=selectedItem;
-      }else{
+      }else if(type === 'carGroup'){
         state.carGroup = selectedItem; 
+      }else if(type === 'pickupAddress'){
+        state.pickupAddress = selectedItem ; 
       }
     },
   },
