@@ -144,15 +144,20 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   selectedTimeBox: {
-    backgroundColor: '#4CAF50',
+
+    // backgroundColor: '#4CAF50',
   },
   selectedTimeText: {
-    color: '#fff',
+    color: 'black',
+    fontWeight: 'bold', 
+    fontSize: 14, 
+    // backgroundColor: "#f1f1f1"
   },
   disabledTimeBox: {
     // backgroundColor: '#E0E0E0',
   },
   disabledTimeText: {
     color: '#A9A9A9',
+    backfaceVisibility : "hidden"
   },
 });

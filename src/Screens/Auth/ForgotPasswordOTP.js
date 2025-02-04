@@ -29,7 +29,7 @@ const ForgotPasswordOTP = ({ route , navigation }) => {
     newOtp[index] = value;
     setOtp(newOtp);
     setIsError(false);
-
+    
     // Automatically move to the next input
     if (value && index < 5) {
       inputRefs[index + 1].current?.focus();
@@ -92,9 +92,14 @@ const ForgotPasswordOTP = ({ route , navigation }) => {
       const passPhrase = sha256hash;
       setIsLoading(true);
       // const url = `https://anchor.mapmyindia.com/api/otp/otp1738057306i1090519040/validate?passPhrase=${passPhrase}&processForgotPassword`;
-      const response = await verifyOTP(url , passPhrase , 'processForgotPassword' );
+      const response = await verifyOTP(url , passPhrase.toString() , 'processForgotPassword' );
        // Pass the correct hashed value to your API
-      if (response) {
+      //  const status = response.status;
+      //  console.log(status);
+       console.log('====================================');
+       console.log(response.status , "RESPONSESESE");
+       console.log('====================================');
+      if (response.status === 204) {
         navigation.navigate('ResetPassword');
       } else {
         setIsError(true);

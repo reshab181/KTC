@@ -30,13 +30,13 @@ const ResetPassword = () => {
   }, []);
 
   const handleSubmit = async () => {
-    if (!newPassword || !confirmPassword || !email) {
+    if (!newPassword || !confirmPassword ) {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
 
     await resetPassword(email, newPassword, confirmPassword, accessToken, (loading) => {
-      console.log('Loading state:', loading);
+      
     });
 
     setIsVisible(true);

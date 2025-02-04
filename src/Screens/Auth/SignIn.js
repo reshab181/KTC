@@ -20,6 +20,8 @@ import { useDispatch } from 'react-redux';
 import { updateUserDetails } from '../../Redux/slice/Userslice';
 import { setUserProfile } from '../../Redux/slice/UserProfileSlice';
 import RegisterPOPUP from './RegisterPopUp';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { setUserProfileData } from '../../Utils/userProfileUtils';
 
 
 const SignInCorporate = ({ route }) => {
@@ -40,7 +42,7 @@ const SignInCorporate = ({ route }) => {
     };
     fetchAccessToken();
   }, []);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch(); 
 
   const validateForm = () => {
     const validationErrors = {};
@@ -76,27 +78,10 @@ const SignInCorporate = ({ route }) => {
       console.log('====================================');
       console.log("USER DATA", userData);
       console.log('====================================');
-      const date = new Date(userData.bithdate * 1000);
-      const dateobbirth = date.toLocaleDateString();
-      dispatch(
-        setUserProfile({
-          email_id: userData.email_id,
-          user_id: userData.user_id,
-          client_name: userData.client_name,
-          f_name: userData.f_name,
-          l_name: userData.l_name,
-          gender: userData.gender,
-          country: userData.country,
-          user_type: userData.user_type,
-          client_id: userData.client_id,
-          alternative_no: userData.alternative_no,
-          bithdate: dateobbirth,
-          mobile_number: userData.mobile_number,
-        })
-      );
-      // navigation.replace('MainApp', {
-      //   screen: 'CorporateModule1',
-      // })
+      setUserProfileData(dispatch, userData);
+      await AsyncStorage.setItem('isLoggedInn', 'true');
+      await AsyncStorage.setItem('user_id', userData.user_id);  
+      await AsyncStorage.setItem('user_email', userData.email_id);  
     } catch (error) {
       Alert.alert('Sign In Error', error.message || 'Unable to sign in.');
     } finally {

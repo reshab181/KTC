@@ -7,7 +7,7 @@ import debounce from 'lodash.debounce';
 import { ANCHOR_URL } from '@env';
 import Api from '../services/Api';
 
-const encryptPayload = (data) => {
+export const encryptPayload = (data) => {
   const ClientID = '!IV@_$2123456789';
   const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
   const CryptoJsCI = CryptoJS.enc.Utf8.parse(ClientID);
@@ -170,7 +170,7 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
 
     if (data?.jwt) {
       await AsyncStorage.setItem('token', data.jwt);
-      Alert.alert('Success', 'Logged in successfully!');
+      // Alert.alert('Success', 'Logged in successfully!');
       navigation.replace('MainApp', {
         screen: 'CorporateModule1',
       });
@@ -202,21 +202,19 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
     }
 
     // const apiUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
-    const apiUrl = `${ANCHOR_URL}?handle=${email}`;
-
-
-    const response = await axios.post(
-      apiUrl,
-      {},
+    const apiUrl = `${ANCHOR_URL}?handle=${email.toString()}`;
+    let headersList = {
+      "Authorization": `Bearer ${mmiToken?.access_token}`
+    }
+    const response = await fetch(apiUrl,
       {
-        headers: {
-          Authorization: `Bearer ${mmiToken.access_token}`,
-        },
+        method: "POST",
+        headers: headersList
       }
     );
 
 
-    const locationUrl = response?.headers?.location;
+    const locationUrl = response?.headers?.map?.location;
     console.log('====================================');
     console.log(locationUrl);
     console.log('====================================');
@@ -299,7 +297,7 @@ export const verifyOTP = async (url, passPhrase, processs ) => {
       console.log('====================================');
       console.log("repsonse" , response);
       console.log('====================================');  
-      return response.data;
+      return response;
     } else {
       throw new Error('Access token is missing.');
     }

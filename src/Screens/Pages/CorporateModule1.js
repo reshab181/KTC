@@ -25,13 +25,13 @@ const CorporateModule1 = ({ navigation }) => {
   const [Visible, setVisible] = useState(false)
   const [carGroupList, setCarGroupList] = useState([]);
   const [e_loc, seteloc] = useState('');
-  const { city, rentalType, carGroup, pickupAddress ,   selectedDate , selectedTime } = useSelector((state) => state.corporate);
+  const { city, rentalType, carGroup, pickupAddress, selectedDate, selectedTime } = useSelector((state) => state.corporate);
   const userDetails = useSelector((state) => state.userprofile);
   const dispatch = useDispatch();
   const [specialInstruction, setspecialInstruction] = useState('');
   const [reportingLandmark, setreportingLandmark] = useState('');
-  const [flightTrainInfo , setflightTrainInfo] = useState('');
-  const [EmpId , setEmpId ] = useState('');
+  const [flightTrainInfo, setflightTrainInfo] = useState('');
+  const [EmpId, setEmpId] = useState('');
   const [referenceNumber, setreferenceNumber] = useState('');
   const [BookingCode, setBookingCode] = useState('');
   const [trNumber, settrNumber] = useState('')
@@ -69,15 +69,16 @@ const CorporateModule1 = ({ navigation }) => {
       city &&
       rentalType &&
       carGroup &&
-      pickupAddress && 
-      selectedDate && 
-      selectedTime
-    ); 
-      // EmpId &&
-      // referenceNumber &&
-      // BookingCode &&
-      // trNumber &&
-      // BillNumber
+      pickupAddress 
+
+    );
+    // selectedDate &&
+    // selectedTime
+    // EmpId &&
+    // referenceNumber &&
+    // BookingCode &&
+    // trNumber &&
+    // BillNumber
     // );
   };
   const openModal = () => {
@@ -175,15 +176,15 @@ const CorporateModule1 = ({ navigation }) => {
           </Section>
 
           <Section title="Other Information">
-            <View style={[styles.container2, { }]}>
+            <View style={[styles.container2, {}]}>
               <View style={{ marginHorizontal: 10 }}>
                 <CustomTextInpt placeholder="Flight/Train info"
-                  value={flightTrainInfo} 
-                  onChangeText={(text)=>{
+                  value={flightTrainInfo}
+                  onChangeText={(text) => {
                     setflightTrainInfo(text)
                     dispatch(updateCorporateSlice({
-                      type: "flightTrainInfo", 
-                      selectedItem : text
+                      type: "flightTrainInfo",
+                      selectedItem: text
                     }))
                   }}
                 />
@@ -218,30 +219,30 @@ const CorporateModule1 = ({ navigation }) => {
             </View>
           </Section>
           <Section title="Additional Information">
-            <View style={[styles.container2, { }]}>
+            <View style={[styles.container2, {}]}>
               <View style={{ marginHorizontal: 10 }}>
                 <CustomTextInpt placeholder="Emp ID"
-                  value={EmpId} 
-                  onChangeText={(text)=>{
+                  value={EmpId}
+                  onChangeText={(text) => {
                     setEmpId(text)
                     dispatch(updateCorporateSlice({
-                      type: "empId", 
-                      selectedItem : text
+                      type: "empId",
+                      selectedItem: text
                     }))
                   }}
                 />
                 <CustomTextInpt placeholder="Reference Number"
-                 value={referenceNumber} 
+                  value={referenceNumber}
                   onChangeText={(text) => {
-                  setreferenceNumber(text)
-                  dispatch(
-                    updateCorporateSlice({
-                      type: "referenceNumber",
-                      selectedItem: text,
-                    })
-                  )
-                }
-                }
+                    setreferenceNumber(text)
+                    dispatch(
+                      updateCorporateSlice({
+                        type: "referenceNumber",
+                        selectedItem: text,
+                      })
+                    )
+                  }
+                  }
                 />
                 <CustomTextInpt placeholder="Booking Code" onChangeText={(text) => {
                   setBookingCode(text)
@@ -254,31 +255,31 @@ const CorporateModule1 = ({ navigation }) => {
                 }
                 } value={BookingCode}
                 />
-               <CustomTextInpt placeholder="TR No" 
-               value={trNumber}
-               onChangeText={(text) => {
-                  settrNumber(text)
-                  dispatch(
-                    updateCorporateSlice({
-                      type: "trNumber",
-                      selectedItem: text,
-                    })
-                  )
-                }
-                } 
+                <CustomTextInpt placeholder="TR No"
+                  value={trNumber}
+                  onChangeText={(text) => {
+                    settrNumber(text)
+                    dispatch(
+                      updateCorporateSlice({
+                        type: "trNumber",
+                        selectedItem: text,
+                      })
+                    )
+                  }
+                  }
                 />
-                <CustomTextInpt placeholder="Bill No" 
-                value={BillNumber}
+                <CustomTextInpt placeholder="Bill No"
+                  value={BillNumber}
                   onChangeText={(text) => {
                     setBillNumber(text)
                     dispatch(
-                    updateCorporateSlice({
-                      type: "billNumber",
-                      selectedItem: text,
-                    })
-                  )
-                }
-                } 
+                      updateCorporateSlice({
+                        type: "billNumber",
+                        selectedItem: text,
+                      })
+                    )
+                  }
+                  }
                 />
               </View>
             </View>
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
   },
   container2: {
     backgroundColor: '#FFFFFF',
-    paddingBottom : 10
+    paddingBottom: 10
   },
   txt: {
     color: '#FFFFFF',

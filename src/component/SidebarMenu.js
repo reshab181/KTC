@@ -67,7 +67,9 @@ const SidebarMenu = ({ isVisible, onClose }) => {
   const clearUserData = async () => {
     try {
       await AsyncStorage.removeItem('userToken');
-      await AsyncStorage.setItem('isLoggedIn' , 'false'); 
+      await AsyncStorage.setItem('isLoggedInn', 'false');
+      await AsyncStorage.removeItem('user_id');  
+      await AsyncStorage.removeItem('user_email');  
     } catch (error) {
       console.error('Error clearing user data:', error);
     }
