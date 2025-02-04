@@ -3,12 +3,12 @@
 import React from 'react';
 import { useWindowDimensions, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 
-const CustomHeader = ({ title,justifyContent, imgPath, iconPath, iconHeight = 30,handleLeftIcon,  iconWidth = 36 , leftTitle, handlePress}) => {
+const CustomHeader = ({ title, justifyContent, imgPath, iconPath, Iconn, iconHeight = 30, handleLeftIcon, iconWidth = 36, leftTitle, handlePress }) => {
   const { width: winWidth } = useWindowDimensions();
 
   const styles = StyleSheet.create({
     header: {
-      justifyContent: justifyContent? justifyContent: '',
+      justifyContent: justifyContent ? justifyContent : '',
       width: winWidth,
       height: 60,
       backgroundColor: '#3C3567',
@@ -31,27 +31,33 @@ const CustomHeader = ({ title,justifyContent, imgPath, iconPath, iconHeight = 30
       width: 69,
       marginStart: 20,
     },
-    ltitle:{
+    ltitle: {
       position: 'absolute',
-      right: 20, 
+      right: 20,
     },
     ltitletxt: {
-      color: "#FFFFFF", 
+      color: "#FFFFFF",
 
     }
   });
   return (
     <View style={styles.headerContainer}>
       <View style={styles.header}>
-      <TouchableOpacity onPress={handleLeftIcon}>
-      {iconPath && <Image source={iconPath} style={styles.icon} />}
-      </TouchableOpacity>
-      {imgPath && <Image source={imgPath} style={styles.img} />}
-      <Text style={styles.title}>{title}</Text>
-      <TouchableOpacity style={styles.ltitle} onPress={handlePress}>
-        <Text style={styles.ltitletxt}>{leftTitle}</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={handleLeftIcon}>
+          {Iconn && (
+            <TouchableOpacity onPress={handleLeftIcon}>
+              <Iconn height={iconHeight} width={iconWidth} />
+            </TouchableOpacity>
+          )}
+
+          {iconPath && <Image source={iconPath} style={styles.icon} />}
+        </TouchableOpacity>
+        {imgPath && <Image source={imgPath} style={styles.img} />}
+        <Text style={styles.title}>{title}</Text>
+        <TouchableOpacity style={styles.ltitle} onPress={handlePress}>
+          <Text style={styles.ltitletxt}>{leftTitle}</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

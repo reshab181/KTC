@@ -1,7 +1,6 @@
 // Author: Reshab Kumar Pandey
 // Component: SignIn.js
 
-
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,

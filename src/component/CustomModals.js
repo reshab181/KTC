@@ -10,6 +10,7 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from 'react-native';
+import TickSvg from '../assets/svg/tick.svg'
 import { useWindowDimensions } from 'react-native';
 
 const CustomModal = ({ message1, message2, isVisible, onClose, isButtonVisible = true, btnText , handlePress }) => {
@@ -26,7 +27,10 @@ const CustomModal = ({ message1, message2, isVisible, onClose, isButtonVisible =
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback>
             <View style={styles.modalContainer}>
-              <Image source={require('../assets/tickbuttn.png')} style={styles.img} />
+              <View style={styles.img}>
+              <TickSvg height={64} width={64}/>
+              </View>
+              {/* <Image source={require('../assets/tickbuttn.png')} style={styles.img} /> */}
               <Text style={styles.modalText}>{message1}</Text>
               <Text style={styles.modalText}>{message2}</Text>
               {isButtonVisible ? (
@@ -55,8 +59,8 @@ function useStyles() {
       backgroundColor: '#F1F1F3',
     },
     img: {
-      height: 64,
-      width: 64,
+      // height: 64,
+      // width: 64,
       marginBottom: 22,
     },
     modalOverlay: {

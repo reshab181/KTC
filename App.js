@@ -32,6 +32,7 @@ import Notification from "./src/Screens/Notification";
 import SplashScreen from "@exodus/react-native-splash-screen";
 import Citieslist from "./src/Screens/Pages/Citieslist";
 import MapplsGL from 'mappls-map-react-native';
+import ReviewBookingModal from "./src/component/ReviewBookingModal";
 
 
 const Stack = createNativeStackNavigator();
@@ -79,6 +80,8 @@ const MainAppNavigator = () => (
     <AppStack.Screen name="Track" component={Track} options={{ headerShown: false }} />
     <AppStack.Screen name="Upcoming" component={Upcoming} options={{ headerShown: false }} />
     <AppStack.Screen name="Notifications" component={Notification} options={{ headerShown: false }} />
+    <AppStack.Screen name="BookingReview" component={ReviewBookingModal} options={{ headerShown: false }} />
+
   </AppStack.Navigator>
 );
 

@@ -67,14 +67,8 @@ export const fetchCities = async (city, userDetails, token, setCity) => {
     try {
         const data = await fetchData("https://web.gst.fleet.ktcindia.com/user_apis_encoded/booking_param.php", payload, token);
         const cityList = decryptData(data?.city_of_usage);
-        const e_loc = decryptData(data?.e_loc);
-
-
         console.log("Decrypted City List:", cityList);
-        console.log("E_loc:", e_loc);
-
         setCity([...cityList]);
-
         return cityList;
     } catch (error) {
         console.error('Error Fetching Cities:', error.message);
@@ -82,7 +76,6 @@ export const fetchCities = async (city, userDetails, token, setCity) => {
     }
 };
 
-// Fetch Rental Types
 export const fetchRentalType = async (city, userDetails, token, setCity, typeOff) => {
     console.log("Fetching Rental Types...");
 
@@ -97,11 +90,8 @@ export const fetchRentalType = async (city, userDetails, token, setCity, typeOff
 
         const rentalItems = decryptData(data?.assignment) || [];
         const carGroupItems = decryptData(data?.cartype) || [];
-        // const e_loc = decryptData(data?.e_loc) || '' ; 
-
         console.log("Rental Items:", rentalItems);
         console.log("Car Group Items:", carGroupItems);
-        // var CryptoJS = require("crypto-js");
         var data6 = data?.e_loc
         var rawData = CryptoJS.enc.Base64.parse(data6);
         var key1 = CryptoJS.enc.Latin1.parse("*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh");
@@ -112,7 +102,6 @@ export const fetchRentalType = async (city, userDetails, token, setCity, typeOff
         console.log(plaintexte_loc);
         const e_loc = plaintexte_loc ; 
         console.log('====================================');
-
         return { rentalItems, carGroupItems , e_loc};
     } catch (error) {
         console.error('Error Fetching Rental Types:', error.message);

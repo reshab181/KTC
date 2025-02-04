@@ -1,25 +1,24 @@
-import { StyleSheet, Text, View, FlatList, TouchableOpacity } from 'react-native';
+// Ashutosh Rai 
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import TimeTracker from './TimeTracker';
 
 const CalendarTimePicker = ({ selectDate, selectTime }) => {
-    const [startDate, setStartDate] = useState(new Date()); // Track the start date of the current week
-    const [selectedDate, setSelectedDate] = useState(null); // Track the selected date
+    const [startDate, setStartDate] = useState(new Date()); 
+    const [selectedDate, setSelectedDate] = useState(null); 
 
-    // Weekday Names (Fixed)
     const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-    // Function to calculate the next set of 7 days from a given start date
     const getNextWeek = (baseDate) => {
         const dates = [];
         const startOfWeek = new Date(baseDate);
         const dayOfWeek = startOfWeek.getDay();
-        startOfWeek.setDate(startOfWeek.getDate() - dayOfWeek); // Set to Sunday
+        startOfWeek.setDate(startOfWeek.getDate() - dayOfWeek); 
 
         for (let i = 0; i < 7; i++) {
             const newDate = new Date(startOfWeek);
-            newDate.setDate(startOfWeek.getDate() + i); // Increment the date by 1 for each day of the week
+            newDate.setDate(startOfWeek.getDate() + i); 
             dates.push({
                 day: dayNames[newDate.getDay()],
                 date: newDate.getDate(),
@@ -29,32 +28,27 @@ const CalendarTimePicker = ({ selectDate, selectTime }) => {
         return dates;
     };
 
-    // Function to handle the scrolling (next or previous 7 days)
     const changeWeek = (direction) => {
         const newStartDate = new Date(startDate);
-        newStartDate.setDate(startDate.getDate() + direction * 7); // Add or subtract 7 days
+        newStartDate.setDate(startDate.getDate() + direction * 7); 
         setStartDate(newStartDate);
     };
 
-    // Get the current set of 7 days to display
     const weekData = getNextWeek(startDate);
 
-    // Handle date selection and call the parent function if provided
     const handleDateSelect = (date) => {
-        setSelectedDate(date); // Set selected date
-        selectDate(date); // Call the parent function
+        setSelectedDate(date); 
+        selectDate(date); 
     };
 
-    // Function to check if a date is in the past
     const isPastDate = (date) => {
         const today = new Date();
-        today.setHours(0, 0, 0, 0); // Reset time to 00:00 for comparison
+        today.setHours(0, 0, 0, 0); 
         return date < today;
     };
 
     return (
         <View>
-            {/* Month Section */}
             <View style={styles.monthContainer}>
                 <TouchableOpacity onPress={() => changeWeek(-1)}>
                     <Ionicons name="chevron-back" size={20} color="#3C3567" />
@@ -67,7 +61,6 @@ const CalendarTimePicker = ({ selectDate, selectTime }) => {
                 </TouchableOpacity>
             </View>
 
-            {/* Fixed Weekday Names */}
             <View style={styles.weekdayContainer}>
                 {dayNames.map((day, index) => (
                     <View key={index} style={styles.weekdayItem}>
@@ -76,20 +69,19 @@ const CalendarTimePicker = ({ selectDate, selectTime }) => {
                 ))}
             </View>
 
-            {/* Scrollable Dates Section */}
             <View style={styles.dateContainer}>
                 {weekData.map((item) => {
-                    const isPast = isPastDate(item.fullDate); // Check if the date is in the past
+                    const isPast = isPastDate(item.fullDate); 
                     return (
                         <TouchableOpacity
                             key={item.fullDate.toDateString()}
                             style={[
                                 styles.dateItem,
                                 item.fullDate.toDateString() === selectedDate?.toDateString() && styles.selectedDate,
-                                isPast // Apply disabled style to past dates
+                                isPast 
                             ]}
-                            onPress={() => !isPast && handleDateSelect(item.fullDate)} // Only allow selection if it's not a past date
-                            disabled={isPast} // Disable the TouchableOpacity for past dates
+                            onPress={() => !isPast && handleDateSelect(item.fullDate)} 
+                            disabled={isPast} 
                         >
                             <Text style={[styles.dateText, isPast && styles.disabledText]}>
                                 {item.date}
@@ -99,10 +91,8 @@ const CalendarTimePicker = ({ selectDate, selectTime }) => {
                 })}
             </View>
 
-            {/* Time Picker */}
             <TimeTracker selectTime={selectTime} selectedDate={selectedDate}/>
 
-            {/* Footer */}
             <View style={styles.footer}>
                 <Text style={styles.footerText}>Swipe to change Week</Text>
             </View>
@@ -151,12 +141,10 @@ const styles = StyleSheet.create({
         color: '#000000',
     },
     selectedDate: {
-        backgroundColor: '#4CAF50', // Selected date background color
-    },
-    disabledDate: {
+        backgroundColor: '#4CAF50', 
     },
     disabledText: {
-        color: '#a9a9a9', // Disabled text color
+        color: '#a9a9a9', 
     },
     footer: {
         marginTop: 10,

@@ -1,3 +1,4 @@
+// Ashutosh Rai
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
@@ -42,7 +43,6 @@ const ForgotPassword = ({ route, navigation }) => {
   const sendForgotOTP = () => {
     console.log("Sending Click")
     emailsms(email, accessToken, navigation, setLoading);
-    // navigation.replace("OTP")
   };
 
   return (

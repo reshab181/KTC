@@ -257,7 +257,11 @@ import CustomHeader from '../../component/CustomHeader';
 import CustomButton from '../../component/CustomButtons';
 import CustomIconTextInput from '../../component/CustomIconTextInput';
 import { RadioButton } from 'react-native-paper';
-
+import FirstName from '../../assets/svg/first-name.svg'
+import DobSvg from '../../assets/svg/cake_black.svg'
+import GenderSvg from '../../assets/svg/Gender.svg'
+import SmartPhoneSvg from '../../assets/svg/smartphone.svg'
+import EmailSvg from '../../assets/svg/email_black.svg'
 const { height, width } = Dimensions.get('window');
 
 const COLORS = {

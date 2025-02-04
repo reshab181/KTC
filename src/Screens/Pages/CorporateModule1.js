@@ -4,7 +4,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomHeader from '../../component/CustomHeader';
 import CustomDropdown from '../../component/CustomDropdown';
 import CustomTextInpt from '../../component/CustomTextInpt';
@@ -14,16 +14,28 @@ import CustomCarGrouptile from '../../component/CustomCarGrouptile';
 import SidebarMenu from '../../component/SidebarMenu';
 import { fetchCities, fetchLocalities, fetchRentalType } from '../../Api/CorporateModuleApis';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
-
+import { Alert } from 'react-native';
+import Menuu from '../../assets/svg/menu.svg';
+import ReviewBookingModal from '../../component/ReviewBookingModal';
+import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
 const CorporateModule1 = ({ navigation }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [accessToken, setAccessToken] = useState('');
   const [cityList, setCityList] = useState([]);
+  const [Visible, setVisible] = useState(false)
   const [carGroupList, setCarGroupList] = useState([]);
-  const [e_loc , seteloc ] = useState('');
-  const { city, rentalType, carGroup , pickupAddress} = useSelector((state) => state.corporate);
+  const [e_loc, seteloc] = useState('');
+  const { city, rentalType, carGroup, pickupAddress ,   selectedDate , selectedTime } = useSelector((state) => state.corporate);
   const userDetails = useSelector((state) => state.userprofile);
-
+  const dispatch = useDispatch();
+  const [specialInstruction, setspecialInstruction] = useState('');
+  const [reportingLandmark, setreportingLandmark] = useState('');
+  const [flightTrainInfo , setflightTrainInfo] = useState('');
+  const [EmpId , setEmpId ] = useState('');
+  const [referenceNumber, setreferenceNumber] = useState('');
+  const [BookingCode, setBookingCode] = useState('');
+  const [trNumber, settrNumber] = useState('')
+  const [BillNumber, setBillNumber] = useState('')
   useEffect(() => {
     const getAccessToken = async () => {
       const token = await fetchJwtAccess();
@@ -43,7 +55,7 @@ const CorporateModule1 = ({ navigation }) => {
 
   const handleFetchRentalType = useCallback(async () => {
     try {
-      const { rentalItems, carGroupItems , e_loc} = await fetchRentalType(city, userDetails, accessToken, setCityList, 'rentalType');
+      const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city, userDetails, accessToken, setCityList, 'rentalType');
       setCarGroupList(carGroupItems);
       seteloc(e_loc);
       navigation.navigate('City', { list: rentalItems, type: 'rentalType' });
@@ -51,27 +63,79 @@ const CorporateModule1 = ({ navigation }) => {
       console.error("Error fetching rental types:", error);
     }
   }, [city, userDetails, accessToken]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const areFieldsFilled = () => {
+    return (
+      city &&
+      rentalType &&
+      carGroup &&
+      pickupAddress && 
+      selectedDate && 
+      selectedTime
+    ); 
+      // EmpId &&
+      // referenceNumber &&
+      // BookingCode &&
+      // trNumber &&
+      // BillNumber
+    // );
+  };
+  const openModal = () => {
+    if (areFieldsFilled()) {
+      setModalVisible(true);
+    } else {
+      Alert.alert("Incomplete Fields", "Please fill all required fields before proceeding.");
+    }
+  };
 
+  const closeModal = () => {
+    setModalVisible(false);
+  };
   return (
     <View style={styles.mainContainer}>
       <CustomHeader
         iconHeight={30}
-        iconWidth={39}
+        iconWidth={36}
         islogo
         imgPath={require('../../assets/ktclogo.png')}
-        iconPath={require('../../assets/menuu.png')}
+        Iconn={Menuu}
         handleLeftIcon={() => setIsSidebarVisible(true)}
         isSidebarVisible={isSidebarVisible}
       />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {
+          <ReviewBookingModal visible={modalVisible}
+            onClose={closeModal} />
+        }
         <View style={styles.root}>
           <Section title="Car Reservation Details">
-            <View style={[styles.container2, { height: 190 }]}>
+            <View style={[styles.container2]}>
               <View style={{ marginHorizontal: 10, marginTop: 5 }}>
                 {renderCustomTile(city || 'City', handleFetchCities)}
-                {renderCustomTile(rentalType || 'Rental Type', handleFetchRentalType)}
-                {renderCustomTile(carGroup || 'Car Group', () => navigation.navigate('City', { list: carGroupList, type: 'carGroup' }))}
+
+                {renderCustomTile(
+                  rentalType || 'Rental Type',
+                  () => {
+                    if (!city) {
+                      Alert.alert("Selection Required", "Please select a city first.");
+                      return;
+                    }
+                    handleFetchRentalType();
+                  }
+                )}
+
+                {renderCustomTile(
+                  carGroup || 'Car Group',
+                  () => {
+                    if (!rentalType) {
+                      Alert.alert("Selection Required", "Please select a Rental Type.");
+                      return;
+                    }
+                    navigation.navigate('City', { list: carGroupList, type: 'carGroup' });
+                  }
+                )}
+
               </View>
             </View>
           </Section>
@@ -80,35 +144,149 @@ const CorporateModule1 = ({ navigation }) => {
             <View style={{ backgroundColor: '#FFFFFF' }}>
               <CustomCalender />
             </View>
-            <View style={[styles.container2, { height: 140 }]}>
+            <View style={[styles.container2]}>
               <View style={{ marginHorizontal: 10 }}>
-                {renderCustomTile(pickupAddress || 'Pickup Address', ()=>navigation.navigate('PickUpLocation', {eloc : e_loc}))}
+                {renderCustomTile(
+                  (pickupAddress?.placeAddress?.length > 25
+                    ? pickupAddress.placeAddress.substring(0, 40) + "..."
+                    : pickupAddress?.placeAddress) || 'Pickup Address',
+                  () => {
+                    if (!city) {
+                      Alert.alert("Selection Required", "Please select a city first.");
+                      return; // Prevent navigation
+                    }
+                    navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'pickupAddress' });
+                  }
+                )}
 
-                <CustomTextInpt placeholder="Reporting Landmark (Optional)" />
-              </View>
-            </View>
-          </Section>
-
-          <Section title="Other Information">
-            <View style={[styles.container2, { height: 208 }]}>
-              <View style={{ marginHorizontal: 10 }}>
-                <CustomTextInpt placeholder="Flight/Train info" />
-                <CustomTextInpt placeholder="Special Instruction (Optional)" />
-                <CustomDropdown
-                  data={cityList}
-                  placeholder="Payment Mode"
-                  searchPlaceholder="Search Payment Mode..."
-                  onChange={(item) => console.log('Selected Payment Mode:', item)}
+                <CustomTextInpt
+                  placeholder="Reporting Landmark (Optional)"
+                  value={reportingLandmark} // Pass value correctly
+                  onChangeText={(text) => {
+                    setreportingLandmark(text);
+                    dispatch(updateCorporateSlice({
+                      type: "reportingLandmark",
+                      selectedItem: text // Use `text` instead of `reportingLandmark`
+                    }));
+                  }}
                 />
               </View>
             </View>
           </Section>
 
-          <CustomButton title="Next" borderRadius={0} onPress={() =>
-             navigation.navigate('HomeScreen1')
-            // fetchLocalities('delhi')
-            } 
-            />
+          <Section title="Other Information">
+            <View style={[styles.container2, { }]}>
+              <View style={{ marginHorizontal: 10 }}>
+                <CustomTextInpt placeholder="Flight/Train info"
+                  value={flightTrainInfo} 
+                  onChangeText={(text)=>{
+                    setflightTrainInfo(text)
+                    dispatch(updateCorporateSlice({
+                      type: "flightTrainInfo", 
+                      selectedItem : text
+                    }))
+                  }}
+                />
+                <CustomTextInpt placeholder="Special Instruction (Optional)" onChangeText={(text) => {
+                  setspecialInstruction(text)
+                  dispatch(
+                    updateCorporateSlice({
+                      type: "specialInstruction",
+                      selectedItem: specialInstruction,
+                    })
+                  )
+                }
+                } value={specialInstruction}
+                />
+                {/* <CustomDropdown
+                  data={cityList}
+                  placeholder="Payment Mode"
+                  searchPlaceholder="Search Payment Mode..."
+                  onChange={(item) => console.log('Selected Payment Mode:', item)}
+                /> */}
+                {/* {renderCustomTile
+                  ('Payment Method',
+                    () => {
+                      if (!city) {
+                        Alert.alert("Selection Required", "Please select a Above options.");
+                        return; // Prevent navigation
+                      }
+                      navigation.navigate('Payment', { eloc: e_loc, type: 'paymentMethod' });
+                    }
+                  )} */}
+              </View>
+            </View>
+          </Section>
+          <Section title="Additional Information">
+            <View style={[styles.container2, { }]}>
+              <View style={{ marginHorizontal: 10 }}>
+                <CustomTextInpt placeholder="Emp ID"
+                  value={EmpId} 
+                  onChangeText={(text)=>{
+                    setEmpId(text)
+                    dispatch(updateCorporateSlice({
+                      type: "empId", 
+                      selectedItem : text
+                    }))
+                  }}
+                />
+                <CustomTextInpt placeholder="Reference Number"
+                 value={referenceNumber} 
+                  onChangeText={(text) => {
+                  setreferenceNumber(text)
+                  dispatch(
+                    updateCorporateSlice({
+                      type: "referenceNumber",
+                      selectedItem: text,
+                    })
+                  )
+                }
+                }
+                />
+                <CustomTextInpt placeholder="Booking Code" onChangeText={(text) => {
+                  setBookingCode(text)
+                  dispatch(
+                    updateCorporateSlice({
+                      type: "bookingCode",
+                      selectedItem: text,
+                    })
+                  )
+                }
+                } value={BookingCode}
+                />
+               <CustomTextInpt placeholder="TR No" 
+               value={trNumber}
+               onChangeText={(text) => {
+                  settrNumber(text)
+                  dispatch(
+                    updateCorporateSlice({
+                      type: "trNumber",
+                      selectedItem: text,
+                    })
+                  )
+                }
+                } 
+                />
+                <CustomTextInpt placeholder="Bill No" 
+                value={BillNumber}
+                  onChangeText={(text) => {
+                    setBillNumber(text)
+                    dispatch(
+                    updateCorporateSlice({
+                      type: "billNumber",
+                      selectedItem: text,
+                    })
+                  )
+                }
+                } 
+                />
+              </View>
+            </View>
+          </Section>
+
+          <CustomButton title="Next" borderRadius={0} onPress={openModal}
+          />
+
         </View>
       </ScrollView>
 
@@ -129,6 +307,8 @@ const Section = ({ title, children }) => (
 const renderCustomTile = (title, onPress) => (
   <CustomCarGrouptile title={title} onPress={onPress} iconName="chevron-right" />
 );
+
+
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -157,6 +337,7 @@ const styles = StyleSheet.create({
   },
   container2: {
     backgroundColor: '#FFFFFF',
+    paddingBottom : 10
   },
   txt: {
     color: '#FFFFFF',
@@ -259,7 +440,7 @@ export default CorporateModule1;
 //                       title={carGroup || 'Car Group'}
 //                       onPress={async () => {
 //                         try {
-//                           const list = cargroupitem ; 
+//                           const list = cargroupitem ;
 //                           console.log('====================================');
 //                           console.log("CARGRPITEM", cargroupitem);
 //                           console.log('====================================');

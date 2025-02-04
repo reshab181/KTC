@@ -303,7 +303,11 @@ import CustomIconTextInput from '../../component/CustomIconTextInput';
 import { updateUserDetails } from '../../Redux/slice/Userslice';
 import { registerUser } from '../../Api/Authentication';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
-
+import FirstName from '../../assets/svg/first-name.svg'
+import DobSvg from '../../assets/svg/cake_black.svg'
+import GenderSvg from '../../assets/svg/Gender.svg'
+import SmartPhoneSvg from '../../assets/svg/smartphone.svg'
+import EmailSvg from '../../assets/svg/email_black.svg'
 const { width } = Dimensions.get('window');
 
 

@@ -5,6 +5,7 @@ import CustomButton from '../../component/CustomButtons';
 import CustomHeader from '../../component/CustomHeader';
 import { verifyOTP } from '../../Api/Authentication';
 import { useRef, useState } from 'react';
+import OtpSvg from '../../assets/svg/otp.svg'
 import RNHash from 'react-native-hash';
 const ForgotPasswordOTP = ({ route , navigation }) => {
   const styles = useStyles();
@@ -77,7 +78,7 @@ const ForgotPasswordOTP = ({ route , navigation }) => {
       Alert.alert("Error", "Please fill all OTP fields.");
       return;
     }
-    const otpp = otp.join("");
+    const otpp = otp.join("").toString();
     console.log('====================================');
     console.log();
     console.log('Entered OTP:', otpp);
@@ -109,10 +110,13 @@ const ForgotPasswordOTP = ({ route , navigation }) => {
   return (
     <View style={styles.root}>
       <CustomHeader title={"Forgot Password"} />
-      <Image
+      <View style={styles.img}>
+        <OtpSvg/>
+      </View>
+      {/* <Image
         source={require('../../assets/frgtpwdotp.png')}
         style={styles.img}
-      />
+      /> */}
       <Text style={styles.txt}>
         Please enter the OTP received on your registered email address.
       </Text>

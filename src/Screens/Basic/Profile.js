@@ -11,6 +11,10 @@ import CustomHeader from '../../component/CustomHeader';
 import CustomIconTextInput from '../../component/CustomIconTextInput';
 import CustomButton from '../../component/CustomButtons';
 import { useSelector } from 'react-redux';
+import FirstName from '../../assets/svg/first-name.svg'
+import DobSvg from '../../assets/svg/cake_black.svg'
+import SmartPhoneSvg from '../../assets/svg/smartphone.svg'
+import EmailSvg from '../../assets/svg/email_black.svg'
 
 const Profile = ({ navigation }) => {
   const [loader, setLoader] = useState(false);
@@ -41,12 +45,12 @@ const Profile = ({ navigation }) => {
   };
 
   const inputs = [
-    { placeholder: "First Name", icon1: require('../../assets/manicon.png'), value: formData.firstName, key: 'firstName' },
-    { placeholder: "Last Name", icon1: require('../../assets/manicon.png'), value: formData.lastName, key: 'lastName' },
-    { placeholder: "Email", icon1: require('../../assets/email.png'), value: formData.email, key: 'email' },
-    { placeholder: "MM/DD/YYYY", icon1: require('../../assets/DOB.png'), value: formData.birthDate, key: 'birthDate' },
-    { placeholder: "Mobile Number", icon1: require('../../assets/phone.png'), value: formData.mobileNumber, key: 'mobileNumber' , type: "numeric" },
-    { placeholder: "Change Password", icon1: require('../../assets/lock.png'), value: formData.password, key: 'password' },
+    { placeholder: "First Name", icon1: FirstName, value: formData.firstName, key: 'firstName' },
+    { placeholder: "Last Name", icon1: FirstName, value: formData.lastName, key: 'lastName' },
+    { placeholder: "Email", icon1: EmailSvg, value: formData.email, key: 'email' },
+    { placeholder: "MM/DD/YYYY", icon1: DobSvg, value: formData.birthDate, key: 'birthDate' },
+    { placeholder: "Mobile Number", icon1: SmartPhoneSvg, value: formData.mobileNumber, key: 'mobileNumber' , type: "numeric" },
+    { placeholder: "Change Password", iconimg: require('../../assets/lock.png'), value: formData.password, key: 'password' },
   ];
 
   const handleInputChange = (key, value) => {
@@ -79,7 +83,8 @@ const Profile = ({ navigation }) => {
               <CustomIconTextInput
                 keyboardType={input.type}
                 placeholder={input.placeholder}
-                icon1={input.icon1}
+                LeftSvg={input.icon1 }
+                icon1 = {input.iconimg}
                 value={input.value}
                 onChangeText={(value) => handleInputChange(input.key, value)}
               />
