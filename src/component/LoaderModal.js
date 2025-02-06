@@ -23,13 +23,13 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.1)', // High opacity background
+        // backgroundColor: 'rgba(0, 0, 0, 0.1)', // High opacity background
     },
     loaderContainer: {
-        width: 80,
-        height: 80,
-        backgroundColor: 'rgba(44, 12, 223, 0.2)', // Slightly transparent white
-        borderRadius: 10,
+        width: 50,
+        height: 50,
+        backgroundColor: 'rgba(44, 12, 223, 0.4)', // Slightly transparent white
+        borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
     },

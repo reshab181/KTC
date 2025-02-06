@@ -1,154 +1,254 @@
-// Ashutosh Rai 
-// PickUpLocation
-import { FlatList, StyleSheet, Text, View, TextInput, ActivityIndicator, TouchableOpacity } from 'react-native';
-import React, { useState, useEffect } from 'react';
-import CustomButton from '../../component/CustomButtons';
-import CustomHeader from '../../component/CustomHeader';
-import CustomTextInput from '../../component/CustomIconTextInput';
-import SearchResultList from '../../component/SearchResultList';
-import { fetchLocalities } from '../../Api/CorporateModuleApis';
+import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import TimeTracker from '../../component/TimeTracker';
 import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import CloseSvg from '../../assets/svg/closeblack.svg'
-import LoaderModal from '../../component/LoaderModal';
 
-const PickUpLocation = ({ navigation, route }) => {
-    const [searchText, setSearchText] = useState('');
-    const [locations, setLocations] = useState([]); // Store API results
-    const [loading, setLoading] = useState(false); // Loader state
+const CustomCalendar = () => {
     const dispatch = useDispatch();
-    console.log("Route", route.params?.eloc, route.params?.type);
+    const today = new Date();
+    const flatListRef = useRef(null);
+    const [visibleDate, setVisibleDate] = useState(today);
+    const [selectedDate, setSelectedDate] = useState(today);
+    const [weeks, setWeeks] = useState([]);
+    const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
+    const [selectedTime, setSelectedTime] = useState(null);
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
     useEffect(() => {
-        if (searchText.length > 2) {
-            setLoading(true); // Show loader
-            fetchLocalities(searchText, route.params?.eloc)
-                .then(response => {
-                    console.log("Response", response);
-                    setLocations(response); 
-                })
-                .catch(error => {
-                    console.error("API Error:", error);
-                })
-                .finally(() => {
-                    setLoading(false); 
-                });
-        } else {
-            setLocations([]); 
-        }
-    }, [searchText]);
+        generateWeeks();
+    }, []);
 
-    const handleSelectLocation = (item) => {
-        console.log("Selected Location:", item);
+    useEffect(() => {
+        if (weeks.length > 0) {
+            const weekIndex = weeks.findIndex(week =>
+                week.some(day => day.fullDate.toDateString() === today.toDateString())
+            );
+
+            if (weekIndex !== -1) {
+                setCurrentWeekIndex(weekIndex);
+                setTimeout(() => {
+                    flatListRef.current?.scrollToIndex({ index: weekIndex, animated: true });
+                }, 100);
+            }
+        }
+    }, [weeks]);
+
+    const generateWeeks = () => {
+        let start = new Date(today.getFullYear(), today.getMonth(), 1);
+        start.setDate(start.getDate() - start.getDay()); // Start from the first Sunday
+
+        let end = new Date(today.getFullYear(), today.getMonth() + 2, 0);
+        end.setDate(end.getDate() + (6 - end.getDay())); // End at the last Saturday
+
+        let tempWeeks = [];
+        let current = new Date(start);
+
+        while (current <= end) {
+            let week = [];
+            for (let i = 0; i < 7; i++) {
+                week.push({
+                    day: dayNames[current.getDay()],
+                    date: current.getDate(),
+                    fullDate: new Date(current),
+                    isDisabled: current < today && current.toDateString() !== today.toDateString(),
+                });
+                current.setDate(current.getDate() + 1);
+            }
+            tempWeeks.push(week);
+        }
+        setWeeks(tempWeeks);
+    };
+
+    const handleScroll = (event) => {
+        const newIndex = Math.round(event.nativeEvent.contentOffset.x / 350); // Adjust based on fixed width
+        if (newIndex !== currentWeekIndex && weeks[newIndex]) {
+            setCurrentWeekIndex(newIndex);
+            setVisibleDate(weeks[newIndex][0].fullDate);
+        }
+    };
+
+    const handleDateSelect = (date) => {
+        setSelectedDate(date);
+        const formattedDate = date.toISOString().split('T')[0];
+
         dispatch(updateCorporateSlice({
-            type: route.params.type,
-            selectedItem: item
+            type: 'selectedDate',
+            selectedItem: formattedDate,
         }));
-        navigation.goBack();
+
+        const weekIndex = weeks.findIndex(week =>
+            week.some(day => day.fullDate.toDateString() === date.toDateString())
+        );
+
+        if (weekIndex !== -1) {
+            setCurrentWeekIndex(weekIndex);
+            flatListRef.current.scrollToIndex({ index: weekIndex, animated: true });
+        }
+    };
+
+    const navigateMonth = (direction) => {
+        let newDate = new Date(visibleDate);
+        newDate.setMonth(visibleDate.getMonth() + (direction === 'next' ? 1 : -1));
+
+        setVisibleDate(newDate);
+
+        // Find the first week that belongs to the new month
+        const weekIndex = weeks.findIndex(week =>
+            week.some(day =>
+                day.fullDate.getFullYear() === newDate.getFullYear() &&
+                day.fullDate.getMonth() === newDate.getMonth()
+            )
+        );
+
+        if (weekIndex !== -1) {
+            setCurrentWeekIndex(weekIndex);
+            flatListRef.current?.scrollToIndex({ index: weekIndex, animated: true });
+        }
     };
 
     return (
-        <View style={{ flex: 1, backgroundColor: '#F1F1F3' }}>
-            <CustomHeader
-                handleLeftIcon={() => { navigation.goBack(); }}
-                islogo={true}
-                title={"Pickup Location"}
-                iconPath={require('../../assets/icbackarrow.png')}
-                iconHeight={24}
-                iconWidth={24}
-            />
-            <View style={{ marginStart: 16, marginEnd: 16, marginTop: 10 }}>
-                <CustomTextInput 
-                lefticon={'search'}
-                Righticon={CloseSvg} 
-                iconSize={20} 
-                placeholder={"Enter Location"} 
-                value={searchText} 
-                handlePress={()=>{
-                    setLocations([]);
-                }}
-                onChangeText={setSearchText}/>
+        <View style={styles.container}>
+            <View style={styles.header}>
+                <Image source={require('../../assets/car.png')} />
+                <Text style={styles.headerText}>Select Date & Reporting Time</Text>
             </View>
 
-            {loading ? ( 
-               <View style={styles.modalBackground}>
-                              <View style={styles.loaderContainer}>
-                                  <ActivityIndicator size="large" color="#ffffff" />
-                              </View>
-                          </View>
-            ) : (
-                <FlatList
-                    data={locations}
-                    keyExtractor={(item) => item.mapplsPin} // Using unique ID
-                    renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => handleSelectLocation(item)} style={styles.item}>
-                            <View style={styles.locationContainer}>
-                                <View style={styles.iconContainer}>
-                                    <Icon name="map-marker" size={20} />
+            <View style={styles.monthContainer}>
+                <TouchableOpacity onPress={() => navigateMonth('prev')}>
+                    <Ionicons name="chevron-back" size={24} color="#3C3567" />
+                </TouchableOpacity>
+                <Text style={styles.monthText}>
+                    {visibleDate.toLocaleString('default', { month: 'long' })} {visibleDate.getFullYear()}
+                </Text>
+                <TouchableOpacity onPress={() => navigateMonth('next')}>
+                    <Ionicons name="chevron-forward" size={24} color="#3C3567" />
+                </TouchableOpacity>
+            </View>
+
+            {/* Weekday Headers */}
+            <View style={styles.weekHeader}>
+                {dayNames.map((day, index) => (
+                    <Text key={index} style={styles.weekDay}>{day}</Text>
+                ))}
+            </View>
+
+            {/* Dates Scrollable List */}
+            <FlatList
+                ref={flatListRef}
+                data={weeks}
+                horizontal
+                keyExtractor={(item, index) => index.toString()}
+                showsHorizontalScrollIndicator={false}
+                pagingEnabled
+                // getItemLayout={(data, index) => {
+                //     const itemWidth = 350; // Fixed width for each item
+                //     return { length: itemWidth, offset: itemWidth * index, index };
+                // }}
+                onMomentumScrollEnd={handleScroll}
+                renderItem={({ item }) => (
+                    <View style={styles.weekContainer}>
+                        {item.map((dayItem, index) => {
+                            const isLastItem = index === item.length - 1; // Check if it's the last item
+
+                            return (
+                                <View>
+                                    
                                 </View>
-                                <View style={styles.textContainer}>
-                                    <Text style={styles.placeName}>{item.placeName}</Text>
-                                    <Text style={styles.placeAddress} numberOfLines={2} ellipsizeMode="tail">
-                                        {item.placeAddress}
-                                    </Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                />
-            )}
+                            );
+                        })}
+                    </View>
+                )}
+            />
+
+            <TimeTracker selectTime={(time) => setSelectedTime(time)} selectedDate={selectedDate} />
         </View>
     );
 };
 
-export default PickUpLocation;
-
 const styles = StyleSheet.create({
-    input: {
-        backgroundColor: '#fff',
-        padding: 10,
-        borderWidth: 1,
-        borderColor: '#ccc',
-    },
-    item: {
-        backgroundColor: '#fff',
-        padding: 10,
-        marginHorizontal: 16,
-        borderBottomWidth: 0.3,
-    },
-    locationContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    iconContainer: {
-        justifyContent: 'center',
-        marginHorizontal: 16,
-    },
-    textContainer: {
-        flex: 1, 
-    },
-    placeName: {
-        fontSize: 16,
-        fontWeight: 'bold',
-    },
-    placeAddress: {
-        fontSize: 12,
-        color: 'gray',
-        flexShrink: 1,
-    },
-    modalBackground: {
+    container: {
+        backgroundColor: '#FFFFFF',
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        // backgroundColor: 'rgba(0, 0, 0, 0.1)', // High opacity background
+        margin: 10,
+        borderWidth: 1,
+        borderColor: "#E5E5E5",
+        borderRadius: 8,
+        paddingBottom: 10,
     },
-    loaderContainer: {
-        width: 80,
-        height: 80,
-        backgroundColor: 'rgba(44, 12, 223, 0.1)', // Slightly transparent white
-        borderRadius: 40,
+    header: {
+        flexDirection: "row",
+        alignItems: "center",
+        margin: 20,
+    },
+    headerText: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#3C3567',
+        marginStart: 20,
+    },
+    monthContainer: {
+        flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
+        marginVertical: 10,
+    },
+    monthText: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#3C3567',
+        marginHorizontal: 15,
+    },
+    weekHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingHorizontal: 10,
+        marginBottom: 5,
+    },
+    weekDay: {
+        width: 50,
+        textAlign: 'center',
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#3C3567',
+    },
+    weekContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 10,
+        width: 350,
+        alignSelf: 'center',
+    },
+    dateItem: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+    },
+    selectedDateStyle: {
+        backgroundColor: '#3C3567',
+        borderRadius: 25,
+        width: 50,
+        height: 50,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    disabledDate: {
+        opacity: 0.3,
+    },
+    dateText: {
+        fontSize: 16,
+        color: 'black',
+        fontWeight: '500',
+    },
+    selectedDateText: {
+        fontSize: 17,
+        fontWeight: 'bold',
+        color: 'white',
     },
 });
+
+
+export default CustomCalendar;
