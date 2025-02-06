@@ -28,7 +28,7 @@ export const decryptData = (encryptedData) => {
   const iv = CryptoJS.enc.Latin1.parse(ClientID);
 
   const decryptedData = CryptoJS.AES.decrypt(
-    { 
+    {
       ciphertext: rawData
     },
     key,
@@ -82,7 +82,8 @@ export const registrationHandler = debounce(
       } else if (data?.newuser === 'Yes') {
         const mmiToken = await tokenFromMMI();
 
-        const otpUrl = `https://anchor.mapmyindia.com/api/users/authenticate?handle=${email}&autoMigrate`;
+        // const otpUrl = `https://anchor.mapmyindia.com/api/users/authenticate?handle=${email}&autoMigrate`;
+        const otpUrl = `https://anchor.mapmyindia.com/api/users/authenticate?handle=${email}`;
         const otpResponse = await axios.post(
           otpUrl,
           {},
@@ -92,7 +93,9 @@ export const registrationHandler = debounce(
             },
           }
         );
-
+        console.log('====================================');
+        console.log(otpResponse?.headers?.location, " URL FROM OTP REGISTER");
+        console.log('====================================');
         if (otpResponse.status >= 200 && otpResponse.status < 300) {
           const otpScreen = userType === 'corporate' ? 'OTPRegister' : null;
           navigation.navigate(otpScreen, {
@@ -160,13 +163,28 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
     });
 
     const data = response.data;
-    console.log(data, "login data");  
-    if(data.status === 200 ){
-      AsyncStorage.setItem('isLoggedInn' , 'true');
+    console.log('====================================');
+    console.log(data , "RESPONSE DATA");
+    console.log('====================================');
+ 
+
+    console.log(data, "login data");
+    if (data.status === 200) {
+      console.log('====================================');
+      console.log("Logged In");
+      console.log('====================================');
+      AsyncStorage.setItem('isLoggedInn', 'true');
+      var result = decryptData(data.result);
+
+      // return result ; 
+    }else if(data.status === 204){
+      Alert.alert('OOPs', data?.message)
+      return ; 
     }
-    const dataDecrypted = decryptData(data.result);
-    console.log(dataDecrypted, "Descrypted DAta ");
-    
+    console.log(result, "Descrypted DAta ");
+    // await AsyncStorage.setItem('isLoggedInn', 'true');
+    // await AsyncStorage.setItem('user_id', decryptData.user_id);
+    // await AsyncStorage.setItem('user_email', decryptData .email_id);
 
     if (data?.jwt) {
       await AsyncStorage.setItem('token', data.jwt);
@@ -175,11 +193,11 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
         screen: 'CorporateModule1',
       });
     } else {
-      Alert.alert('OOPs!', 'Login Failed Try Again');
+      Alert.alert('OOPs!', 'Login Failed Try sAgain');
     }
-    return dataDecrypted  
+    return result; 
   } catch (error) {
-    console.error('Error in handleSignIn:', error);
+    console.error('Error in handleSignIn:',);
     Alert.alert('Error', 'Failed to sign in. Please try again.');
   } finally {
     setLoading(false);
@@ -258,16 +276,21 @@ export const resetPassword = async (email, newPassword, confirmPassword, accessT
     const encryptedPayload = encryptPayload(payload);
     const formBody = new URLSearchParams({ request_data: encryptedPayload }).toString();
 
-    const response = await axios.post(Api.USER_RESETPASSWORD, formBody, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        jwt: accessToken,
-      },
-    });
+    const response = await axios.post(Api.USER_RESETPASSWORD,
+      formBody,
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          jwt: accessToken,
+        },
+      });
 
     const data = response.data;
-
-    if (data?.status === 'success') {
+    console.log('====================================');
+    console.log(data, "DATA RESETING PASSWORD");
+    console.log('====================================');
+    return data;
+    if (data?.status === '200') {
       Alert.alert('Success', 'Password reset successfully.');
     } else {
       Alert.alert('Error', 'Failed to reset password. Please try again.');
@@ -280,14 +303,14 @@ export const resetPassword = async (email, newPassword, confirmPassword, accessT
   }
 };
 
-export const verifyOTP = async (url, passPhrase, processs ) => {
+export const verifyOTP = async (url, passPhrase, processs) => {
   try {
     const mmiToken = await tokenFromMMI();
 
     if (mmiToken?.access_token) {
       const fullUrl = `${url}?passPhrase=${passPhrase}&${processs}`;
       console.log('====================================');
-      console.log("FULL URL " , fullUrl);
+      console.log("FULL URL ", fullUrl);
       console.log('====================================');
       const response = await axios.get(fullUrl, {
         headers: {
@@ -295,8 +318,8 @@ export const verifyOTP = async (url, passPhrase, processs ) => {
         },
       });
       console.log('====================================');
-      console.log("repsonse" , response);
-      console.log('====================================');  
+      console.log("repsonse", response);
+      console.log('====================================');
       return response;
     } else {
       throw new Error('Access token is missing.');

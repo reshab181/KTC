@@ -237,9 +237,11 @@ const RegisterPOPUP = ({ onClose }) => {
               else if (!emailRegex.test(values.email)) errors.email = 'Invalid email address';
               return errors;
             }}
-            onSubmit={({ email }) => {
-              // navigation.navigate('OTPRegister');
-              registrationHandler(email, userType, accessToken,navigation, setLoader)
+            onSubmit={async({ email }) => {
+              // registrationHandler(email, userType, accessToken,navigation, setLoader)
+              // setLoader(true);  // Start loader
+              await registrationHandler(email, userType, accessToken, navigation, setLoader)
+              // setLoader(false);
             }}
           >
             {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (

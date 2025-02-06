@@ -13,7 +13,7 @@ import {
 import TickSvg from '../assets/svg/tick.svg'
 import { useWindowDimensions } from 'react-native';
 
-const CustomModal = ({ message1, message2, isVisible, onClose, isButtonVisible = true, btnText , handlePress }) => {
+const CustomModal = ({ loading , message1, message2, isVisible, onClose, isButtonVisible = true, btnText , handlePress }) => {
   const styles = useStyles();
 
   return (
@@ -35,7 +35,7 @@ const CustomModal = ({ message1, message2, isVisible, onClose, isButtonVisible =
               <Text style={styles.modalText}>{message2}</Text>
               {isButtonVisible ? (
                 <TouchableOpacity onPress={handlePress} style={styles.closeButton}>
-                  <Text style={styles.closeButtonText}>{btnText}</Text>
+                  {loading ? <ActivityIndicator size="large" color="#FFFFFF" style={styles.loader} /> : <Text style={styles.closeButtonText}>{btnText}</Text>}
                 </TouchableOpacity>
               ) : null}
             </View>

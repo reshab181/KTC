@@ -12,6 +12,7 @@ const ForgotPasswordOTP = ({ route , navigation }) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+    const [loading, setloading] = useState(false);
   const {url , email , accessToken} = route.params ;
   console.log('====================================');
   console.log(url , email , accessToken, "AAGYA URL");
@@ -73,6 +74,7 @@ const ForgotPasswordOTP = ({ route , navigation }) => {
   //   }
   // };
   const handleSubmit = async() => {
+    setloading(true)
     if (otp.some(value => value === "")) {
       setIsError(true);
       Alert.alert("Error", "Please fill all OTP fields.");
@@ -90,26 +92,27 @@ const ForgotPasswordOTP = ({ route , navigation }) => {
       const sha256hash = await RNHash.hashString(md5hash, 'sha256'); // Ensure you await RNHash
       console.log('SHA256 Hash:', sha256hash);
       const passPhrase = sha256hash;
-      setIsLoading(true);
+      // setIsLoading(true);
       // const url = `https://anchor.mapmyindia.com/api/otp/otp1738057306i1090519040/validate?passPhrase=${passPhrase}&processForgotPassword`;
-      const response = await verifyOTP(url , passPhrase.toString() , 'processForgotPassword' );
+      const response = await verifyOTP(url , passPhrase , 'processForgotPassword' );
        // Pass the correct hashed value to your API
       //  const status = response.status;
       //  console.log(status);
-       console.log('====================================');
-       console.log(response.status , "RESPONSESESE");
-       console.log('====================================');
+      //  console.log('====================================');
+      //  console.log(response , "RESPONSESESE");
+      //  console.log('====================================');
       if (response.status === 204) {
-        navigation.navigate('ResetPassword');
-      } else {
-        setIsError(true);
-      }
+        navigation.navigate('ResetPassword', {email});
+        setloading(false); 
+
+      } 
+
     } catch (error) {
-      console.error('Error during OTP verification:', error);
-      Alert.alert('Error', 'Something went wrong. Please try again.');
-    } finally {
-      setIsLoading(false);
-    }
+      // console.error('Error during OTP verification:', error);
+      // Alert.alert('Error', error,message);
+      Alert.alert('Error', 'Incorrect OTP entered.');
+
+    } 
   };
   
   return (
@@ -145,9 +148,9 @@ const ForgotPasswordOTP = ({ route , navigation }) => {
       </View>
       <View style={styles.btn}>
         <CustomButton
-          title={isLoading ? "Verifying..." : "Next"}
+          title={"Next"}
           onPress={handleSubmit}
-          disabled={isLoading}
+          loading={loading}
         />
       </View>
       <View>

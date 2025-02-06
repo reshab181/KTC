@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CloseSvg from '../../assets/svg/closeblack.svg'
+import LoaderModal from '../../component/LoaderModal';
 
 const PickUpLocation = ({ navigation, route }) => {
     const [searchText, setSearchText] = useState('');
@@ -20,7 +21,7 @@ const PickUpLocation = ({ navigation, route }) => {
     console.log("Route", route.params?.eloc, route.params?.type);
 
     useEffect(() => {
-        if (searchText.length > 3) {
+        if (searchText.length > 2) {
             setLoading(true); // Show loader
             fetchLocalities(searchText, route.params?.eloc)
                 .then(response => {
@@ -70,8 +71,12 @@ const PickUpLocation = ({ navigation, route }) => {
                 onChangeText={setSearchText}/>
             </View>
 
-            {loading ? ( // ✅ Show loader when API call is in progress
-                <ActivityIndicator size="large" color="#0000ff" style={styles.loader} />
+            {loading ? ( 
+               <View style={styles.modalBackground}>
+                              <View style={styles.loaderContainer}>
+                                  <ActivityIndicator size="large" color="#ffffff" />
+                              </View>
+                          </View>
             ) : (
                 <FlatList
                     data={locations}
@@ -131,5 +136,19 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'gray',
         flexShrink: 1,
+    },
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        // backgroundColor: 'rgba(0, 0, 0, 0.1)', // High opacity background
+    },
+    loaderContainer: {
+        width: 80,
+        height: 80,
+        backgroundColor: 'rgba(44, 12, 223, 0.1)', // Slightly transparent white
+        borderRadius: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });

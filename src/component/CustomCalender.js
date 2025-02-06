@@ -9,12 +9,31 @@ const CustomCalendar = () => {
     const dispatch = useDispatch();
     const today = new Date();
     const flatListRef = useRef(null);
-
+    const [VisibleDates, setVisibleDates] = useState(today);
     const [selectedDate, setSelectedDate] = useState(today);
     const [weeks, setWeeks] = useState([]);
     const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
     const [selectedTime, setSelectedTime] = useState(null);
     const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    useEffect(() => {
+        if (weeks.length > 0) {
+            const weekIndex = weeks.findIndex(week =>
+                week.some(day => day.fullDate.toDateString() === today.toDateString())
+            );
+
+            if (weekIndex !== -1) {
+                setCurrentWeekIndex(weekIndex);
+                setTimeout(() => {
+                    flatListRef.current?.scrollToIndex({ index: weekIndex, animated: true });
+                }, 100); // Small delay to ensure FlatList renders
+            }
+        }
+    }, [weeks]);
+    useEffect(() => {
+        generateWeeks();
+    }, []);
+
 
     const generateWeeks = () => {
         let start = new Date();
@@ -48,39 +67,74 @@ const CustomCalendar = () => {
         const newIndex = Math.round(event.nativeEvent.contentOffset.x / 350);
         if (newIndex !== currentWeekIndex && weeks[newIndex]) {
             setCurrentWeekIndex(newIndex);
-            setSelectedDate(weeks[newIndex][0].fullDate); // Set to first day of new week
+            setVisibleDates(weeks[newIndex][0].fullDate);
+
+            // Set selectedDate to the first day of the new week
+            // setSelectedDate(weeks[newIndex][0].fullDate);
         }
     };
-    useEffect(() => {
-        generateWeeks();
-    }, []);
+
+    // useEffect(() => {
+    //     generateWeeks();
+    // }, []);
 
     const handleTimeSelect = (time) => {
         setSelectedTime(time);
+        console.log("Selected Time:", time); // Log selected time
+    
         dispatch(updateCorporateSlice({
             type: 'selectedTime',
             selectedItem: time,
         }));
     };
-
+    
     const handleDateSelect = (date) => {
         setSelectedDate(date);
         const formattedDate = date.toISOString().split('T')[0];
+        console.log("Selected Date:", formattedDate); // Log selected date
+    
         dispatch(updateCorporateSlice({
             type: 'selectedDate',
             selectedItem: formattedDate,
         }));
-
+    
         // Find the week index where the selected date belongs and scroll to it
         const weekIndex = weeks.findIndex(week =>
             week.some(day => day.fullDate.toDateString() === date.toDateString())
         );
-
+    
         if (weekIndex !== -1) {
             setCurrentWeekIndex(weekIndex);
             flatListRef.current.scrollToIndex({ index: weekIndex, animated: true });
         }
     };
+
+    // const handleTimeSelect = (time) => {
+    //     setSelectedTime(time);
+    //     dispatch(updateCorporateSlice({
+    //         type: 'selectedTime',
+    //         selectedItem: time,
+    //     }));
+    // };
+
+    // const handleDateSelect = (date) => {
+    //     setSelectedDate(date);
+    //     const formattedDate = date.toISOString().split('T')[0];
+    //     dispatch(updateCorporateSlice({
+    //         type: 'selectedDate',
+    //         selectedItem: formattedDate,
+    //     }));
+
+    //     // Find the week index where the selected date belongs and scroll to it
+    //     const weekIndex = weeks.findIndex(week =>
+    //         week.some(day => day.fullDate.toDateString() === date.toDateString())
+    //     );
+
+    //     if (weekIndex !== -1) {
+    //         setCurrentWeekIndex(weekIndex);
+    //         flatListRef.current.scrollToIndex({ index: weekIndex, animated: true });
+    //     }
+    // };
 
     const navigateWeek = (direction) => {
         let newIndex = direction === 'next' ? currentWeekIndex + 1 : currentWeekIndex - 1;
@@ -96,8 +150,18 @@ const CustomCalendar = () => {
                 <Image source={require('../assets/car.png')} />
                 <Text style={styles.headerText}>Select Date & Reporting Time</Text>
             </View>
-
             <View style={styles.monthContainer}>
+                <TouchableOpacity onPress={() => navigateWeek('prev')}>
+                    <Ionicons name="chevron-back" size={24} color="#3C3567" />
+                </TouchableOpacity>
+                <Text style={styles.monthText}>
+                    {VisibleDates.toLocaleString('default', { month: 'long' })} {VisibleDates.getFullYear()}
+                </Text>
+                <TouchableOpacity onPress={() => navigateWeek('next')}>
+                    <Ionicons name="chevron-forward" size={24} color="#3C3567" />
+                </TouchableOpacity>
+            </View>
+            {/* <View style={styles.monthContainer}>
                 <TouchableOpacity onPress={() => navigateWeek('prev')}>
                     <Ionicons name="chevron-back" size={24} color="#3C3567" />
                 </TouchableOpacity>
@@ -106,7 +170,44 @@ const CustomCalendar = () => {
                 <TouchableOpacity onPress={() => navigateWeek('next')}>
                     <Ionicons name="chevron-forward" size={24} color="#3C3567" />
                 </TouchableOpacity>
-            </View>
+            </View> */}
+            <FlatList
+                ref={flatListRef}
+                data={weeks}
+                horizontal
+                keyExtractor={(item, index) => index.toString()}
+                showsHorizontalScrollIndicator={false}
+                pagingEnabled={false}
+                getItemLayout={(data, index) => ({ length: 350, offset: 350 * index, index })}
+                onMomentumScrollEnd={handleScroll} // Update selectedDate when scrolling ends
+                renderItem={({ item }) => (
+                    <View style={styles.weekContainer}>
+                        {item.map((dayItem) => (
+                            <TouchableOpacity
+                                key={dayItem.fullDate.toDateString()}
+                                style={[
+                                    styles.dateItem,
+                                    selectedDate.toDateString() === dayItem.fullDate.toDateString() && styles.selectedDateStyle,
+                                    dayItem.isDisabled && styles.disabledDate,
+                                ]}
+                                onPress={() => handleDateSelect(dayItem.fullDate)}
+                                disabled={dayItem.isDisabled}
+                            >
+                                <Text style={[styles.dayText, dayItem.isDisabled && styles.disabledDayText]}>
+                                    {dayItem.day}
+                                </Text>
+                                <Text style={[
+                                    styles.dateText,
+                                    selectedDate.toDateString() === dayItem.fullDate.toDateString() && styles.selectedDateText
+                                ]}>
+                                    {dayItem.date}
+                                </Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                )}
+            />
+
 
             {/* <FlatList
                 ref={flatListRef}
@@ -144,6 +245,7 @@ const CustomCalendar = () => {
                 )}
             /> */}
 
+            {/* 
             <FlatList
                 ref={flatListRef}
                 data={weeks}
@@ -179,7 +281,8 @@ const CustomCalendar = () => {
                         ))}
                     </View>
                 )}
-            />
+            /> 
+            */}
             <TimeTracker selectTime={handleTimeSelect} selectedDate={selectedDate} />
         </View>
     );
@@ -234,17 +337,20 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
     },
     disabledDate: {
-        opacity: 0.5,
+        opacity: 0.3,
+        // color: '#aaa'
     },
     disabledDayText: {
         color: '#aaa',
+        fontWeight: 'normal'
+
     },
     dateText: {
         fontSize: 16,
-        color: '#737373',
+        color: 'black',
     },
     selectedDateText: {
-        fontSize: 16,
+        fontSize: 17,
         fontWeight: 'bold',
         color: 'black',
     },

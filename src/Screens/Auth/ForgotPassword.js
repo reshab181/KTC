@@ -52,7 +52,7 @@ const ForgotPassword = ({ route, navigation }) => {
       <View style={styles.emailContainer}>
         <CustomTextInpt placeholder={email} value={email} editable={false} style={{backgroundColor:"#EEE"}} />
         <View style={{marginTop: 84}}>
-        <CustomButton title={"Next"} onPress={sendForgotOTP} />
+        <CustomButton title={"Next"} onPress={sendForgotOTP} loading={loading}/>
         </View>
       </View>
       {error && <Text style={styles.errorText}>{error}</Text>}

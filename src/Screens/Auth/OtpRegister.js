@@ -341,7 +341,8 @@ const OtpRegister = ({ route }) => {
         const md5Hash = await RNHash.hashString(otp, 'md5');
         const sha256Hash = await RNHash.hashString(md5Hash, 'sha256');
 
-        const response = await verifyOTP(url, sha256Hash);
+          // const response = await verifyOTP(url, sha256Hash);
+        const response = await verifyOTP(url, sha256Hash, 'processSignUp');
 
         if (response.status === 204) {
           setLoader(false);

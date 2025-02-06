@@ -438,7 +438,8 @@ const Register = ({ route }) => {
             <View style={styles.scrollContainer}>
                 <Formik
                     initialValues={{
-                        email: '',
+                        // email: '',
+                        email: emailId,
                         firstName: '',
                         lastName: '',
                         password: '',

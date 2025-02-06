@@ -18,6 +18,7 @@ import { Alert } from 'react-native';
 import Menuu from '../../assets/svg/menu.svg';
 import ReviewBookingModal from '../../component/ReviewBookingModal';
 import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
+import LoaderModal from '../../component/LoaderModal';
 const CorporateModule1 = ({ navigation }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [accessToken, setAccessToken] = useState('');
@@ -36,28 +37,39 @@ const CorporateModule1 = ({ navigation }) => {
   const [BookingCode, setBookingCode] = useState('');
   const [trNumber, settrNumber] = useState('')
   const [BillNumber, setBillNumber] = useState('')
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const getAccessToken = async () => {
       const token = await fetchJwtAccess();
       if (token) setAccessToken(token);
+
     };
     getAccessToken();
   }, []);
+  // const showLoader = () => {
+  //   setLoading(true);
+  //   setTimeout(() => setLoading(false), 3000); // Simulate a 3-second process
+  // };
 
   const handleFetchCities = useCallback(async () => {
+    setLoading(true);
     try {
       const list = await fetchCities('', userDetails, accessToken, setCityList);
       navigation.navigate('City', { list, type: 'city' });
+      setLoading(false)
     } catch (error) {
       console.error("Error fetching cities:", error);
     }
   }, [userDetails, accessToken]);
 
   const handleFetchRentalType = useCallback(async () => {
+    setLoading(true);
     try {
       const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city, userDetails, accessToken, setCityList, 'rentalType');
       setCarGroupList(carGroupItems);
       seteloc(e_loc);
+    setLoading(false);
+
       navigation.navigate('City', { list: rentalItems, type: 'rentalType' });
     } catch (error) {
       console.error("Error fetching rental types:", error);
@@ -69,7 +81,7 @@ const CorporateModule1 = ({ navigation }) => {
       city &&
       rentalType &&
       carGroup &&
-      pickupAddress 
+      pickupAddress
 
     );
     // selectedDate &&
@@ -108,6 +120,9 @@ const CorporateModule1 = ({ navigation }) => {
         {
           <ReviewBookingModal visible={modalVisible}
             onClose={closeModal} />
+        }
+        {
+          <LoaderModal visible={loading} />
         }
         <View style={styles.root}>
           <Section title="Car Reservation Details">
@@ -188,16 +203,18 @@ const CorporateModule1 = ({ navigation }) => {
                     }))
                   }}
                 />
-                <CustomTextInpt placeholder="Special Instruction (Optional)" onChangeText={(text) => {
+                <CustomTextInpt placeholder="Special Instruction (Optional)" 
+                value={specialInstruction}
+                onChangeText={(text) => {
                   setspecialInstruction(text)
                   dispatch(
                     updateCorporateSlice({
                       type: "specialInstruction",
-                      selectedItem: specialInstruction,
+                      selectedItem: text,
                     })
                   )
                 }
-                } value={specialInstruction}
+                } 
                 />
                 {/* <CustomDropdown
                   data={cityList}
@@ -287,7 +304,6 @@ const CorporateModule1 = ({ navigation }) => {
 
           <CustomButton title="Next" borderRadius={0} onPress={openModal}
           />
-
         </View>
       </ScrollView>
 

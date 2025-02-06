@@ -42,7 +42,7 @@ const SignInCorporate = ({ route }) => {
     };
     fetchAccessToken();
   }, []);
-  const dispatch = useDispatch(); 
+  const dispatch = useDispatch();
 
   const validateForm = () => {
     const validationErrors = {};
@@ -75,13 +75,15 @@ const SignInCorporate = ({ route }) => {
     try {
       const userData = await handleSignIn(email, password, accessToken, navigation, setLoading);
       // Methods added by Ashutosh Rai 
-      console.log('====================================');
-      console.log("USER DATA", userData);
-      console.log('====================================');
-      setUserProfileData(dispatch, userData);
-      await AsyncStorage.setItem('isLoggedInn', 'true');
-      await AsyncStorage.setItem('user_id', userData.user_id);  
-      await AsyncStorage.setItem('user_email', userData.email_id);  
+      // console.log('====================================');
+      // console.log("USER DATA", userData);
+      // console.log('====================================');
+      if (userData) {
+        setUserProfileData(dispatch, userData);
+        await AsyncStorage.setItem('isLoggedInn', 'true');
+        await AsyncStorage.setItem('user_id', userData.user_id);
+        await AsyncStorage.setItem('user_email', userData.email_id);
+      }
     } catch (error) {
       Alert.alert('Sign In Error', error.message || 'Unable to sign in.');
     } finally {
@@ -128,10 +130,10 @@ const SignInCorporate = ({ route }) => {
 
         <View style={{ marginTop: 32 }}>
           <CustomButton
-            title={loading ? 'Signing In...' : 'Sign In'}
+            title={'Sign In'}
             onPress={handleSignInn}
             textSize={18}
-            disabled={loading}
+            loading={loading}
           />
         </View>
 

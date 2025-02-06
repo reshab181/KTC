@@ -12,14 +12,19 @@ import CustomModal from '../../component/CustomModals';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import { resetPassword } from '../../Api/Authentication';
 
-const ResetPassword = () => {
+const ResetPassword = ({route, navigation}) => {
 
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
+  const {email} = route.params ;
+  console.log('====================================');
+  console.log(email, "email coming");
+  console.log('====================================');
   const styles = useStyles();
   const [isVisible, setIsVisible] = useState(false);
   const [accessToken, setAccessToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [loading , setloading] = useState(false);
 
   useEffect(() => {
     const fetchAccessToken = async () => {
@@ -30,15 +35,14 @@ const ResetPassword = () => {
   }, []);
 
   const handleSubmit = async () => {
+    setloading(true)
     if (!newPassword || !confirmPassword ) {
       Alert.alert('Error', 'Please fill in all fields.');
       return;
     }
 
-    await resetPassword(email, newPassword, confirmPassword, accessToken, (loading) => {
-      
-    });
-
+    await resetPassword(email, newPassword, confirmPassword, accessToken, (loading) => {});
+    setloading(false)
     setIsVisible(true);
   };
 
@@ -65,18 +69,23 @@ const ResetPassword = () => {
           onChangeText={setConfirmPassword}
         />
         <View style={{ marginTop: 16 }}>
-          <CustomButton title={"Submit"} onPress={handleSubmit} />
+          <CustomButton title={"Submit"} onPress={handleSubmit} loading={loading}/>
         </View>
       </View>
       {isVisible && (
         <View>
           <CustomModal
+            loading = {loading}
             onClose={() => setIsVisible(false)}
             isButtonVisible={true}
             message1={"Your Password has been set Successfully"}
             message2={"Please login using the set Password"}
             btnText={"Login Now"}
-            handlePress={() => navigation.replace('SignInCorporate')}
+            handlePress={() =>{ 
+              setloading(true);
+              navigation.replace('SignInCorporate', {email , accessToken})
+              setloading(false);
+            }}
           />
         </View>
       )}
