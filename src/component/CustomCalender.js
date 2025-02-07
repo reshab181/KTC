@@ -1,362 +1,143 @@
-import { StyleSheet, Text, View, Image, TouchableOpacity, FlatList } from 'react-native';
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { updateCorporateSlice } from '../Redux/slice/CorporateSlice';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import TimeTracker from './TimeTracker';
-
-const CustomCalendar = () => {
-    const dispatch = useDispatch();
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    useWindowDimensions,
+  } from "react-native";
+  import React, { useState } from "react";
+  import { useDispatch } from "react-redux";
+  import { updateCorporateSlice } from "../Redux/slice/CorporateSlice";
+  import TimeTracker from "./TimeTracker";
+  import CalendarPicker from "react-native-calendar-picker";
+  import Icon from "react-native-vector-icons/FontAwesome";
+  
+  const CustomCalendar = () => {
+    const { width } = useWindowDimensions();
     const today = new Date();
-    const flatListRef = useRef(null);
-    const [VisibleDates, setVisibleDates] = useState(today);
     const [selectedDate, setSelectedDate] = useState(today);
-    const [weeks, setWeeks] = useState([]);
-    const [currentWeekIndex, setCurrentWeekIndex] = useState(0);
     const [selectedTime, setSelectedTime] = useState(null);
-    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-
-    useEffect(() => {
-        if (weeks.length > 0) {
-            const weekIndex = weeks.findIndex(week =>
-                week.some(day => day.fullDate.toDateString() === today.toDateString())
-            );
-
-            if (weekIndex !== -1) {
-                setCurrentWeekIndex(weekIndex);
-                setTimeout(() => {
-                    flatListRef.current?.scrollToIndex({ index: weekIndex, animated: true });
-                }, 100); // Small delay to ensure FlatList renders
-            }
-        }
-    }, [weeks]);
-    useEffect(() => {
-        generateWeeks();
-    }, []);
-
-
-    const generateWeeks = () => {
-        let start = new Date();
-        start.setDate(1);
-        start.setDate(start.getDate() - start.getDay()); // Move to the start of the first week
-
-        let end = new Date();
-        end.setMonth(today.getMonth() + 2);
-        end.setDate(0);
-        end.setDate(end.getDate() + (6 - end.getDay())); // Move to the end of the last week
-
-        let tempWeeks = [];
-        let current = new Date(start);
-
-        while (current <= end) {
-            let week = [];
-            for (let i = 0; i < 7; i++) {
-                week.push({
-                    day: dayNames[current.getDay()],
-                    date: current.getDate(),
-                    fullDate: new Date(current),
-                    isDisabled: current < today && current.toDateString() !== today.toDateString(),
-                });
-                current.setDate(current.getDate() + 1);
-            }
-            tempWeeks.push(week);
-        }
-        setWeeks(tempWeeks);
-    };
-    const handleScroll = (event) => {
-        const newIndex = Math.round(event.nativeEvent.contentOffset.x / 350);
-        if (newIndex !== currentWeekIndex && weeks[newIndex]) {
-            setCurrentWeekIndex(newIndex);
-            setVisibleDates(weeks[newIndex][0].fullDate);
-
-            // Set selectedDate to the first day of the new week
-            // setSelectedDate(weeks[newIndex][0].fullDate);
-        }
-    };
-
-    // useEffect(() => {
-    //     generateWeeks();
-    // }, []);
-
-    const handleTimeSelect = (time) => {
-        setSelectedTime(time);
-        console.log("Selected Time:", time); // Log selected time
-    
-        dispatch(updateCorporateSlice({
-            type: 'selectedTime',
-            selectedItem: time,
-        }));
-    };
-    
+    const dispatch = useDispatch();
+  
+    // Disable past dates
+    const disablePastDates = (date) => date  + 1 < today  ;
+  
+    // Handle date selection
     const handleDateSelect = (date) => {
-        setSelectedDate(date);
-        const formattedDate = date.toISOString().split('T')[0];
-        console.log("Selected Date:", formattedDate); // Log selected date
-    
-        dispatch(updateCorporateSlice({
-            type: 'selectedDate',
-            selectedItem: formattedDate,
-        }));
-    
-        // Find the week index where the selected date belongs and scroll to it
-        const weekIndex = weeks.findIndex(week =>
-            week.some(day => day.fullDate.toDateString() === date.toDateString())
-        );
-    
-        if (weekIndex !== -1) {
-            setCurrentWeekIndex(weekIndex);
-            flatListRef.current.scrollToIndex({ index: weekIndex, animated: true });
-        }
+      setSelectedDate(date);
+      const formattedDate = date.toISOString().split("T")[0];
+      dispatch(
+        updateCorporateSlice({
+          type: "selectedDate",
+          selectedItem: formattedDate,
+        })
+      );
+  
+      console.log("Selected Date:", formattedDate);
     };
-
-    // const handleTimeSelect = (time) => {
-    //     setSelectedTime(time);
-    //     dispatch(updateCorporateSlice({
-    //         type: 'selectedTime',
-    //         selectedItem: time,
-    //     }));
-    // };
-
-    // const handleDateSelect = (date) => {
-    //     setSelectedDate(date);
-    //     const formattedDate = date.toISOString().split('T')[0];
-    //     dispatch(updateCorporateSlice({
-    //         type: 'selectedDate',
-    //         selectedItem: formattedDate,
-    //     }));
-
-    //     // Find the week index where the selected date belongs and scroll to it
-    //     const weekIndex = weeks.findIndex(week =>
-    //         week.some(day => day.fullDate.toDateString() === date.toDateString())
-    //     );
-
-    //     if (weekIndex !== -1) {
-    //         setCurrentWeekIndex(weekIndex);
-    //         flatListRef.current.scrollToIndex({ index: weekIndex, animated: true });
-    //     }
-    // };
-
-    const navigateWeek = (direction) => {
-        let newIndex = direction === 'next' ? currentWeekIndex + 1 : currentWeekIndex - 1;
-        if (newIndex >= 0 && newIndex < weeks.length) {
-            setCurrentWeekIndex(newIndex);
-            flatListRef.current.scrollToIndex({ index: newIndex, animated: true });
-        }
+  
+    // Handle time selection
+    const handleTimeSelect = (time) => {
+      setSelectedTime(time);
+      dispatch(
+        updateCorporateSlice({
+          type: "selectedTime",
+          selectedItem: time,
+        })
+      );
+  
+      console.log("Selected Time:", time);
     };
-
+  
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Image source={require('../assets/car.png')} />
-                <Text style={styles.headerText}>Select Date & Reporting Time</Text>
-            </View>
-            <View style={styles.monthContainer}>
-                <TouchableOpacity onPress={() => navigateWeek('prev')}>
-                    <Ionicons name="chevron-back" size={24} color="#3C3567" />
-                </TouchableOpacity>
-                <Text style={styles.monthText}>
-                    {VisibleDates.toLocaleString('default', { month: 'long' })} {VisibleDates.getFullYear()}
-                </Text>
-                <TouchableOpacity onPress={() => navigateWeek('next')}>
-                    <Ionicons name="chevron-forward" size={24} color="#3C3567" />
-                </TouchableOpacity>
-            </View>
-            {/* <View style={styles.monthContainer}>
-                <TouchableOpacity onPress={() => navigateWeek('prev')}>
-                    <Ionicons name="chevron-back" size={24} color="#3C3567" />
-                </TouchableOpacity>
-                <Text style={styles.monthText}>{selectedDate.toLocaleString('default', { month: 'long' })}
-                    {selectedDate.getFullYear()}</Text>
-                <TouchableOpacity onPress={() => navigateWeek('next')}>
-                    <Ionicons name="chevron-forward" size={24} color="#3C3567" />
-                </TouchableOpacity>
-            </View> */}
-            <FlatList
-                ref={flatListRef}
-                data={weeks}
-                horizontal
-                keyExtractor={(item, index) => index.toString()}
-                showsHorizontalScrollIndicator={false}
-                pagingEnabled={false}
-                getItemLayout={(data, index) => ({ length: 350, offset: 350 * index, index })}
-                onMomentumScrollEnd={handleScroll} // Update selectedDate when scrolling ends
-                renderItem={({ item }) => (
-                    <View style={styles.weekContainer}>
-                        {item.map((dayItem) => (
-                            <TouchableOpacity
-                                key={dayItem.fullDate.toDateString()}
-                                style={[
-                                    styles.dateItem,
-                                    selectedDate.toDateString() === dayItem.fullDate.toDateString() && styles.selectedDateStyle,
-                                    dayItem.isDisabled && styles.disabledDate,
-                                ]}
-                                onPress={() => handleDateSelect(dayItem.fullDate)}
-                                disabled={dayItem.isDisabled}
-                            >
-                                <Text style={[styles.dayText, dayItem.isDisabled && styles.disabledDayText]}>
-                                    {dayItem.day}
-                                </Text>
-                                <Text style={[
-                                    styles.dateText,
-                                    selectedDate.toDateString() === dayItem.fullDate.toDateString() && styles.selectedDateText
-                                ]}>
-                                    {dayItem.date}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                )}
-            />
-
-
-            {/* <FlatList
-                ref={flatListRef}
-                data={weeks}
-                horizontal
-                keyExtractor={(item, index) => index.toString()}
-                showsHorizontalScrollIndicator={false}
-                pagingEnabled={false} // Allow independent smooth scrolling
-                getItemLayout={(data, index) => ({ length: 350, offset: 350 * index, index })} // Optimize scroll performance
-                renderItem={({ item }) => (
-                    <View style={styles.weekContainer}>
-                        {item.map((dayItem) => (
-                            <TouchableOpacity
-                                key={dayItem.fullDate.toDateString()}
-                                style={[
-                                    styles.dateItem,
-                                    selectedDate.toDateString() === dayItem.fullDate.toDateString() && styles.selectedDateStyle,
-                                    dayItem.isDisabled && styles.disabledDate,
-                                ]}
-                                onPress={() => handleDateSelect(dayItem.fullDate)}
-                                disabled={dayItem.isDisabled}
-                            >
-                                <Text style={[styles.dayText, dayItem.isDisabled && styles.disabledDayText]}>
-                                    {dayItem.day}
-                                </Text>
-                                <Text style={[
-                                    styles.dateText,
-                                    selectedDate.toDateString() === dayItem.fullDate.toDateString() && styles.selectedDateText
-                                ]}>
-                                    {dayItem.date}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                )}
-            /> */}
-
-            {/* 
-            <FlatList
-                ref={flatListRef}
-                data={weeks}
-                horizontal
-                keyExtractor={(item, index) => index.toString()}
-                showsHorizontalScrollIndicator={false}
-                pagingEnabled={false}
-                getItemLayout={(data, index) => ({ length: 350, offset: 350 * index, index })}
-                onMomentumScrollEnd={handleScroll} // Update selectedDate when scrolling ends
-                renderItem={({ item }) => (
-                    <View style={styles.weekContainer}>
-                        {item.map((dayItem) => (
-                            <TouchableOpacity
-                                key={dayItem.fullDate.toDateString()}
-                                style={[
-                                    styles.dateItem,
-                                    selectedDate.toDateString() === dayItem.fullDate.toDateString() && styles.selectedDateStyle,
-                                    dayItem.isDisabled && styles.disabledDate,
-                                ]}
-                                onPress={() => handleDateSelect(dayItem.fullDate)}
-                                disabled={dayItem.isDisabled}
-                            >
-                                <Text style={[styles.dayText, dayItem.isDisabled && styles.disabledDayText]}>
-                                    {dayItem.day}
-                                </Text>
-                                <Text style={[
-                                    styles.dateText,
-                                    selectedDate.toDateString() === dayItem.fullDate.toDateString() && styles.selectedDateText
-                                ]}>
-                                    {dayItem.date}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-                )}
-            /> 
-            */}
-            <TimeTracker selectTime={handleTimeSelect} selectedDate={selectedDate} />
+      <View style={styles.container}>
+        {/* Header */}
+        <View style={styles.header}>
+          <Image source={require("../assets/car.png")} style={styles.carIcon} />
+          <Text style={styles.headerText}>Select Date & Reporting Time</Text>
         </View>
+  
+        {/* Calendar */}
+        <View style={styles.calendarContainer}>
+          <CalendarPicker
+            weekdays={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+            months={[
+              "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+              "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+            ]}
+            startFromMonday={false}
+            selectedDayColor="#007AFF"
+            selectedDayTextColor="#fff"
+            todayBackgroundColor="#cccccc"
+            todayTextStyle={styles.todayText}
+            previousComponent={<Icon name="chevron-left" size={20} color="black" />}
+            nextComponent={<Icon name="chevron-right" size={20} color="black" />}
+            disabledDates={disablePastDates}
+            restrictMonthNavigation={false} // Allow navigating months freely
+            minDate={today}
+            enableDateChange={true}
+            onDateChange={handleDateSelect} // Now properly updating selected date
+            width={width * 0.9} // Reduce width for a better fit
+          />
+        </View>
+  
+        {/* Time Selection Below Calendar */}
+        <View style={styles.timeTrackerContainer}>
+          <TimeTracker selectTime={handleTimeSelect} selectedDate={selectedDate} />
+        </View>
+      </View>
     );
-};
-
-const styles = StyleSheet.create({
+  };
+  
+  const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#FFFFFF',
-        flex: 1,
-        margin: 10,
-        borderWidth: 1,
-        borderColor: "#E5E5E5",
-        borderRadius: 8,
-        paddingBottom: 10,
+    //   backgroundColor: "#FFFFFF",
+      flex: 1,
+      margin: 10,
+      borderWidth: 1,
+      borderColor: "#E5E5E5",
+      borderRadius: 8,
+    //   paddingBottom: 10,
+    //   alignItems: "center",
     },
     header: {
-        flexDirection: "row",
-        alignItems: "center",
-        margin: 20,
+      flexDirection: "row",
+      alignItems: "center",
+      margin: 20,
+      justifyContent: 'center'
+    },
+    carIcon: {
+      width: 40,
+      height: 40,
+      resizeMode: "contain",
     },
     headerText: {
-        fontSize: 14,
-        fontWeight: 'bold',
-        color: '#3C3567',
-        marginStart: 20,
+      fontSize: 14,
+      fontWeight: "bold",
+      color: "#3C3567",
+      marginLeft: 10,
+      textDecorationLine: 'underline'
     },
-    monthContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginVertical: 10,
+    calendarContainer: {
+    //   width: "90%",
+    //   alignSelf: "center",
+    //   borderWidth: 1,
+    //   borderColor: "#E5E5E5",
+    //   borderRadius: 10,
+      paddingVertical: 10,
+      marginBottom: 10 ,
+    //   marginBottom: 20, // Adds spacing before the TimeTracker
     },
-    monthText: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: '#3C3567',
-        marginHorizontal: 10,
+    timeTrackerContainer: {
+    //   width: "100%",
+    //   alignItems: "center",
+    //   marginTop: 10,
     },
-    weekContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 10,
-        // marginHorizontal: 10,
-        width: 350, // Ensure each week occupies equal space
+    todayText: {
+      fontWeight: "bold",
+      color: "#333",
     },
-    dateItem: {
-        alignItems: 'center',
-        width: 50,
-        paddingVertical: 8,
-    },
-    selectedDateStyle: {
-        paddingVertical: 10,
-    },
-    disabledDate: {
-        opacity: 0.3,
-        // color: '#aaa'
-    },
-    disabledDayText: {
-        color: '#aaa',
-        fontWeight: 'normal'
-
-    },
-    dateText: {
-        fontSize: 16,
-        color: 'black',
-    },
-    selectedDateText: {
-        fontSize: 17,
-        fontWeight: 'bold',
-        color: 'black',
-    },
-    dayText: {
-        marginBottom: 5,
-    },
-});
-
-export default CustomCalendar;
+  });
+  
+  export default CustomCalendar;
+  
