@@ -3,12 +3,12 @@
 import { Image, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 import { RadioButton } from 'react-native-paper';
-
+import PhonePeSvg from '../assets/svg/PhonePesvg.svg'
 const WalletnUpi = () => {
   const [selectedOption, setSelectedOption] = useState('option1');
 
   const options = [
-    { id: 'option1', image: require('../assets/PhonePeLogo.png') },
+    { id: 'option1', imageIcon:  PhonePeSvg},
     { id: 'option2', image: require('../assets/Paytm.png') },
     { id: 'option3', image: require('../assets/Google.png') },
   ];
@@ -23,6 +23,9 @@ const WalletnUpi = () => {
               status={selectedOption === option.id ? 'checked' : 'unchecked'}
               onPress={() => setSelectedOption(option.id)}
             />
+            {
+              option.imageIcon && <View style={{marginLeft: 13}}><option.imageIcon height={24} width={75.49} /></View>
+            }
             <Image source={option.image} style={styles.img} />
           </View>
         ))}
@@ -54,5 +57,5 @@ const styles = StyleSheet.create({
   img: {
     height: 24,
     resizeMode: 'contain', // Ensures the image maintains its aspect ratio
-  },
+    },
 });

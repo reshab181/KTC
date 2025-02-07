@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <g id="menu" transform="translate(-141 -40)">
+    <g id="Rectangle_3962" data-name="Rectangle 3962" transform="translate(141 40)" fill="#fff" stroke="#707070" stroke-width="1" opacity="0">
+      <rect width="24" height="24" stroke="none"/>
+      <rect x="0.5" y="0.5" width="23" height="23" fill="none"/>
+    </g>
+    <path id="Icon_material-menu" data-name="Icon material-menu" d="M3,18H21V16H3Zm0-5H21V11H3ZM3,6V8H21V6Z" transform="translate(141 40)" fill="#fff"/>
+  </g>
+</svg>

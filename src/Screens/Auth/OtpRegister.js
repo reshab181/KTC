@@ -41,7 +41,7 @@
 //       Resend code in 00:11
 //       </Text>
 //       </View>
-      
+
 //     </View>
 //   );
 // };
@@ -124,13 +124,13 @@
 //   const navigation = useNavigation()
 
 //   console.log(emailId,client_id,url ,"jai hind");
-  
 
- 
+
+
 //   const [otp, setOtp] = useState('');
 //   const [loader, setLoader] = useState(false);
 
- 
+
 //   const validateOtp = () => {
 //     if (otp.length !== 6) {
 //       alert('Please enter a valid 6-digit OTP.');
@@ -139,19 +139,19 @@
 //     return true;
 //   };
 
-  
+
 //   const handleSubmit = async () => {
 //     if (validateOtp()) {
 //       setLoader(true);
-  
+
 //       try {
-      
+
 //         const md5Hash = await RNHash.hashString(otp,'md5');
 //         const sha256Hash = await RNHash.hashString(md5Hash,'sha256');
-  
-      
+
+
 //         const response = await verifyOTP(sha256Hash, url);
-  
+
 //         if (response && response.status === 204) {
 //           setLoader(false);
 //           alert('OTP verified successfully!');
@@ -179,7 +179,7 @@
 //         Please enter the OTP received on your registered email address.
 //       </Text>
 
-     
+
 //       <View style={styles.txtInputBox}>
 //         {Array.from({ length: 6 }).map((_, index) => (
 //           <TextInput
@@ -202,7 +202,7 @@
 //         <CustomButton title={loader ? 'Verifying...' : 'Next'} onPress={handleSubmit} disabled={loader} />
 //       </View>
 
-    
+
 //       <View>
 //         <Text style={styles.footerText}>
 //           Didn't receive the OTP?
@@ -283,6 +283,7 @@ import CustomButton from '../../component/CustomButtons';
 import CustomHeader from '../../component/CustomHeader';
 import { verifyOTP } from '../../Api/Authentication';
 import RNHash from 'react-native-hash';
+import OtpSvg from '../../assets/svg/otp.svg'
 
 const OtpRegister = ({ route }) => {
   const { emailId, client_id, url } = route.params;
@@ -340,9 +341,12 @@ const OtpRegister = ({ route }) => {
         const sha256Hash = await RNHash.hashString(md5Hash, 'sha256');
         console.log("URL" , url);
         
-        const response = await verifyOTP(url, sha256Hash);
+        // const response = await verifyOTP(url, sha256Hash);
 
-        if (response && response.status === 204) {
+          // const response = await verifyOTP(url, sha256Hash);
+        const response = await verifyOTP(url, sha256Hash, 'processSignUp');
+
+        if (response.status === 204) {
           setLoader(false);
           Alert.alert('Success', 'OTP verified successfully!');
           navigation.navigate('RegisterPage', { emailId, client_id });
@@ -361,10 +365,13 @@ const OtpRegister = ({ route }) => {
   return (
     <View style={styles.root}>
       <CustomHeader title="Register" />
-      <Image
+      <View style={styles.img}>
+        <OtpSvg height={60} width={122} />
+      </View>
+      {/* <Image
         source={require('../../assets/frgtpwdotp.png')}
         style={styles.img}
-      />
+      /> */}
       <Text style={styles.txt}>
         Please enter the OTP received on your registered email address.
       </Text>
@@ -438,8 +445,6 @@ function useStyles() {
       marginTop: 47,
       marginBottom: 32,
       width: 122.1,
-      height: 100,
-      resizeMode: 'contain',
     },
     txt: {
       width: winwidth * 0.8,

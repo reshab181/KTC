@@ -16,6 +16,9 @@ export const fetchJwtAccess = async () => {
     });
 
     const result = await response.json();
+    console.log('====================================');
+    console.log(result);
+    console.log('====================================');
     const token = result?.jwt;
     if (!token) {
       throw new Error('Token not retrieved');

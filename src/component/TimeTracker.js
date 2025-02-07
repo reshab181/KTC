@@ -1,5 +1,4 @@
-// Author: Ashutosh Rai
-// Component: TimeTracker
+// Ashutosh Rai
 import React, { useEffect, useState, useRef } from 'react';
 import {
   StyleSheet,
@@ -9,17 +8,16 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const TimeTracker = () => {
+const TimeTracker = ({ selectTime, selectedDate }) => {
   const [timeArray, setTimeArray] = useState([]);
   const [currentTime, setCurrentTime] = useState('');
   const [selectedTime, setSelectedTime] = useState(null);
   const scrollViewRef = useRef(null);
 
-  // Function to generate the complete range of time
   const generateTimeRange = () => {
     const timeRange = [];
     for (let hour = 0; hour < 24; hour++) {
-      for (let minute = 0; minute < 60; minute += 15) {
+      for (let minute = 0; minute < 60; minute += 30) {
         const formattedTime = `${hour.toString().padStart(2, '0')}:${minute
           .toString()
           .padStart(2, '0')}`;
@@ -29,7 +27,6 @@ const TimeTracker = () => {
     setTimeArray(timeRange);
   };
 
-  // Function to get the current time in hh:mm format
   const getCurrentTime = () => {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
@@ -38,11 +35,10 @@ const TimeTracker = () => {
     return `${hours}:${formattedMinutes}`;
   };
 
-  // Automatically scroll to current time
   const scrollToCurrentTime = () => {
     const index = timeArray.indexOf(currentTime);
     if (index !== -1 && scrollViewRef.current) {
-      const scrollPosition = index * 100; 
+      const scrollPosition = index * 100;
       scrollViewRef.current.scrollTo({ x: scrollPosition, animated: true });
     }
   };
@@ -59,40 +55,67 @@ const TimeTracker = () => {
     }
   }, [timeArray, currentTime]);
 
+  const isPastTime = (time) => {
+    if (!selectedDate) return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time for accurate comparison
+
+    const isToday = selectedDate.toDateString() === today.toDateString();
+    if (!isToday) return false;
+
+    const [hours, minutes] = time.split(':').map(Number);
+    const now = new Date();
+    return hours < now.getHours() || (hours === now.getHours() && minutes < now.getMinutes());
+  };
+
+  useEffect(() => {
+    if (selectedTime && isPastTime(selectedTime)) {
+      setSelectedTime(null); // Reset selected time if it becomes invalid
+      selectTime(null);
+    }
+  }, [selectedDate]);
   const handleTimeSelect = (time) => {
-    setSelectedTime(time);
-    console.log('Selected Time:', time); 
+    if (!isPastTime(time)) {
+      setSelectedTime(time);
+      selectTime(time);
+    }
   };
 
   return (
-    <View style={{marginHorizontal: 10}}>
+    <View style={{ marginHorizontal: 10 }}>
       <ScrollView
         horizontal
-        ref={scrollViewRef} 
+        ref={scrollViewRef}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.scrollContainer}
       >
-        {timeArray.map((time, index) => (
-          <TouchableOpacity
-            key={index}
-            style={[
-              styles.timeBox,
-              time === currentTime ? styles.currentTimeBox : null, 
-              time === selectedTime ? styles.selectedTimeBox : null, 
-            ]}
-            onPress={() => handleTimeSelect(time)} 
-          >
-            <Text
+        {timeArray.map((time, index) => {
+          const disabled = isPastTime(time);
+
+          return (
+            <TouchableOpacity
+              key={index}
               style={[
-                styles.timeText,
-                time === currentTime ? styles.currentTimeText : null, 
-                time === selectedTime ? styles.selectedTimeText : null, 
+                styles.timeBox,
+                time === selectedTime ? styles.selectedTimeBox : null,
+                disabled ? styles.disabledTimeBox : null,
               ]}
+              onPress={() => handleTimeSelect(time)}
+              disabled={disabled}
             >
-              {time}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Text
+                style={[
+                  styles.timeText,
+                  time === selectedTime ? styles.selectedTimeText : null,
+                  disabled ? styles.disabledTimeText : null,
+                ]}
+              >
+                {time}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
       </ScrollView>
     </View>
   );
@@ -101,39 +124,40 @@ const TimeTracker = () => {
 export default TimeTracker;
 
 const styles = StyleSheet.create({
-  
   scrollContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10, 
-    // marginHorizontal: 10
+    marginBottom: 10,
   },
   timeBox: {
-    // backgroundColor: '#f1f1f1',
     padding: 2,
     borderRadius: 5,
     marginHorizontal: 5,
-    width: 60, 
+    width: 60,
     height: 30,
     alignItems: 'center',
     justifyContent: 'center',
-
   },
   timeText: {
     fontSize: 12,
     fontWeight: 'normal',
     color: '#333',
   },
-  currentTimeBox: {
-    backgroundColor: '#FFD700', 
-  },
-  currentTimeText: {
-    color: '#fff', 
-  },
   selectedTimeBox: {
-    backgroundColor: '#4CAF50', 
+
+    // backgroundColor: '#4CAF50',
   },
   selectedTimeText: {
-    color: '#fff', 
+    color: 'black',
+    fontWeight: 'bold', 
+    fontSize: 14, 
+    // backgroundColor: "#f1f1f1"
+  },
+  disabledTimeBox: {
+    // backgroundColor: '#E0E0E0',
+  },
+  disabledTimeText: {
+    color: '#A9A9A9',
+    backfaceVisibility : "hidden"
   },
 });

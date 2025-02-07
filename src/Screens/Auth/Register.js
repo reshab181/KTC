@@ -275,7 +275,7 @@
 // export default Register;
 
 
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     SafeAreaView,
     View,
@@ -303,7 +303,11 @@ import CustomIconTextInput from '../../component/CustomIconTextInput';
 import { updateUserDetails } from '../../Redux/slice/Userslice';
 import { registerUser } from '../../Api/Authentication';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
-
+import FirstName from '../../assets/svg/first-name.svg'
+import DobSvg from '../../assets/svg/cake_black.svg'
+import GenderSvg from '../../assets/svg/Gender.svg'
+import SmartPhoneSvg from '../../assets/svg/smartphone.svg'
+import EmailSvg from '../../assets/svg/email_black.svg'
 const { width } = Dimensions.get('window');
 
 
@@ -331,34 +335,25 @@ const validationSchema = Yup.object().shape({
     alternatePhone: Yup.string().length(10, 'Alternate phone number must be 10 digits').required('Alternate phone number is required'),
 });
 
-const Register = ({route}) => {
-    const {  emailId,client_id} = route.params || {};
-    
+const Register = ({ route }) => {
+    const { emailId, client_id } = route.params || {};
+
     const [selectedGender, setSelectedGender] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('India');
     const [dob, setDob] = useState('');
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [loading, setLoading] = useState(false);
-      const [accessToken, setAccessToken] = useState('');
+    const [accessToken, setAccessToken] = useState('');
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
-      useEffect(() => {
+    useEffect(() => {
         const fetchAccessToken = async () => {
-          const token = await fetchJwtAccess();
-          setAccessToken(token || '');
+            const token = await fetchJwtAccess();
+            setAccessToken(token || '');
         };
         fetchAccessToken();
-      }, []);
-
- 
-
-     
-    
-
-
-
- 
+    }, []);
 
     const handleDateChange = (event, selectedDate) => {
         setShowDatePicker(false);
@@ -375,7 +370,7 @@ const Register = ({route}) => {
             // if (!jwt) throw new Error('Failed to obtain JWT token');
 
             const userData = {
-                email_id:   emailId,
+                email_id: emailId,
                 f_name: values.firstName,
                 l_name: values.lastName,
                 gender: selectedGender,
@@ -383,21 +378,21 @@ const Register = ({route}) => {
                 mobile_number: values.phone,
                 password: values.password,
                 client_id: client_id,
-                sub_enitityid:"iLP9r7kLuFskHpdCMao9KQtxBQlCloYnjY5E/IWbAECmPiQeK4cka7b88sZV9O3vY3V4xrq7oJdXuwEwycaR75eIhDFb88m2U6p76tsGgOZMyTGfksK+RdmMFwVKp3n1ZnCGuvKOU7mLxQi3j3vOU5a1jEga6ZWj/Akr79u3oiIq5TaiB++2JSHQfOn7s5OyCVJj37/FG2gB4XNhWOqZQfUwP1mPeMNv1IcaL7m3uldzVofMCKoUYI58BM/ZUHj6",
+                sub_enitityid: "iLP9r7kLuFskHpdCMao9KQtxBQlCloYnjY5E/IWbAECmPiQeK4cka7b88sZV9O3vY3V4xrq7oJdXuwEwycaR75eIhDFb88m2U6p76tsGgOZMyTGfksK+RdmMFwVKp3n1ZnCGuvKOU7mLxQi3j3vOU5a1jEga6ZWj/Akr79u3oiIq5TaiB++2JSHQfOn7s5OyCVJj37/FG2gB4XNhWOqZQfUwP1mPeMNv1IcaL7m3uldzVofMCKoUYI58BM/ZUHj6",
                 country: selectedCountry,
                 alternative_no: values.alternatePhone,
             };
-         console.log(userData,"hELLO DATA");
- 
+            console.log(userData, "hELLO DATA");
+
             const responseData = await registerUser(userData, accessToken);
             if (responseData?.user_id) {
                 dispatch(updateUserDetails({
                     email: values.email,
                     userId: responseData.user_id
                 }));
-// const data= responseData.json();
-// console.log(data,"heelo");
-                    console.log(responseData,"hello");
+                // const data= responseData.json();
+                // console.log(data,"heelo");
+                console.log(responseData, "hello");
 
 
 
@@ -409,7 +404,7 @@ const Register = ({route}) => {
                         onPress: () => navigation.navigate('SignInCorporate', { email_id: values.email })
                     }]
                 );
-            } 
+            }
             else {
                 throw new Error(responseData?.message || 'Registration failed');
             }
@@ -443,7 +438,8 @@ const Register = ({route}) => {
             <View style={styles.scrollContainer}>
                 <Formik
                     initialValues={{
-                        email: '',
+                        // email: '',
+                        email: emailId,
                         firstName: '',
                         lastName: '',
                         password: '',
@@ -456,7 +452,7 @@ const Register = ({route}) => {
                 >
                     {({ values, handleChange, handleBlur, handleSubmit, errors, touched }) => (
                         <>
-                            <ScrollView 
+                            <ScrollView
                                 contentContainerStyle={styles.formContainer}
                                 showsVerticalScrollIndicator={false}
                             >
@@ -761,7 +757,7 @@ const styles = StyleSheet.create({
     },
     scrollContentContainer: {
         flexGrow: 1,
-        paddingBottom: 100, 
+        paddingBottom: 100,
     },
 });
 

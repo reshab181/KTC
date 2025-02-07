@@ -1,3 +1,4 @@
+// Ashutosh Rai
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
@@ -40,8 +41,8 @@ const ForgotPassword = ({ route, navigation }) => {
   }, []);
 
   const sendForgotOTP = () => {
+    console.log("Sending Click")
     emailsms(email, accessToken, navigation, setLoading);
-    // navigation.replace("OTP")
   };
 
   return (
@@ -50,8 +51,8 @@ const ForgotPassword = ({ route, navigation }) => {
 
       <View style={styles.emailContainer}>
         <CustomTextInpt placeholder={email} value={email} editable={false} style={{backgroundColor:"#EEE"}} />
-        <View style={{marginTop: 94}}>
-        <CustomButton title={"Next"} onPress={sendForgotOTP} />
+        <View style={{marginTop: 84}}>
+        <CustomButton title={"Next"} onPress={sendForgotOTP} loading={loading}/>
         </View>
       </View>
       {error && <Text style={styles.errorText}>{error}</Text>}

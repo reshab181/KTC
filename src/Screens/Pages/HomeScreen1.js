@@ -8,13 +8,42 @@ import CustomTextInpt from '../../component/CustomTextInpt';
 import CustomButton from '../../component/CustomButtons';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CalendarTimePicker from '../../component/CalendarTimePicker';
-import Ionicons from 'react-native-vector-icons/FontAwesome';
 import SidebarMenu from '../../component/SidebarMenu';
+import { use } from 'react';
+import { useEffect } from 'react';
 
 const HomeScreen1 = ({ navigation }) => {
     const [isVisible, setisVisible] = useState(false);
     const [rentalType, setRentalType] = useState('Rental Type');
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+    const [startTrip, setstartTrip] = useState(true);
+    const [endTrip, setendTrip] = useState(false);
+    const [selectStartDate, setSelectStartDate] = useState();
+    const [selectEndDate, setSelectEndDate] = useState();
+    const [selectStartTime, setSelectStartTime] = useState();
+    const [selectEndTime, setSelectEndTime] = useState();
+
+    useEffect(() => {
+        if(selectStartDate && selectStartTime){
+            setstartTrip(false)
+            setendTrip(true)
+        }
+    }, [selectStartDate, selectStartTime])
+    
+
+    console.log('====================================');
+    console.log("Start Date" , selectStartDate);
+    console.log("Start Time" , selectStartTime);
+    console.log('====================================');
+
+    
+    console.log('====================================');
+    console.log("End Date" , selectEndDate);
+    console.log("End Time" , selectEndTime);
+
+    console.log('====================================');
+
+
     const cityData = [
         { label: 'Local Run - Full day', value: 'FD' },
         { label: 'Local Run - Half day', value: 'HD' },
@@ -33,16 +62,19 @@ const HomeScreen1 = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.root}>
-            <ScrollView>
+            <View style={styles.headerContainer}>
                 <CustomHeader
                     iconHeight={30}
                     iconWidth={39}
                     islogo={true}
                     imgPath={require('../../assets/ktclogo.png')}
                     iconPath={require('../../assets/menuu.png')}
-                    onMenuPress={handleMenuPress}
+                    handleLeftIcon={handleMenuPress}
                     isSidebarVisible={isSidebarVisible}
                 />
+            </View>
+
+            <ScrollView style={styles.ScrollView}>
                 <View style={styles.container}>
                     <CustomIconTextInput
                         icon1={require('../../assets/place.png')}
@@ -58,9 +90,15 @@ const HomeScreen1 = ({ navigation }) => {
                         {isVisible && (
                             <View style={styles.dropdownList}>
                                 {cityData.map((item, index) => {
-                                    return (<TouchableOpacity key={index} onPress={() => handleItemPress(item)} style={styles.listItemContainer}>
-                                        <Text style={styles.listItem}>{item.label}</Text>
-                                    </TouchableOpacity>)
+                                    return (
+                                        <TouchableOpacity
+                                            key={index}
+                                            onPress={() => handleItemPress(item)}
+                                            style={styles.listItemContainer}
+                                        >
+                                            <Text style={styles.listItem}>{item.label}</Text>
+                                        </TouchableOpacity>
+                                    );
                                 })}
                             </View>
                         )}
@@ -68,26 +106,34 @@ const HomeScreen1 = ({ navigation }) => {
                     <View style={styles.tripContainer}>
                         <View style={styles.tripRow}>
                             <Image source={require('../../assets/car-bg.png')} style={styles.tripIcon} />
-                            <TouchableOpacity >
-                                <Text style={styles.tripText}>Start Trip</Text>
+                            <TouchableOpacity onPress={() => {
+                                setstartTrip(true)
+                                setendTrip(false)
+                            }}>
+                                <Text style={startTrip ? styles.tripText : styles.disableTripText}>Start Trip</Text>
                             </TouchableOpacity>
-                            <Icon name='chevron-right' />
-                            <TouchableOpacity>
-                                <Text style={styles.tripText}>End Trip</Text>
+                            <Icon name="chevron-right" />
+                            <TouchableOpacity onPress={() => {
+                                setstartTrip(false)
+                                setendTrip(true)
+                            }}>
+                                <Text style={endTrip ? styles.tripText : styles.disableTripText}>End Trip</Text>
                             </TouchableOpacity>
                             <Image source={require('../../assets/carbw.png')} style={styles.tripIcon} />
                         </View>
-                        <CalendarTimePicker />
+                        {startTrip ? <CalendarTimePicker selectDate={setSelectStartDate} selectTime={setSelectStartTime} /> : null}
+                        {endTrip  ? <CalendarTimePicker selectDate={setSelectEndDate} selectTime={setSelectEndTime} /> : null}
+
+
                     </View>
                 </View>
             </ScrollView>
+
             <View style={styles.footer}>
                 <CustomButton title="Continue" widthSize="100%" borderRadius={0} onPress={() => navigation.navigate('CarGroup')} />
             </View>
-            <SidebarMenu
-                isVisible={isSidebarVisible}
-                onClose={() => setIsSidebarVisible(false)}
-            />
+
+            <SidebarMenu isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
         </SafeAreaView>
     );
 };
@@ -99,8 +145,25 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F1F1F3',
     },
+    headerContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 10,
+        backgroundColor: '#FFFFFF',
+        elevation: 5, // Add shadow for Android
+        shadowColor: '#000', // Add shadow for iOS
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+    },
+    ScrollView: {
+        marginTop: 40, // Adjust to prevent overlap with header
+    },
     container: {
         margin: 16,
+        paddingTop: 16,
     },
     dropdownContainer: {
         marginTop: 16,
@@ -150,6 +213,12 @@ const styles = StyleSheet.create({
     tripText: {
         fontSize: 14,
         color: '#3C3567',
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+    },
+    disableTripText: {
+        fontSize: 14,
+        color: '#B3B0C4',
         fontWeight: 'bold',
         textDecorationLine: 'underline',
     },

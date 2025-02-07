@@ -29,21 +29,7 @@ const Track = ({
                 iconWidth={24}
                 handleLeftIcon={()=>{navigation.navigate('Upcoming')}}
             />
-            {/* Header */}
 
-            {/* <View style={styles.header}>
-                <TouchableOpacity onPress={onBack} style={styles.backButton}>
-                    <Image source={require('../../assets/ic_back_arrow_white_24.png')} />
-                </TouchableOpacity>
-                <CustomHeader title="Track Chauffeur" />
-            </View> */}
-
-            {/* Map View */}
-            {/* <View style={styles.mapContainer}>
-                <MapIndex/>
-            </View> */}
-
-            {/* Car Details and Actions */}
             <View style={styles.container}>
                 <View style={styles.carDetailsContainer}>
                     <View style={styles.timeContainer}>

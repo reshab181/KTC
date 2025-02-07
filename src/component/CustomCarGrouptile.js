@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 const CustomCarGrouptile = ({ title, onPress , iconName}) => {
   return (
         <TouchableOpacity onPress={onPress} style={styles.contianer}>
-            <View style={{flexDirection: 'row' , justifyContent: 'space-between'}}>
+            <View style={{flexDirection: 'row' , justifyContent: 'space-between', alignItems: 'center'}}>
             <Text >
                 {title}
             </Text>
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         color: '#666666',
         elevation : 2, 
         height : 48 ,
-        // borderWidth: 0.05,
+        marginTop: 10, 
         borderRadius:4 , 
     }
 })

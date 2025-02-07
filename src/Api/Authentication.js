@@ -7,7 +7,7 @@ import debounce from 'lodash.debounce';
 import { ANCHOR_URL } from '@env';
 import Api from '../services/Api';
 
-const encryptPayload = (data) => {
+export const encryptPayload = (data) => {
   const ClientID = '!IV@_$2123456789';
   const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
   const CryptoJsCI = CryptoJS.enc.Utf8.parse(ClientID);
@@ -26,11 +26,13 @@ export const decryptData = (encryptedData) => {
   const rawData = CryptoJS.enc.Base64.parse(encryptedData);
   const key = CryptoJS.enc.Latin1.parse(ClientKey);
   const iv = CryptoJS.enc.Latin1.parse(ClientID);
-  
+
   const decryptedData = CryptoJS.AES.decrypt(
-      { ciphertext: rawData },
-      key,
-      { iv: iv }
+    {
+      ciphertext: rawData
+    },
+    key,
+    { iv: iv }
   );
 
   return JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
@@ -49,90 +51,91 @@ export const registrationHandler = debounce(
       const encryptedPayload = encryptPayload(payload);
 
       const response = await axios.post(
-     Api.USER_REGISTRATION,
-      `request_data=${encodeURIComponent(encryptedPayload)}`,
-      {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          jwt: accessToken,
-        },
-      }
+        Api.USER_REGISTRATION,
+        `request_data=${encodeURIComponent(encryptedPayload)}`,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+            jwt: accessToken,
+          },
+        }
       );
 
-const data = response.data;
-console.log(data, "Response from USER_REGISTRATION");
+      const data = response.data;
+      console.log(data, "Response from USER_REGISTRATION");
 
-if (data?.message === 'Invalid Domain Name.') {
-  Alert.alert('Invalid Domain!', 'Please contact KTC Admin', [
-    {
-      text: 'OK',
-      onPress: () => navigation.navigate('ModuleSelectionUI'),
-    },
-  ]);
-  return;
-}
+      if (data?.message === 'Invalid Domain Name.') {
+        Alert.alert('Invalid Domain!', 'Please contact KTC Admin', [
+          {
+            text: 'OK',
+            onPress: () => navigation.navigate('ModuleSelectionUI'),
+          },
+        ]);
+        return;
+      }
 
-if (data?.newuser === 'No') {
-  navigation.navigate('SignInCorporate', {
-    email,
-    from: 'RegisterPOPUP',
-  });
-} else if (data?.newuser === 'Yes') {
-  const mmiToken = await tokenFromMMI();
+      if (data?.newuser === 'No') {
+        navigation.navigate('SignInCorporate', {
+          email,
+          from: 'RegisterPOPUP',
+        });
+      } else if (data?.newuser === 'Yes') {
+        const mmiToken = await tokenFromMMI();
 
-  const otpUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
-  console.log("mmi token",mmiToken?.access_token)
-  const otpResponse = await axios.post(
-    otpUrl,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${mmiToken?.access_token}`,
-      },
-    }
-  );
-
-  if (otpResponse.status >= 200 && otpResponse.status < 300) {
-    console.log("Response",otpResponse.headers)
-    const otpScreen = userType === 'corporate' ? 'OTPRegister' : null;
-    navigation.navigate(otpScreen, {
-      emailId: email,
-      client_id: userType === 'corporate' ? data?.client_id : 'PERSONAL',
-      url: otpResponse?.headers?.location,
-    });
-  }
-}
+        // const otpUrl = `https://anchor.mapmyindia.com/api/users/authenticate?handle=${email}&autoMigrate`;
+        const otpUrl = `https://anchor.mapmyindia.com/api/users/authenticate?handle=${email}`;
+        const otpResponse = await axios.post(
+          otpUrl,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${mmiToken?.access_token}`,
+            },
+          }
+        );
+        console.log('====================================');
+        console.log(otpResponse?.headers?.location, " URL FROM OTP REGISTER");
+        console.log('====================================');
+        if (otpResponse.status >= 200 && otpResponse.status < 300) {
+          const otpScreen = userType === 'corporate' ? 'OTPRegister' : null;
+          navigation.navigate(otpScreen, {
+            emailId: email,
+            client_id: userType === 'corporate' ? data?.client_id : 'PERSONAL',
+            url: otpResponse?.headers?.location,
+          });
+        }
+      }
     } catch (error) {
-  console.error('Registration Error:', error);
-  Alert.alert('Error', 'Failed to register. Please try again.');
-} finally {
-  setLoader(false);
-}
+      console.error('Registration Error:', error);
+      Alert.alert('Error', 'Failed to register. Please try again.');
+    } finally {
+      setLoader(false);
+    }
   },
-300
+  300
 );
 
 export const registerUser = async (userData, accessToken) => {
   try {
-      const encryptedPayload = encryptPayload(userData);
+    const encryptedPayload = encryptPayload(userData);
 
-      const formBody = new URLSearchParams({
-          request_data: encryptedPayload
-      }).toString();
+    const formBody = new URLSearchParams({
+      request_data: encryptedPayload
+    }).toString();
 
-      const response = await fetch('https://web.gst.fleet.ktcindia.com/user_apis_encoded/user_registration.php', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-              'jwt': accessToken
-          },
-          body: formBody
-      });
+    const response = await fetch('https://web.gst.fleet.ktcindia.com/user_apis_encoded/user_registration.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+        'jwt': accessToken
+      },
+      body: formBody
+    });
 
-      const responseData = await response.json();
-      return responseData;
+    const responseData = await response.json();
+    return responseData;
   } catch (error) {
-      throw new Error('Registration failed. Please try again.');
+    throw new Error('Registration failed. Please try again.');
   }
 };
 
@@ -160,29 +163,47 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
     });
 
     const data = response.data;
+    console.log('====================================');
+    console.log(data , "RESPONSE DATA");
+    console.log('====================================');
+ 
+
     console.log(data, "login data");
+    if (data.status === 200) {
+      console.log('====================================');
+      console.log("Logged In");
+      console.log('====================================');
+      AsyncStorage.setItem('isLoggedInn', 'true');
+      var result = decryptData(data.result);
+
+      // return result ; 
+    }else if(data.status === 204){
+      Alert.alert('OOPs', data?.message)
+      return ; 
+    }
+    console.log(result, "Descrypted DAta ");
+    // await AsyncStorage.setItem('isLoggedInn', 'true');
+    // await AsyncStorage.setItem('user_id', decryptData.user_id);
+    // await AsyncStorage.setItem('user_email', decryptData .email_id);
 
     if (data?.jwt) {
 
       await AsyncStorage.setItem('token', data.jwt);
-      await AsyncStorage.setItem('email', email);
-
-       
-
-      
-      Alert.alert('Success', 'Logged in successfully!');
+      // Alert.alert('Success', 'Logged in successfully!');
       navigation.replace('MainApp', {
         screen: 'CorporateModule1',
       });
     } else {
-      Alert.alert('OOPs!', 'Login Failed. Try Again');
+      Alert.alert('OOPs!', 'Login Failed Try sAgain');
     }
+    return result; 
   } catch (error) {
-    console.error('Error in handleSignIn:', error);
+    console.error('Error in handleSignIn:',);
     Alert.alert('Error', 'Failed to sign in. Please try again.');
   } finally {
     setLoading(false);
   }
+
 };
 export const emailsms = async (email, accessToken, navigation, setLoading) => {
   if (!accessToken) {
@@ -199,22 +220,23 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
       throw new Error('Failed to retrieve MMI access token.');
     }
 
-  
-    const apiUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
-
-
-    const response = await axios.post(
-      apiUrl,
-      {},
+    // const apiUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
+    const apiUrl = `${ANCHOR_URL}?handle=${email.toString()}`;
+    let headersList = {
+      "Authorization": `Bearer ${mmiToken?.access_token}`
+    }
+    const response = await fetch(apiUrl,
       {
-        headers: {
-          Authorization: `Bearer ${mmiToken.access_token}`,
-        },
+        method: "POST",
+        headers: headersList
       }
     );
 
-    
-    const locationUrl = response?.headers?.location;
+
+    const locationUrl = response?.headers?.map?.location;
+    console.log('====================================');
+    console.log(locationUrl);
+    console.log('====================================');
     if (locationUrl) {
       navigation.navigate('OTP', {
         url: locationUrl,
@@ -224,7 +246,7 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
       });
 
       console.log(locationUrl, 'URL retrieved successfully.');
-      return locationUrl;
+      // return locationUrl;
     } else {
       throw new Error('Location header is missing in the response.');
     }
@@ -255,16 +277,21 @@ export const resetPassword = async (email, newPassword, confirmPassword, accessT
     const encryptedPayload = encryptPayload(payload);
     const formBody = new URLSearchParams({ request_data: encryptedPayload }).toString();
 
-    const response = await axios.post(Api.USER_RESETPASSWORD, formBody, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-        jwt: accessToken,
-      },
-    });
+    const response = await axios.post(Api.USER_RESETPASSWORD,
+      formBody,
+      {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          jwt: accessToken,
+        },
+      });
 
     const data = response.data;
-
-    if (data?.status === 'success') {
+    console.log('====================================');
+    console.log(data, "DATA RESETING PASSWORD");
+    console.log('====================================');
+    return data;
+    if (data?.status === '200') {
       Alert.alert('Success', 'Password reset successfully.');
     } else {
       Alert.alert('Error', 'Failed to reset password. Please try again.');
@@ -277,7 +304,7 @@ export const resetPassword = async (email, newPassword, confirmPassword, accessT
   }
 };
 
-export const verifyOTP = async (url, encodedPassPhrase) => {
+export const verifyOTP = async (url, passPhrase, processs) => {
   try {
   
     if (!url) {
@@ -287,9 +314,22 @@ export const verifyOTP = async (url, encodedPassPhrase) => {
    
     const mmiToken = await tokenFromMMI();
 
-
-    if (!mmiToken?.access_token) {
-      throw new Error("Access token is missing.");
+    if (mmiToken?.access_token) {
+      const fullUrl = `${url}?passPhrase=${passPhrase}&${processs}`;
+      console.log('====================================');
+      console.log("FULL URL ", fullUrl);
+      console.log('====================================');
+      const response = await axios.get(fullUrl, {
+        headers: {
+          Authorization: `Bearer ${mmiToken?.access_token}`,
+        },
+      });
+      console.log('====================================');
+      console.log("repsonse", response);
+      console.log('====================================');
+      return response;
+    } else {
+      throw new Error('Access token is missing.');
     }
 
     console.log("VERIFY OTP REQUEST", url, mmiToken?.access_token, encodedPassPhrase);
@@ -422,7 +462,7 @@ export const verifyOTP = async (url, encodedPassPhrase) => {
 //       setLoader(false);
 //     }
 //   },
-//   300 
+//   300
 // );
 
 
@@ -456,12 +496,12 @@ export const verifyOTP = async (url, encodedPassPhrase) => {
 
 
 
-//       return data; 
+//       return data;
 
 //     } catch (error) {
 //       console.error('Registration Error:', error);
 //       Alert.alert('Error', 'Failed to register. Please try again.');
-//       throw error; 
+//       throw error;
 //     }
 //   };
 // export const handleSignIn = async (email, password, accessToken, navigation, setLoading) => {
@@ -547,7 +587,7 @@ export const verifyOTP = async (url, encodedPassPhrase) => {
 //       console.log(locationUrl, "URL retrieved successfully.");
 //       console.log(accessToken,"aa gya token chalo ghumne");
 
-//       return locationUrl; 
+//       return locationUrl;
 //     } else {
 //       const errorData = await response.json();
 //       Alert.alert('Error', 'Failed to send OTP. Please try again.');

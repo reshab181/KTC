@@ -257,7 +257,11 @@ import CustomHeader from '../../component/CustomHeader';
 import CustomButton from '../../component/CustomButtons';
 import CustomIconTextInput from '../../component/CustomIconTextInput';
 import { RadioButton } from 'react-native-paper';
-
+import FirstName from '../../assets/svg/first-name.svg'
+import DobSvg from '../../assets/svg/cake_black.svg'
+import GenderSvg from '../../assets/svg/Gender.svg'
+import SmartPhoneSvg from '../../assets/svg/smartphone.svg'
+import EmailSvg from '../../assets/svg/email_black.svg'
 const { height, width } = Dimensions.get('window');
 
 const COLORS = {
@@ -317,7 +321,6 @@ const PersonalRegister = ({ navigation }) => {
                 iconPath={require('../../assets/icbackarrow.png')}
                 iconHeight={24}
                 iconWidth={24}
-                handleLeftIcon={() => navigation.goBack()}
             />
 
             <View style={styles.scrollContainer}>
@@ -357,7 +360,6 @@ const PersonalRegister = ({ navigation }) => {
                                     </View>
                                 ))}
 
-                                {/* Date of Birth Field */}
                                 <TouchableOpacity
                                     style={styles.selectionContainer}
                                     onPress={() => setShowDatePicker(true)}
@@ -384,7 +386,6 @@ const PersonalRegister = ({ navigation }) => {
                                     />
                                 )}
 
-                                {/* Gender and Country Fields */}
                                 <View style={styles.selectionContainer}>
                                     <Image
                                         source={require('../../assets/Gender.png')}

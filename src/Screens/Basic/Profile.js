@@ -10,16 +10,23 @@ import {
 import CustomHeader from '../../component/CustomHeader';
 import CustomIconTextInput from '../../component/CustomIconTextInput';
 import CustomButton from '../../component/CustomButtons';
+import { useSelector } from 'react-redux';
+import FirstName from '../../assets/svg/first-name.svg'
+import DobSvg from '../../assets/svg/cake_black.svg'
+import SmartPhoneSvg from '../../assets/svg/smartphone.svg'
+import EmailSvg from '../../assets/svg/email_black.svg'
 
 const Profile = ({ navigation }) => {
   const [loader, setLoader] = useState(false);
-
+  const userDetails = useSelector((state) => state.userprofile); 
+  const date = new Date(userDetails.bithdate * 1000);
+  console.log("DETAILS", userDetails)
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    birthDate: '',
-    mobileNumber: '',
+    firstName: userDetails.f_name ? userDetails.f_name : '',
+    lastName: userDetails.l_name ? userDetails.l_name : '',
+    email: userDetails.email_id ? userDetails.email_id :'',
+    birthDate: userDetails.bithdate ? userDetails.bithdate : '',  
+    mobileNumber: userDetails.mobile_number ? userDetails.mobile_number : '',
     password: '',
   });
 
@@ -38,12 +45,12 @@ const Profile = ({ navigation }) => {
   };
 
   const inputs = [
-    { placeholder: "First Name", icon1: require('../../assets/manicon.png'), value: formData.firstName, key: 'firstName' },
-    { placeholder: "Last Name", icon1: require('../../assets/manicon.png'), value: formData.lastName, key: 'lastName' },
-    { placeholder: "Email", icon1: require('../../assets/email.png'), value: formData.email, key: 'email' },
-    { placeholder: "MM/DD/YYYY", icon1: require('../../assets/DOB.png'), value: formData.birthDate, key: 'birthDate' },
-    { placeholder: "Mobile Number", icon1: require('../../assets/phone.png'), value: formData.mobileNumber, key: 'mobileNumber' , type: "numeric" },
-    { placeholder: "Change Password", icon1: require('../../assets/lock.png'), value: formData.password, key: 'password' },
+    { placeholder: "First Name", icon1: FirstName, value: formData.firstName, key: 'firstName' },
+    { placeholder: "Last Name", icon1: FirstName, value: formData.lastName, key: 'lastName' },
+    { placeholder: "Email", icon1: EmailSvg, value: formData.email, key: 'email' },
+    { placeholder: "MM/DD/YYYY", icon1: DobSvg, value: formData.birthDate, key: 'birthDate' },
+    { placeholder: "Mobile Number", icon1: SmartPhoneSvg, value: formData.mobileNumber, key: 'mobileNumber' , type: "numeric" },
+    { placeholder: "Change Password", iconimg: require('../../assets/lock.png'), value: formData.password, key: 'password' },
   ];
 
   const handleInputChange = (key, value) => {
@@ -61,7 +68,7 @@ const Profile = ({ navigation }) => {
           iconPath={require('../../assets/ic_back_arrow_white_24.png')}
           iconHeight={24}
           iconWidth={24}
-      onMenuPress ={() => navigation.goBack()} 
+          handleLeftIcon ={() => navigation.navigate('CorporateModule1')} 
         />
 
         {loader && (
@@ -76,7 +83,8 @@ const Profile = ({ navigation }) => {
               <CustomIconTextInput
                 keyboardType={input.type}
                 placeholder={input.placeholder}
-                icon1={input.icon1}
+                LeftSvg={input.icon1 }
+                icon1 = {input.iconimg}
                 value={input.value}
                 onChangeText={(value) => handleInputChange(input.key, value)}
               />

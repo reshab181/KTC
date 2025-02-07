@@ -1,3 +1,4 @@
+// Reshab 
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   View, 
@@ -8,12 +9,15 @@ import {
   Image,
   Dimensions,
   Animated,
-  Alert,
-  
+  Alert, 
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
+import HomeSvg from '../assets/svg/home.svg'
+import BookingSvg from '../assets/svg/Mybookings.svg'
+import ProfileSvg from '../assets/svg/my-profile.svg'
+import NotificationSvg from '../assets/svg/notifications.svg';
+import LogoutSvg from '../assets/svg/logout.svg'
 const windowWidth = Dimensions.get('window').width;
 
 const SidebarMenu = ({ isVisible, onClose }) => {
@@ -21,11 +25,11 @@ const SidebarMenu = ({ isVisible, onClose }) => {
   const translateX = useRef(new Animated.Value(-windowWidth * 0.8)).current; 
 
   const menuItems = [
-    { name: 'Home', route: 'CorporateModule1', icon: require('../assets/home.png') },
-    { name: 'My Bookings', route: 'Bookings', icon: require('../assets/bookings.png') },
-    { name: 'Profile', route: 'Profile', icon: require('../assets/my-profile.png') },
-    { name: 'Notifications', route: 'Notifications', icon: require('../assets/notifications.png') },
-    { name: 'Logout', route: 'logout', icon: require('../assets/logout.png') }, 
+    { name: 'Home', route: 'CorporateModule1', icon: HomeSvg },
+    { name: 'My Bookings', route: 'MyBooking', icon: BookingSvg},
+    { name: 'Profile', route: 'Profile', icon: ProfileSvg},
+    { name: 'Notifications', route: 'Notifications', icon:NotificationSvg },
+    { name: 'Logout', route: 'logout', icon: LogoutSvg }, 
   ];
 
   const handleNavigation = (route) => {
@@ -62,7 +66,10 @@ const SidebarMenu = ({ isVisible, onClose }) => {
 
   const clearUserData = async () => {
     try {
-      await AsyncStorage.removeItem('userToken'); 
+      await AsyncStorage.removeItem('userToken');
+      await AsyncStorage.setItem('isLoggedInn', 'false');
+      await AsyncStorage.removeItem('user_id');  
+      await AsyncStorage.removeItem('user_email');  
     } catch (error) {
       console.error('Error clearing user data:', error);
     }
@@ -114,7 +121,8 @@ const SidebarMenu = ({ isVisible, onClose }) => {
                 style={styles.menuItem}
                 onPress={() => handleNavigation(item.route)}
               >
-                <Image source={item.icon} style={styles.menuIcon} />
+                {item.icon && <item.icon  style={styles.menuIcon}/>}
+                {/* <Image source={item.icon} style={styles.menuIcon} /> */}
                 <Text style={styles.menuText}>{item.name}</Text>
               </TouchableOpacity>
             ))}
