@@ -13,6 +13,7 @@ import CustomHeader from '../../component/CustomHeader';
 import CustomTextInpt from '../../component/CustomTextInpt';
 import CustomButton from '../../component/CustomButtons';
 import { emailsms } from '../../Api/Authentication';
+import { AuthStrings, Characters } from '../../constants/Strings';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -47,12 +48,12 @@ const ForgotPassword = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-         <CustomHeader title={"Forgot Password"} leftTitle={"Skip"} handlePress={() => navigation.goBack()} />
+         <CustomHeader title={AuthStrings.ForgotPassword} leftTitle={Characters.Skip} handlePress={() => navigation.goBack()} />
 
       <View style={styles.emailContainer}>
         <CustomTextInpt placeholder={email} value={email} editable={false} style={{backgroundColor:"#EEE"}} />
         <View style={{marginTop: 84}}>
-        <CustomButton title={"Next"} onPress={sendForgotOTP} loading={loading}/>
+        <CustomButton title={Characters.Next} onPress={sendForgotOTP} loading={loading}/>
         </View>
       </View>
       {error && <Text style={styles.errorText}>{error}</Text>}

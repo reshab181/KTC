@@ -284,6 +284,7 @@ import CustomHeader from '../../component/CustomHeader';
 import { verifyOTP } from '../../Api/Authentication';
 import RNHash from 'react-native-hash';
 import OtpSvg from '../../assets/svg/otp.svg'
+import { AuthStrings } from '../../constants/Strings';
 
 const OtpRegister = ({ route }) => {
   const { emailId, client_id, url } = route.params;
@@ -371,7 +372,7 @@ const OtpRegister = ({ route }) => {
         style={styles.img}
       /> */}
       <Text style={styles.txt}>
-        Please enter the OTP received on your registered email address.
+        {AuthStrings.PleaseEnterOtpRecieved}
       </Text>
 
       <View style={styles.txtInputBox}>
@@ -396,7 +397,7 @@ const OtpRegister = ({ route }) => {
 
       {!isValidOtp && (
         <Text style={styles.errorText}>
-          Please enter a valid 6-digit OTP.
+          {AuthStrings.Enter6Digit}
         </Text>
       )}
 

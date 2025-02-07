@@ -262,6 +262,7 @@ import DobSvg from '../../assets/svg/cake_black.svg'
 import GenderSvg from '../../assets/svg/Gender.svg'
 import SmartPhoneSvg from '../../assets/svg/smartphone.svg'
 import EmailSvg from '../../assets/svg/email_black.svg'
+import { AuthStrings } from '../../constants/Strings';
 const { height, width } = Dimensions.get('window');
 
 const COLORS = {
@@ -317,7 +318,7 @@ const PersonalRegister = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.mainContainer}>
             <CustomHeader
-                title="Register"
+                title={AuthStrings.Register}
                 iconPath={require('../../assets/icbackarrow.png')}
                 iconHeight={24}
                 iconWidth={24}
@@ -429,7 +430,7 @@ const PersonalRegister = ({ navigation }) => {
 
                             <View style={styles.buttonContainer}>
                                 <CustomButton
-                                    title="Sign Up"
+                                    title={AuthStrings.SignUp}
                                     onPress={handleSubmit}
                                     widthSize="100%"
                                     textSize={18}

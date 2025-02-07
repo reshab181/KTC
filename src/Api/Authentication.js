@@ -237,7 +237,7 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
     console.log(locationUrl);
     console.log('====================================');
     if (locationUrl) {
-      navigation.navigate('OTP', {
+      navigation.replace('OTP', {
         url: locationUrl,
         email,
         from: 'ForgotPassword',

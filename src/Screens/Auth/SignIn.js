@@ -22,6 +22,7 @@ import { setUserProfile } from '../../Redux/slice/UserProfileSlice';
 import RegisterPOPUP from './RegisterPopUp';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setUserProfileData } from '../../Utils/userProfileUtils';
+import { AuthStrings, Characters } from '../../constants/Strings';
 
 
 const SignInCorporate = ({ route }) => {
@@ -97,8 +98,8 @@ const SignInCorporate = ({ route }) => {
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader
-        title="Sign In"
-        leftTitle="Skip"
+        title={AuthStrings.SignIn}
+        leftTitle={Characters.Skip}
         handlePress={() => navigation.navigate('ModuleSelectionUI')}
       />
       <View style={styles.form}>
@@ -118,7 +119,7 @@ const SignInCorporate = ({ route }) => {
         {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
         <CustomTextInpt
-          placeholder="Password"
+          placeholder={AuthStrings.Password}
           value={password}
           onChangeText={(text) => setPassword(text)}
           secureTextEntry
@@ -130,7 +131,7 @@ const SignInCorporate = ({ route }) => {
 
         <View style={{ marginTop: 32 }}>
           <CustomButton
-            title={'Sign In'}
+            title={AuthStrings.SignIn}
             onPress={handleSignInn}
             textSize={18}
             loading={loading}
@@ -142,29 +143,26 @@ const SignInCorporate = ({ route }) => {
           style={{ marginTop: 10 }}
           onPress={() => navigation.replace('ForgotPassword', { email })}
         >
-          <Text style={styles.linkText}>Forgot Password?</Text>
+          <Text style={styles.linkText}>{AuthStrings.FORGOTPASSWORD}</Text>
         </TouchableOpacity>
 
 
         <View style={styles.divider}>
           <View style={styles.line} />
-          <Text style={styles.orText}>OR</Text>
+          <Text style={styles.orText}>{AuthStrings.OR}</Text>
           <View style={styles.line} />
         </View>
 
 
         <CustomButton
-          title="Create New Account"
+          title={AuthStrings.CreateNewAccount}
           backgroundColor="#F1F1F3"
           borderWidth={1}
           textColor="#0F2541"
           textSize={16}
           onPress={() => {
-            console.log('====================================');
-            console.log("clicked");
             setSelectedModule(module);
             setIsModalVisible(true);
-            console.log('====================================');
           }
           }
         />
