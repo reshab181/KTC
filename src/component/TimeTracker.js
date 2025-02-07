@@ -30,7 +30,7 @@ const TimeTracker = ({ selectTime, selectedDate }) => {
   const getCurrentTime = () => {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = Math.floor(now.getMinutes() / 15) * 15; // Round down to nearest 15 minutes
+    const minutes = Math.floor(now.getMinutes() / 30) * 30; 
     const formattedMinutes = minutes.toString().padStart(2, '0');
     return `${hours}:${formattedMinutes}`;
   };
