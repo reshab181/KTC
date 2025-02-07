@@ -9,9 +9,10 @@ import {
   Dimensions,
   Animated,
   Alert,
-  AsyncStorage 
+  
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const windowWidth = Dimensions.get('window').width;
 

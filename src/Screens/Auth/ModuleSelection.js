@@ -8,7 +8,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Alert
+  Alert,
+  BackHandler
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../component/CustomHeader';
@@ -16,16 +17,34 @@ import RegisterPOPUP from './RegisterPopUp';
 
 const ModuleSelectionUI = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedModule, setSelectedModule] = useState(null); 
+  const [selectedModule, setSelectedModule] = useState(null);
   const navigation = useNavigation();
 
   useEffect(() => {
-  
+    const handleBackPress = () => {
+      Alert.alert(
+        'Hold On!',
+        'Are you sure you want to exit?',
+        [
+          { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+          { text: 'Yes', onPress: () => BackHandler.exitApp() },
+        ],
+        { cancelable: true }
+      );
+      return true; 
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+
+    return () => backHandler.remove(); 
+  }, []);
+
+  useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      setIsModalVisible(false); 
+      setIsModalVisible(false);
     });
 
-    return unsubscribe; 
+    return unsubscribe;
   }, [navigation]);
 
   const handleModuleClick = (module) => {
@@ -36,15 +55,15 @@ const ModuleSelectionUI = () => {
         [{ text: 'OK', onPress: () => {} }],
         { cancelable: true }
       );
-      return; 
+      return;
     }
     setSelectedModule(module);
     setIsModalVisible(true);
   };
 
   const closeModal = () => {
-    setIsModalVisible(false); 
-    setSelectedModule(null); 
+    setIsModalVisible(false);
+    setSelectedModule(null);
   };
 
   const ModuleCard = ({ title, image, description, onPress }) => (
@@ -63,12 +82,7 @@ const ModuleSelectionUI = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {isModalVisible && (
-        <RegisterPOPUP 
-          module={selectedModule} 
-          onClose={closeModal} 
-        />
-      )}
+      {isModalVisible && <RegisterPOPUP module={selectedModule} onClose={closeModal} />}
       <CustomHeader imgPath={require('../../assets/ktclogo.png')} justifyContent={'center'} />
       <View style={styles.contentContainer}>
         <ModuleCard
@@ -97,9 +111,9 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: 'flex-start', 
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingTop: 80, 
+    paddingTop: 80,
     paddingHorizontal: 15,
   },
   moduleContainer: {
@@ -148,5 +162,4 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
 });
-
 

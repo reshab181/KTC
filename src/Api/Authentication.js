@@ -80,7 +80,8 @@ if (data?.newuser === 'No') {
 } else if (data?.newuser === 'Yes') {
   const mmiToken = await tokenFromMMI();
 
-  const otpUrl = `https://anchor.mapmyindia.com/api/users/authenticate?handle=${email}&autoMigrate`;
+  const otpUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
+  console.log("mmi token",mmiToken?.access_token)
   const otpResponse = await axios.post(
     otpUrl,
     {},
@@ -92,6 +93,7 @@ if (data?.newuser === 'No') {
   );
 
   if (otpResponse.status >= 200 && otpResponse.status < 300) {
+    console.log("Response",otpResponse.headers)
     const otpScreen = userType === 'corporate' ? 'OTPRegister' : null;
     navigation.navigate(otpScreen, {
       emailId: email,
@@ -158,16 +160,22 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
     });
 
     const data = response.data;
-    console.log(data,"login data");
-    
+    console.log(data, "login data");
+
     if (data?.jwt) {
+
       await AsyncStorage.setItem('token', data.jwt);
+      await AsyncStorage.setItem('email', email);
+
+       
+
+      
       Alert.alert('Success', 'Logged in successfully!');
       navigation.replace('MainApp', {
         screen: 'CorporateModule1',
       });
     } else {
-      Alert.alert('OOPs!', 'Login Failed Try Again');
+      Alert.alert('OOPs!', 'Login Failed. Try Again');
     }
   } catch (error) {
     console.error('Error in handleSignIn:', error);
@@ -269,29 +277,46 @@ export const resetPassword = async (email, newPassword, confirmPassword, accessT
   }
 };
 
-export const verifyOTP = async (url, passPhrase) => {
+export const verifyOTP = async (url, encodedPassPhrase) => {
   try {
+  
+    if (!url) {
+      throw new Error("URL is required.");
+    }
+
+   
     const mmiToken = await tokenFromMMI();
 
-    if (mmiToken?.access_token) {
-      const fullUrl = `${url}?passPhrase=${passPhrase}`;
 
-      const response = await axios.get(fullUrl, {
-        headers: {
-          Authorization: `Bearer ${mmiToken?.access_token}`,
-        },
-      });
-
-      return response.data;
-    } else {
-      throw new Error('Access token is missing.');
+    if (!mmiToken?.access_token) {
+      throw new Error("Access token is missing.");
     }
+
+    console.log("VERIFY OTP REQUEST", url, mmiToken?.access_token, encodedPassPhrase);
+
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${mmiToken?.access_token}`,
+      },
+      params: {
+        passPhrase: encodedPassPhrase,
+      },
+    });
+
+    
+    return response.data;
+
   } catch (error) {
-    Alert.alert('Error', error.message || 'An unexpected error occurred.');
-    console.error('verifyOTP error:', error);
+   
+    console.error("verifyOTP error:", error);
+
+   
+    Alert.alert("Error", error.message || "An unexpected error occurred.");
+
     return null;
   }
 };
+
 
 
 // import { Alert, Platform } from 'react-native';

@@ -135,7 +135,7 @@ const SignInCorporate = ({ route }) => {
           borderWidth={1}
           textColor="#0F2541"
           textSize={16}
-          onPress={() => navigation.navigate('Register')}
+          onPress={() => navigation.navigate('RegisterPage')}
         />
       </View>
     </SafeAreaView>

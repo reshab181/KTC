@@ -295,7 +295,7 @@ const OtpRegister = ({ route }) => {
   const [isValidOtp, setIsValidOtp] = useState(true);
   const inputRefs = useRef([]);
 
-  // Timer for resend OTP
+
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
@@ -327,7 +327,6 @@ const OtpRegister = ({ route }) => {
     newOtp[index] = '';
     setOtp(newOtp.join(''));
 
-
     if (index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
@@ -339,10 +338,11 @@ const OtpRegister = ({ route }) => {
       try {
         const md5Hash = await RNHash.hashString(otp, 'md5');
         const sha256Hash = await RNHash.hashString(md5Hash, 'sha256');
+        console.log("URL" , url);
+        
+        const response = await verifyOTP(url, sha256Hash);
 
-        const response = await verifyOTP(url,sha256Hash);
-
-        if ( response.status === 204) {
+        if (response && response.status === 204) {
           setLoader(false);
           Alert.alert('Success', 'OTP verified successfully!');
           navigation.navigate('RegisterPage', { emailId, client_id });
@@ -403,18 +403,22 @@ const OtpRegister = ({ route }) => {
         />
       </View>
 
-      {/* <View style={styles.clearButton}>
-        <CustomButton title="Clear OTP" onPress={() => setOtp('')} />
-      </View> */}
-
-      {/* <View>
+      <View>
         <Text style={styles.footerText}>
           Didn't receive the OTP?
         </Text>
-        <Text style={styles.footerText2}>
-          {timer > 0 ? `Resend code in 00:${String(timer).padStart(2, '0')}` : 'Resend code'}
+        <Text
+          style={[
+            styles.footerText2,
+            { color: timer > 0 ? '#999' : '#1C4096' },
+          ]}
+          onPress={() => timer === 0 && setTimer(30)}
+        >
+          {timer > 0
+            ? `Resend code in 00:${String(timer).padStart(2, '0')}`
+            : 'Resend code'}
         </Text>
-      </View> */}
+      </View>
     </View>
   );
 };
@@ -470,10 +474,6 @@ function useStyles() {
     },
     btn: {
       width: winwidth * 0.9,
-    },
-    clearButton: {
-      marginTop: 20,
-      width: winwidth * 0.5,
     },
     footerText: {
       marginTop: 110,
