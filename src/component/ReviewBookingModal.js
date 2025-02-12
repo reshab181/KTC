@@ -11,7 +11,7 @@ const ReviewBookingModal = ({ visible, onClose }) => {
     const UserDetail = useSelector((state) => state.userprofile)
     return (
         <Modal visible={visible} animationType="slide" >
-            <CustomHeader title={'Review Booking Details'} Iconn={IcBackArrowSvg} handleLeftIcon={onClose} />
+            <CustomHeader title={'Review Booking Details'} Iconn={IcBackArrowSvg} iconHeight={24} iconWidth={24} handleLeftIcon={onClose} />
 
             <View style={styles.overlay}>
                 <View style={styles.modalContainer}>
@@ -22,7 +22,7 @@ const ReviewBookingModal = ({ visible, onClose }) => {
                     {renderDetail('Renter Name', UserDetail?.f_name + ' ' + UserDetail?.l_name)}
                     {renderDetail('Organisation Name', UserDetail?.client_name)}
                     {renderDetail('Mobile', UserDetail?.mobile_number)}
-                    {renderDetail('Email', UserDetail?.email_id , " + " , "ashutosh")}
+                    {renderDetail('Email', UserDetail?.email_id)}
 
                     <Text style={styles.sectionTitle}>Reservation Details</Text>
                     {renderDetail('Rental City', city)}

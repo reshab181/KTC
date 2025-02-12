@@ -47,6 +47,7 @@
     "react-native-hash": "^3.0.3",
     "react-native-modal": "^13.0.1",
     "react-native-modal-datetime-picker": "^18.0.0",
+    "react-native-otp-input": "^1.0.12",
     "react-native-paper": "^5.13.1",
     "react-native-randombytes": "^3.6.1",
     "react-native-safe-area-context": "^5.1.0",

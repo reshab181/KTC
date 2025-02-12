@@ -21,6 +21,7 @@ const CustomHeader = ({ title, justifyContent, imgPath, iconPath, Iconn, iconHei
       marginStart: 16,
       color: '#FFFFFF',
       fontWeight: '600',
+      textTransform : "capitalize"
     },
     icon: {
       height: iconHeight,

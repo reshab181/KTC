@@ -76,14 +76,15 @@ const SignInCorporate = ({ route }) => {
     try {
       const userData = await handleSignIn(email, password, accessToken, navigation, setLoading);
       // Methods added by Ashutosh Rai 
-      // console.log('====================================');
-      // console.log("USER DATA", userData);
-      // console.log('====================================');
+      console.log('====================================');
+      console.log("USER DATA", userData);
+      console.log('====================================');
       if (userData) {
         setUserProfileData(dispatch, userData);
         await AsyncStorage.setItem('isLoggedInn', 'true');
         await AsyncStorage.setItem('user_id', userData.user_id);
         await AsyncStorage.setItem('user_email', userData.email_id);
+        await AsyncStorage.setItem('userToken' , accessToken);
       }
     } catch (error) {
       Alert.alert('Sign In Error', error.message || 'Unable to sign in.');

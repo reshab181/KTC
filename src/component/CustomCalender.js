@@ -70,8 +70,8 @@ import {
             selectedDayTextColor="#fff"
             todayBackgroundColor="#cccccc"
             todayTextStyle={styles.todayText}
-            previousComponent={<Icon name="chevron-left" size={20} color="black" />}
-            nextComponent={<Icon name="chevron-right" size={20} color="black" />}
+            previousComponent={<Icon name="angle-left" size={20} color="black" marginLeft={'10%'}/>}
+            nextComponent={<Icon name="angle-right" size={20} color="black" marginRight={'10%'}/>}
             disabledDates={disablePastDates}
             restrictMonthNavigation={false} // Allow navigating months freely
             minDate={today}

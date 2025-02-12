@@ -1,7 +1,7 @@
 // Ashutosh Rai 
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from 'react-native-vector-icons/FontAwesome';
 import TimeTracker from './TimeTracker';
 
 const CalendarTimePicker = ({ selectDate, selectTime }) => {
@@ -51,13 +51,13 @@ const CalendarTimePicker = ({ selectDate, selectTime }) => {
         <View>
             <View style={styles.monthContainer}>
                 <TouchableOpacity onPress={() => changeWeek(-1)}>
-                    <Ionicons name="chevron-back" size={20} color="#3C3567" />
+                    <Ionicons name="angle-left" size={20} color="#3C3567" />
                 </TouchableOpacity>
                 <Text style={styles.monthText}>
                     {startDate.toLocaleString('default', { month: 'long' })} {startDate.getFullYear()}
                 </Text>
                 <TouchableOpacity onPress={() => changeWeek(1)}>
-                    <Ionicons name="chevron-forward" size={20} color="#3C3567" />
+                    <Ionicons name="angle-right" size={20} color="#3C3567" />
                 </TouchableOpacity>
             </View>
 

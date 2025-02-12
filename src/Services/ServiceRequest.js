@@ -33,7 +33,6 @@ export async function tokenFromMMI() {
       `${BASE_URL}?grant_type=client_credentials&client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}`,
       {
         method: 'POST',
-     
         redirect: 'follow',
       }
     );

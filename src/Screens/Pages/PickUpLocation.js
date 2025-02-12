@@ -17,8 +17,10 @@ const PickUpLocation = ({ navigation, route }) => {
     console.log("Route Params:", route.params?.eloc, route.params?.type);
 
     useEffect(() => {
-        if (searchText.length > 2) {
-            setLoading(true); // Show loader
+        if (searchText.length > 1) {
+            setLoading(true); 
+            console.log("Current Search Text:", searchText , route.params?.eloc);
+
             fetchLocalities(searchText, route.params?.eloc)
                 .then(response => {
                     console.log("API Response:", response);
@@ -47,16 +49,15 @@ const PickUpLocation = ({ navigation, route }) => {
     return (
         <View style={{ flex: 1, backgroundColor: '#F1F1F3' }}>
             {/* Header */}
-            <CustomHeader
+            {/* <CustomHeader
                 handleLeftIcon={() => navigation.goBack()}
                 islogo={true}
                 title="Pickup Location"
                 iconPath={require('../../assets/icbackarrow.png')}
                 iconHeight={24}
                 iconWidth={24}
-            />
+            /> */}
 
-            {/* Search Input */}
             <View style={{ marginHorizontal: 16, marginTop: 10 }}>
                 <CustomTextInput
                     lefticon="search"
@@ -64,12 +65,11 @@ const PickUpLocation = ({ navigation, route }) => {
                     iconSize={20}
                     placeholder="Enter Location"
                     value={searchText}
-                    handlePress={() => setSearchText('')} 
+                    handlePress={() => navigation.goBack() } 
                     onChangeText={setSearchText}
                 />
             </View>
 
-            {/* Loader */}
             {loading ? (
                 <View style={styles.modalBackground}>
                     <View style={styles.loaderContainer}>
@@ -79,7 +79,7 @@ const PickUpLocation = ({ navigation, route }) => {
             ) : (
                 <FlatList
                     data={locations}
-                    keyExtractor={(item) => item.mapplsPin.toString()} // Ensure unique key
+                    keyExtractor={(item) => item.mapplsPin.toString()} 
                     renderItem={({ item }) => (
                         <TouchableOpacity onPress={() => handleSelectLocation(item)} style={styles.item}>
                             <View style={styles.locationContainer}>
