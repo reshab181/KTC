@@ -5,14 +5,16 @@ import { useNavigation } from '@react-navigation/native';
 import DeviceInfo from 'react-native-device-info';
 import JailMonkey from 'jail-monkey';
 import RNExit from 'react-native-exit-app';
+import { StackNavigationProp } from '@react-navigation/stack';
+// type HomeScreenNavigationProp = StackNavigationProp<any, 'HomeScreen'>;
 
 const KTCSplashScreen = () => {
 
-    const navigation = useNavigation()
+  const navigation = useNavigation<any>();
 
    const moveToNextScreen = async () => {
     const isCheckEmulator = await DeviceInfo.isEmulator();
-    if (isCheckEmulator) {
+    if (false) {
         Alert.alert("Alert", "App can not run in Emulator Phone", [
           { text: 'OK', onPress: () => RNExit.exitApp() }
         ]);

@@ -41,7 +41,7 @@ const CustomIconTextInput = ({
         />
         {showRightIcon && (
           <TouchableOpacity onPress={handlePress}>
-            <Righticon/>
+            <Righticon />
             {/* <Icon name={Righticon} size={iconSize} style={{marginLeft: 10}} /> */}
           </TouchableOpacity>
         )}
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
   icon1: {
     height: 24,
     width: 24,
-    marginRight: 10,
+    // marginRight: 10,
   },
   icon2: {
     height: 24,

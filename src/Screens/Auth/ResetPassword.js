@@ -83,7 +83,10 @@ const ResetPassword = ({route, navigation}) => {
             btnText={"Login Now"}
             handlePress={() =>{ 
               setloading(true);
-              navigation.replace('SignInCorporate', {email , accessToken})
+              navigation.navigate('CorporateLoginNavigator', {
+                screen: 'CorporateSignIn',
+                params: { email: email },
+              });
               setloading(false);
             }}
           />

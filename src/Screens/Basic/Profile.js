@@ -68,7 +68,7 @@ const Profile = ({ navigation }) => {
           iconPath={require('../../assets/ic_back_arrow_white_24.png')}
           iconHeight={24}
           iconWidth={24}
-          handleLeftIcon ={() => navigation.navigate('CorporateModule1')} 
+          handleLeftIcon ={() => navigation.goBack()} 
         />
 
         {loader && (
@@ -83,8 +83,8 @@ const Profile = ({ navigation }) => {
               <CustomIconTextInput
                 keyboardType={input.type}
                 placeholder={input.placeholder}
-                LeftSvg={input.icon1 }
-                icon1 = {input.iconimg}
+                LeftSvg={input?.icon1 }
+                icon1 = {input?.iconimg}
                 value={input.value}
                 onChangeText={(value) => handleInputChange(input.key, value)}
               />
@@ -92,7 +92,7 @@ const Profile = ({ navigation }) => {
           ))}
         </View>
 
-        <View style={{ position: 'absolute', width: '100%', bottom: 0.5 }}>
+        <View style={{ position: 'absolute', width: '100%', bottom: 0 }}>
           <CustomButton
             title="Delete Account"
             onPress={handleDeleteAccount}
@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     marginHorizontal: 16,
+    paddingLeft: 10 , 
     marginTop: 16,
   },
 });

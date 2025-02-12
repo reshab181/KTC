@@ -185,8 +185,8 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
     if (data?.jwt) {
       await AsyncStorage.setItem('token', data.jwt);
       // Alert.alert('Success', 'Logged in successfully!');
-      navigation.replace('MainApp', {
-        screen: 'CorporateModule1',
+      navigation.replace('CorporateNavigator', {
+        screen: 'CorporateHomeScreen',
       });
     } else {
       Alert.alert('OOPs!', 'Login Failed Try sAgain');
@@ -230,7 +230,7 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
     console.log(locationUrl);
     console.log('====================================');
     if (locationUrl) {
-      navigation.replace('OTP', {
+      navigation.replace('ForgotPasswordOTP', {
         url: locationUrl,
         email,
         from: 'ForgotPassword',

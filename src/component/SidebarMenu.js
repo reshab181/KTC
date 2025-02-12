@@ -25,7 +25,7 @@ const SidebarMenu = ({ isVisible, onClose }) => {
   const translateX = useRef(new Animated.Value(-windowWidth * 0.8)).current; 
 
   const menuItems = [
-    { name: 'Home', route: 'CorporateModule1', icon: HomeSvg },
+    { name: 'Home', route: 'CorporateHomeScreen', icon: HomeSvg },
     { name: 'My Bookings', route: 'Upcoming', icon: BookingSvg},
     { name: 'Profile', route: 'Profile', icon: ProfileSvg},
     { name: 'Notifications', route: 'Notifications', icon:NotificationSvg },
@@ -55,8 +55,8 @@ const SidebarMenu = ({ isVisible, onClose }) => {
           onPress: async () => {
             await clearUserData(); 
             onClose();
-            navigation.replace('Auth', {
-              screen: 'SignInCorporate',
+            navigation.replace('CorporateLoginNavigator', {
+              screen: 'CorporateSignIn',
             });
           },
         },

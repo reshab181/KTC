@@ -15,10 +15,8 @@ const CorporateRegisterNavigator = () => {
         <CorporateRegisterStack.Navigator initialRouteName="OTPRegister">
             <CorporateRegisterStack.Screen name="RegisterPage" component={Register} options={{ headerShown: false }} />
             <CorporateRegisterStack.Screen name="OTPRegister" component={OtpRegister} options={{ headerShown: false }} />
-            <CorporateRegisterStack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
+            <CorporateRegisterStack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
             <CorporateRegisterStack.Screen name="PersonalRegister" component={PersonalRegister} options={{ headerShown: false }} />
-            <CorporateRegisterStack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
-
         </CorporateRegisterStack.Navigator>
     )
 }

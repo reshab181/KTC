@@ -14,7 +14,7 @@ const VerifyEmailDialog = ({module, onClose, onSignIn, onSignUp}) => {
 
     // const[email, setEmail] = useState('ashutosh.rai@mapmyindia.com')
     const navigation = useNavigation();
-    const[email, setEmail] = useState('saksham.tyagi@mapmyindia.com')
+    const[email, setEmail] = useState('ashutosh.rai@mapmyindia.com')
     const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     const dispatch = useDispatch<any>();

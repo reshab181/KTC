@@ -101,7 +101,7 @@ const SignInCorporate = ({ route }) => {
       <CustomHeader
         title={AuthStrings.SignIn}
         leftTitle={Characters.Skip}
-        handlePress={() => navigation.navigate('ModuleSelectionUI')}
+        handlePress={() => navigation.replace('ModuleSelection')}
       />
       <View style={styles.form}>
         {isModalVisible && (

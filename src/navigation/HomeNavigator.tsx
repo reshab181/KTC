@@ -4,6 +4,8 @@ import CorporateNavigator from "./CorporateNavigator";
 import KTCSplashScreen from "../Screens/splash/KTCSplashScreen";
 import HomeScreen from "../Screens/home/HomeScreen.tsx";
 import CorporateLoginNavigator from "./CorporateLoginNavigator.tsx";
+import ResetPassword from "../Screens/Auth/ResetPassword.js";
+import CorporateModule1 from "../Screens/Pages/CorporateModule1.js";
 
 const HomeStack = createNativeStackNavigator();
 
@@ -14,7 +16,11 @@ const HomeNavigator = () => {
             <HomeStack.Screen name="ModuleSelection" component={HomeScreen} options={{ headerShown: false }}/>
             <HomeStack.Screen name="CorporateRegisterNavigator" component={CorporateRegisterNavigator} options={{ headerShown: false }} />
             <HomeStack.Screen name="CorporateLoginNavigator" component={CorporateLoginNavigator}  options={{ headerShown: false }}/>
-            <HomeStack.Screen name="CorporateModule" component={CorporateNavigator} />
+            <HomeStack.Screen name="CorporateNavigator" component={CorporateNavigator} options={{headerShown: false}}/>
+            {/* <HomeStack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} /> */}
+            {/* <HomeStack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} /> */}
+            
+
         </HomeStack.Navigator>
     )
 }
