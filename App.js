@@ -6,7 +6,6 @@ import { Provider } from "react-redux";
 import store from "./src/Redux/store";
 
 import Splash from "./src/Screens/Basic/Splash";
-import ModuleSelectionUI from "./src/Screens/Auth/ModuleSelection";
 import RegisterPOPUP from "./src/Screens/Auth/RegisterPopUp";
 import Register from "./src/Screens/Auth/Register";
 import SignInCorporate from "./src/Screens/Auth/SignIn";
@@ -31,39 +30,15 @@ import Track from "./src/Screens/My Bookings/Track";
 import Notification from "./src/Screens/Notification";
 import SplashScreen from "@exodus/react-native-splash-screen";
 import Citieslist from "./src/Screens/Pages/Citieslist";
+import CorporateRegisterNavigator from "./src/navigation/CorporateRegisterNavigator";
+import HomeNavigator from "./src/navigation/HomeNavigator";
 import MapplsGL from 'mappls-map-react-native';
 import ReviewBookingModal from "./src/component/ReviewBookingModal";
 
 
 const Stack = createNativeStackNavigator();
-const AuthStack = createNativeStackNavigator();
 const AppStack = createNativeStackNavigator();
 
-const AuthNavigator = () => (
-  <AuthStack.Navigator initialRouteName="ModuleSelectionUI">
-    <AuthStack.Screen
-      name="ModuleSelectionUI"
-      component={ModuleSelectionUI}
-      options={{ headerShown: false }}
-    />
-    <AuthStack.Screen
-      name="SignInCorporate"
-      component={SignInCorporate}
-      options={{ headerShown: false }}
-    />
-    <AuthStack.Screen
-      name="RegisterPOPUP"
-      component={RegisterPOPUP}
-      options={{ presentation: "modal", headerShown: false }}
-    />
-    <AuthStack.Screen name="RegisterPage" component={Register} options={{ headerShown: false }} />
-    <AuthStack.Screen name="OTPRegister" component={OTPRegister} options={{ headerShown: false }} />
-    <AuthStack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
-    <AuthStack.Screen name="OTP" component={ForgotPasswordOTP} options={{ headerShown: false }} />
-    <AuthStack.Screen name="PersonalRegister" component={PersonalRegister} options={{ headerShown: false }} />
-    <AuthStack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
-  </AuthStack.Navigator>
-);
 
 const MainAppNavigator = () => (
   <AppStack.Navigator initialRouteName="HomeScreen1">
@@ -86,11 +61,11 @@ const MainAppNavigator = () => (
 );
 
 const App = () => {
-  MapplsGL.setMapSDKKey( 'a3b6ecfc98829a83dd2d90f31acbfa8e');
-  MapplsGL.setRestAPIKey('886b8e770b7b5314cd9ed9e669676599');
-  MapplsGL.setAtlasClientId('33OkryzDZsIk6jfukki-FfOGzG6jGTz_X-NBQnWydvjbP03ss7EjTOcBXKwiRpM5GJlnuBJESQ37rGeGouOH0Q==');
-  MapplsGL.setAtlasClientSecret( 'lrFxI-iSEg9eBbkGuWL0S-z4QTwM_t31-Fla-GsyLUNUdLw-VluK9Uq3GDgMsq6L0sh4tcAPNKN-FkKeuC7tKljvi7cElTNw'); 
-  
+  MapplsGL.setMapSDKKey( 'a3b6ecfc98829a83dd2d90f31acbfa8e');//place your mapsdkKey
+  MapplsGL.setRestAPIKey('886b8e770b7b5314cd9ed9e669676599');//your restApiKey
+  MapplsGL.setAtlasClientId('33OkryzDZsIk6jfukki-FfOGzG6jGTz_X-NBQnWydvjbP03ss7EjTOcBXKwiRpM5GJlnuBJESQ37rGeGouOH0Q==');//your atlasClientId key
+  MapplsGL.setAtlasClientSecret( 'lrFxI-iSEg9eBbkGuWL0S-z4QTwM_t31-Fla-GsyLUNUdLw-VluK9Uq3GDgMsq6L0sh4tcAPNKN-FkKeuC7tKljvi7cElTNw'); //your atlasClientSecret key
+
   useEffect(() => {
     SplashScreen.hide()
   }, []);
@@ -99,7 +74,8 @@ const App = () => {
     <GestureHandlerRootView>
       <Provider store={store}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Splash">
+          <HomeNavigator />
+          {/* <Stack.Navigator initialRouteName="Splash">
 
             <Stack.Screen
               name="Splash"
@@ -120,7 +96,7 @@ const App = () => {
               component={MainAppNavigator}
               options={{ headerShown: false }}
             />
-          </Stack.Navigator>
+          </Stack.Navigator> */}
         </NavigationContainer>
       </Provider>
     </GestureHandlerRootView>

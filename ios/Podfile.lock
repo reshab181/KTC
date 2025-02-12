@@ -7,6 +7,43 @@ PODS:
   - hermes-engine (0.75.4):
     - hermes-engine/Pre-built (= 0.75.4)
   - hermes-engine/Pre-built (0.75.4)
+  - jail-monkey (2.8.3):
+    - React-Core
+  - mappls-map-react-native (1.0.10):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - MapplsAnnotationExtension/Base (= 1.0.1)
+    - MapplsAPICore (= 1.0.15)
+    - MapplsAPIKit/Base (= 2.0.29)
+    - MapplsFeedbackKit/Base (= 2.0.0)
+    - MapplsGeoanalytics/Base (= 1.0.0)
+    - MapplsLMS/Base (= 1.0.5)
+    - MapplsMap/Base (= 5.13.15)
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - MapplsAnnotationExtension/Base (1.0.1)
+  - MapplsAPICore (1.0.15)
+  - MapplsAPIKit/Base (2.0.29)
+  - MapplsFeedbackKit/Base (2.0.0)
+  - MapplsGeoanalytics/Base (1.0.0)
+  - MapplsLMS/Base (1.0.5)
+  - MapplsMap/Base (5.13.15)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1538,6 +1575,10 @@ PODS:
     - React-Core
   - RNDateTimePicker (8.2.0):
     - React-Core
+  - RNDeviceInfo (14.0.2):
+    - React-Core
+  - RNExitApp (2.0.0):
+    - React-Core
   - RNGestureHandler (2.21.2):
     - DoubleConversion
     - glog
@@ -1614,6 +1655,8 @@ DEPENDENCIES:
   - fmt (from `../node_modules/react-native/third-party-podspecs/fmt.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
+  - jail-monkey (from `../node_modules/jail-monkey`)
+  - mappls-map-react-native (from `../node_modules/mappls-map-react-native`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCTDeprecation (from `../node_modules/react-native/ReactApple/Libraries/RCTFoundation/RCTDeprecation`)
@@ -1681,6 +1724,8 @@ DEPENDENCIES:
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - "RNCPicker (from `../node_modules/@react-native-picker/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
+  - RNDeviceInfo (from `../node_modules/react-native-device-info`)
+  - RNExitApp (from `../node_modules/react-native-exit-app`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -1689,6 +1734,13 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - MapplsAnnotationExtension
+    - MapplsAPICore
+    - MapplsAPIKit
+    - MapplsFeedbackKit
+    - MapplsGeoanalytics
+    - MapplsLMS
+    - MapplsMap
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1705,6 +1757,10 @@ EXTERNAL SOURCES:
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
     :tag: hermes-2024-08-15-RNv0.75.1-4b3bf912cc0f705b51b71ce1a5b8bd79b93a451b
+  jail-monkey:
+    :path: "../node_modules/jail-monkey"
+  mappls-map-react-native:
+    :path: "../node_modules/mappls-map-react-native"
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -1835,6 +1891,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-picker/picker"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
+  RNDeviceInfo:
+    :path: "../node_modules/react-native-device-info"
+  RNExitApp:
+    :path: "../node_modules/react-native-exit-app"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNScreens:
@@ -1853,6 +1913,15 @@ SPEC CHECKSUMS:
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
   hermes-engine: ea92f60f37dba025e293cbe4b4a548fd26b610a0
+  jail-monkey: 066e0af74e67cbf432fbb4d214b046ef6dccf910
+  mappls-map-react-native: 5618c2ccc9638062fcd5b28080ad4a54a15d959c
+  MapplsAnnotationExtension: 9b12f907df2ff894478f22797c0cfcc800506d59
+  MapplsAPICore: ef9565cd30c27731ca2a81ac0dfe324f23ff925a
+  MapplsAPIKit: c39cbf3944ae2f377474d99077f83eb3764b553a
+  MapplsFeedbackKit: 3c96bcd142304b115ad9b15d557190ac1de9e2f9
+  MapplsGeoanalytics: fa3434679c22d73a4ff47fac50a246c9b61b0192
+  MapplsLMS: c32e855a5bfe6e6a1f5a355c8f1c51ec54ffb15d
+  MapplsMap: e74ab61e115e6dfe7e0f671c56e76bfa0774e57c
   RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
   RCTDeprecation: 726d24248aeab6d7180dac71a936bbca6a994ed1
   RCTRequired: a94e7febda6db0345d207e854323c37e3a31d93b
@@ -1918,6 +1987,8 @@ SPEC CHECKSUMS:
   RNCMaskedView: e07a0b5e9e8d6962826def06e6ff2ecdb815433f
   RNCPicker: 4f6d5e8d107064be32dfc8f1bcb5a3741135db0b
   RNDateTimePicker: 40ffda97d071a98a10fdca4fa97e3977102ccd14
+  RNDeviceInfo: 3f2e5fcca3637f75c6d30ba287293c2f97206781
+  RNExitApp: 00036cabe7bacbb413d276d5520bf74ba39afa6a
   RNGestureHandler: aa9690789023c9be8f06aa90e10ce637ea788f4d
   RNScreens: e52d2e7e5fa29266d6f8f68e8229452e5b2f4236
   RNSVG: 669ed128ab9005090c612a0d627dbecb6ab5c76f
