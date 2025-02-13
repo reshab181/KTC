@@ -169,7 +169,7 @@ const CorporateModule1 = ({ navigation }) => {
                   () => {
                     if (!city) {
                       Alert.alert("Selection Required", "Please select a city first.");
-                      return; // Prevent navigation
+                      return; 
                     }
                     navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'pickupAddress' });
                   }
@@ -177,12 +177,12 @@ const CorporateModule1 = ({ navigation }) => {
 
                 <CustomTextInpt
                   placeholder="Reporting Landmark (Optional)"
-                  value={reportingLandmark} // Pass value correctly
+                  value={reportingLandmark}
                   onChangeText={(text) => {
                     setreportingLandmark(text);
                     dispatch(updateCorporateSlice({
                       type: "reportingLandmark",
-                      selectedItem: text // Use `text` instead of `reportingLandmark`
+                      selectedItem: text 
                     }));
                   }}
                 />

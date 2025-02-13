@@ -62,7 +62,7 @@ export const registrationHandler = debounce(
       );
 
       const data = response.data;
-      console.log(data, "Response from USER_REGISTRATION");
+      console.log(data , "Response from USER_REGISTRATION");
 
       if (data?.message === 'Invalid Domain Name.') {
         Alert.alert('Invalid Domain!', 'Please contact KTC Admin', [
@@ -101,6 +101,7 @@ export const registrationHandler = debounce(
           navigation.navigate(otpScreen, {
             emailId: email,
             client_id: userType === 'corporate' ? data?.client_id : 'PERSONAL',
+            // sub_entity: userType === 'corporate' ? data?.sub_entity : 'PERSONAL',
             url: otpResponse?.headers?.location,
           });
         }
@@ -178,10 +179,10 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
 
       // return result ; 
     }else if(data.status === 204){
-      Alert.alert('OOPs', data?.message)
+      Alert.alert('OOPs!', data?.message)
       return ; 
     }
-    console.log(result, "Descrypted DAta ");
+    console.log(result, "Descrypted Data ");
     // await AsyncStorage.setItem('isLoggedInn', 'true');
     // await AsyncStorage.setItem('user_id', decryptData.user_id);
     // await AsyncStorage.setItem('user_email', decryptData .email_id);

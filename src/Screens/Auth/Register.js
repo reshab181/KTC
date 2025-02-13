@@ -336,7 +336,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const Register = ({ route }) => {
-    const { emailId, client_id } = route.params || {};
+    const { emailId, client_id,sub_entity} = route.params || {};
+    console.log(emailId, client_id,sub_entity,"hello");
+    
 
     const [selectedGender, setSelectedGender] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('India');

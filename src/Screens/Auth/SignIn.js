@@ -28,7 +28,7 @@ const SignInCorporate = ({ route }) => {
   const { email: prefilledEmail } = route.params || {};
   const navigation = useNavigation();
   const [email, setEmail] = useState(prefilledEmail || '');
-  const [password, setPassword] = useState('AsHu@123');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [accessToken, setAccessToken] = useState('');
   const [loading, setLoading] = useState(false);
