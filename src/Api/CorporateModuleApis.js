@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux';
 import { encryptPayload } from './Authentication';
 import { fetchJwtAccess } from '../Utils/JwtHelper';
 import MapplsGL from 'mappls-map-react-native';
+import { accessRefresh } from './apiRefresh';
 // Encryption function
 const encryptData = async (data) => {
     const key = CryptoJS.enc.Utf8.parse('*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh');
@@ -78,10 +79,10 @@ export const fetchCities = async (city, userDetails, token, setCity) => {
 
 export const fetchRentalType = async (city, userDetails, token, setCity, typeOff) => {
     console.log("Fetching Rental Types...");
-
+    const date =  Math.floor(Date.now() / 1000) ;
     const payload = {
         client_id: userDetails?.client_id,
-        start_date: Math.floor(Date.now() / 1000),
+        start_date:date ,
         city_of_usage: city
     };
 
@@ -133,3 +134,101 @@ export const fetchLocalities = (city, eloc) => {
             });
     });
 };
+
+export const fetchHistoryBookings = async (page, pageLimit) => {
+    const token = await AsyncStorage.getItem("userToken")
+    try {
+      var userId = await AsyncStorage.getItem('user_id');
+      const MyPayLod = {
+        "user_id": userId,
+        "type": 'history',
+        "limit": `${(page - 1) * pageLimit},${pageLimit}`
+      }
+      const MyPayLoad = encryptPayload(MyPayLod)
+      var details = {
+        'request_data': MyPayLoad,
+      };
+      var formBody = [];
+      for (var property in details) {
+        var encodedKey = encodeURIComponent(property);
+        var encodedValue = encodeURIComponent(details[property]);
+        formBody.push(encodedKey + "=" + encodedValue);
+      }
+      formBody = formBody.join("&");
+      let response = await fetch(Api.VIEW_BOOKING, {
+        method: "POST",
+        body: formBody,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          jwt: token
+        },
+      })
+      let data = await response?.json();
+      if (data?.message == "Access denied.") {
+        accessRefresh(token, fetchHistoryBookings)
+      }
+      const result = decryptData(data?.booking_arr)
+      console.log('====================================');
+      console.log(result);
+      console.log('====================================');
+      return result
+      // setList(ValueText);
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  
+export const fetchUpcomingBookings = async (page, pageLimit) => {
+    const token = await AsyncStorage.getItem("userToken")
+    try {
+      var userId = await AsyncStorage.getItem('user_id');
+      const MyPayLod = {
+        "user_id": userId,
+        "type": 'upcoming',
+        "limit": `${(page - 1) * pageLimit},${pageLimit}`
+      }
+      const MyPayLoad = encryptPayload(MyPayLod)
+      var details = {
+        'request_data': MyPayLoad,
+      };
+      var formBody = [];
+      for (var property in details) {
+        var encodedKey = encodeURIComponent(property);
+        var encodedValue = encodeURIComponent(details[property]);
+        formBody.push(encodedKey + "=" + encodedValue);
+      }
+      formBody = formBody.join("&");
+      let response = await fetch("https://web.gst.fleet.ktcindia.com/user_apis_encoded/view_booking.php", {
+        method: "POST",
+        body: formBody,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+          jwt: token
+        },
+      })
+
+      let data = await response?.json();
+      console.log('====================================');
+      console.log(data, "UPCOMING");
+      console.log('====================================');
+      if (data?.message == "Access denied.") {
+        accessRefresh(token, fetchHistoryBookings)
+      }
+      console.log('====================================');
+      console.log("RESULT" , data.booking_arr);
+      console.log('====================================');
+      if(data.booking_arr === "No Booking Found."){
+        console.log('====================================');
+        console.log("REturning" );
+        console.log('====================================');
+        return ; 
+      }else{
+        const result = decryptData(data?.booking_arr)
+        return result ; 
+      }
+      // setList(ValueText);
+    } catch (err) {
+      console.log(err)
+    }
+  }

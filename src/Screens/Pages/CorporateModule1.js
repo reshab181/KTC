@@ -38,6 +38,10 @@ const CorporateModule1 = ({ navigation }) => {
   const [trNumber, settrNumber] = useState('')
   const [BillNumber, setBillNumber] = useState('')
   const [loading, setLoading] = useState(false);
+  const [loadingCities, setLoadingCities] = useState(false);
+  const [loadingRentalType, setLoadingRentalType] = useState(false);
+  const [loadingCarGroup , setloadingCarGroup] = useState(false)
+  
   useEffect(() => {
     const getAccessToken = async () => {
       const token = await fetchJwtAccess();
@@ -46,29 +50,31 @@ const CorporateModule1 = ({ navigation }) => {
     };
     getAccessToken();
   }, []);
-  // const showLoader = () => {
-  //   setLoading(true);
-  //   setTimeout(() => setLoading(false), 3000); // Simulate a 3-second process
-  // };
+
 
   const handleFetchCities = useCallback(async () => {
-    setLoading(true);
+    setLoadingCities(true);
     try {
       const list = await fetchCities('', userDetails, accessToken, setCityList);
+      setLoadingCities(false)
       navigation.navigate('City', { list, type: 'city' });
-      setLoading(false)
+      // setLoading(false)
     } catch (error) {
       console.error("Error fetching cities:", error);
+
     }
+    setLoadingCities(false)
+
+
   }, [userDetails, accessToken]);
 
   const handleFetchRentalType = useCallback(async () => {
-    setLoading(true);
+    setLoadingRentalType(true);
     try {
       const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city, userDetails, accessToken, setCityList, 'rentalType');
       setCarGroupList(carGroupItems);
       seteloc(e_loc);
-    setLoading(false);
+      setLoadingRentalType(false);
 
       navigation.navigate('City', { list: rentalItems, type: 'rentalType' });
     } catch (error) {
@@ -122,13 +128,13 @@ const CorporateModule1 = ({ navigation }) => {
             onClose={closeModal} />
         }
         {
-          <LoaderModal visible={loading} />
+          // <LoaderModal visible={loading} />
         }
         <View style={styles.root}>
           <Section title="Car Reservation Details">
             <View style={[styles.container2]}>
               <View style={{ marginHorizontal: 10, marginTop: 5 }}>
-                {renderCustomTile(city || 'City', handleFetchCities)}
+                {renderCustomTile(city || 'City', handleFetchCities , loadingCities)}
 
                 {renderCustomTile(
                   rentalType || 'Rental Type',
@@ -138,7 +144,8 @@ const CorporateModule1 = ({ navigation }) => {
                       return;
                     }
                     handleFetchRentalType();
-                  }
+                  }, 
+                  loadingRentalType
                 )}
 
                 {renderCustomTile(
@@ -148,8 +155,11 @@ const CorporateModule1 = ({ navigation }) => {
                       Alert.alert("Selection Required", "Please select a Rental Type.");
                       return;
                     }
+                    setloadingCarGroup(true)
                     navigation.navigate('City', { list: carGroupList, type: 'carGroup' });
-                  }
+                    setloadingCarGroup(false)
+                  }, 
+                  loadingCarGroup
                 )}
 
               </View>
@@ -172,7 +182,8 @@ const CorporateModule1 = ({ navigation }) => {
                       return; 
                     }
                     navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'pickupAddress' });
-                  }
+                  }, 
+                  loading
                 )}
 
                 <CustomTextInpt
@@ -321,8 +332,8 @@ const Section = ({ title, children }) => (
   </View>
 );
 
-const renderCustomTile = (title, onPress) => (
-  <CustomCarGrouptile title={title} onPress={onPress} iconName="chevron-right" />
+const renderCustomTile = (title, onPress , loading) => (
+  <CustomCarGrouptile title={title} onPress={onPress} iconName="chevron-right" loader={loading} />
 );
 
 

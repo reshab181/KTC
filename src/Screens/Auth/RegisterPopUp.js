@@ -202,6 +202,8 @@ import CustomButton from '../../component/CustomButtons';
 
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import { registrationHandler } from '../../Api/Authentication';
+import { AuthStrings } from '../../constants/Strings';
+import {jwtTokenApi} from '../../services/api/jwtToken';
 
 
 const { height } = Dimensions.get('screen');
@@ -216,11 +218,18 @@ const RegisterPOPUP = ({ onClose }) => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
   useEffect(() => {
+    
     const getAccessToken = async () => {
-      const token = await fetchJwtAccess();
-      if (token) {
+      try {
+      const token = await jwtTokenApi();
+      console.log(token.data)
+      if (token.data) {
+        
         setAccessToken(token);
       }
+    } catch(ex) {
+      console.log(ex)
+    }
     };
     getAccessToken();
   }, []);
@@ -253,7 +262,7 @@ const RegisterPOPUP = ({ onClose }) => {
                   </TouchableOpacity>
                 </View>
                 <View style={{ marginHorizontal: 16, marginTop: 14, marginBottom: 19 }}>
-                  <Text style={styles.instruction}>Enter your official Email ID</Text>
+                  <Text style={styles.instruction}>{AuthStrings.EnterEmail}</Text>
                   <CustomTextInpt
                     placeholder="Official Email ID"
                     value={values.email}
@@ -266,7 +275,7 @@ const RegisterPOPUP = ({ onClose }) => {
                   {errors.email && touched.email && <Text style={styles.errorText}>{errors.email}</Text>}
                 </View>
                 <CustomButton
-                  title="Submit"
+                  title={AuthStrings.Submit}
                   onPress={handleSubmit}
                   borderRadius={0}
                   loading={loader}

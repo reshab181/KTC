@@ -277,16 +277,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { StyleSheet, Text, View, Image, Alert } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useWindowDimensions } from 'react-native';
 import CustomButton from '../../component/CustomButtons';
 import CustomHeader from '../../component/CustomHeader';
 import { verifyOTP } from '../../Api/Authentication';
 import RNHash from 'react-native-hash';
 import OtpSvg from '../../assets/svg/otp.svg'
+import { AuthStrings } from '../../constants/Strings';
 
-const OtpRegister = ({ route }) => {
-  const { emailId, client_id, url } = route.params;
+const OtpRegister = () => {
+  const route = useRoute()
+  // const { emailId, client_id, url } = route.params;
+  const [emailId, setEmailId] = useState('')
+  const [clientId, setClientId] = useState('')
+  const [url, setUrl] = useState('')
   const styles = useStyles();
   const navigation = useNavigation();
 
@@ -296,7 +301,16 @@ const OtpRegister = ({ route }) => {
   const [isValidOtp, setIsValidOtp] = useState(true);
   const inputRefs = useRef([]);
 
+  useEffect(() => {
+    console.log(route?.params)
+    if(route?.params) {
+      setEmailId(route?.params?.emailId)
+      setClientId(route?.params?.client_id)
+      setUrl(route?.params?.url)
+    }
+  }, [route?.params])
 
+  // Timer for resend OTP
   useEffect(() => {
     if (timer > 0) {
       const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
@@ -349,7 +363,7 @@ const OtpRegister = ({ route }) => {
         if (response.status === 204) {
           setLoader(false);
           Alert.alert('Success', 'OTP verified successfully!');
-          navigation.navigate('RegisterPage', { emailId, client_id });
+          navigation.navigate('RegisterPage', { emailId, clientId });
         } else {
           setLoader(false);
           Alert.alert('Error', 'Incorrect OTP, please try again.');
@@ -373,7 +387,7 @@ const OtpRegister = ({ route }) => {
         style={styles.img}
       /> */}
       <Text style={styles.txt}>
-        Please enter the OTP received on your registered email address.
+        {AuthStrings.PleaseEnterOtpRecieved}
       </Text>
 
       <View style={styles.txtInputBox}>
@@ -398,7 +412,7 @@ const OtpRegister = ({ route }) => {
 
       {!isValidOtp && (
         <Text style={styles.errorText}>
-          Please enter a valid 6-digit OTP.
+          {AuthStrings.Enter6Digit}
         </Text>
       )}
 

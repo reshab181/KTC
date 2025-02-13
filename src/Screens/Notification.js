@@ -6,16 +6,15 @@ import CustomHeader from '../component/CustomHeader';
 
 const { height, width } = Dimensions.get('screen');
 
-const Notification = () => {
+const Notification = ({navigation}) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <CustomHeader title={'Notifications'}
           iconPath={require('../assets/ic_back_arrow_white_24.png')}
           iconHeight={24}
           iconWidth={24}
-      onMenuPress ={() => navigation.goBack()} />
+      handleLeftIcon ={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.scrollView}>
-        {/* Notification 1 */}
         <Card style={styles.cardStyle}>
           <View style={styles.cardContent}>
             <View style={styles.flex1}>
@@ -34,7 +33,6 @@ const Notification = () => {
           </View>
         </Card>
 
-        {/* Notification 2 */}
         <Card style={[styles.cardStyle, styles.cardAlternate]}>
           <View style={styles.cardContent}>
             <View style={styles.flex1}>
@@ -55,7 +53,6 @@ const Notification = () => {
           </View>
         </Card>
 
-        {/* Notification 3 */}
         <Card style={styles.cardStyle}>
           <View style={styles.cardContent}>
             <View style={styles.flex1}>
@@ -74,7 +71,6 @@ const Notification = () => {
           </View>
         </Card>
 
-        {/* Notification 4 */}
         <Card style={[styles.cardStyle, styles.cardAlternate]}>
           <View style={styles.cardContent}>
             <View style={styles.flex1}>

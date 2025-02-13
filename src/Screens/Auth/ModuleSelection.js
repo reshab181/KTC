@@ -7,6 +7,7 @@ import CustomHeader from '../../component/CustomHeader';
 import RegisterPOPUP from './RegisterPopUp';
 import CorporateSVG from '../../assets/svg/Corporate.svg';
 import PersonalSVG from '../../assets/svg/Personal.svg';
+import { AuthStrings, Characters } from '../../constants/Strings';
 
 const ModuleSelectionUI = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -54,8 +55,8 @@ const ModuleSelectionUI = () => {
       {isModalVisible && <RegisterPOPUP module={selectedModule} onClose={closeModal} />}
       <CustomHeader imgPath={require('../../assets/ktclogo.png')} justifyContent={'center'} />
       <View style={styles.contentContainer}>
-        <ModuleCard title="Corporate" Icon={CorporateSVG} description="Chauffeur Corporate" onPress={() => handleModuleClick('Corporate')} />
-        <ModuleCard title="Personal" Icon={PersonalSVG} description="Personal Module" onPress={() => handleModuleClick('Personal')} />
+        <ModuleCard title={AuthStrings.Corporate} Icon={CorporateSVG} description="Chauffeur Corporate" onPress={() => handleModuleClick('Corporate')} />
+        <ModuleCard title={AuthStrings.Personal} Icon={PersonalSVG} description="Personal Module" onPress={() => handleModuleClick('Personal')} />
       </View>
     </SafeAreaView>
   );

@@ -124,7 +124,7 @@ export const registerUser = async (userData, accessToken) => {
       request_data: encryptedPayload
     }).toString();
 
-    const response = await fetch('https://web.gst.fleet.ktcindia.com/user_apis_encoded/user_registration.php', {
+    const response = await fetch(Api.USER_REGISTRATION, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -182,17 +182,13 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
       Alert.alert('OOPs!', data?.message)
       return ; 
     }
-    console.log(result, "Descrypted Data ");
-    // await AsyncStorage.setItem('isLoggedInn', 'true');
-    // await AsyncStorage.setItem('user_id', decryptData.user_id);
-    // await AsyncStorage.setItem('user_email', decryptData .email_id);
-
+    // console.log(result, "Descrypted DAta ");
     if (data?.jwt) {
 
       await AsyncStorage.setItem('token', data.jwt);
       // Alert.alert('Success', 'Logged in successfully!');
-      navigation.replace('MainApp', {
-        screen: 'CorporateModule1',
+      navigation.replace('CorporateNavigator', {
+        screen: 'CorporateHomeScreen',
       });
     } else {
       Alert.alert('OOPs!', 'Login Failed Try sAgain');
@@ -214,13 +210,10 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
 
   try {
     setLoading(true);
-
-
     const mmiToken = await tokenFromMMI();
     if (!mmiToken?.access_token) {
       throw new Error('Failed to retrieve MMI access token.');
     }
-
     // const apiUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
     const apiUrl = `${ANCHOR_URL}?handle=${email.toString()}`;
     let headersList = {
@@ -239,14 +232,14 @@ export const emailsms = async (email, accessToken, navigation, setLoading) => {
     console.log(locationUrl);
     console.log('====================================');
     if (locationUrl) {
-      navigation.navigate('OTP', {
+      navigation.replace('ForgotPasswordOTP', {
         url: locationUrl,
         email,
         from: 'ForgotPassword',
         accessToken,
       });
 
-      console.log(locationUrl, 'URL retrieved successfully.');
+      // console.log(locationUrl, 'URL retrieved successfully.');
       // return locationUrl;
     } else {
       throw new Error('Location header is missing in the response.');
@@ -288,15 +281,16 @@ export const resetPassword = async (email, newPassword, confirmPassword, accessT
       });
 
     const data = response.data;
-    console.log('====================================');
-    console.log(data, "DATA RESETING PASSWORD");
-    console.log('====================================');
+    // console.log('====================================');
+    // console.log(data, "DATA RESETING PASSWORD");
+    // console.log('====================================');
+    // if (data?.status === '200') {
+    //   Alert.alert('Success', 'Password reset successfully.');
+    // } else {
+    //   Alert.alert('Error', 'Failed to reset password. Please try again.');
+    // }
     return data;
-    if (data?.status === '200') {
-      Alert.alert('Success', 'Password reset successfully.');
-    } else {
-      Alert.alert('Error', 'Failed to reset password. Please try again.');
-    }
+
   } catch (error) {
     console.error('Error in resetPassword:', error);
     Alert.alert('Error', 'Failed to reset password. Please try again.');
