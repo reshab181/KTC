@@ -429,10 +429,10 @@ const Register = ({ route }) => {
         <SafeAreaView style={styles.mainContainer}>
             <CustomHeader
                 title="Register"
-                iconPath={require('../../assets/icbackarrow.png')}
-                iconHeight={24}
-                iconWidth={24}
-                onMenuPress={() => navigation.goBack()}
+                // iconPath={require('../../assets/icbackarrow.png')}
+                // iconHeight={24}
+                // iconWidth={24}
+                // onMenuPress={() => navigation.goBack()}
             />
 
             <View style={styles.scrollContainer}>

@@ -19,6 +19,7 @@ import Menuu from '../../assets/svg/menu.svg';
 import ReviewBookingModal from '../../component/ReviewBookingModal';
 import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
 import LoaderModal from '../../component/LoaderModal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const CorporateModule1 = ({ navigation }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [accessToken, setAccessToken] = useState('');
@@ -40,22 +41,23 @@ const CorporateModule1 = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingRentalType, setLoadingRentalType] = useState(false);
-  const [loadingCarGroup , setloadingCarGroup] = useState(false)
-  
+  const [loadingCarGroup, setloadingCarGroup] = useState(false)
+
   useEffect(() => {
     const getAccessToken = async () => {
       const token = await fetchJwtAccess();
       if (token) setAccessToken(token);
 
     };
+
     getAccessToken();
   }, []);
-
 
   const handleFetchCities = useCallback(async () => {
     setLoadingCities(true);
     try {
-      const list = await fetchCities('', userDetails, accessToken, setCityList);
+      const client_id = await AsyncStorage.getItem('client_id')
+      const list = await fetchCities('', client_id, accessToken, setCityList);
       setLoadingCities(false)
       navigation.navigate('City', { list, type: 'city' });
       // setLoading(false)
@@ -71,7 +73,8 @@ const CorporateModule1 = ({ navigation }) => {
   const handleFetchRentalType = useCallback(async () => {
     setLoadingRentalType(true);
     try {
-      const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city, userDetails, accessToken, setCityList, 'rentalType');
+      const client_id = await AsyncStorage.getItem('client_id')
+      const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city, client_id, accessToken, setCityList, 'rentalType');
       setCarGroupList(carGroupItems);
       seteloc(e_loc);
       setLoadingRentalType(false);
@@ -134,7 +137,7 @@ const CorporateModule1 = ({ navigation }) => {
           <Section title="Car Reservation Details">
             <View style={[styles.container2]}>
               <View style={{ marginHorizontal: 10, marginTop: 5 }}>
-                {renderCustomTile(city || 'City', handleFetchCities , loadingCities)}
+                {renderCustomTile(city || 'City', handleFetchCities, loadingCities)}
 
                 {renderCustomTile(
                   rentalType || 'Rental Type',
@@ -144,7 +147,7 @@ const CorporateModule1 = ({ navigation }) => {
                       return;
                     }
                     handleFetchRentalType();
-                  }, 
+                  },
                   loadingRentalType
                 )}
 
@@ -158,7 +161,7 @@ const CorporateModule1 = ({ navigation }) => {
                     setloadingCarGroup(true)
                     navigation.navigate('City', { list: carGroupList, type: 'carGroup' });
                     setloadingCarGroup(false)
-                  }, 
+                  },
                   loadingCarGroup
                 )}
 
@@ -182,7 +185,7 @@ const CorporateModule1 = ({ navigation }) => {
                       return; // Prevent navigation
                     }
                     navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'pickupAddress' });
-                  }, 
+                  },
                   loading
                 )}
 
@@ -214,18 +217,18 @@ const CorporateModule1 = ({ navigation }) => {
                     }))
                   }}
                 />
-                <CustomTextInpt placeholder="Special Instruction (Optional)" 
-                value={specialInstruction}
-                onChangeText={(text) => {
-                  setspecialInstruction(text)
-                  dispatch(
-                    updateCorporateSlice({
-                      type: "specialInstruction",
-                      selectedItem: text,
-                    })
-                  )
-                }
-                } 
+                <CustomTextInpt placeholder="Special Instruction (Optional)"
+                  value={specialInstruction}
+                  onChangeText={(text) => {
+                    setspecialInstruction(text)
+                    dispatch(
+                      updateCorporateSlice({
+                        type: "specialInstruction",
+                        selectedItem: text,
+                      })
+                    )
+                  }
+                  }
                 />
                 {/* <CustomDropdown
                   data={cityList}
@@ -332,7 +335,7 @@ const Section = ({ title, children }) => (
   </View>
 );
 
-const renderCustomTile = (title, onPress , loading) => (
+const renderCustomTile = (title, onPress, loading) => (
   <CustomCarGrouptile title={title} onPress={onPress} iconName="chevron-right" loader={loading} />
 );
 

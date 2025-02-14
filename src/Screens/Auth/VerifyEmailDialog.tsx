@@ -9,119 +9,121 @@ import { resetState, verifyEmail } from '../../Redux/slice/VerifyEmailSlice';
 import { resetSendOtpState, sendOtp } from '../../Redux/slice/SendOtpSlice';
 import { useNavigation } from '@react-navigation/native';
 import NavigationService from '../../navigation/NavigationService';
+import CloseSvg from '../../assets/svg/close.svg'; 
 
-const VerifyEmailDialog = ({module, onClose, onSignIn, onSignUp}) => {
+const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
 
-    // const[email, setEmail] = useState('ashutosh.rai@mapmyindia.com')
-    const navigation = useNavigation();
-    const[email, setEmail] = useState('ashutosh.rai@mapmyindia.com')
-    const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    const dispatch = useDispatch<any>();
-    const verifyEmailApiState = useSelector((state: any) => state.verifyEmail);
-    const sendOtpApiState = useSelector((state: any) => state.sendOtp);
-    const [clientId, setClientId] = useState('')
+  // const[email, setEmail] = useState('ashutosh.rai@mapmyindia.com')
+  const navigation = useNavigation();
+  const [email, setEmail] = useState('ashutosh.rai@mapmyindia.com')
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  const dispatch = useDispatch<any>();
+  const verifyEmailApiState = useSelector((state: any) => state.verifyEmail);
+  const sendOtpApiState = useSelector((state: any) => state.sendOtp);
+  const [clientId, setClientId] = useState('')
 
 
-    const handleSubmit = async() => {
-        if(email && email !== '') {
-            if (!emailRegex.test(email)) {
-                setErrorMessage('Invalid Email address')
-            } else {
-              dispatch(verifyEmail({email: email, module: module}))
-            }
-        } else {
-            setErrorMessage('Email is required')
-        }
-    }
-
-    useEffect(() => {
-      return () => {
-        dispatch(resetState())
-        dispatch(resetSendOtpState())
+  const handleSubmit = async () => {
+    if (email && email !== '') {
+      if (!emailRegex.test(email)) {
+        setErrorMessage('Invalid Email address')
+      } else {
+        dispatch(verifyEmail({ email: email, module: module }))
       }
-    }, [])
-
-    useEffect(() => {
-      getVerifyEmailResponse()
-    }, [verifyEmailApiState])
-
-    const getVerifyEmailResponse = () => {
-      
-      if(verifyEmailApiState.loading === false && verifyEmailApiState.data && verifyEmailApiState.data !== null) {
-        if (verifyEmailApiState.data.message === 'Invalid Domain Name.') {
-            Alert.alert('Invalid Domain!', 'Please contact KTC Admin', [
-            {
-              text: 'OK',
-              onPress: () => {},
-            },
-          ]);
-          return;
-        }
-        if (verifyEmailApiState.data.newuser === 'No') {
-          onSignIn(email)
-        }else if (verifyEmailApiState.data.newuser === 'Yes') {
-          setClientId(verifyEmailApiState.data.client_id)
-          dispatch(sendOtp(email))
-          // onSignUp(module, email)
-        }
-      } else if(verifyEmailApiState.loading === false && verifyEmailApiState.error !== null) {
-        console.log('Error', verifyEmailApiState.error)
-        Alert.alert('Error', 'Failed to register. Please try again.');
-      }
+    } else {
+      setErrorMessage('Email is required')
     }
+  }
 
-
-    useEffect(() => {
-      getSendOtpResponse()
-    }, [sendOtpApiState])
-
-    const getSendOtpResponse = () => {
-      
-      if(sendOtpApiState.loading === false && sendOtpApiState.data && sendOtpApiState.data !== null) {
-        onSignUp(email, sendOtpApiState.data, clientId)
-      } else if(sendOtpApiState.loading === false && sendOtpApiState.error !== null) {
-        console.log('Error', sendOtpApiState.error)
-        Alert.alert('Error', 'Failed to send otp. Please try again.');
-      }
+  useEffect(() => {
+    return () => {
+      dispatch(resetState())
+      dispatch(resetSendOtpState())
     }
+  }, [])
+
+  useEffect(() => {
+    getVerifyEmailResponse()
+  }, [verifyEmailApiState])
+
+  const getVerifyEmailResponse = () => {
+
+    if (verifyEmailApiState.loading === false && verifyEmailApiState.data && verifyEmailApiState.data !== null) {
+      if (verifyEmailApiState.data.message === 'Invalid Domain Name.') {
+        Alert.alert('Invalid Domain!', 'Please contact KTC Admin', [
+          {
+            text: 'OK',
+            onPress: () => { },
+          },
+        ]);
+        return;
+      }
+      if (verifyEmailApiState.data.newuser === 'No') {
+        onSignIn(email)
+      } else if (verifyEmailApiState.data.newuser === 'Yes') {
+        setClientId(verifyEmailApiState.data.client_id)
+        dispatch(sendOtp(email))
+        // onSignUp(module, email)
+      }
+    } else if (verifyEmailApiState.loading === false && verifyEmailApiState.error !== null) {
+      console.log('Error', verifyEmailApiState.error)
+      Alert.alert('Error', 'Failed to register. Please try again.');
+    }
+  }
 
 
-    return(
-        <Modal animationType="slide" transparent visible={true}>
-            <SafeAreaView style={styles.overlay}>
-                <View style={styles.modalContainer}>
-                    <View style={styles.formContainer}>
-                        <View style={styles.header}>
-                        <Text style={styles.headerText}>Register</Text>
-                        <TouchableOpacity onPress={onClose}>
-                    <Image source={require('../../assets/close.png')} />
-                  </TouchableOpacity>
-                </View>
-                <View style={{ marginHorizontal: 16, marginTop: 14, marginBottom: 19 }}>
-                  <Text style={styles.instruction}>{AuthStrings.EnterEmail}</Text>
-                  <CustomTextInpt
-                    placeholder="Official Email ID"
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    secureTextEntry={false}
-                  />
-                
-                  {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
-                </View>
-                <CustomButton
-                  title={AuthStrings.Submit}
-                  
-                  onPress={handleSubmit}
-                  borderRadius={0}
-                  loading={verifyEmailApiState.loading || sendOtpApiState.loading}
-                />
-              </View>
-                </View>
-            </SafeAreaView>
-        </Modal>
-    )
+  useEffect(() => {
+    getSendOtpResponse()
+  }, [sendOtpApiState])
+
+  const getSendOtpResponse = () => {
+
+    if (sendOtpApiState.loading === false && sendOtpApiState.data && sendOtpApiState.data !== null) {
+      onSignUp(email, sendOtpApiState.data, clientId)
+    } else if (sendOtpApiState.loading === false && sendOtpApiState.error !== null) {
+      console.log('Error', sendOtpApiState.error)
+      Alert.alert('Error', 'Failed to send otp. Please try again.');
+    }
+  }
+
+
+  return (
+    <Modal animationType="slide" transparent visible={true}>
+      <SafeAreaView style={styles.overlay}>
+        <View style={styles.modalContainer}>
+          <View style={styles.formContainer}>
+            <View style={styles.header}>
+              <Text style={styles.headerText}>Register</Text>
+              <TouchableOpacity onPress={onClose}>
+                <CloseSvg/>
+                {/* <Image source={require('../../assets/close.png')} /> */}
+              </TouchableOpacity>
+            </View>
+            <View style={{ marginHorizontal: 16, marginTop: 14, marginBottom: 19 }}>
+              <Text style={styles.instruction}>{AuthStrings.EnterEmail}</Text>
+              <CustomTextInpt
+                placeholder="Official Email ID"
+                value={email}
+                onChangeText={setEmail}
+                keyboardType="email-address"
+                secureTextEntry={false}
+              />
+
+              {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
+            </View>
+            <CustomButton
+              title={AuthStrings.Submit}
+
+              onPress={handleSubmit}
+              borderRadius={0}
+              loading={verifyEmailApiState.loading || sendOtpApiState.loading}
+            />
+          </View>
+        </View>
+      </SafeAreaView>
+    </Modal>
+  )
 }
 
 const styles = StyleSheet.create({
