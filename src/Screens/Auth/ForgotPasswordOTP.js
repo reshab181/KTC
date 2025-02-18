@@ -14,7 +14,7 @@ const ForgotPasswordOTP = ({ route, navigation }) => {
   const [otp, setOtp] = useState(""); // Single string for OTP
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { url, email, accessToken } = route.params;
+  const { url, email } = route.params;
   
   const inputRefs = Array.from({ length: 6 }, () => useRef(null));
 

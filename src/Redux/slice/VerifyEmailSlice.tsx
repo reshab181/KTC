@@ -15,9 +15,9 @@ const initialState: VerifyEmailState = {
 
 export const verifyEmail = createAsyncThunk(
     'verifyEmail',
-    async({email, module}: {email: string, module: string}, { rejectWithValue }) => {
+    async({email, module }: {email: string, module: string }, { rejectWithValue }) => {
         try {
-            const response = await verifyEmailApi(email, module)
+            const response = await verifyEmailApi(email, module  )
             return response.data
         } catch(error: any) {
             return rejectWithValue(error.response?.data || 'Something went wrong');

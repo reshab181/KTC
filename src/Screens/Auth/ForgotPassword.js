@@ -14,6 +14,10 @@ import CustomTextInpt from '../../component/CustomTextInpt';
 import CustomButton from '../../component/CustomButtons';
 import { emailsms } from '../../Api/Authentication';
 import { AuthStrings, Characters } from '../../constants/Strings';
+import { useDispatch, useSelector } from 'react-redux';
+import { resetSendOtpState, sendOtp } from '../../Redux/slice/SendOtpSlice';
+import { resetState } from '../../Redux/slice/VerifyEmailSlice';
+import { Alert } from 'react-native';
 
 const { height, width } = Dimensions.get('screen');
 
@@ -22,38 +26,70 @@ const ForgotPassword = ({ route, navigation }) => {
   const [accessToken, setAccessToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const sendOtpApiState = useSelector((state) => state.sendOtp);
+
 
   useEffect(() => {
-    const getAccessToken = async () => {
-      try {
-        console.log('Fetching JWT Access Token...');
-        const token = await fetchJwtAccess();
-        console.log('Fetched JWT Access Token:', token);
-        if (token) {
-          setAccessToken(token);
-        }
-      } catch (error) {
-        console.error('Error fetching JWT access token:', error.message);
-        setError('Failed to fetch access token.');
-      }
-    };
+    // setLoading(true)
+    getSendOtpResponse()
+    // setLoading(false)
+  }, [sendOtpApiState])
 
-    getAccessToken();
-  }, []);
+  const getSendOtpResponse = () => {
+
+    if (sendOtpApiState.loading === false && sendOtpApiState.data && sendOtpApiState.data !== null) {
+       navigation.replace('ForgotPasswordOTP', {
+        url: sendOtpApiState.data,
+        email,
+        from: 'ForgotPassword',
+        accessToken,
+      });
+    } else if (sendOtpApiState.loading === false && sendOtpApiState.error !== null) {
+      console.log('Error', sendOtpApiState.error)
+      Alert.alert('Error', 'Failed to send otp. Please try again.');
+    }
+  }
+
+  // useEffect(() => {
+  //   const getAccessToken = async () => {
+  //     try {
+  //       console.log('Fetching JWT Access Token...');
+  //       const token = await fetchJwtAccess();
+  //       console.log('Fetched JWT Access Token:', token);
+  //       if (token) {
+  //         setAccessToken(token);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching JWT access token:', error.message);
+  //       setError('Failed to fetch access token.');
+  //     }
+  //   };
+
+  //   getAccessToken();
+  // }, []);
+    useEffect(() => {
+      return () => {
+        dispatch(resetSendOtpState())
+      }
+    }, [])
 
   const sendForgotOTP = () => {
     console.log("Sending Click")
-    emailsms(email, accessToken, navigation, setLoading);
+    // setLoading(true)
+    dispatch(sendOtp(email))
+    // setLoading(false)
+
   };
 
   return (
     <SafeAreaView style={styles.mainContainer}>
-         <CustomHeader title={AuthStrings.ForgotPassword} leftTitle={Characters.Skip} handlePress={() => navigation.goBack()} />
+      <CustomHeader title={AuthStrings.ForgotPassword} leftTitle={Characters.Skip} handlePress={() => navigation.goBack()} />
 
       <View style={styles.emailContainer}>
-        <CustomTextInpt placeholder={email} value={email} editable={false} style={{backgroundColor:"#EEE"}} />
-        <View style={{marginTop: 84}}>
-        <CustomButton title={Characters.Next} onPress={sendForgotOTP} loading={loading}/>
+        <CustomTextInpt placeholder={email} value={email} editable={false} style={{ backgroundColor: "#EEE" }} />
+        <View style={{ marginTop: 84 }}>
+          <CustomButton title={Characters.Next} onPress={sendForgotOTP} loading={sendOtpApiState.loading}/>
         </View>
       </View>
       {error && <Text style={styles.errorText}>{error}</Text>}
@@ -96,7 +132,7 @@ const styles = StyleSheet.create({
   },
   emailContainer: {
     marginHorizontal: 16,
-     marginTop: 10 , 
+    marginTop: 10,
   },
   emailText: {
     fontSize: 16,

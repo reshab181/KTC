@@ -56,11 +56,11 @@ const fetchData = async (endpoint, payload, token) => {
 };
 
 // Fetch Cities
-export const fetchCities = async (city, userDetails, token, setCity) => {
+export const fetchCities = async (city, client_id, token, setCity) => {
     console.log("Fetching Cities...");
 
     const payload = {
-        client_id: userDetails?.client_id,
+        client_id: client_id,
         start_date: Math.floor(Date.now() / 1000),
         city_of_usage: city
     };
@@ -77,11 +77,11 @@ export const fetchCities = async (city, userDetails, token, setCity) => {
     }
 };
 
-export const fetchRentalType = async (city, userDetails, token, setCity, typeOff) => {
+export const fetchRentalType = async (city, client_id, token, setCity, typeOff) => {
     console.log("Fetching Rental Types...");
     const date =  Math.floor(Date.now() / 1000) ;
     const payload = {
-        client_id: userDetails?.client_id,
+        client_id: client_id,
         start_date:date ,
         city_of_usage: city
     };

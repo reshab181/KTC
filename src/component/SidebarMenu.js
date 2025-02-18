@@ -18,11 +18,15 @@ import BookingSvg from '../assets/svg/Mybookings.svg'
 import ProfileSvg from '../assets/svg/my-profile.svg'
 import NotificationSvg from '../assets/svg/notifications.svg';
 import LogoutSvg from '../assets/svg/logout.svg'
+import { useDispatch, useSelector } from 'react-redux';
+import { resetSignInState } from '../Redux/slice/SignInSlice';
 const windowWidth = Dimensions.get('window').width;
 
 const SidebarMenu = ({ isVisible, onClose }) => {
   const navigation = useNavigation();
   const translateX = useRef(new Animated.Value(-windowWidth * 0.8)).current; 
+  const dispatch = useDispatch(); 
+  const SignInApiState = useSelector((state) => state.signIn);
 
   const menuItems = [
     { name: 'Home', route: 'CorporateHomeScreen', icon: HomeSvg },
@@ -66,10 +70,12 @@ const SidebarMenu = ({ isVisible, onClose }) => {
 
   const clearUserData = async () => {
     try {
+      dispatch(resetSignInState());
       await AsyncStorage.removeItem('userToken');
       await AsyncStorage.setItem('isLoggedInn', 'false');
-      await AsyncStorage.removeItem('user_id');  
-      await AsyncStorage.removeItem('user_email');  
+      // await AsyncStorage.removeItem('user_id');  
+      // await AsyncStorage.removeItem('user_email');  
+
     } catch (error) {
       console.error('Error clearing user data:', error);
     }

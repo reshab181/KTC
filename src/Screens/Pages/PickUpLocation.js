@@ -3,40 +3,67 @@ import React, { useState, useEffect, useRef } from 'react';
 import CustomHeader from '../../component/CustomHeader';
 import CustomTextInput from '../../component/CustomIconTextInput';
 import { fetchLocalities } from '../../Api/CorporateModuleApis';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CloseSvg from '../../assets/svg/closeblack.svg';
 
 const PickUpLocation = ({ navigation, route }) => {
     const [searchText, setSearchText] = useState('');
-    const [locations, setLocations] = useState([]); // Store API results
-    const [loading, setLoading] = useState(false); // Loader state
+    const [locations, setLocations] = useState([]); 
+    const [loading, setLoading] = useState(false); 
     const dispatch = useDispatch();
     
     console.log("Route Params:", route.params?.eloc, route.params?.type);
 
-    useEffect(() => {
-        if (searchText.length > 1) {
-            setLoading(true); 
-            console.log("Current Search Text:", searchText , route.params?.eloc);
+    // useEffect(() => {
+    //     if (searchText.length > 1) {
+    //         setLoading(true); 
+    //         console.log("Current Search Text:", searchText , route.params?.eloc);
 
+    //         fetchLocalities(searchText, route.params?.eloc)
+    //             .then(response => {
+    //                 console.log("API Response:", response);
+    //                 setLocations(response);
+    //             })
+    //             .catch(error => {
+    //                 console.error("API Error:", error);
+    //             })
+    //             .finally(() => {
+    //                 setLoading(false);
+    //             });
+    //     } else {
+    //         setLocations([]); // Clear locations if input is too short
+    //     }
+    // }, [searchText]);
+    useEffect(() => {
+        if (searchText.length > 1 && route.params?.eloc) { 
+            setLoading(true); 
+            console.log("Current Search Text:", searchText, "Eloc:", route.params?.eloc);
+    
             fetchLocalities(searchText, route.params?.eloc)
                 .then(response => {
-                    console.log("API Response:", response);
-                    setLocations(response);
+                    if (Array.isArray(response)) {
+                        console.log("API Response:", response);
+                        setLocations(response);
+                    } else {
+                        console.error("Unexpected API Response Format:", response);
+                        setLocations([]); 
+                    }
                 })
                 .catch(error => {
                     console.error("API Error:", error);
+                    setLocations([]); 
                 })
                 .finally(() => {
                     setLoading(false);
                 });
         } else {
-            setLocations([]); // Clear locations if input is too short
+            setLocations([]); 
         }
-    }, [searchText]);
-
+    }, [searchText, route.params?.eloc]);
+    
+    
     const handleSelectLocation = (item) => {
         console.log("Selected Location:", item);
         dispatch(updateCorporateSlice({

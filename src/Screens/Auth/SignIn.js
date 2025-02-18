@@ -1,6 +1,4 @@
-// Author: Reshab Kumar Pandey
-// Component: SignIn.js
-
+// Reshabh Pandey
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
@@ -16,13 +14,16 @@ import CustomHeader from '../../component/CustomHeader';
 import CustomTextInpt from '../../component/CustomTextInpt';
 import CustomButton from '../../component/CustomButtons';
 import { handleSignIn } from '../../Api/Authentication';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateUserDetails } from '../../Redux/slice/Userslice';
 import { setUserProfile } from '../../Redux/slice/UserProfileSlice';
 import RegisterPOPUP from './RegisterPopUp';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setUserProfileData } from '../../Utils/userProfileUtils';
 import { AuthStrings, Characters } from '../../constants/Strings';
+import { SignInApi } from '../../services/api/SignInApi';
+import { SignIn } from '../../Redux/slice/SignInSlice';
+import { decryptData } from '../../Utils/EncryptionUtility';
 
 
 const SignInCorporate = ({ route }) => {
@@ -32,19 +33,70 @@ const SignInCorporate = ({ route }) => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [accessToken, setAccessToken] = useState('');
+  const dispatch = useDispatch();
+
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedModule, setSelectedModule] = useState(null);
+  // const SingInApiState = useSelector((state) => state.SignIn);
+  const SignInApiState = useSelector((state) => state.signIn);
 
-  useEffect(() => {
-    const fetchAccessToken = async () => {
-      const token = await fetchJwtAccess();
-      setAccessToken(token || '');
-    };
-    fetchAccessToken();
-  }, []);
-  const dispatch = useDispatch();
+  // useEffect(() => {
+  //   const fetchAccessToken = async () => {
+  //     const token = await fetchJwtAccess();
+  //     setAccessToken(token || '');
+  //   };
+  //   fetchAccessToken();
+  // }, []);
+  // const dispatch = useDispatch();
 
+  const handleSubmit = async () => {
+    if (!validateForm()) return;
+    setLoading(true);
+    dispatch(SignIn({ email: email, password: password }));
+    setLoading(false);
+
+    // const date = (userData.bithdate*1000).toLocaleString
+
+    // try {
+
+
+    //  console.log('====================================');
+    //  console.log("SingInApiState.data", SingInApiState.data , "SignInApiState");
+    //  console.log('====================================');
+    //  if(SingInApiState.loading === false && SingInApiState.data   && SingInApiState.data !== null){
+    // navigation.replace('CorporateNavigator', {
+    //   screen: 'CorporateHomeScreen',
+    // });
+    //   console.log('====================================');
+    //   console.log("Hello");
+    //   console.log('====================================');
+    //  }
+    //  if(SingInApiState.data.status === "200" ){
+
+    //   console.log('====================================');
+    //   console.log("Hello");
+    //   console.log('====================================');
+    //  }
+    // const userData = await handleSignIn(email, password, accessToken, navigation, setLoading);
+    // Methods added by Ashutosh Rai 
+    // console.log('====================================');
+    // console.log("USER DATA", userData);
+    // console.log('====================================');
+    // if (userData) {
+    // setUserProfileData(dispatch, userData);
+    // await AsyncStorage.setItem('isLoggedInn', 'true');
+    // await AsyncStorage.setItem('user_id', userData.user_id);
+    // await AsyncStorage.setItem('user_email', userData.email_id);
+    // await AsyncStorage.setItem('userToken' , accessToken);
+    // }
+
+    // } catch (error) {
+    // Alert.alert('Sign In Error', error.message || 'Unable to sign in.');
+    // } finally {
+    // setLoading(false);
+    // }
+  };
   const validateForm = () => {
     const validationErrors = {};
 
@@ -67,31 +119,64 @@ const SignInCorporate = ({ route }) => {
     return Object.keys(validationErrors).length === 0;
   };
 
-  const handleSignInn = async () => {
-    if (!validateForm()) return;
+  useEffect(() => {
+    console.log("Updated Redux State:", SignInApiState);
+    verifySignIn();
 
-    setLoading(true);
-    // const date = (userData.bithdate*1000).toLocaleString
+  }, [SignInApiState]);
+  // useEffect(()=>{
+  //   return(()=>{
+  //     dispatchresetSignInState(); 
+  //   })
+  // })
+  const verifySignIn = async() => {
+    if (SignInApiState.loading === false && SignInApiState.data && SignInApiState.data !== null) {
+      if (SignInApiState.data.message === "Password Not Match") {
+        Alert.alert('Incorrect Password',
+          {
+            text: 'OK',
+            onPress: () => { },
+          },
+        );
+        return;
+      }
+      if (SignInApiState.data.status === 200) {
+        const userData = decryptData(SignInApiState.data.result)
+        dispatch(setUserProfile(userData));
+        console.log('====================================');
+        console.log("STATUS=============", userData.status);
+        console.log('====================================');
 
-    try {
-      const userData = await handleSignIn(email, password, accessToken, navigation, setLoading);
-      
-      console.log('====================================');
-      console.log("USER DATA", userData);
-      console.log('====================================');
-      if (userData) {
-        setUserProfileData(dispatch, userData);
+        await AsyncStorage.setItem('status', userData.status);
+
         await AsyncStorage.setItem('isLoggedInn', 'true');
         await AsyncStorage.setItem('user_id', userData.user_id);
-        await AsyncStorage.setItem('user_email', userData.email_id);
-        await AsyncStorage.setItem('userToken' , accessToken);
+        await AsyncStorage.setItem('email_id', userData.email_id);
+        await AsyncStorage.setItem('f_name', userData.f_name);
+        await AsyncStorage.setItem('l_name', userData.l_name);
+        await AsyncStorage.setItem('client_name', userData.client_name);
+        await AsyncStorage.setItem('client_id', userData.client_id);
+        await AsyncStorage.setItem('gender', userData.gender);
+        await AsyncStorage.setItem('mobile_number', userData.mobile_number);
+        await AsyncStorage.setItem('user_type', userData.user_type);
+        const birthdate = (userData.bithdate);
+        const timestamp = birthdate;
+        const date = new Date(timestamp);
+        AsyncStorage.setItem('bithdate', date.toLocaleDateString('en-GB').toString());
+        AsyncStorage.setItem('country', userData.country);
+        AsyncStorage.setItem('userToken', accessToken);
+        navigation.replace('CorporateNavigator', {
+          screen: 'CorporateHomeScreen',
+        });
+
       }
-    } catch (error) {
-      Alert.alert('Sign In Error', error.message || 'Unable to sign in.');
-    } finally {
-      setLoading(false);
+    } else if (SignInApiState.loading === false && SignInApiState.error !== null) {
+      console.log('Error', SignInApiState.error)
+      Alert.alert('Error', 'Failed to Sign In . Please try again.');
     }
-  };
+
+  }
+
   const closeModal = () => {
     setIsModalVisible(false);
     setSelectedModule(null);
@@ -133,9 +218,9 @@ const SignInCorporate = ({ route }) => {
         <View style={{ marginTop: 32 }}>
           <CustomButton
             title={AuthStrings.SignIn}
-            onPress={handleSignInn}
+            onPress={handleSubmit}
             textSize={18}
-            loading={loading}
+            loading={SignInApiState.loading}
           />
         </View>
 

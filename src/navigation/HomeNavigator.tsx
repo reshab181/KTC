@@ -17,10 +17,6 @@ const HomeNavigator = () => {
             <HomeStack.Screen name="CorporateRegisterNavigator" component={CorporateRegisterNavigator} options={{ headerShown: false }} />
             <HomeStack.Screen name="CorporateLoginNavigator" component={CorporateLoginNavigator}  options={{ headerShown: false }}/>
             <HomeStack.Screen name="CorporateNavigator" component={CorporateNavigator} options={{headerShown: false}}/>
-            {/* <HomeStack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} /> */}
-            {/* <HomeStack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} /> */}
-            
-
         </HomeStack.Navigator>
     )
 }

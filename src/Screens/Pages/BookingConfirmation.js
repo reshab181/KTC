@@ -131,8 +131,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F1F3',
   },
   scrollContent: {
-    paddingTop: 10, // Space for the fixed header
-    paddingBottom: 70, // Prevent content from overlapping footer
+    paddingTop: 10, 
+    paddingBottom: 70, 
   },
   cardContainer: {
     marginHorizontal: 16,
