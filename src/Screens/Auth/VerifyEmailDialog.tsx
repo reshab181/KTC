@@ -10,11 +10,23 @@ import { resetSendOtpState, sendOtp } from '../../Redux/slice/SendOtpSlice';
 import { useNavigation } from '@react-navigation/native';
 import NavigationService from '../../navigation/NavigationService';
 
-const VerifyEmailDialog = ({module, onClose, onSignIn, onSignUp}) => {
+interface VerifyEmailDialogProps {
+  module: string;
+  onClose: () => void;
+  onSignIn: (email: string) => void;
+  onSignUp: (email: string, otpData: any, clientId: string) => void;
+}
+
+const VerifyEmailDialog: React.FC<VerifyEmailDialogProps> = ({
+  module,
+  onClose,
+  onSignIn,
+  onSignUp,
+}) =>{
 
     // const[email, setEmail] = useState('ashutosh.rai@mapmyindia.com')
     const navigation = useNavigation();
-    const[email, setEmail] = useState('ashutosh.rai@mapmyindia.com')
+    const[email, setEmail] = useState('')
     const [errorMessage, setErrorMessage] = useState<string|undefined>(undefined)
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     const dispatch = useDispatch<any>();
@@ -101,22 +113,20 @@ const VerifyEmailDialog = ({module, onClose, onSignIn, onSignUp}) => {
                 <View style={{ marginHorizontal: 16, marginTop: 14, marginBottom: 19 }}>
                   <Text style={styles.instruction}>{AuthStrings.EnterEmail}</Text>
                   <CustomTextInpt
-                    placeholder="Official Email ID"
-                    value={email}
-                    onChangeText={setEmail}
-                    keyboardType="email-address"
-                    secureTextEntry={false}
-                  />
+                  placeholder="Official Email ID"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  secureTextEntry={false} style={undefined} containerStyle={undefined}                  />
                 
                   {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
                 </View>
                 <CustomButton
-                  title={AuthStrings.Submit}
-                  
-                  onPress={handleSubmit}
-                  borderRadius={0}
-                  loading={verifyEmailApiState.loading || sendOtpApiState.loading}
-                />
+                title={AuthStrings.Submit}
+
+                onPress={handleSubmit}
+                borderRadius={0}
+                loading={verifyEmailApiState.loading || sendOtpApiState.loading} borderWidth={undefined} textColor={undefined} btnHeight={undefined} textSize={undefined} fontWeight={undefined} btnColor={undefined} backgroundColor={undefined}                />
               </View>
                 </View>
             </SafeAreaView>

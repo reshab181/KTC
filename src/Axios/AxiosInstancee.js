@@ -3,11 +3,11 @@ import Api from '../services/Api';
 import Static from '../services/Static';
 
 
-// Create an Axios instance with a custom configuration
+
 const axiosInstance = axios.create({
   baseURL: Api.BASE_URL,
   headers: {
-    'Content-Type': 'application/x-www-form-urlencoded', // Default Content-Type
+    'Content-Type': 'application/x-www-form-urlencoded', 
   },
 });
 

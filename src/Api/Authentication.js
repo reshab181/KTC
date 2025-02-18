@@ -202,56 +202,56 @@ export const handleSignIn = async (email, password, accessToken, navigation, set
   }
 
 };
-export const emailsms = async (email, accessToken, navigation, setLoading) => {
-  if (!accessToken) {
-    Alert.alert('Error', 'Access token is not available.');
-    return null;
-  }
+// export const emailsms = async (email, accessToken, navigation, setLoading) => {
+//   if (!accessToken) {
+//     Alert.alert('Error', 'Access token is not available.');
+//     return null;
+//   }
 
-  try {
-    setLoading(true);
-    const mmiToken = await tokenFromMMI();
-    if (!mmiToken?.access_token) {
-      throw new Error('Failed to retrieve MMI access token.');
-    }
-    // const apiUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
-    const apiUrl = `${ANCHOR_URL}?handle=${email.toString()}`;
-    let headersList = {
-      "Authorization": `Bearer ${mmiToken?.access_token}`
-    }
-    const response = await fetch(apiUrl,
-      {
-        method: "POST",
-        headers: headersList
-      }
-    );
+//   try {
+//     setLoading(true);
+//     const mmiToken = await tokenFromMMI();
+//     if (!mmiToken?.access_token) {
+//       throw new Error('Failed to retrieve MMI access token.');
+//     }
+//     // const apiUrl = `${ANCHOR_URL}?handle=${email}&autoMigrate`;
+//     const apiUrl = `${ANCHOR_URL}?handle=${email.toString()}`;
+//     let headersList = {
+//       "Authorization": `Bearer ${mmiToken?.access_token}`
+//     }
+//     const response = await fetch(apiUrl,
+//       {
+//         method: "POST",
+//         headers: headersList
+//       }
+//     );
 
 
-    const locationUrl = response?.headers?.map?.location;
-    console.log('====================================');
-    console.log(locationUrl);
-    console.log('====================================');
-    if (locationUrl) {
-      navigation.replace('ForgotPasswordOTP', {
-        url: locationUrl,
-        email,
-        from: 'ForgotPassword',
-        accessToken,
-      });
+//     const locationUrl = response?.headers?.map?.location;
+//     console.log('====================================');
+//     console.log(locationUrl);
+//     console.log('====================================');
+//     if (locationUrl) {
+//       navigation.replace('ForgotPasswordOTP', {
+//         url: locationUrl,
+//         email,
+//         from: 'ForgotPassword',
+//         accessToken,
+//       });
 
-      // console.log(locationUrl, 'URL retrieved successfully.');
-      // return locationUrl;
-    } else {
-      throw new Error('Location header is missing in the response.');
-    }
-  } catch (error) {
-    console.error('Error in emailsms:', error.message);
-    Alert.alert('Error', error.message || 'An unexpected error occurred.');
-    return null;
-  } finally {
-    setLoading(false);
-  }
-};
+//       // console.log(locationUrl, 'URL retrieved successfully.');
+//       // return locationUrl;
+//     } else {
+//       throw new Error('Location header is missing in the response.');
+//     }
+//   } catch (error) {
+//     console.error('Error in emailsms:', error.message);
+//     Alert.alert('Error', error.message || 'An unexpected error occurred.');
+//     return null;
+//   } finally {
+//     setLoading(false);
+//   }
+// };
 export const resetPassword = async (email, newPassword, confirmPassword, accessToken, setLoading) => {
   setLoading(true);
 

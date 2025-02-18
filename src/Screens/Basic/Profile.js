@@ -14,9 +14,10 @@ import { useSelector } from 'react-redux';
 import FirstName from '../../assets/svg/first-name.svg'
 import DobSvg from '../../assets/svg/cake_black.svg'
 import SmartPhoneSvg from '../../assets/svg/smartphone.svg'
-import EmailSvg from '../../assets/svg/email_black.svg'
+import EmailSvg from '../../assets/svg/email_black.svg';
+import { useNavigation } from '@react-navigation/native';
 
-const Profile = ({ navigation }) => {
+const Profile = () => {
   const [loader, setLoader] = useState(false);
   const userDetails = useSelector((state) => state.userprofile); 
   const date = new Date(userDetails.bithdate * 1000);
@@ -29,6 +30,7 @@ const Profile = ({ navigation }) => {
     mobileNumber: userDetails.mobile_number ? userDetails.mobile_number : '',
     password: '',
   });
+  const navigation = useNavigation();
 
   const handleDeleteAccount = () => {
     console.log(formData.firstName);
@@ -39,7 +41,13 @@ const Profile = ({ navigation }) => {
       'Are you sure you want to delete your account?',
       [
         { text: 'Cancel', onPress: () => null },
-        { text: 'OK', onPress: () => console.log('Account deleted') }, 
+        { 
+          text: 'OK', 
+          onPress: () => {
+            console.log('Account deleted');
+            navigation.navigate("ModuleSelection");
+          } 
+        }, 
       ]
     );
   };
