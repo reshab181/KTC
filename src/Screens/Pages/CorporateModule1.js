@@ -93,14 +93,6 @@ const CorporateModule1 = ({ navigation }) => {
       pickupAddress
 
     );
-    // selectedDate &&
-    // selectedTime
-    // EmpId &&
-    // referenceNumber &&
-    // BookingCode &&
-    // trNumber &&
-    // BillNumber
-    // );
   };
   const openModal = () => {
     if (areFieldsFilled()) {
@@ -129,9 +121,6 @@ const CorporateModule1 = ({ navigation }) => {
         {
           <ReviewBookingModal visible={modalVisible}
             onClose={closeModal} />
-        }
-        {
-          // <LoaderModal visible={loading} />
         }
         <View style={styles.root}>
           <Section title="Car Reservation Details">
@@ -182,7 +171,7 @@ const CorporateModule1 = ({ navigation }) => {
                   () => {
                     if (!city) {
                       Alert.alert("Selection Required", "Please select a city first.");
-                      return; // Prevent navigation
+                      return; 
                     }
                     navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'pickupAddress' });
                   },
@@ -191,12 +180,12 @@ const CorporateModule1 = ({ navigation }) => {
 
                 <CustomTextInpt
                   placeholder="Reporting Landmark (Optional)"
-                  value={reportingLandmark} // Pass value correctly
+                  value={reportingLandmark}
                   onChangeText={(text) => {
                     setreportingLandmark(text);
                     dispatch(updateCorporateSlice({
                       type: "reportingLandmark",
-                      selectedItem: text // Use `text` instead of `reportingLandmark`
+                      selectedItem: text
                     }));
                   }}
                 />

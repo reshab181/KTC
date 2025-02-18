@@ -143,6 +143,12 @@ const SignInCorporate = ({ route }) => {
       if (SignInApiState.data.status === 200) {
         const userData = decryptData(SignInApiState.data.result)
         dispatch(setUserProfile(userData));
+        console.log('====================================');
+        console.log("STATUS=============", userData.status);
+        console.log('====================================');
+
+        await AsyncStorage.setItem('status', userData.status);
+
         await AsyncStorage.setItem('isLoggedInn', 'true');
         await AsyncStorage.setItem('user_id', userData.user_id);
         await AsyncStorage.setItem('email_id', userData.email_id);

@@ -9,7 +9,6 @@ import CarCard from '../../component/CarCard';
 const CarSelection = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
-      {/* Fixed Header */}
       <CustomHeader
         title="Car Selection"
         iconPath={require('../../assets/icbackarrow.png')}
@@ -18,7 +17,6 @@ const CarSelection = ({ navigation }) => {
         handleLeftIcon={() => navigation.goBack()}
       />
 
-      {/* Scrollable Content */}
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.cityInfoContainer}>
           <View style={styles.cityLabelContainer}>
@@ -87,8 +85,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F1F3',
   },
   scrollContent: {
-    paddingTop: 5, // Leaves space for the fixed header
-    paddingBottom: 40, // Ensures content does not overlap with footer
+    paddingTop: 5, 
+    paddingBottom: 40, 
   },
   cityInfoContainer: {
     height: 93,
