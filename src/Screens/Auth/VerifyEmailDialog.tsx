@@ -10,6 +10,7 @@ import { resetSendOtpState, sendOtp } from '../../Redux/slice/SendOtpSlice';
 import { useNavigation } from '@react-navigation/native';
 import NavigationService from '../../navigation/NavigationService';
 import CloseSvg from '../../assets/svg/close.svg'; 
+import { decryptData } from '../../Api/Authentication';
 
 const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
 
@@ -62,6 +63,10 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
       if (verifyEmailApiState.data.newuser === 'No') {
         onSignIn(email)
       } else if (verifyEmailApiState.data.newuser === 'Yes') {
+        console.log('====================================');
+        console.log("NEW USER" , decryptData(verifyEmailApiState.data.sub_entity));
+
+        console.log('====================================');
         setClientId(verifyEmailApiState.data.client_id)
         dispatch(sendOtp(email))
         // onSignUp(module, email)
