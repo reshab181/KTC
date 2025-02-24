@@ -18,7 +18,7 @@ const initialState: VerifyOtpState = {
 export const verifyOtp = createAsyncThunk(
     "verifyOtp",
     async({url, otp, process}: {url: string, otp: string, process: string}, {rejectWithValue}) =>{
-        // return "OTP Verified successfully"
+     
         const md5Hash = await RNHash.hashString(otp, 'md5');
         const sha256Hash = await RNHash.hashString(md5Hash, 'sha256');
         try {

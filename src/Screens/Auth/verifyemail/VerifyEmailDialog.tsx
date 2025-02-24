@@ -9,7 +9,6 @@ import { resetState, verifyEmail } from '../../../Redux/slice/VerifyEmailSlice';
 import { resetSendOtpState, sendOtp } from '../../../Redux/slice/SendOtpSlice';
 import { useNavigation } from '@react-navigation/native';
 import NavigationService from '../../../navigation/NavigationService';
-import CloseSvg from '../../../assets/svg/close.svg'; 
 import verifyEmailStyle from './VerifyEmailStyle';
 import CloseIcon from '../../../assets/icon/CloseIcon';
 
@@ -83,7 +82,7 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
 
     if (sendOtpApiState.loading === false && sendOtpApiState.data && sendOtpApiState.data !== null) {
       console.log(sendOtpApiState.data)
-      onSignUp(email, sendOtpApiState.data, clientId)
+      onSignUp(email, sendOtpApiState.data, clientId,sub_entity)
     } else if (sendOtpApiState.loading === false && sendOtpApiState.error !== null) {
       Alert.alert('Error', 'Failed to send otp. Please try again.');
     }
@@ -109,8 +108,7 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
-                secureTextEntry={false}
-              />
+                secureTextEntry={false} style={undefined} containerStyle={undefined}              />
 
               {errorMessage && <Text style={verifyEmailStyle.errorText}>{errorMessage}</Text>}
             </View>
@@ -119,8 +117,7 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
 
               onPress={handleSubmit}
               borderRadius={0}
-              loading={verifyEmailApiState.loading || sendOtpApiState.loading}
-            />
+              loading={verifyEmailApiState.loading || sendOtpApiState.loading} borderWidth={undefined} textColor={undefined} btnHeight={undefined} textSize={undefined} fontWeight={undefined} btnColor={undefined} backgroundColor={undefined}            />
           </View>
         </View>
       </SafeAreaView>
