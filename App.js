@@ -5,38 +5,25 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
 import store from "./src/Redux/store";
 
-import Splash from "./src/Screens/Basic/Splash";
-import RegisterPOPUP from "./src/Screens/Auth/RegisterPopUp";
-import Register from "./src/Screens/Auth/Register";
-import SignInCorporate from "./src/Screens/Auth/SignIn";
-import ForgotPassword from "./src/Screens/Auth/ForgotPassword";
-import ForgotPasswordOTP from "./src/Screens/Auth/ForgotPasswordOTP";
-import PersonalRegister from "./src/Screens/Auth/PersonalRegister";
-import ResetPassword from "./src/Screens/Auth/ResetPassword";
 import CorporateModule1 from "./src/Screens/Pages/CorporateModule1";
 import Profile from "./src/Screens/Basic/Profile";
 import PickUpLocation from "./src/Screens/Pages/PickUpLocation";
 import HomeScreen1 from "./src/Screens/Pages/HomeScreen1";
 import CarGroup from "./src/Screens/Pages/CarGroup";
 import CarSelection from "./src/Screens/Pages/CarSelection";
-import OTPRegister from "./src/Screens/Auth/OtpRegister";
 import BookingConfirmation from "./src/Screens/Pages/BookingConfirmation";
 import PaymentMethod from "./src/Screens/Pages/PaymentMethod";
 import MyBooking from "./src/Screens/Pages/MyBooking";
 import Upcoming from "./src/Screens/My Bookings/Upcoming";
-import Feedback from "./src/Screens/Feedback";
-import Help from "./src/Screens/Help";
 import Track from "./src/Screens/My Bookings/Track";
 import Notification from "./src/Screens/Notification";
 import SplashScreen from "@exodus/react-native-splash-screen";
 import Citieslist from "./src/Screens/Pages/Citieslist";
-import CorporateRegisterNavigator from "./src/navigation/CorporateRegisterNavigator";
 import HomeNavigator from "./src/navigation/HomeNavigator";
 import MapplsGL from 'mappls-map-react-native';
 import ReviewBookingModal from "./src/component/ReviewBookingModal";
 
 
-const Stack = createNativeStackNavigator();
 const AppStack = createNativeStackNavigator();
 
 
