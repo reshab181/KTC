@@ -9,7 +9,8 @@ const HomeItemCard = ({ title, image, description, onPress }) => {
               <Text style={styles.moduleHeaderText}>{title}</Text>
             </View>
             <View style={styles.moduleBody}>
-              <Image source={image} style={styles.moduleImage} />
+              {/* <Image source={image} style={styles.moduleImage} /> */}
+              {image}
               <Text style={styles.moduleBodyText}>{description}</Text>
             </View>
           </View>
