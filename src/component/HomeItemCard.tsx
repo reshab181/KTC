@@ -17,10 +17,8 @@ const HomeItemCard: React.FC<HomeItemCardProps> = ({ title, image, description =
               <Text style={styles.moduleHeaderText}>{title}</Text>
             </View>
             <View style={styles.moduleBody}>
-            <Image
-              source={typeof image === 'string' ? { uri: image } : image}
-              style={styles.moduleImage}
-            />
+              {/* <Image source={image} style={styles.moduleImage} /> */}
+              {image}
               <Text style={styles.moduleBodyText}>{description}</Text>
             </View>
           </View>

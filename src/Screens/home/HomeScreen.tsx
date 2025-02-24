@@ -3,9 +3,10 @@ import { Alert, SafeAreaView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../component/CustomHeader';
 import HomeItemCard from '../../component/HomeItemCard';
-import VerifyEmailDialog from '../Auth/VerifyEmailDialog';
 import homeStyle from './HomeStyle';
-import { StackNavigationProp } from '@react-navigation/stack';
+import VerifyEmailDialog from '../Auth/verifyemail/VerifyEmailDialog';
+import CorporateIcon from '../../assets/icon/CorporateIcon';
+import PersonelIcon from '../../assets/icon/PersonelIcon';
 
 
 type ModuleType = 'Corporate' | 'Personal';
@@ -56,6 +57,7 @@ const HomeScreen: React.FC = () => {
     navigation.navigate('CorporateRegisterNavigator', {
       screen: 'OTPRegister',
       params: {
+        screenType: 0,
         emailId: email,
         client_id: clientId,
         url: location,
@@ -85,13 +87,13 @@ const HomeScreen: React.FC = () => {
       <View style={homeStyle.contentContainer}>
         <HomeItemCard
           title="Corporate"
-          image={require('../../assets/Corporate.png')}
+          image={<CorporateIcon />}
           description="Chauffeur Corporate"
           onPress={() => handleModuleClick('Corporate')}
         />
         <HomeItemCard
           title="Personal"
-          image={require('../../assets/Personal.png')}
+          image={<PersonelIcon />}
           description="Personal Module"
           onPress={() => handleModuleClick('Personal')}
         />

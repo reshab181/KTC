@@ -173,9 +173,85 @@ const postHttpAuthClient = (instance: AxiosInstance, url: any, params?: any, dat
     });
 }
 
+
+
+const getHttpAuthClient = (instance: AxiosInstance, url: any, params?: any) => {
+  let axiosCall = axios.CancelToken.source();
+    // console.log(params)
+    var timeOut = setTimeout(() => {
+      axiosCall.cancel(
+        'Unable to connect server. Please try again after some Time.',
+      );
+    }, 1000 * 30);
+
+    
+    instance.interceptors.request.use(async(config) => {
+      if(KTCSingleton.getInstance().getOAuthToken() && KTCSingleton.getInstance().getOAuthToken() !== ''){
+        config.headers.Authorization = `bearer ${KTCSingleton.getInstance().getOAuthToken()}`;
+      } else {
+        const tokenApi = await oauthApi()
+        if(tokenApi.data?.access_token) {
+          KTCSingleton.getInstance().setOAuthToken(tokenApi.data?.access_token)
+          config.headers.Authorization = `bearer ${KTCSingleton.getInstance().getOAuthToken()}`;
+        }
+      }
+      return config;
+    })
+
+    instance.interceptors.response.use((response) => {
+      return response
+    },
+    async (error) => {
+      if(error && error.response && error.response.status === 401) {
+        console.log("status === 401")
+        clearTimeout(timeOut);
+        try {
+          const tokenResponse = await oauthApi()
+          if(tokenResponse && tokenResponse.status === 200 && tokenResponse.data?.access_token) {
+            KTCSingleton.getInstance().setOAuthToken(tokenResponse.data?.access_token)
+            instance.interceptors.request.clear();
+            instance.interceptors.request.use((config) => {
+              config.headers.delete("Authorization")
+              config.headers.Authorization = `bearer ${tokenResponse.data.access_token}`
+              return config;
+            })
+          }
+
+          instance.interceptors.response.clear()
+          return instance({
+            method: 'get',
+            cancelToken: axiosCall.token,
+            url: url,
+            params: params,
+            onUploadProgress : function(progressEvent) {
+            //   var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+            //   debuggerLogs("PROGRESS",percentCompleted)
+            }
+          });
+        } catch(tokenError) {
+          return Promise.reject(tokenError);
+       }
+
+      }
+      console.log(error.response.request)
+      return Promise.reject(error)
+    })
+    return instance({
+      method: 'get',
+      cancelToken: axiosCall.token,
+      url: url,
+      params: params,
+      onUploadProgress : function(progressEvent) {
+      //   var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+      //   debuggerLogs("PROGRESS",percentCompleted)
+      }
+    });
+}
+
 export {
     apiClient,
     postHttpClient,
     postJWtHttpClient,
-    postHttpAuthClient
+    postHttpAuthClient,
+    getHttpAuthClient
 }
