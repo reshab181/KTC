@@ -291,7 +291,9 @@ const OtpRegister = () => {
   // const { emailId, client_id, url } = route.params;
   const [emailId, setEmailId] = useState('')
   const [clientId, setClientId] = useState('')
+  const [sub_entity,setSub_entity]=useState('')
   const [url, setUrl] = useState('')
+  
   const styles = useStyles();
   const navigation = useNavigation();
 
@@ -306,6 +308,7 @@ const OtpRegister = () => {
     if(route?.params) {
       setEmailId(route?.params?.emailId)
       setClientId(route?.params?.client_id)
+      setSub_entity(route?.params?.sub_entity)
       setUrl(route?.params?.url)
     }
   }, [route?.params])
@@ -363,7 +366,7 @@ const OtpRegister = () => {
         if (response.status === 204) {
           setLoader(false);
           Alert.alert('Success', 'OTP verified successfully!');
-          navigation.navigate('RegisterPage', { emailId, clientId });
+          navigation.navigate('RegisterPage', { emailId, clientId ,sub_entity});
         } else {
           setLoader(false);
           Alert.alert('Error', 'Incorrect OTP, please try again.');

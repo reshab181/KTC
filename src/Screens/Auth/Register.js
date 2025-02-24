@@ -312,7 +312,9 @@ const COLORS = {
 };
 
 const Register = ({ route }) => {
-    const { emailId, client_id, sub_entity } = route.params || {};
+    const { emailId, clientId, sub_entity } = route.params || {};
+    console.log(emailId,clientId,sub_entity,"data=========================");
+    
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
@@ -438,7 +440,7 @@ const Register = ({ route }) => {
                 birthdate: dob,
                 mobile_number: formData.phone,
                 password: formData.password,
-                client_id: client_id,
+                client_id:  clientId,
                 sub_enitityid: sub_entity,
                 country: selectedCountry,
                 alternative_no: formData.alternatePhone,

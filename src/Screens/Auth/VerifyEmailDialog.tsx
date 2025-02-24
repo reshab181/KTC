@@ -15,13 +15,14 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
 
   // const[email, setEmail] = useState('ashutosh.rai@mapmyindia.com')
   const navigation = useNavigation();
-  const [email, setEmail] = useState('ashutosh.rai@mapmyindia.com')
+  const [email, setEmail] = useState('')
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   const dispatch = useDispatch<any>();
   const verifyEmailApiState = useSelector((state: any) => state.verifyEmail);
   const sendOtpApiState = useSelector((state: any) => state.sendOtp);
   const [clientId, setClientId] = useState('')
+  const [sub_entity,setSub_entity] = useState('')
 
 
   const handleSubmit = async () => {
@@ -49,27 +50,26 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
 
   const getVerifyEmailResponse = () => {
 
-    if (verifyEmailApiState.loading === false && verifyEmailApiState.data && verifyEmailApiState.data !== null) {
-      if (verifyEmailApiState.data.message === 'Invalid Domain Name.') {
-        Alert.alert('Invalid Domain!', 'Please contact KTC Admin', [
-          {
-            text: 'OK',
-            onPress: () => { },
-          },
-        ]);
+    if (verifyEmailApiState.loading === false && verifyEmailApiState.data) {
+      const { message, newuser, sub_entity, client_id } = verifyEmailApiState.data;
+    
+      if (message === 'Invalid Domain Name.') {
+        Alert.alert('Invalid Domain!', 'Please contact KTC Admin');
         return;
       }
-      if (verifyEmailApiState.data.newuser === 'No') {
-        onSignIn(email)
-      } else if (verifyEmailApiState.data.newuser === 'Yes') {
-        setClientId(verifyEmailApiState.data.client_id)
-        dispatch(sendOtp(email))
-        // onSignUp(module, email)
+    
+      if (newuser === 'No') {
+        onSignIn(email);
+      } else if (newuser === 'Yes') {
+        setClientId(client_id);
+        
+        setSub_entity(sub_entity);
+        dispatch(sendOtp(email));
       }
-    } else if (verifyEmailApiState.loading === false && verifyEmailApiState.error !== null) {
-      console.log('Error', verifyEmailApiState.error)
+    } else if (verifyEmailApiState.loading === false && verifyEmailApiState.error) {
       Alert.alert('Error', 'Failed to register. Please try again.');
     }
+    
   }
 
 
@@ -80,7 +80,7 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
   const getSendOtpResponse = () => {
 
     if (sendOtpApiState.loading === false && sendOtpApiState.data && sendOtpApiState.data !== null) {
-      onSignUp(email, sendOtpApiState.data, clientId)
+      onSignUp(email, sendOtpApiState.data,clientId,sub_entity)
     } else if (sendOtpApiState.loading === false && sendOtpApiState.error !== null) {
       console.log('Error', sendOtpApiState.error)
       Alert.alert('Error', 'Failed to send otp. Please try again.');

@@ -51,7 +51,7 @@ const HomeScreen: React.FC = () => {
   };
 
   // Sign-up handler
-  const signUp = (email: string, location: string, clientId: string) => {
+  const signUp = (email: string, location: string, clientId: string,sub_entity:string) => {
     setIsModalVisible(false);
     navigation.navigate('CorporateRegisterNavigator', {
       screen: 'OTPRegister',
@@ -59,6 +59,9 @@ const HomeScreen: React.FC = () => {
         emailId: email,
         client_id: clientId,
         url: location,
+        sub_entity:sub_entity
+
+
       },
     });
   };
