@@ -8,16 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { resetState, verifyEmail } from '../../../Redux/slice/VerifyEmailSlice';
 import { resetSendOtpState, sendOtp } from '../../../Redux/slice/SendOtpSlice';
 import { useNavigation } from '@react-navigation/native';
-<<<<<<< HEAD:src/Screens/Auth/VerifyEmailDialog.tsx
-import NavigationService from '../../navigation/NavigationService';
-import CloseSvg from '../../assets/svg/close.svg'; 
-import { decryptData } from '../../Api/Authentication';
-=======
 import NavigationService from '../../../navigation/NavigationService';
 import CloseSvg from '../../../assets/svg/close.svg'; 
 import verifyEmailStyle from './VerifyEmailStyle';
 import CloseIcon from '../../../assets/icon/CloseIcon';
->>>>>>> 51097664d03b676e708d8b0a72364c4823bc3423:src/Screens/Auth/verifyemail/VerifyEmailDialog.tsx
 
 const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
 
