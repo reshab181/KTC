@@ -289,30 +289,18 @@ import {
     Alert,
     ActivityIndicator,
 } from 'react-native';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { RadioButton } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import CryptoJS from 'crypto-js';
 import CustomHeader from '../../component/CustomHeader';
 import CustomButton from '../../component/CustomButtons';
 import CustomIconTextInput from '../../component/CustomIconTextInput';
-
 import { updateUserDetails } from '../../Redux/slice/Userslice';
 import { registerUser } from '../../Api/Authentication';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
-import FirstName from '../../assets/svg/first-name.svg'
-import DobSvg from '../../assets/svg/cake_black.svg'
-import GenderSvg from '../../assets/svg/Gender.svg'
-import SmartPhoneSvg from '../../assets/svg/smartphone.svg'
-import EmailSvg from '../../assets/svg/email_black.svg'
+
 const { width } = Dimensions.get('window');
-
-
-
-
 
 const COLORS = {
     primary: '#3C3567',
@@ -323,29 +311,34 @@ const COLORS = {
     gray: '#666666',
 };
 
-const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email address').required('Email is required'),
-    firstName: Yup.string().required('First Name is required'),
-    lastName: Yup.string().required('Last Name is required'),
-    password: Yup.string().min(4, 'Password must be at least 4 characters').required('Password is required'),
-    confirmPassword: Yup.string()
-        .oneOf([Yup.ref('password'), null], 'Passwords must match')
-        .required('Confirm Password is required'),
-    phone: Yup.string().length(10, 'Phone number must be 10 digits').required('Phone number is required'),
-    alternatePhone: Yup.string().length(10, 'Alternate phone number must be 10 digits').required('Alternate phone number is required'),
-});
-
 const Register = ({ route }) => {
-    const { emailId, client_id } = route.params || {};
+    const { emailId, clientId, sub_entity } = route.params || {};
+    console.log(emailId,clientId,sub_entity,"data=========================");
+    
+    const navigation = useNavigation();
+    const dispatch = useDispatch();
 
+    // Form state
+    const [formData, setFormData] = useState({
+        email: emailId || '',
+        firstName: '',
+        lastName: '',
+        password: '',
+        confirmPassword: '',
+        phone: '',
+        alternatePhone: '',
+    });
+
+    // Error state
+    const [errors, setErrors] = useState({});
+
+    // Other state
     const [selectedGender, setSelectedGender] = useState('');
     const [selectedCountry, setSelectedCountry] = useState('India');
     const [dob, setDob] = useState('');
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [loading, setLoading] = useState(false);
     const [accessToken, setAccessToken] = useState('');
-    const navigation = useNavigation();
-    const dispatch = useDispatch();
 
     useEffect(() => {
         const fetchAccessToken = async () => {
@@ -355,6 +348,60 @@ const Register = ({ route }) => {
         fetchAccessToken();
     }, []);
 
+    const validateForm = () => {
+        const newErrors = {};
+        
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!formData.email) {
+            newErrors.email = 'Email is required';
+        } else if (!emailRegex.test(formData.email)) {
+            newErrors.email = 'Invalid email address';
+        }
+
+        // Name validation
+        if (!formData.firstName) newErrors.firstName = 'First Name is required';
+        if (!formData.lastName) newErrors.lastName = 'Last Name is required';
+
+        // Password validation
+        if (!formData.password) {
+            newErrors.password = 'Password is required';
+        } else if (formData.password.length < 4) {
+            newErrors.password = 'Password must be at least 4 characters';
+        }
+
+        if (!formData.confirmPassword) {
+            newErrors.confirmPassword = 'Confirm Password is required';
+        } else if (formData.password !== formData.confirmPassword) {
+            newErrors.confirmPassword = 'Passwords must match';
+        }
+
+        // Phone validation
+        if (!formData.phone) {
+            newErrors.phone = 'Phone number is required';
+        } else if (formData.phone.length !== 10) {
+            newErrors.phone = 'Phone number must be 10 digits';
+        }
+
+        // if (!formData.alternatePhone) {
+        //     newErrors.alternatePhone = 'Alternate phone number is required';
+        // } else if (formData.alternatePhone.length !== 10) {
+        //     newErrors.alternatePhone = 'Alternate phone number must be 10 digits';
+        // }
+
+        // Date of birth validation
+        if (!dob) newErrors.dob = 'Date of birth is required';
+
+        // Gender validation
+        if (!selectedGender) newErrors.gender = 'Gender is required';
+         
+        // Country validation
+        if (!selectedCountry) newErrors.country = 'Country is required'
+
+        setErrors(newErrors);
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleDateChange = (event, selectedDate) => {
         setShowDatePicker(false);
         if (selectedDate) {
@@ -362,50 +409,59 @@ const Register = ({ route }) => {
         }
     };
 
-    const handleRegistration = async (values) => {
+    const handleInputChange = (name, value) => {
+        setFormData(prev => ({
+            ...prev,
+            [name]: value
+        }));
+        // Clear error when user starts typing
+        if (errors[name]) {
+            setErrors(prev => ({
+                ...prev,
+                [name]: undefined
+            }));
+        }
+    };
+
+    const handleRegistration = async () => {
+        if (!validateForm()) {
+            Alert.alert('Error', 'Please fix the errors in the form');
+            return;
+        }
+
         try {
             setLoading(true);
 
-            // const jwt = await getJwtToken();
-            // if (!jwt) throw new Error('Failed to obtain JWT token');
-
             const userData = {
                 email_id: emailId,
-                f_name: values.firstName,
-                l_name: values.lastName,
+                f_name: formData.firstName,
+                l_name: formData.lastName,
                 gender: selectedGender,
                 birthdate: dob,
-                mobile_number: values.phone,
-                password: values.password,
-                client_id: client_id,
-                sub_enitityid: "iLP9r7kLuFskHpdCMao9KQtxBQlCloYnjY5E/IWbAECmPiQeK4cka7b88sZV9O3vY3V4xrq7oJdXuwEwycaR75eIhDFb88m2U6p76tsGgOZMyTGfksK+RdmMFwVKp3n1ZnCGuvKOU7mLxQi3j3vOU5a1jEga6ZWj/Akr79u3oiIq5TaiB++2JSHQfOn7s5OyCVJj37/FG2gB4XNhWOqZQfUwP1mPeMNv1IcaL7m3uldzVofMCKoUYI58BM/ZUHj6",
+                mobile_number: formData.phone,
+                password: formData.password,
+                client_id:  clientId,
+                sub_enitityid: sub_entity,
                 country: selectedCountry,
-                alternative_no: values.alternatePhone,
+                alternative_no: formData.alternatePhone,
             };
-            console.log(userData, "hELLO DATA");
 
             const responseData = await registerUser(userData, accessToken);
             if (responseData?.user_id) {
                 dispatch(updateUserDetails({
-                    email: values.email,
+                    email: formData.email,
                     userId: responseData.user_id
                 }));
-                // const data= responseData.json();
-                // console.log(data,"heelo");
-                console.log(responseData, "hello");
-
-
 
                 Alert.alert(
                     'Successfully Signup!',
                     'Account Created Successfully',
                     [{
                         text: 'OK',
-                        onPress: () => navigation.navigate('SignInCorporate', { email_id: values.email })
+                        onPress: () => navigation.navigate('SignInCorporate', { email_id: formData.email })
                     }]
                 );
-            }
-            else {
+            } else {
                 throw new Error(responseData?.message || 'Registration failed');
             }
         } catch (error) {
@@ -436,122 +492,112 @@ const Register = ({ route }) => {
             />
 
             <View style={styles.scrollContainer}>
-                <Formik
-                    initialValues={{
-                        // email: '',
-                        email: emailId,
-                        firstName: '',
-                        lastName: '',
-                        password: '',
-                        confirmPassword: '',
-                        phone: '',
-                        alternatePhone: '',
-                    }}
-                    validationSchema={validationSchema}
-                    onSubmit={handleRegistration}
+                <ScrollView
+                    contentContainerStyle={styles.formContainer}
+                    showsVerticalScrollIndicator={false}
                 >
-                    {({ values, handleChange, handleBlur, handleSubmit, errors, touched }) => (
-                        <>
-                            <ScrollView
-                                contentContainerStyle={styles.formContainer}
-                                showsVerticalScrollIndicator={false}
-                            >
-                                {inputFields.map((field, index) => (
-                                    <View key={index} style={styles.inputContainer}>
-                                        <CustomIconTextInput
-                                            placeholder={field.placeholder}
-                                            icon1={field.icon}
-                                            value={values[field.name]}
-                                            onChangeText={handleChange(field.name)}
-                                            onBlur={handleBlur(field.name)}
-                                            keyboardType={field.keyboardType}
-                                            secureTextEntry={field.secureTextEntry}
-                                        />
-                                        {touched[field.name] && errors[field.name] && (
-                                            <Text style={styles.errorText}>
-                                                {errors[field.name]}
-                                            </Text>
-                                        )}
-                                    </View>
-                                ))}
+                    {inputFields.map((field, index) => (
+                        <View key={index} style={styles.inputContainer}>
+                            <CustomIconTextInput
+                                placeholder={field.placeholder}
+                                icon1={field.icon}
+                                value={formData[field.name]}
+                                onChangeText={(text) => handleInputChange(field.name, text)}
+                                keyboardType={field.keyboardType}
+                                secureTextEntry={field.secureTextEntry}
+                            />
+                            {errors[field.name] && (
+                                <Text style={styles.errorText}>
+                                    {errors[field.name]}
+                                </Text>
+                            )}
+                        </View>
+                    ))}
 
-                                <TouchableOpacity
-                                    style={styles.selectionContainer}
-                                    onPress={() => setShowDatePicker(true)}
-                                >
-                                    <Image
-                                        source={require('../../assets/DOB.png')}
-                                        style={styles.selectionIcon}
-                                    />
-                                    <Text style={styles.dobText}>
-                                        {dob || 'Select Date of Birth'}
-                                    </Text>
-                                </TouchableOpacity>
-
-                                {showDatePicker && (
-                                    <DateTimePicker
-                                        mode="date"
-                                        value={dob ? new Date(dob) : new Date()}
-                                        maximumDate={new Date()}
-                                        display={Platform.OS === 'ios' ? 'inline' : 'default'}
-                                        onChange={handleDateChange}
-                                    />
-                                )}
-
-                                <View style={styles.selectionContainer}>
-                                    <Image
-                                        source={require('../../assets/Gender.png')}
-                                        style={styles.selectionIcon}
-                                    />
-                                    <View style={styles.radioContainer}>
-                                        {['Male', 'Female', 'Others'].map((gender) => (
-                                            <View key={gender} style={styles.radioOption}>
-                                                <RadioButton
-                                                    value={gender.toLowerCase()}
-                                                    status={selectedGender === gender.toLowerCase() ? 'checked' : 'unchecked'}
-                                                    onPress={() => setSelectedGender(gender.toLowerCase())}
-                                                    color={COLORS.primary}
-                                                />
-                                                <Text style={styles.radioText}>{gender}</Text>
-                                            </View>
-                                        ))}
-                                    </View>
-                                </View>
-
-                                <View style={styles.selectionContainer}>
-                                    <Image
-                                        source={require('../../assets/flag_black_24dp.png')}
-                                        style={styles.selectionIcon}
-                                    />
-                                    <View style={styles.radioContainer}>
-                                        {['India', 'Others'].map((country) => (
-                                            <View key={country} style={styles.radioOption}>
-                                                <RadioButton
-                                                    value={country}
-                                                    status={selectedCountry === country ? 'checked' : 'unchecked'}
-                                                    onPress={() => setSelectedCountry(country)}
-                                                    color={COLORS.primary}
-                                                />
-                                                <Text style={styles.radioText}>{country}</Text>
-                                            </View>
-                                        ))}
-                                    </View>
-                                </View>
-                            </ScrollView>
-
-                            <View style={styles.buttonContainer}>
-                                <CustomButton
-                                    title="Sign Up"
-                                    onPress={handleSubmit}
-                                    widthSize="100%"
-                                    textSize={18}
-                                    borderRadius={0}
-                                    isSelected={true}
-                                />
-                            </View>
-                        </>
+                    <TouchableOpacity
+                        style={styles.selectionContainer}
+                        onPress={() => setShowDatePicker(true)}
+                    >
+                        <Image
+                            source={require('../../assets/DOB.png')}
+                            style={styles.selectionIcon}
+                        />
+                        <Text style={styles.dobText}>
+                            {dob || 'Select Date of Birth'}
+                        </Text>
+                    </TouchableOpacity>
+                    {errors.dob && (
+                        <Text style={[styles.errorText, { marginLeft: 16 }]}>
+                            {errors.dob}
+                        </Text>
                     )}
-                </Formik>
+
+                    {showDatePicker && (
+                        <DateTimePicker
+                            mode="date"
+                            value={dob ? new Date(dob) : new Date()}
+                            maximumDate={new Date()}
+                            display={Platform.OS === 'ios' ? 'inline' : 'default'}
+                            onChange={handleDateChange}
+                        />
+                    )}
+
+                    <View style={styles.selectionContainer}>
+                        <Image
+                            source={require('../../assets/Gender.png')}
+                            style={styles.selectionIcon}
+                        />
+                        <View style={styles.radioContainer}>
+                            {['Male', 'Female', 'Others'].map((gender) => (
+                                <View key={gender} style={styles.radioOption}>
+                                    <RadioButton
+                                        value={gender.toLowerCase()}
+                                        status={selectedGender === gender.toLowerCase() ? 'checked' : 'unchecked'}
+                                        onPress={() => setSelectedGender(gender.toLowerCase())}
+                                        color={COLORS.primary}
+                                    />
+                                    <Text style={styles.radioText}>{gender}</Text>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                    {errors.gender && (
+                        <Text style={[styles.errorText, { marginLeft: 16 }]}>
+                            {errors.gender}
+                        </Text>
+                    )}
+
+                    <View style={styles.selectionContainer}>
+                        <Image
+                            source={require('../../assets/flag_black_24dp.png')}
+                            style={styles.selectionIcon}
+                        />
+                        <View style={styles.radioContainer}>
+                            {['India', 'Others'].map((country) => (
+                                <View key={country} style={styles.radioOption}>
+                                    <RadioButton
+                                        value={country}
+                                        status={selectedCountry === country ? 'checked' : 'unchecked'}
+                                        onPress={() => setSelectedCountry(country)}
+                                        color={COLORS.primary}
+                                    />
+                                    <Text style={styles.radioText}>{country}</Text>
+                                </View>
+                            ))}
+                        </View>
+                    </View>
+                </ScrollView>
+
+                <View style={styles.buttonContainer}>
+                    <CustomButton
+                        title="Sign Up"
+                        onPress={handleRegistration}
+                        widthSize="100%"
+                        textSize={18}
+                        borderRadius={0}
+                        isSelected={true}
+                    />
+                </View>
             </View>
 
             {loading && (
@@ -562,7 +608,6 @@ const Register = ({ route }) => {
         </SafeAreaView>
     );
 };
-
 const styles = StyleSheet.create({
     mainContainer: {
         flex: 1,

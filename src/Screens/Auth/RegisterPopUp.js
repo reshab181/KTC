@@ -239,7 +239,7 @@ const RegisterPOPUP = ({ onClose }) => {
       <SafeAreaView style={styles.overlay}>
         <View style={styles.modalContainer}>
           <Formik
-            initialValues={{ email: 'ashutosh.rai@mapmyindia.com' }}
+            initialValues={{ email: '' }}
             validate={(values) => {
               const errors = {};
               if (!values.email) errors.email = 'Email is required';

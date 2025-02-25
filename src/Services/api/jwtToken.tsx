@@ -15,7 +15,7 @@ const jwtTokenApi = async () => {
         // config.headers["Content-Type"]="application/json"
         return config;
       })
-    return(postHttpClient(instance, '', null, data))
+    return (postHttpClient(instance, '', null, data))
 }
 
 export {jwtTokenApi}

@@ -17,7 +17,7 @@ import SmartPhoneSvg from '../../assets/svg/smartphone.svg';
 import EmailSvg from '../../assets/svg/email_black.svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Profile = ({ navigation }) => {
+const Profile = () => {
   const [loader, setLoader] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -27,6 +27,7 @@ const Profile = ({ navigation }) => {
     mobileNumber: '',
     password: '',
   });
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchData = async () => {

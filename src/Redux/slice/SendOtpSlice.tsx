@@ -17,7 +17,7 @@ export const sendOtp = createAsyncThunk(
     'sendOtp',
     async(email: string, { rejectWithValue }) => {
         try {
-            // return "https://anchor.mapmyindia.com/api/otp/otp1740312070i1366294528/validate"
+            return "https://anchor.mapmyindia.com/api/otp/otp1740312070i1366294528/validate"
             const response = await sendOtpApi(email)
             if(response.status === 201 && response?.headers?.location){
                 

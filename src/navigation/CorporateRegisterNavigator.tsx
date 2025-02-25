@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInCorporate from "../Screens/Auth/SignIn";
 import RegisterPOPUP from "../Screens/Auth/RegisterPopUp";
 import Register from "../Screens/Auth/Register";
-import OtpRegister from "../Screens/Auth/OtpRegister";
+// import OtpRegister from "../Screens/Auth/OtpRegister";
 import ForgotPassword from "../Screens/Auth/ForgotPassword";
 import ForgotPasswordOTP from "../Screens/Auth/ForgotPasswordOTP";
 import PersonalRegister from "../Screens/Auth/PersonalRegister";

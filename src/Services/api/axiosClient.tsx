@@ -4,7 +4,7 @@ import { jwtTokenApi } from "./jwtToken";
 import { oauthApi } from "./oauthToken";
 
 const apiClient = async (baseUrl: any) => {
-    const instance = await axios.create({
+    const instance =  axios.create({
         baseURL: baseUrl,
         responseType: 'json',
 

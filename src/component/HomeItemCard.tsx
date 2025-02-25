@@ -1,7 +1,15 @@
 import React, { useState } from 'react'
-import { TouchableOpacity, View, Image, Text, StyleSheet } from 'react-native'
+import { TouchableOpacity, View, Image, Text, StyleSheet, ImageSourcePropType } from 'react-native'
 
-const HomeItemCard = ({ title, image, description, onPress }) => {
+interface HomeItemCardProps {
+  title: string;
+  image?: string | ImageSourcePropType; 
+  description?: string;
+  onPress?: () => void;
+}
+
+
+const HomeItemCard: React.FC<HomeItemCardProps> = ({ title, image, description = 'No description provided', onPress = () => {} }) => {
 
     return(<TouchableOpacity style={styles.moduleContainer} onPress={onPress} activeOpacity={0.9}>
           <View style={styles.module}>
@@ -29,14 +37,14 @@ const styles = StyleSheet.create({
     height: 240,
     backgroundColor: '#F2F2F2',
     elevation: 2,
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15, 
+    // borderTopLeftRadius: 15,
+    // borderTopRightRadius: 15, 
   },
   moduleHeader: {
     height: '22%',
     backgroundColor: '#3C3567',
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
+    // borderTopLeftRadius: 8,
+    // borderTopRightRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },

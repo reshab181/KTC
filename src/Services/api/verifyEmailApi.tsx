@@ -12,6 +12,8 @@ const verifyEmailApi = async (email: string, userType: string) => {
 
 
     const encryptedRequestPayload = encryptPayload(payload)
+    console.log(encryptedRequestPayload,"payload");
+    
     const data = {
         request_data: decodeURIComponent(encryptedRequestPayload)
     }

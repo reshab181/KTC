@@ -9,7 +9,6 @@ import { resetState, verifyEmail } from '../../../Redux/slice/VerifyEmailSlice';
 import { resetSendOtpState, sendOtp } from '../../../Redux/slice/SendOtpSlice';
 import { useNavigation } from '@react-navigation/native';
 import NavigationService from '../../../navigation/NavigationService';
-import CloseSvg from '../../../assets/svg/close.svg'; 
 import verifyEmailStyle from './VerifyEmailStyle';
 import CloseIcon from '../../../assets/icon/CloseIcon';
 
@@ -24,6 +23,7 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
   const verifyEmailApiState = useSelector((state: any) => state.verifyEmail);
   const sendOtpApiState = useSelector((state: any) => state.sendOtp);
   const [clientId, setClientId] = useState('')
+  const [sub_entity,setSub_entity] = useState('')
 
 
   const handleSubmit = async () => {
@@ -51,16 +51,14 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
 
   const getVerifyEmailResponse = () => {
 
-    if (verifyEmailApiState.loading === false && verifyEmailApiState.data && verifyEmailApiState.data !== null) {
-      if (verifyEmailApiState.data.message === 'Invalid Domain Name.') {
-        Alert.alert('Invalid Domain!', 'Please contact KTC Admin', [
-          {
-            text: 'OK',
-            onPress: () => { },
-          },
-        ]);
+    if (verifyEmailApiState.loading === false && verifyEmailApiState.data) {
+      const { message, newuser, sub_entity, client_id } = verifyEmailApiState.data;
+    
+      if (message === 'Invalid Domain Name.') {
+        Alert.alert('Invalid Domain!', 'Please contact KTC Admin');
         return;
       }
+<<<<<<< HEAD
       if (verifyEmailApiState.data.newuser === 'No') {
         onSignIn(email)
       } else if (verifyEmailApiState.data.newuser === 'Yes') {
@@ -71,10 +69,21 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
         setClientId(verifyEmailApiState.data.client_id)
         dispatch(sendOtp(email))
         // onSignUp(module, email)
+=======
+    
+      if (newuser === 'No') {
+        onSignIn(email);
+      } else if (newuser === 'Yes') {
+        setClientId(client_id);
+        
+        setSub_entity(sub_entity);
+        dispatch(sendOtp(email));
+>>>>>>> d622e52910660f07dc2664b7043fa093b5ca66d9
       }
     } else if (verifyEmailApiState.loading === false && verifyEmailApiState.error !== null) {
       Alert.alert('Error', 'Failed to register. Please try again.');
     }
+    
   }
 
 
@@ -86,7 +95,7 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
 
     if (sendOtpApiState.loading === false && sendOtpApiState.data && sendOtpApiState.data !== null) {
       console.log(sendOtpApiState.data)
-      onSignUp(email, sendOtpApiState.data, clientId)
+      onSignUp(email, sendOtpApiState.data, clientId,sub_entity)
     } else if (sendOtpApiState.loading === false && sendOtpApiState.error !== null) {
       Alert.alert('Error', 'Failed to send otp. Please try again.');
     }
@@ -112,8 +121,7 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
-                secureTextEntry={false}
-              />
+                secureTextEntry={false} style={undefined} containerStyle={undefined}              />
 
               {errorMessage && <Text style={verifyEmailStyle.errorText}>{errorMessage}</Text>}
             </View>
@@ -122,8 +130,7 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
 
               onPress={handleSubmit}
               borderRadius={0}
-              loading={verifyEmailApiState.loading || sendOtpApiState.loading}
-            />
+              loading={verifyEmailApiState.loading || sendOtpApiState.loading} borderWidth={undefined} textColor={undefined} btnHeight={undefined} textSize={undefined} fontWeight={undefined} btnColor={undefined} backgroundColor={undefined}            />
           </View>
         </View>
       </SafeAreaView>
