@@ -1,6 +1,6 @@
 // Ashutosh Rai 
 
-import { SafeAreaView, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Text, View, TextInput, TouchableOpacity,useColorScheme } from 'react-native';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import CustomHeader from '../../component/CustomHeader';
@@ -10,6 +10,8 @@ import IcBackArrowSvg from '../../assets/svg/backarrow.svg'
 import Icon from "react-native-vector-icons/EvilIcons";
 import CloseSvg from '../../assets/svg/closeblack.svg';
 const Citieslist = ({ route, navigation }) => {
+      const theme = useColorScheme(); // Detect theme
+    const isDark = theme === 'dark';
     const { list = [], type = 'city' } = route.params ?? {};
     const [searchText, setSearchText] = useState('');
     const [filteredList, setFilteredList] = useState(list);
@@ -37,7 +39,7 @@ const Citieslist = ({ route, navigation }) => {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1 , backgroundColor : 'white',}}>
+        <SafeAreaView style={{ flex: 1 , backgroundColor : 'white'}}>
             <ScrollView keyboardShouldPersistTaps="handled">
                 <View>
                     {/* <CustomHeader
@@ -49,7 +51,7 @@ const Citieslist = ({ route, navigation }) => {
                         handleLeftIcon={() => navigation.goBack()}
                     /> */}
                 </View>
-                <View style={{ flexDirection : "row" , alignItems : "center" ,borderBottomWidth: 0.4 , borderColor: '#000000' , backgroundColor : 'white' ,  }}>
+                <View style={{ flexDirection : "row" , alignItems : "center" ,borderBottomWidth: 0.4 , borderColor: '#000000' , backgroundColor : 'white',  }}>
                     <TextInput
                         style={{
                             margin: 5 , 
@@ -57,12 +59,14 @@ const Citieslist = ({ route, navigation }) => {
                             borderColor: "#000000",  
                             borderRadius: 4,
                             height: 40,
+                            // color: isDark ? '#000' : '#000' ,
                             backgroundColor :'white', 
                             paddingHorizontal: 10,
                             fontSize: 16,
                             width: '90%'
                         }}
                         placeholder={`Search ${type === 'rentalType' ? 'Rental Type' : type=== 'carGroup' ? 'Car Group' : type === 'city' ? 'City' : ""}`}
+                        placeholderTextColor={isDark ? '#B0B0B0' : '#666666'}
                         value={searchText}
                         onChangeText={handleSearch}
                     />

@@ -59,7 +59,7 @@ import {
   
         {/* Calendar */}
         <View style={styles.calendarContainer}>
-          <CalendarPicker
+          <CalendarPicker style ={{fontWeight:'600'}}
             weekdays={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
             months={[
               "Jan", "Feb", "Mar", "Apr", "May", "Jun",

@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import {
   Dimensions,
   StyleSheet,
   SafeAreaView,
   View,
   Alert,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../component/CustomHeader';
 import CustomIconTextInput from '../../component/CustomIconTextInput';
 import CustomButton from '../../component/CustomButtons';
@@ -28,6 +29,15 @@ const Profile = () => {
     password: '',
   });
   const navigation = useNavigation();
+  function convertUnixTimestamp(unixTimestamp) {
+    const date = new Date(unixTimestamp * 1000); // Convert seconds to milliseconds
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(date.getUTCDate() + 1).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,17 +45,21 @@ const Profile = () => {
         const firstName = await AsyncStorage.getItem('f_name');
         const lastName = await AsyncStorage.getItem('l_name');
         const email = await AsyncStorage.getItem('email_id');
-        const birthDate = await AsyncStorage.getItem('bithdate');
+
+        const bithDate = convertUnixTimestamp(await AsyncStorage.getItem('bithdate'))
+        console.log(bithDate);
+
+        
         const mobileNumber = await AsyncStorage.getItem('mobile_number');
         const cc  = await AsyncStorage.getItem('isLoggedInn')
         console.log('====================================');
-        console.log(firstName , lastName , email , birthDate , cc);
+        console.log(firstName , lastName , email , bithDate , cc);
         console.log('====================================');
         setFormData({
           firstName: firstName || '',
           lastName: lastName || '',
           email: email || '',
-          birthDate: birthDate || '',
+          birthDate: bithDate || '',
           mobileNumber: mobileNumber || '',
           password: '',
         });
@@ -72,7 +86,7 @@ const Profile = () => {
     { placeholder: "First Name", icon1: FirstName, value: formData.firstName, key: 'firstName' },
     { placeholder: "Last Name", icon1: FirstName, value: formData.lastName, key: 'lastName' },
     { placeholder: "Email", icon1: EmailSvg, value: formData.email, key: 'email' },
-    { placeholder: "MM/DD/YYYY", icon1: DobSvg, value: formData.birthDate, key: 'birthDate' },
+    { placeholder: "MM/DD/YYYY", icon1: DobSvg, value: formData.birthDate, key: 'bithDate' },
     { placeholder: "Mobile Number", icon1: SmartPhoneSvg, value: formData.mobileNumber, key: 'mobileNumber', type: "numeric" },
     { placeholder: "Change Password", iconimg: require('../../assets/lock.png'), value: formData.password, key: 'password' },
   ];

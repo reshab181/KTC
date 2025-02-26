@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 const homeStyle = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#0000001F',
+        backgroundColor: '#F3F3F3',
       },
       contentContainer: {
         flex: 1,

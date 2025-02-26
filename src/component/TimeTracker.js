@@ -144,14 +144,13 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   selectedTimeBox: {
-
-    // backgroundColor: '#4CAF50',
+    backgroundColor: '#007AFF', // Blue background
+    borderRadius: 30, // Ensures a circular shape
   },
   selectedTimeText: {
-    color: 'black',
-    fontWeight: 'bold', 
-    fontSize: 14, 
-    // backgroundColor: "#f1f1f1"
+    color: '#000', 
+    fontWeight: '600',
+    fontSize: 14,
   },
   disabledTimeBox: {
     // backgroundColor: '#E0E0E0',

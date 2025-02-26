@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -22,6 +22,8 @@ import Citieslist from "./src/Screens/Pages/Citieslist";
 import HomeNavigator from "./src/navigation/HomeNavigator";
 import MapplsGL from 'mappls-map-react-native';
 import ReviewBookingModal from "./src/component/ReviewBookingModal";
+import { Provider as PaperProvider, MD3LightTheme, MD3DarkTheme } from 'react-native-paper';
+import { useColorScheme } from 'react-native';
 
 
 const AppStack = createNativeStackNavigator();
@@ -48,6 +50,8 @@ const MainAppNavigator = () => (
 );
 
 const App = () => {
+  const theme = useColorScheme() === 'dark' ? MD3DarkTheme : MD3LightTheme;
+
   MapplsGL.setMapSDKKey( 'a3b6ecfc98829a83dd2d90f31acbfa8e');//place your mapsdkKey
   MapplsGL.setRestAPIKey('886b8e770b7b5314cd9ed9e669676599');//your restApiKey
   MapplsGL.setAtlasClientId('33OkryzDZsIk6jfukki-FfOGzG6jGTz_X-NBQnWydvjbP03ss7EjTOcBXKwiRpM5GJlnuBJESQ37rGeGouOH0Q==');//your atlasClientId key
@@ -56,9 +60,17 @@ const App = () => {
   useEffect(() => {
     SplashScreen.hide()
   }, []);
+  // useEffect(() => {
+  //   const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+  //     setTheme(colorScheme);
+  //   });
+
+  //   return () => subscription.remove();
+  // }, []);
 
   return (
-    <GestureHandlerRootView>
+    <PaperProvider theme={theme}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
         <NavigationContainer>
           <HomeNavigator />
@@ -87,6 +99,10 @@ const App = () => {
         </NavigationContainer>
       </Provider>
     </GestureHandlerRootView>
+    </PaperProvider>
+     
+ 
+   
   );
 };
 

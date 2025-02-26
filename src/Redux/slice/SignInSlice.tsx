@@ -25,10 +25,13 @@ const initialState: SignInState = {
         // const decryptedData = response.data; // Decrypt data
         // console.log("SLICE SIGNIN", decryptedData);
         return response.data; // Return decrypted data
-      } catch (error: any) {
-        console.log("SLICE SIGNIN", error);
-        return rejectWithValue(error.response?.data || 'Something went wrong');
-      }
+      }catch (error: any) {
+        console.log("SLICE SIGNIN ERROR", error);
+        return rejectWithValue(
+          error.response?.data?.message || "Invalid credentials"
+        );
+     }
+     
     }
   );
   

@@ -87,7 +87,7 @@ const HomeScreen: React.FC = () => {
       <View style={homeStyle.contentContainer}>
         <HomeItemCard
           title="Corporate"
-          image={<CorporateIcon />}
+          image={<CorporateIcon/>}
           description="Chauffeur Corporate"
           onPress={() => handleModuleClick('Corporate')}
         />

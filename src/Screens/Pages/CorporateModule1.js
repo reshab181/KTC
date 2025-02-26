@@ -42,7 +42,7 @@ const CorporateModule1 = ({ navigation }) => {
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingRentalType, setLoadingRentalType] = useState(false);
   const [loadingCarGroup, setloadingCarGroup] = useState(false)
-
+  const [isTimeSelected, setIsTimeSelected] = useState(false); 
   useEffect(() => {
     const getAccessToken = async () => {
       const token = await fetchJwtAccess();
@@ -360,8 +360,9 @@ const styles = StyleSheet.create({
     paddingBottom: 10
   },
   txt: {
-    color: '#FFFFFF',
+    color: '#FFF',
     fontSize: 12,
+    fontWeight:'600'
   },
 });
 
