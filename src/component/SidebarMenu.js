@@ -114,7 +114,7 @@ const SidebarMenu = ({ isVisible, onClose }) => {
         <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={handleClose} />
         <Animated.View style={[styles.menu, { transform: [{ translateX }] }]}>
           <View style={styles.header}>
-            <Image source={require('../assets/ktclogo.png')} style={styles.logo} resizeMode="contain" />
+            <Image source={require('../assets/ktc.png')} style={styles.logo} resizeMode="contain" />
             <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
               <Text style={styles.closeText}>✕</Text>
             </TouchableOpacity>

@@ -81,7 +81,7 @@ const HomeScreen: React.FC = () => {
       )}
 
       {/* Custom header */}
-      <CustomHeader imgPath={require('../../assets/ktclogo.png')} justifyContent={'center'} />
+      <CustomHeader imgPath={require('../../assets/ktc.png')} justifyContent={'center'} />
 
       {/* HomeItemCard components for Corporate and Personal modules */}
       <View style={homeStyle.contentContainer}>

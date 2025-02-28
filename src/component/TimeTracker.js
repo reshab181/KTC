@@ -78,7 +78,7 @@ const TimeTracker = ({ selectTime, selectedDate }) => {
   const handleTimeSelect = (time) => {
     if (!isPastTime(time)) {
       setSelectedTime(time);
-      selectTime(time);
+      // selectTime(time);
     }
   };
 

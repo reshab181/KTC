@@ -12,7 +12,7 @@ import CloseSvg from '../../assets/svg/closeblack.svg';
 const Citieslist = ({ route, navigation }) => {
       const theme = useColorScheme(); // Detect theme
     const isDark = theme === 'dark';
-    const { list = [], type = 'city' } = route.params ?? {};
+    const { list = [], type = 'city_of_usage' } = route.params ?? {};
     const [searchText, setSearchText] = useState('');
     const [filteredList, setFilteredList] = useState(list);
     const dispatch = useDispatch();

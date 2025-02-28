@@ -5,5 +5,6 @@ export default {
     USER_REGISTRATION:"https://web.gst.fleet.ktcindia.com/user_apis_encoded/user_registration.php",
     USER_LOGIN :"https://web.gst.fleet.ktcindia.com/user_apis_encoded/userlogin.php",
     USER_RESETPASSWORD:"http://web.gst.fleet.ktcindia.com/user_apis_encoded/update_forget_pass.php",
-    VIEW_BOOKING : "https://web.gst.fleet.ktcindia.com/user_apis_encoded/view_booking.php" 
+    VIEW_BOOKING : "https://web.gst.fleet.ktcindia.com/user_apis_encoded/view_booking.php" ,
+    CREATE_BOOKING :"https://web.gst.fleet.ktcindia.com/user_apis_encoded/create_booking.php"
 }

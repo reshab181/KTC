@@ -27,7 +27,7 @@ const CorporateModule1 = ({ navigation }) => {
   const [Visible, setVisible] = useState(false)
   const [carGroupList, setCarGroupList] = useState([]);
   const [e_loc, seteloc] = useState('');
-  const { city, rentalType, carGroup, pickupAddress, selectedDate, selectedTime } = useSelector((state) => state.corporate);
+  const { city_of_usage, rentalType, assignment ,vehiclerequested, pickupAddress, selectedDate, selectedTime } = useSelector((state) => state.corporate);
   const userDetails = useSelector((state) => state.userprofile);
   const dispatch = useDispatch();
   const [specialInstruction, setspecialInstruction] = useState('');
@@ -59,7 +59,7 @@ const CorporateModule1 = ({ navigation }) => {
       const client_id = await AsyncStorage.getItem('client_id')
       const list = await fetchCities('', client_id, accessToken, setCityList);
       setLoadingCities(false)
-      navigation.navigate('City', { list, type: 'city' });
+      navigation.navigate('City', { list, type: 'city_of_usage' });
       // setLoading(false)
     } catch (error) {
       console.error("Error fetching cities:", error);
@@ -74,23 +74,23 @@ const CorporateModule1 = ({ navigation }) => {
     setLoadingRentalType(true);
     try {
       const client_id = await AsyncStorage.getItem('client_id')
-      const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city, client_id, accessToken, setCityList, 'rentalType');
+      const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city_of_usage , client_id, accessToken);
       setCarGroupList(carGroupItems);
       seteloc(e_loc);
       setLoadingRentalType(false);
 
-      navigation.navigate('City', { list: rentalItems, type: 'rentalType' });
+      navigation.navigate('City', { list: rentalItems, type: 'assignment' });
     } catch (error) {
       console.error("Error fetching rental types:", error);
     }
-  }, [city, userDetails, accessToken]);
+  }, [city_of_usage, userDetails, accessToken]);
   const [modalVisible, setModalVisible] = useState(false);
   const areFieldsFilled = () => {
     return (
-      city &&
-      rentalType &&
-      carGroup &&
-      pickupAddress
+      city_of_usage &&
+      assignment &&
+      vehiclerequested &&
+      pickupAddress 
 
     );
   };
@@ -111,7 +111,7 @@ const CorporateModule1 = ({ navigation }) => {
         iconHeight={30}
         iconWidth={36}
         islogo
-        imgPath={require('../../assets/ktclogo.png')}
+        imgPath={require('../../assets/ktc.png')}
         Iconn={Menuu}
         handleLeftIcon={() => setIsSidebarVisible(true)}
         isSidebarVisible={isSidebarVisible}
@@ -126,12 +126,12 @@ const CorporateModule1 = ({ navigation }) => {
           <Section title="Car Reservation Details">
             <View style={[styles.container2]}>
               <View style={{ marginHorizontal: 10, marginTop: 5 }}>
-                {renderCustomTile(city || 'City', handleFetchCities, loadingCities)}
+                {renderCustomTile(city_of_usage || 'City', handleFetchCities, loadingCities)}
 
                 {renderCustomTile(
-                  rentalType || 'Rental Type',
+                  assignment || 'Rental Type',
                   () => {
-                    if (!city) {
+                    if (!city_of_usage) {
                       Alert.alert("Selection Required", "Please select a city first.");
                       return;
                     }
@@ -141,14 +141,14 @@ const CorporateModule1 = ({ navigation }) => {
                 )}
 
                 {renderCustomTile(
-                  carGroup || 'Car Group',
+                  vehiclerequested || 'Car Group',
                   () => {
-                    if (!rentalType) {
+                    if (!assignment) {
                       Alert.alert("Selection Required", "Please select a Rental Type.");
                       return;
                     }
                     setloadingCarGroup(true)
-                    navigation.navigate('City', { list: carGroupList, type: 'carGroup' });
+                    navigation.navigate('City', { list: carGroupList, type: 'vehiclerequested' });
                     setloadingCarGroup(false)
                   },
                   loadingCarGroup
@@ -169,7 +169,7 @@ const CorporateModule1 = ({ navigation }) => {
                     ? pickupAddress.placeAddress.substring(0, 40) + "..."
                     : pickupAddress?.placeAddress) || 'Pickup Address',
                   () => {
-                    if (!city) {
+                    if (!city_of_usage) {
                       Alert.alert("Selection Required", "Please select a city first.");
                       return; 
                     }
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
   },
   txt: {
     color: '#FFF',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight:'600'
   },
 });

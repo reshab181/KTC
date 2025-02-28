@@ -132,9 +132,9 @@
 //   const verifySignIn = async () => {
 //     if (SignInApiState.loading === false && SignInApiState.data) {
 //       console.log("API Response:", SignInApiState.data);
-  
+
 //       const message = SignInApiState.data.message || SignInApiState.data.error?.message || ""; 
-  
+
 //       if (typeof message === "string" && message.includes("Password Not Match")) {
 //         Alert.alert(
 //           "Incorrect Password",
@@ -143,11 +143,11 @@
 //         );
 //         return;
 //       }
-  
+
 //       if (SignInApiState.data.status === 200) {
 //         const userData = decryptData(SignInApiState.data.result);
 //         dispatch(setUserProfile(userData));
-  
+
 //         await AsyncStorage.setItem("status", userData.status);
 //         await AsyncStorage.setItem("isLoggedInn", "true");
 //         await AsyncStorage.setItem("user_id", userData.user_id);
@@ -162,7 +162,7 @@
 //         await AsyncStorage.setItem("bithdate", userData.bithdate.toString());
 //         await AsyncStorage.setItem("country", userData.country);
 //         await AsyncStorage.setItem("userToken", accessToken);
-  
+
 //         navigation.replace("CorporateNavigator", {
 //           screen: "CorporateHomeScreen",
 //         });
@@ -172,7 +172,7 @@
 //       Alert.alert("Error", "Failed to Sign In. Please try again.");
 //     }
 //   };
-  
+
 //   const closeModal = () => {
 //     setIsModalVisible(false);
 //     setSelectedModule(null);
@@ -343,7 +343,7 @@ const SignInCorporate = ({ route }) => {
     dispatch(SignIn({ email: email, password: password }));
     setLoading(false);
   };
-  
+
   const validateForm = () => {
     const validationErrors = {};
 
@@ -372,19 +372,10 @@ const SignInCorporate = ({ route }) => {
   const verifySignIn = async () => {
     if (SignInApiState.loading === false && SignInApiState.data) {
       console.log("API Response:", SignInApiState.data);
-  
-      const message = SignInApiState.data.message || SignInApiState.data.error?.message || ""; 
-    if (typeof message === "string") {
-      if (message.includes("User not found")) {
-        Alert.alert(
-          "User Not Found",
-          "The email you entered is not registered. Please check or create a new account.",
-          [{ text: "OK" }]
-        );
-        return;
-      }
-      
-      if (message.includes("Password Not Match")) {
+
+      const message = SignInApiState.data.message || SignInApiState.data.error?.message || "";
+
+      if (typeof message === "string" && message.includes("Password Not Match")) {
         Alert.alert(
           "Incorrect Password",
           "The password you entered is incorrect. Please try again.",
@@ -392,28 +383,43 @@ const SignInCorporate = ({ route }) => {
         );
         return;
       }
-    }
 
-  
       if (SignInApiState.data.status === 200) {
         const userData = decryptData(SignInApiState.data.result);
         dispatch(setUserProfile(userData));
-  
-        await AsyncStorage.setItem("status", userData.status);
-        await AsyncStorage.setItem("isLoggedInn", "true");
-        await AsyncStorage.setItem("user_id", userData.user_id);
-        await AsyncStorage.setItem("email_id", userData.email_id);
-        await AsyncStorage.setItem("f_name", userData.f_name);
-        await AsyncStorage.setItem("l_name", userData.l_name);
-        await AsyncStorage.setItem("client_name", userData.client_name);
-        await AsyncStorage.setItem("client_id", userData.client_id);
-        await AsyncStorage.setItem("gender", userData.gender);
-        await AsyncStorage.setItem("mobile_number", userData.mobile_number);
-        await AsyncStorage.setItem("user_type", userData.user_type);
-        await AsyncStorage.setItem("bithdate", userData.bithdate.toString());
-        await AsyncStorage.setItem("country", userData.country);
-        await AsyncStorage.setItem("userToken", accessToken);
-  
+
+        // await AsyncStorage.setItem("status", userData.status);
+        // await AsyncStorage.setItem("isLoggedInn", "true");
+        // await AsyncStorage.setItem("user_id", userData.user_id);
+        // await AsyncStorage.setItem("email_id", userData.email_id);
+        // await AsyncStorage.setItem("f_name", userData.f_name);
+        // await AsyncStorage.setItem("l_name", userData.l_name);
+        // await AsyncStorage.setItem("client_name", userData.client_name);
+        // await AsyncStorage.setItem("client_id", userData.client_id);
+        // await AsyncStorage.setItem("gender", userData.gender);
+        // await AsyncStorage.setItem("mobile_number", userData.mobile_number);
+        // await AsyncStorage.setItem("user_type", userData.user_type);
+        // await AsyncStorage.setItem("bithdate", userData.bithdate.toString());
+        // await AsyncStorage.setItem("country", userData.country);
+        // await AsyncStorage.setItem("userToken", accessToken);
+        await AsyncStorage.multiSet([
+          ["status", userData.status],
+          ["isLoggedInn", "true"],
+          ["user_id", userData.user_id],
+          ["email_id", userData.email_id],
+          ["f_name", userData.f_name],
+          ["l_name", userData.l_name],
+          ["client_name", userData.client_name],
+          ["client_id", userData.client_id],
+          ["gender", userData.gender],
+          ["mobile_number", userData.mobile_number],
+          ["user_type", userData.user_type],
+          ["bithdate", userData.bithdate.toString()],
+          ["country", userData.country],
+          ["userToken", accessToken],
+        ]);
+        
+
         navigation.replace("CorporateNavigator", {
           screen: "CorporateHomeScreen",
         });
@@ -423,7 +429,7 @@ const SignInCorporate = ({ route }) => {
       Alert.alert("Error", "Failed to Sign In. Please try again.");
     }
   };
-  
+
   const closeModal = () => {
     setIsModalVisible(false);
     setSelectedModule(null);
@@ -433,7 +439,7 @@ const SignInCorporate = ({ route }) => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
-  
+
   return (
     <SafeAreaView style={styles.container}>
       <CustomHeader
@@ -458,27 +464,27 @@ const SignInCorporate = ({ route }) => {
         {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
 
         <View style={styles.passwordContainer}>
-  <CustomTextInpt
-    placeholder={AuthStrings.Password}
-    value={password}
-    onChangeText={(text) => setPassword(text)}
-    secureTextEntry={!showPassword}
-    // style={{ flex: 1 }} 
-  />
-  <TouchableOpacity 
-    style={styles.eyeIconContainer} 
-    onPress={togglePasswordVisibility}
-  >
-    <Image 
-      source={showPassword 
-        ? require('../../assets/open-eye.png')  
-        : require('../../assets/close-eye.png')  
-      } 
-      style={styles.eyeIcon}
-      resizeMode="contain"
-    />
-  </TouchableOpacity>
-</View>
+          <CustomTextInpt
+            placeholder={AuthStrings.Password}
+            value={password}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry={!showPassword}
+          // style={{ flex: 1 }} 
+          />
+          <TouchableOpacity
+            style={styles.eyeIconContainer}
+            onPress={togglePasswordVisibility}
+          >
+            <Image
+              source={showPassword
+                ? require('../../assets/open-eye.png')
+                : require('../../assets/close-eye.png')
+              }
+              style={styles.eyeIcon}
+              resizeMode="contain"
+            />
+          </TouchableOpacity>
+        </View>
         {errors.password && (
           <Text style={styles.errorText}>{errors.password}</Text>
         )}
@@ -494,11 +500,16 @@ const SignInCorporate = ({ route }) => {
 
         <TouchableOpacity
           style={{ marginTop: 10 }}
-          onPress={() => navigation.replace('ForgotPassword', { email })}
+          onPress={() => {
+            if (!email) {
+              Alert.alert("Input Required", "Please enter your email before proceeding.");
+            } else {
+              navigation.replace("ForgotPassword", { email });
+            }
+          }}
         >
           <Text style={styles.linkText}>{AuthStrings.FORGOTPASSWORD}</Text>
         </TouchableOpacity>
-
         <View style={styles.divider}>
           <View style={styles.line} />
           <Text style={styles.orText}>{AuthStrings.OR}</Text>
@@ -568,18 +579,20 @@ const styles = StyleSheet.create({
   //   borderRadius: 8, // Optional
   //   backgroundColor: '#FFF',
   // },
-  
+
   passwordInput: {
     flex: 1,
   },
   eyeIconContainer: {
     position: 'absolute',
+    top: 15,
     right: 15,
     height: '100%',
     justifyContent: 'center',
+    transform: [{ translateY: -12 }],
   },
   eyeIcon: {
-    alignItems:'center',
+    alignItems: 'center',
     width: 24,
     height: 24,
   }

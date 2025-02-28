@@ -19,7 +19,7 @@ const ForgotPasswordOTP = ({ route, navigation }) => {
   const inputRefs = Array.from({ length: 6 }, () => useRef(null));
 
   const handleChangeOtp = useCallback((value, index) => {
-    if (!/^\d?$/.test(value)) return; // Only allow digits
+    if (!/^\d?$/.test(value)) return; 
 
     let newOtp = otp.split('');
     newOtp[index] = value;
