@@ -58,18 +58,6 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
         Alert.alert('Invalid Domain!', 'Please contact KTC Admin');
         return;
       }
-<<<<<<< HEAD
-      if (verifyEmailApiState.data.newuser === 'No') {
-        onSignIn(email)
-      } else if (verifyEmailApiState.data.newuser === 'Yes') {
-        console.log('====================================');
-        console.log("NEW USER" , decryptData(verifyEmailApiState.data.sub_entity));
-
-        console.log('====================================');
-        setClientId(verifyEmailApiState.data.client_id)
-        dispatch(sendOtp(email))
-        // onSignUp(module, email)
-=======
     
       if (newuser === 'No') {
         onSignIn(email);
@@ -78,7 +66,6 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
         
         setSub_entity(sub_entity);
         dispatch(sendOtp(email));
->>>>>>> d622e52910660f07dc2664b7043fa093b5ca66d9
       }
     } else if (verifyEmailApiState.loading === false && verifyEmailApiState.error !== null) {
       Alert.alert('Error', 'Failed to register. Please try again.');

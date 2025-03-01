@@ -188,6 +188,9 @@ export const fetchUpcomingBookings = async (page, pageLimit) => {
         "type": 'upcoming',
         "limit": `${(page - 1) * pageLimit},${pageLimit}`
       }
+      console.log('====================================');
+      console.log("MyPayload", userId);
+      console.log('====================================');
       const MyPayLoad = encryptPayload(MyPayLod)
       var details = {
         'request_data': MyPayLoad,
@@ -198,6 +201,12 @@ export const fetchUpcomingBookings = async (page, pageLimit) => {
         var encodedValue = encodeURIComponent(details[property]);
         formBody.push(encodedKey + "=" + encodedValue);
       }
+      console.log('====================================');
+      console.log("MYpayload" , MyPayLoad);
+      console.log('====================================');
+      console.log('====================================');
+      console.log("FORMBODY" , formBody);
+      console.log('====================================');
       formBody = formBody.join("&");
       let response = await fetch("https://web.gst.fleet.ktcindia.com/user_apis_encoded/view_booking.php", {
         method: "POST",
