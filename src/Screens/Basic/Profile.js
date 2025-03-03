@@ -5,7 +5,7 @@ import {
   SafeAreaView,
   View,
   Alert,
-  ActivityIndicator
+  ActivityIndicator,TouchableOpacity,Image
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../component/CustomHeader';
@@ -30,9 +30,9 @@ const Profile = () => {
   });
   const navigation = useNavigation();
   function convertUnixTimestamp(unixTimestamp) {
-    const date = new Date(unixTimestamp * 1000); // Convert seconds to milliseconds
+    const date = new Date(unixTimestamp * 1000);
     const year = date.getUTCFullYear();
-    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); 
     const day = String(date.getUTCDate() + 1).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
@@ -101,13 +101,14 @@ const Profile = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.mainContainer}>
-        <CustomHeader
-          title="Profile"
-          iconPath={require('../../assets/ic_back_arrow_white_24.png')}
-          iconHeight={24}
-          iconWidth={24}
-          handleLeftIcon={() => navigation.goBack()}
-        />
+      <CustomHeader
+        title="Profile"
+        leftIcon={() => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image source={require('../../assets/ic_back_arrow_white_24.png')}/>
+          </TouchableOpacity>
+        )}
+      />
 
         {loader && (
           <View style={styles.loaderContainer}>
@@ -161,6 +162,11 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginHorizontal: 16,
   },
+  // icon: {
+  //   width: width / 15,
+  //   height: height / 34,
+  //   marginRight: 10,
+  // },
 });
 
 export default Profile;

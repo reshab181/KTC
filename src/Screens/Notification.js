@@ -1,200 +1,160 @@
-// Reshabh
-import { StyleSheet, Text, View, Image, Dimensions, SafeAreaView, ScrollView } from 'react-native';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import {
+  StyleSheet, Text, View, Image, Dimensions, SafeAreaView,
+  TouchableOpacity, FlatList, RefreshControl
+} from 'react-native';
 import { Card } from 'react-native-paper';
-import CustomHeader from '../component/CustomHeader';
+import Icon from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
+import NotificationService from '../services/api/Notification';
 
 const { height, width } = Dimensions.get('screen');
 
-const Notification = ({navigation}) => {
+const Notification = ({ navigation }) => {
+  const [unreadMessageCount, setUnreadCount] = useState(0);
+  const [notificationapp, setNotification] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pageLimit] = useState(10);
+  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(false); // Added loading state
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [page]);
+
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      await NotificationService.fetchNotifications(
+        null,
+        setPage,
+        pageLimit,
+        setNotification,
+        setUnreadCount,
+        setLoading
+      );
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    } finally {
+      setLoading(false);
+      setRefreshing(false); // Stop refreshing after fetching data
+    }
+  };
+
+  const clearAllNotifications = async () => {
+    try {
+      await NotificationService.clearNotifications(setNotification, setUnreadCount);
+    } catch (error) {
+      console.error('Error clearing notifications:', error);
+    }
+  };
+
+  const getNotificationIcon = (type) => {
+    return require('../assets/info1.png');
+  };
+
+  const getCardStyle = (index) => {
+    return [
+      styles.cardStyle,
+      index % 2 === 1 ? styles.cardAlternate : null
+    ];
+  };
+
+  const getMessageStyle = (status) => {
+    return status === '0' ? styles.rejectionText : styles.confirmationText;
+  };
+
+  const renderNotificationItem = ({ item, index }) => (
+    <TouchableOpacity>
+      <Card style={getCardStyle(index)}>
+        <View style={styles.cardContent}>
+          <View style={styles.flex1}>
+            <View style={styles.flexDirectionRow}>
+              <Image source={getNotificationIcon(item.type)} style={styles.icon} />
+              <Text style={styles.textColor}>{item.type || "Notification"}</Text>
+            </View>
+            <Text style={getMessageStyle(item.status)}>
+              {item.message_data || "No message available"}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.cardFooter}>
+          <Image source={require('../assets/calendar.png')} style={styles.icon} />
+          <Text style={styles.footerText}>{item.notification_date || "No Date"}</Text>
+          <Image source={require('../assets/watch.png')} style={styles.icon} />
+          <Text style={styles.footerText}>{item.notification_time || "No Time"}</Text>
+        </View>
+      </Card>
+    </TouchableOpacity>
+  );
+
   return (
     <SafeAreaView style={styles.safeArea}>
-      <CustomHeader title={'Notifications'}
-          iconPath={require('../assets/ic_back_arrow_white_24.png')}
-          iconHeight={24}
-          iconWidth={24}
-      handleLeftIcon ={() => navigation.goBack()} />
-      <ScrollView contentContainerStyle={styles.scrollView}>
-        <Card style={styles.cardStyle}>
-          <View style={styles.cardContent}>
-            <View style={styles.flex1}>
-              <View style={styles.flexDirectionRow}>
-                <Image source={require('../assets/info1.png')} style={styles.icon} />
-                <Text style={styles.textColor}>Duty Rejection By Admin</Text>
-              </View>
-              <Text style={styles.rejectionText}>Your Booking Request is rejected by the Admin</Text>
-            </View>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ flexDirection: 'row' }}>
+          <AntDesign name="arrowleft" size={24} color="#fff" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Notifications</Text>
+        <Icon name="notifications" size={24} color="#fff" style={{ marginRight: 10 }} />
+        {unreadMessageCount > 0 && (
+          <View style={styles.unreadCountWrapper}>
+            <Text style={styles.unreadCountText}>{unreadMessageCount}</Text>
           </View>
-          <View style={styles.cardFooter}>
-            <Image source={require('../assets/calendar.png')} style={styles.icon} />
-            <Text style={styles.footerText}>09-AUG-2022</Text>
-            <Image source={require('../assets/watch.png')} style={styles.icon} />
-            <Text style={styles.footerText}>01:30 AM</Text>
-          </View>
-        </Card>
+        )}
+      </View>
 
-        <Card style={[styles.cardStyle, styles.cardAlternate]}>
-          <View style={styles.cardContent}>
-            <View style={styles.flex1}>
-              <View style={styles.flexDirectionRow}>
-                <Image source={require('../assets/info1.png')} style={styles.icon} />
-                <Text style={styles.textColor}>Booking Confirmation By KTC</Text>
-              </View>
-              <Text style={styles.confirmationText}>
-                Your Booking is confirmed. You will get the ride details before the Trip timings
-              </Text>
-            </View>
+      <FlatList
+        data={notificationapp}
+        renderItem={renderNotificationItem}
+        keyExtractor={(item, index) => item.notification_id?.toString() || `key-${index}`}
+        contentContainerStyle={styles.scrollView}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={() => {
+            setRefreshing(true);
+            fetchNotifications();
+          }} />
+        }
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No notifications available</Text>
           </View>
-          <View style={styles.cardFooter}>
-            <Image source={require('../assets/calendar.png')} style={styles.icon} />
-            <Text style={styles.footerText}>09-AUG-2022</Text>
-            <Image source={require('../assets/watch.png')} style={styles.icon} />
-            <Text style={styles.footerText}>01:30 AM</Text>
-          </View>
-        </Card>
+        }
+      />
 
-        <Card style={styles.cardStyle}>
-          <View style={styles.cardContent}>
-            <View style={styles.flex1}>
-              <View style={styles.flexDirectionRow}>
-                <Image source={require('../assets/info1.png')} style={styles.icon} />
-                <Text style={styles.textColor}>Booking Rejected By KTC</Text>
-              </View>
-              <Text style={styles.rejectionText}>Apologies! No ride is available currently</Text>
-            </View>
-          </View>
-          <View style={styles.cardFooter}>
-            <Image source={require('../assets/calendar.png')} style={styles.icon} />
-            <Text style={styles.footerText}>09-AUG-2022</Text>
-            <Image source={require('../assets/watch.png')} style={styles.icon} />
-            <Text style={styles.footerText}>01:30 AM</Text>
-          </View>
-        </Card>
-
-        <Card style={[styles.cardStyle, styles.cardAlternate]}>
-          <View style={styles.cardContent}>
-            <View style={styles.flex1}>
-              <View style={styles.flexDirectionRow}>
-                <Image source={require('../assets/info1.png')} style={styles.icon} />
-                <Text style={[styles.textColor, styles.greenText]}>Booking Details</Text>
-              </View>
-              <Text style={styles.detailsText}>Thanks for choosing KTC!</Text>
-            </View>
-          </View>
-          <View style={styles.detailRow}>
-            <Image source={require('../assets/360.png')} style={styles.icon} />
-            <Text style={styles.detailText}>Your reference no. is xxxxx</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Image source={require('../assets/car-1.png')} style={styles.icon} />
-            <Text style={styles.detailText}>Mercedes xxxx</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Image source={require('../assets/driver.png')} style={styles.icon} />
-            <Text style={styles.detailText}>Dambar</Text>
-          </View>
-          <View style={styles.detailRow}>
-            <Image source={require('../assets/cal.png')} style={styles.icon} />
-            <Text style={styles.detailText}>9835000000</Text>
-          </View>
-          <View style={styles.cardFooter}>
-            <Image source={require('../assets/calendar.png')} style={styles.icon} />
-            <Text style={styles.footerText}>09-AUG-2022</Text>
-            <Image source={require('../assets/watch.png')} style={styles.icon} />
-            <Text style={styles.footerText}>01:30 AM</Text>
-          </View>
-        </Card>
-      </ScrollView>
+      {notificationapp.length > 0 && (
+        <View style={styles.actionButtonContainer}>
+          <TouchableOpacity onPress={clearAllNotifications} style={styles.actionButton}>
+            <Text style={styles.actionButtonText}>Read All</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
 
-export default Notification;
-
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  scrollView: {
-    paddingBottom: 90,
-    flexGrow: 1
-  },
-  cardStyle: {
-    borderRadius: 7,
-    margin: 18,
-    paddingBottom: 9,
-    backgroundColor: '#fff',
-  },
-  cardAlternate: {
-    backgroundColor: '#D5D6D8',
-  },
-  cardContent: {
-    flexDirection: 'row',
-    padding: 10,
-  },
-  flexDirectionRow: {
-    flexDirection: 'row',
-  },
-  textColor: {
-    color: '#851515',
-    fontSize: 14,
-    fontWeight: '500',
-    marginLeft: 15,
-    marginTop: 5,
-  },
-  greenText: {
-    color: '#147711',
-  },
-  flex1: {
-    flex: 1,
-  },
-  rejectionText: {
-    color: '#ff4d4d',
-    fontSize: 11,
-    marginLeft: width / 9,
-    marginTop: 6,
-  },
-  confirmationText: {
-    color: 'green',
-    fontSize: 11,
-    marginLeft: width / 9,
-    marginTop: 6,
-    fontWeight: '500',
-  },
-  detailsText: {
-    color: '#147711',
-    fontSize: 11,
-    marginLeft: width / 9,
-    marginTop: 6,
-    fontWeight: '500',
-  },
-  cardFooter: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    marginRight: 10,
-    alignItems: 'center',
-  },
-  icon: {
-    width: width / 15,
-    height: height / 34,
-    marginRight: 10,
-  },
-  footerText: {
-    color: '#000',
-    fontSize: 15,
-    marginRight: 20,
-    fontWeight: '500',
-  },
-  detailRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-    paddingHorizontal: 10,
-  },
-  detailText: {
-    color: '#000',
-    fontSize: 15,
-    fontWeight: '500',
-  },
+  safeArea: { flex: 1, backgroundColor: '#f5f5f5' },
+  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 10, backgroundColor: '#3C3567', height: 50 },
+  headerTitle: { fontSize: 20, color: '#fff', fontWeight: '500' },
+  unreadCountWrapper: { backgroundColor: 'red', borderRadius: 12, paddingHorizontal: 6, paddingVertical: 2 },
+  unreadCountText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
+  cardStyle: { borderRadius: 7, margin: 10, backgroundColor: '#fff', elevation: 3 },
+  flex1: { flex: 1 },
+  flexDirectionRow: { flexDirection: 'row', alignItems: 'center' },
+  icon: { width: 24, height: 24, marginRight: 8 },
+  textColor: { color: '#333', fontSize: 16, fontWeight: 'bold' },
+  rejectionText: { color: 'red', fontSize: 14 },
+  confirmationText: { color: 'green', fontSize: 14 },
+  cardContent: { flexDirection: 'row', padding: 10 },
+  cardFooter: { flexDirection: 'row', alignItems: 'center', padding: 10, justifyContent: 'space-between' },
+  footerText: { fontSize: 12, color: '#666' },
+  scrollView: { flexGrow: 1, paddingBottom: 20 },
+  emptyContainer: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 20 },
+  emptyText: { fontSize: 16, color: '#666' },
+  actionButtonContainer: { padding: 15, alignItems: 'center' },
+  actionButton: { backgroundColor: '#3C3567', padding: 10, borderRadius: 5 },
+  actionButtonText: { color: '#fff', fontSize: 16 }
 });
+
+export default Notification;

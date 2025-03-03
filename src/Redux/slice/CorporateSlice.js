@@ -190,7 +190,7 @@ const initialState = {
   eloc: "",
 };
 
-// 🔹 Async Thunk for Corporate Booking
+
 export const createCorporateBooking = createAsyncThunk(
   "corporate/createCorporateBooking",
   async (payload, { rejectWithValue }) => {

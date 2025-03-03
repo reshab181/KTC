@@ -16,6 +16,7 @@ import { fetchCities, fetchLocalities, fetchRentalType } from '../../Api/Corpora
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import { Alert } from 'react-native';
 import Menuu from '../../assets/svg/menu.svg';
+import Notifications from '../../assets/svg/notifications.svg';
 import ReviewBookingModal from '../../component/ReviewBookingModal';
 import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
 import LoaderModal from '../../component/LoaderModal';
@@ -95,11 +96,11 @@ const CorporateModule1 = ({ navigation }) => {
     );
   };
   const openModal = () => {
-    if (areFieldsFilled()) {
+    // if (areFieldsFilled()) {
       setModalVisible(true);
-    } else {
-      Alert.alert("Incomplete Fields", "Please fill all required fields before proceeding.");
-    }
+    // } else {
+    //   Alert.alert("Incomplete Fields", "Please fill all required fields before proceeding.");
+    // }
   };
 
   const closeModal = () => {
@@ -107,13 +108,16 @@ const CorporateModule1 = ({ navigation }) => {
   };
   return (
     <View style={styles.mainContainer}>
-      <CustomHeader
+      <CustomHeader title='Home'
         iconHeight={30}
         iconWidth={36}
         islogo
-        imgPath={require('../../assets/ktc.png')}
-        Iconn={Menuu}
+        // imgPath={require('../../assets/ktc.png')}
+        leftIcon={Menuu}
+        rightIcon={Notifications}
         handleLeftIcon={() => setIsSidebarVisible(true)}
+        handleRightIcon={() => navigation.navigate('Notifications')}
+        // Iconn={Notifications}
         isSidebarVisible={isSidebarVisible}
       />
 
