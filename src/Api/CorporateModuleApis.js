@@ -77,7 +77,7 @@ export const fetchCities = async (city, client_id, token, setCity) => {
     }
 };
 
-export const fetchRentalType = async (city, client_id, token, setCity, typeOff) => {
+export const fetchRentalType = async (city, client_id, token) => {
     console.log("Fetching Rental Types...");
     const date =  Math.floor(Date.now() / 1000) ;
     const payload = {

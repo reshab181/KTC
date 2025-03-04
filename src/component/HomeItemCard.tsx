@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   module: {
     width: '100%',
     height: 240,
-    backgroundColor: '#F2F2F2',
+    backgroundColor: '#FFF',
     elevation: 2,
     // borderTopLeftRadius: 15,
     // borderTopRightRadius: 15, 

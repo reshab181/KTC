@@ -7,6 +7,7 @@ import verifyEmailReducer from './slice/VerifyEmailSlice';
 import sendOtpReducer from './slice/SendOtpSlice';
 import signInReducer from './slice/SignInSlice'
 import verifyOtpReducer from './slice/VerifyOtpSlice'
+import bookingReducer from "./slice/BookingSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,7 +17,9 @@ const store = configureStore({
     verifyEmail: verifyEmailReducer,
     sendOtp: sendOtpReducer,
     signIn : signInReducer, 
-    verifyOtp: verifyOtpReducer
+    verifyOtp: verifyOtpReducer,
+    booking: bookingReducer,
+  
 
   },
 });

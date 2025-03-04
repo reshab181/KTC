@@ -28,7 +28,7 @@ import {
       const formattedDate = date.toISOString().split("T")[0];
       dispatch(
         updateCorporateSlice({
-          type: "selectedDate",
+          type: "start_date",
           selectedItem: formattedDate,
         })
       );
@@ -41,7 +41,7 @@ import {
       setSelectedTime(time);
       dispatch(
         updateCorporateSlice({
-          type: "selectedTime",
+          type: "Reporingtime",
           selectedItem: time,
         })
       );
@@ -59,7 +59,7 @@ import {
   
         {/* Calendar */}
         <View style={styles.calendarContainer}>
-          <CalendarPicker
+          <CalendarPicker style ={{fontWeight:'600'}}
             weekdays={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
             months={[
               "Jan", "Feb", "Mar", "Apr", "May", "Jun",

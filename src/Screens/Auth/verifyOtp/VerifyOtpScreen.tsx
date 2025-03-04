@@ -114,13 +114,23 @@ import CustomHeader from '../../../component/CustomHeader';
 import OtpIcon from '../../../assets/icon/OtpIcon';
 import { AuthStrings } from '../../../constants/Strings';
 import CustomButton from '../../../component/CustomButtons';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute ,RouteProp} from '@react-navigation/native';
 import OtpInput from '../../../component/OtpInput';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetState, verifyOtp } from '../../../Redux/slice/VerifyOtpSlice';
 
+
+type VerifyOtpScreenParams = {
+  screenType?: number;
+  url?: string;
+  client_id?: string;
+  emailId?: string;
+  sub_entity?: string;
+};
+
+
 const VerifyOTPScreen = () => {
-  const route = useRoute();
+  const route = useRoute<RouteProp<{ VerifyOTPScreen: VerifyOtpScreenParams }, 'VerifyOTPScreen'>>();
   const navigation = useNavigation<any>();
   const dispatch = useDispatch<any>();
 
@@ -136,31 +146,43 @@ const VerifyOTPScreen = () => {
   const verifyOtpApiState = useSelector((state: any) => state.verifyOtp);
 
   useEffect(() => {
-    console.log('Route params:', route.params); // Debugging
-    if (route.params) {
+    console.log('Route params:', route.params); 
+    if (route.params && typeof route.params === 'object') { 
       setScreenType(route.params.screenType ?? 1);
-      setUrl(route.params?.url);
-      setClientId(route.params?.client_id);
-      setEmailId(route.params?.emailId); 
-      setSub_entity(route.params?.sub_entity);
+      setUrl(route.params.url ?? '');
+      setClientId(route.params.client_id ?? '');
+      setEmailId(route.params.emailId ?? ''); 
+      setSub_entity(route.params.sub_entity ?? '');
     }
   }, [route.params]);
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetState());
-    };
-  }, []);
+  
 
   useEffect(() => {
     if (verifyOtpApiState.loading === false && verifyOtpApiState.data !== null) {
-      navigation.replace('RegisterPage', {
-        params: { emailId, clientId,sub_entity },
-      });
+      if (screenType === 0) {
+        navigation.replace('RegisterPage', {
+          params: { emailId, clientId, sub_entity },
+        });
+      } else {
+        navigation.replace('ForgotPassword', {
+          params: { emailId, clientId, sub_entity },
+        });
+      }
     } else if (verifyOtpApiState.loading === false && verifyOtpApiState.error !== null) {
       Alert.alert('Error', 'Invalid OTP');
     }
-  }, [verifyOtpApiState]);
+  }, [verifyOtpApiState, screenType, emailId, clientId, sub_entity]);
+  
+  
+  // if (screenType === 0) {
+  //   navigation.replace('RegisterPage', {
+  //     params: { emailId, clientId, sub_entity },
+  //   });
+  // } else {
+  //   navigation.replace('ForgotPassword', {
+  //     params: { emailId, clientId, sub_entity },
+  //   });
+  // }
 
   const handleOtpChange = (otpValue: string) => {
     setOtp(otpValue);
@@ -204,8 +226,8 @@ const VerifyOTPScreen = () => {
         <CustomButton
           title={verifyOtpApiState.loading ? 'Verifying...' : 'Next'}
           onPress={handleSubmit}
-          disabled={verifyOtpApiState.loading}
-        />
+          loading={verifyOtpApiState.loading}
+          disabled={verifyOtpApiState.loading} borderWidth={undefined} textColor={undefined} btnHeight={undefined} textSize={undefined} fontWeight={undefined} btnColor={undefined} backgroundColor={undefined}        />
       </View>
     </View>
   );
