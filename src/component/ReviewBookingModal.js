@@ -8,7 +8,7 @@ import IcBackArrowSvg from '../assets/svg/backarrow.svg';
 import { createCorporateBooking } from '../Redux/slice/CorporateSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ReviewBookingModal = ({ visible, onClose}) => {
+const ReviewBookingModal = ({ visible, onClose,eloc}) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const corporateData = useSelector((state) => state.corporate);
@@ -48,7 +48,7 @@ const ReviewBookingModal = ({ visible, onClose}) => {
                 "PGorderid": '',
                 "custom_column": JSON.stringify(corporateData?.valuesTextInputs || {}),
                 "endate": corporateData?.endDate || "",
-                "eloc": corporateData?.elcoset || ""
+                "eloc": eloc
             };
 
             console.log("Sending Payload:", MyPayload);

@@ -29,9 +29,10 @@ const CorporateModule1 = ({ navigation }) => {
   const [Visible, setVisible] = useState(false)
   const [carGroupList, setCarGroupList] = useState([]);
   const [e_loc, seteloc] = useState('');
-  const { city_of_usage, rentalType, assignment ,vehiclerequested, pickupAddress, selectedDate, selectedTime } = useSelector((state) => state.corporate);
+  const { city_of_usage,  assignment ,vehiclerequested, pickupAddress, selectedDate, selectedTime } = useSelector((state) => state.corporate);
   const userDetails = useSelector((state) => state.userprofile);
-  console.log(userDetails,"userData");
+  console.log(" Redux User Data:", userDetails);
+
   
   const dispatch = useDispatch();
   const [unreadCount, setUnreadCount] = useState(0);
@@ -57,7 +58,8 @@ const CorporateModule1 = ({ navigation }) => {
 
     };
     getAccessToken();
-    getUserData() ; 
+    getUserData() ;
+    fetchUnreadCount() 
   }, []);
 
   const getUserData = async () => {
@@ -70,19 +72,22 @@ const CorporateModule1 = ({ navigation }) => {
       ];
   
       const values = await AsyncStorage.multiGet(keys);
-      
       const userData = Object.fromEntries(values);
-      console.log("📌 Retrieved User Data:", userData);
   
-      return userData;
+      console.log("📌 Retrieved User Data:", userData); 
+  
+      if (userData.user_id) { 
+        dispatch(updateCorporateSlice(userData));
+      } else {
+        console.warn("⚠️ No user data found in AsyncStorage.");
+      }
     } catch (error) {
       console.error("❌ Error retrieving user data:", error);
     }
   };
   
-  useEffect(() => {
-    fetchUnreadCount();
-  }, []);
+  
+
 
   const fetchUnreadCount = async () => {
     try {
@@ -171,7 +176,7 @@ const CorporateModule1 = ({ navigation }) => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {
           <ReviewBookingModal visible={modalVisible}
-            onClose={closeModal} />
+            onClose={closeModal} eloc={e_loc}  />
         }
         <View style={styles.root}>
           <Section title="Car Reservation Details">

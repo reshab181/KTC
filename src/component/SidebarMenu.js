@@ -20,6 +20,7 @@ import NotificationSvg from '../assets/svg/notifications.svg';
 import LogoutSvg from '../assets/svg/logout.svg'
 import { useDispatch, useSelector } from 'react-redux';
 import { resetSignInState } from '../Redux/slice/SignInSlice';
+import { persistor } from '../Redux/store';
 const windowWidth = Dimensions.get('window').width;
 
 const SidebarMenu = ({ isVisible, onClose }) => {
@@ -58,6 +59,7 @@ const SidebarMenu = ({ isVisible, onClose }) => {
           text: 'Logout',
           onPress: async () => {
             await clearUserData(); 
+            persistor.purge();
             onClose();
             navigation.replace('CorporateLoginNavigator', {
               screen: 'CorporateSignIn',

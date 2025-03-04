@@ -3,7 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { Provider } from "react-redux";
-import store from "./src/Redux/store";
+import { PersistGate } from 'redux-persist/integration/react';
+import {store,persistor} from "./src/Redux/store";
 
 import CorporateModule1 from "./src/Screens/Pages/CorporateModule1";
 import Profile from "./src/Screens/Basic/Profile";
@@ -72,6 +73,7 @@ const App = () => {
     <PaperProvider theme={theme}>
         <GestureHandlerRootView style={{ flex: 1 }}>
       <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
           <HomeNavigator />
           {/* <Stack.Navigator initialRouteName="Splash">
@@ -97,6 +99,7 @@ const App = () => {
             />
           </Stack.Navigator> */}
         </NavigationContainer>
+        </PersistGate>
       </Provider>
     </GestureHandlerRootView>
     </PaperProvider>
