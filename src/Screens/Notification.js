@@ -38,7 +38,7 @@ const Notification = ({ navigation }) => {
       console.error("Error fetching notifications:", error);
     } finally {
       setLoading(false);
-      setRefreshing(false); // Stop refreshing after fetching data
+      setRefreshing(false); 
     }
   };
 

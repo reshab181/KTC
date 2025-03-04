@@ -48,6 +48,7 @@ const NotificationService = {
 
             setUnreadCount(decryptData(response?.data?.count_notification));
             setNotification(decryptData(response?.data?.notification_data));
+            console.log("Decrypted Unread Count:", decryptData(response?.data?.count_notification));
 
         } catch (err) {
             console.error("Error fetching notifications:", err);

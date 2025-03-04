@@ -163,13 +163,14 @@ const [list, setList] = useState(upcomingData);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <CustomHeader iconPath={require('../../assets/ic_back_arrow_white_24.png')}
-        title={"My Booking"}
-        iconHeight={24}
-        iconWidth={24}
-        handleLeftIcon={()=>navigation.goBack()}
+    <CustomHeader
+        title="Bookings"
+        leftIcon={() => (
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Image source={require('../../assets/ic_back_arrow_white_24.png')}/>
+          </TouchableOpacity>
+        )}
       />
-
       <View style={styles.tabContainer}>
         <TouchableOpacity
           style={[styles.tab, selectedTab === 'Upcoming' && styles.activeTab]}

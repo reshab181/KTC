@@ -21,6 +21,7 @@ import ReviewBookingModal from '../../component/ReviewBookingModal';
 import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
 import LoaderModal from '../../component/LoaderModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NotificationService from '../../services/api/Notification';
 const CorporateModule1 = ({ navigation }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [accessToken, setAccessToken] = useState('');
@@ -30,7 +31,10 @@ const CorporateModule1 = ({ navigation }) => {
   const [e_loc, seteloc] = useState('');
   const { city_of_usage, rentalType, assignment ,vehiclerequested, pickupAddress, selectedDate, selectedTime } = useSelector((state) => state.corporate);
   const userDetails = useSelector((state) => state.userprofile);
+  console.log(userDetails,"userData");
+  
   const dispatch = useDispatch();
+  const [unreadCount, setUnreadCount] = useState(0);
   const [specialInstruction, setspecialInstruction] = useState('');
   const [reportingLandmark, setreportingLandmark] = useState('');
   const [flightTrainInfo, setflightTrainInfo] = useState('');
@@ -53,6 +57,24 @@ const CorporateModule1 = ({ navigation }) => {
 
     getAccessToken();
   }, []);
+  useEffect(() => {
+    fetchUnreadCount();
+  }, []);
+
+  const fetchUnreadCount = async () => {
+    try {
+      await NotificationService.fetchNotifications(
+        {}, 
+        1, 
+        10, 
+        () => {}, 
+        setUnreadCount, 
+        () => {} 
+      );
+    } catch (error) {
+      console.error('Error fetching unread count:', error);
+    }
+  };
 
   const handleFetchCities = useCallback(async () => {
     setLoadingCities(true);
@@ -96,11 +118,11 @@ const CorporateModule1 = ({ navigation }) => {
     );
   };
   const openModal = () => {
-    // if (areFieldsFilled()) {
+    if (areFieldsFilled()) {
       setModalVisible(true);
-    // } else {
-    //   Alert.alert("Incomplete Fields", "Please fill all required fields before proceeding.");
-    // }
+    } else {
+      Alert.alert("Incomplete Fields", "Please fill all required fields before proceeding.");
+    }
   };
 
   const closeModal = () => {
@@ -109,6 +131,7 @@ const CorporateModule1 = ({ navigation }) => {
   return (
     <View style={styles.mainContainer}>
       <CustomHeader title='Home'
+      justifyContent={'space-between'}
         iconHeight={30}
         iconWidth={36}
         islogo
@@ -119,6 +142,7 @@ const CorporateModule1 = ({ navigation }) => {
         handleRightIcon={() => navigation.navigate('Notifications')}
         // Iconn={Notifications}
         isSidebarVisible={isSidebarVisible}
+        unreadCount={unreadCount}
       />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
