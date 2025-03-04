@@ -17,7 +17,6 @@ import DobSvg from '../../assets/svg/cake_black.svg';
 import SmartPhoneSvg from '../../assets/svg/smartphone.svg';
 import EmailSvg from '../../assets/svg/email_black.svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 
 const Profile = () => {
   const [loader, setLoader] = useState(false);

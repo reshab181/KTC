@@ -48,11 +48,36 @@ const CorporateModule1 = ({ navigation }) => {
     const getAccessToken = async () => {
       const token = await fetchJwtAccess();
       if (token) setAccessToken(token);
+      console.log('====================================');
+      console.log();
+      console.log('====================================');
+
 
     };
 
     getAccessToken();
+    getUserData() ; 
   }, []);
+  const getUserData = async () => {
+    try {
+      const keys = [
+        "status", "isLoggedInn", "user_id", "email_id",
+        "f_name", "l_name", "client_name", "client_id",
+        "gender", "mobile_number", "user_type",
+        "bithdate", "country", "userToken"
+      ];
+  
+      const values = await AsyncStorage.multiGet(keys);
+      
+      const userData = Object.fromEntries(values);
+      console.log("📌 Retrieved User Data:", userData);
+  
+      return userData;
+    } catch (error) {
+      console.error("❌ Error retrieving user data:", error);
+    }
+  };
+  
 
   const handleFetchCities = useCallback(async () => {
     setLoadingCities(true);
