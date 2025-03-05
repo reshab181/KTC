@@ -8,7 +8,7 @@ import IcBackArrowSvg from '../assets/svg/backarrow.svg';
 import { createCorporateBooking } from '../Redux/slice/CorporateSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ReviewBookingModal = ({ visible, onClose,eloc}) => {
+const ReviewBookingModal = ({ visible, onClose, eloc}) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const corporateData = useSelector((state) => state.corporate);
@@ -28,21 +28,21 @@ const ReviewBookingModal = ({ visible, onClose,eloc}) => {
             Alert.alert("Error", "User ID not found! Please log in again.");
             return;
         }
-
+    
         try {
             const MyPayload = {
                 "companyname": UserDetail?.client_name || "",
                 "Guestname": `${UserDetail?.f_name || ''} ${UserDetail?.l_name || ''}`,
                 "Guestcontacto": UserDetail?.mobile_number || "",
                 "guestemail": UserDetail?.email_id || "",
-                "Guestflight": corporateData?.flightNo || "",
+                "Guestflight": corporateData?.flightTrainInfo || "",
                 "Reportingplace": corporateData?.pickupAddress?.placeAddress || "",
-                "start_date": corporateData?.selectedDate || "",
-                "Reporingtime": corporateData?.selectedTime || "00:00",
-                "assignment": corporateData?.rentalTypeValue || "",
+                "start_date": corporateData?.start_date || "",
+                "Reporingtime": corporateData?.Reporingtime || "00:00",
+                "assignment": corporateData?.assignment || "",
                 "city_of_usage": corporateData?.city_of_usage || "",
                 "vehiclerequested": corporateData?.vehiclerequested || "",
-                "instruction": corporateData?.specialInstrution || "",
+                "instruction": corporateData?.specialInstruction || "",
                 "payment_mode": corporateData?.paymentValue || "",
                 "user_id": userId,
                 "PGorderid": '',
@@ -50,23 +50,20 @@ const ReviewBookingModal = ({ visible, onClose,eloc}) => {
                 "endate": corporateData?.endDate || "",
                 "eloc": eloc
             };
-
+    
             console.log("Sending Payload:", MyPayload);
-
-            const resultAction =  dispatch(createCorporateBooking(MyPayload));
-
-            if (createCorporateBooking.fulfilled.match(resultAction)) {
-                Alert.alert("Success", "Booking confirmed successfully!");
-                onClose();
-            } else {
-                Alert.alert("Error", resultAction.payload || "Failed to confirm booking");
-            }
+    
+            const resultAction = await dispatch(createCorporateBooking(MyPayload)).unwrap();
+            console.log("Redux Action Result:", resultAction);
+    
+            Alert.alert("Success", "Booking confirmed successfully!");
+            onClose();
         } catch (error) {
             console.error("Error during booking confirmation:", error);
-            Alert.alert("Error", "An unexpected error occurred.");
+            Alert.alert("Error", error || "Failed to confirm booking.");
         }
     };
-
+    
     return (
         <Modal visible={visible} animationType="slide" transparent={true}>
             <View style={styles.overlay}>

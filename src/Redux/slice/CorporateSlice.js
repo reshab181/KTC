@@ -149,22 +149,114 @@
 // // export default CorporateSlice.reducer;
 
 
+// import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+// import reviewConfirm from "../../Api/ReviewConfirm";
+// import { encryptPayload, decryptData } from "../../Utils/EncryptionUtility";
+
+
+// const initialState = {
+//   // city: "",
+//   // rentalType: "",
+//   // carGroup: "",
+//   pickupAddress: {},
+//   // reportingLandmark: "",
+//   // selectedDate: "",
+//   // selectedTime: "",
+//   // paymentMethod: "",
+//   // specialInstruction: "",
+//   // flightTrainInfo: "",
+//   paymentMode: "",
+//   empId: "",
+//   referenceNumber: "",
+//   bookingCode: "",
+//   trNumber: "",
+//   billNumber: "",
+//   companyname: "",
+//   Guestname: "",
+//   Guestcontacto: "",
+//   guestemail: "",
+//   Guestflight: "",
+//   Reportingplace: "",
+//   start_date: "",
+//   Reporingtime: "",
+//   assignment: "",
+//   city_of_usage: "",
+//   vehiclerequested: "",
+//   instruction: "",
+//   user_id: "",
+//   PGorderid: "",
+//   custom_column: "",
+//   endate: "",
+//   eloc: "",
+// };
+
+
+// export const createCorporateBooking = createAsyncThunk(
+//   "corporate/createCorporateBooking",
+//   async (payload, { rejectWithValue }) => {
+//     try {
+//       const encryptedPayload = encryptPayload(payload);
+
+//       let formBody = new URLSearchParams();
+//       formBody.append("request_data", encryptedPayload);
+
+//       const response = await reviewConfirm.post("create_booking.php", formBody);
+
+//       if (response.data?.message === "Access denied.") {
+//         return rejectWithValue("Access Denied. Please refresh token.");
+//       }
+
+//       const decryptedResponse = decryptData(response.data?.booking_number);
+//       return decryptedResponse;
+//     } catch (error) {
+//       return rejectWithValue(error.response?.data?.message || "An unexpected error occurred.");
+//     }
+//   }
+// );
+
+// const corporateSlice = createSlice({
+//   name: "corporate",
+//   initialState,
+//   reducers: {
+//     updateCorporateSlice: (state, action) => {
+//       const { type, selectedItem } = action.payload;
+
+//       if (type in state) {
+//         state[type] = selectedItem;
+//       }
+//     },
+//     resetCorporateSlice: () => initialState,
+//   },
+//   extraReducers: (builder) => {
+//     builder
+//       .addCase(createCorporateBooking.pending, (state) => {
+//         state.loading = true;
+//         state.error = null;
+//       })
+//       .addCase(createCorporateBooking.fulfilled, (state, action) => {
+//         state.loading = false;
+//         state.corporateBookingData = action.payload;
+//         state.alertVisible = true;
+//         state.testRemark = "Test======================="
+//       })
+//       .addCase(createCorporateBooking.rejected, (state, action) => {
+//         state.loading = false;
+//         state.error = action.payload || "Failed to create corporate booking.";
+//       });
+//   },
+// });
+
+// // 🔹 Export Actions & Reducer
+// export const { updateCorporateSlice, resetCorporateSlice } = corporateSlice.actions;
+// export default corporateSlice.reducer;
+
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import reviewConfirm from "../../Api/ReviewConfirm";
 import { encryptPayload, decryptData } from "../../Utils/EncryptionUtility";
 
-
 const initialState = {
-  // city: "",
-  // rentalType: "",
-  // carGroup: "",
   pickupAddress: {},
-  // reportingLandmark: "",
-  // selectedDate: "",
-  // selectedTime: "",
-  // paymentMethod: "",
-  // specialInstruction: "",
-  // flightTrainInfo: "",
   paymentMode: "",
   empId: "",
   referenceNumber: "",
@@ -188,8 +280,12 @@ const initialState = {
   custom_column: "",
   endate: "",
   eloc: "",
+  loading: false,
+  error: null,
+  corporateBookingData: null,
+  alertVisible: false,
+  testRemark: "",
 };
-
 
 export const createCorporateBooking = createAsyncThunk(
   "corporate/createCorporateBooking",
@@ -200,16 +296,28 @@ export const createCorporateBooking = createAsyncThunk(
       let formBody = new URLSearchParams();
       formBody.append("request_data", encryptedPayload);
 
+      
       const response = await reviewConfirm.post("create_booking.php", formBody);
+
+      console.log("Response Data:", response.data);
+
 
       if (response.data?.message === "Access denied.") {
         return rejectWithValue("Access Denied. Please refresh token.");
       }
 
-      const decryptedResponse = decryptData(response.data?.booking_number);
+
+      if (!response.data?.booking_number) {
+        return rejectWithValue("Invalid response from the server.");
+      }
+
+      const decryptedResponse = decryptData(response.data);
       return decryptedResponse;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || "An unexpected error occurred.");
+      console.error("API Error:", error);
+      return rejectWithValue(
+        error.response?.data?.message || error.message || "An unexpected error occurred."
+      );
     }
   }
 );
@@ -220,12 +328,11 @@ const corporateSlice = createSlice({
   reducers: {
     updateCorporateSlice: (state, action) => {
       const { type, selectedItem } = action.payload;
-
       if (type in state) {
         state[type] = selectedItem;
       }
     },
-    resetCorporateSlice: () => initialState,
+    resetCorporateSlice: () => ({ ...initialState }), 
   },
   extraReducers: (builder) => {
     builder
@@ -237,6 +344,7 @@ const corporateSlice = createSlice({
         state.loading = false;
         state.corporateBookingData = action.payload;
         state.alertVisible = true;
+        state.testRemark = "test==============================";
       })
       .addCase(createCorporateBooking.rejected, (state, action) => {
         state.loading = false;
@@ -245,6 +353,6 @@ const corporateSlice = createSlice({
   },
 });
 
-// 🔹 Export Actions & Reducer
+
 export const { updateCorporateSlice, resetCorporateSlice } = corporateSlice.actions;
 export default corporateSlice.reducer;

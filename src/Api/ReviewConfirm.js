@@ -1,7 +1,6 @@
 import axios from "axios";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {CREATE_BOOKING} from '../services/Api'
-
+import { CREATE_BOOKING } from "../services/Api";
+import { postJWtHttpClient } from "../services/api/axiosClient";
 
 const reviewConfirm = axios.create({
   baseURL: CREATE_BOOKING,
@@ -11,13 +10,11 @@ const reviewConfirm = axios.create({
 });
 
 reviewConfirm.interceptors.request.use(async (config) => {
-  const token = await AsyncStorage.getItem("userToken");
-  if (token) {
-    config.headers["jwt"] = token;
+  try {
+    return postJWtHttpClient(reviewConfirm, "", null, config.data, config.headers);
+  } catch (error) {
+    return Promise.reject(error);
   }
-  return config;
-}, (error) => {
-  return Promise.reject(error);
 });
 
 export default reviewConfirm;

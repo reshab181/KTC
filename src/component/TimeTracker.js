@@ -1,4 +1,4 @@
-// Ashutosh Rai
+// // Ashutosh Rai
 import React, { useEffect, useState, useRef } from 'react';
 import {
   StyleSheet,
@@ -30,7 +30,7 @@ const TimeTracker = ({ selectTime, selectedDate }) => {
   const getCurrentTime = () => {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = Math.floor(now.getMinutes() / 30) * 30; 
+    const minutes = Math.floor(now.getMinutes() / 30) * 30;
     const formattedMinutes = minutes.toString().padStart(2, '0');
     return `${hours}:${formattedMinutes}`;
   };
@@ -59,7 +59,7 @@ const TimeTracker = ({ selectTime, selectedDate }) => {
     if (!selectedDate) return false;
 
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Reset time for accurate comparison
+    today.setHours(0, 0, 0, 0); 
 
     const isToday = selectedDate.toDateString() === today.toDateString();
     if (!isToday) return false;
@@ -71,14 +71,14 @@ const TimeTracker = ({ selectTime, selectedDate }) => {
 
   useEffect(() => {
     if (selectedTime && isPastTime(selectedTime)) {
-      setSelectedTime(null); // Reset selected time if it becomes invalid
-      selectTime(null);
+      setSelectedTime(null);
     }
   }, [selectedDate]);
+
   const handleTimeSelect = (time) => {
     if (!isPastTime(time)) {
       setSelectedTime(time);
-      // selectTime(time);
+      selectTime(time); 
     }
   };
 
@@ -121,6 +121,7 @@ const TimeTracker = ({ selectTime, selectedDate }) => {
   );
 };
 
+
 export default TimeTracker;
 
 const styles = StyleSheet.create({
@@ -144,11 +145,11 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   selectedTimeBox: {
-    backgroundColor: '#007AFF', // Blue background
+    backgroundColor: '#3C3567', // Blue background
     borderRadius: 30, // Ensures a circular shape
   },
   selectedTimeText: {
-    color: '#000', 
+    color: '#fff', 
     fontWeight: '600',
     fontSize: 14,
   },
@@ -160,3 +161,4 @@ const styles = StyleSheet.create({
     backfaceVisibility : "hidden"
   },
 });
+

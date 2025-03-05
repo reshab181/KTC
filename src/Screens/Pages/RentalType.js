@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
 
 const RentalType = ({ route, navigation }) => {
-    const { list = []} = route.params ?? {};
+    const { list = [],type = 'assignment'} = route.params ?? {};
     const [searchText, setSearchText] = useState('');
     const [filteredList, setFilteredList] = useState(list);
     const dispatch = useDispatch();
@@ -23,7 +23,8 @@ const RentalType = ({ route, navigation }) => {
 
     const handleSelect = (selectedItem) => {
         dispatch(updateCorporateSlice({
-            rentalType : selectedItem 
+            type: type,
+            selectedItem: selectedItem
         }))
         navigation.goBack();
     };

@@ -66,7 +66,7 @@ import {
               "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
             ]}
             startFromMonday={false}
-            selectedDayColor="#007AFF"
+            selectedDayColor="#3C3567"
             selectedDayTextColor="#fff"
             todayBackgroundColor="#cccccc"
             todayTextStyle={styles.todayText}

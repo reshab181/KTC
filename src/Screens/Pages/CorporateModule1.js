@@ -29,7 +29,7 @@ const CorporateModule1 = ({ navigation }) => {
   const [Visible, setVisible] = useState(false)
   const [carGroupList, setCarGroupList] = useState([]);
   const [e_loc, seteloc] = useState('');
-  const { city_of_usage,  assignment ,vehiclerequested, pickupAddress, selectedDate, selectedTime } = useSelector((state) => state.corporate);
+  const { city_of_usage,  assignment ,vehiclerequested, pickupAddress, start_date, Reporingtime } = useSelector((state) => state.corporate);
   const userDetails = useSelector((state) => state.userprofile);
   console.log(" Redux User Data:", userDetails);
 
@@ -257,7 +257,7 @@ const CorporateModule1 = ({ navigation }) => {
                   onChangeText={(text) => {
                     setflightTrainInfo(text)
                     dispatch(updateCorporateSlice({
-                      type: "flightTrainInfo",
+                      type: "Guestflight",
                       selectedItem: text
                     }))
                   }}
@@ -268,7 +268,7 @@ const CorporateModule1 = ({ navigation }) => {
                     setspecialInstruction(text)
                     dispatch(
                       updateCorporateSlice({
-                        type: "specialInstruction",
+                        type: "instruction",
                         selectedItem: text,
                       })
                     )
