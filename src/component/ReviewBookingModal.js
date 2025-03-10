@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Modal, Alert, ScrollView,TouchableOpacity,Image } from 'react-native';
+import { StyleSheet, Text, View, Modal, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,12 +8,13 @@ import IcBackArrowSvg from '../assets/svg/backarrow.svg';
 import { createCorporateBooking } from '../Redux/slice/CorporateSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const ReviewBookingModal = ({ visible, onClose, eloc}) => {
+const ReviewBookingModal = ({ visible, onClose, eloc }) => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const corporateData = useSelector((state) => state.corporate);
     const UserDetail = useSelector((state) => state.userprofile);
     const [userId, setUserId] = useState(null);
+    const [valuesTextInputs, setvaluesTextInputs] = useState({})
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -23,6 +24,23 @@ const ReviewBookingModal = ({ visible, onClose, eloc}) => {
         fetchUserId();
     }, []);
 
+    const dateConverter = (value) => {
+        const date = new Date(value * 1000);
+        
+        if (isNaN(date.getTime())) {
+            return ""; 
+        }
+    
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0"); 
+        const year = date.getFullYear();
+    
+        return `${year}-${month}-${day}`; 
+    };
+    // const updateChanges = (key, txt) => {
+    //     setvaluesTextInputs({ ...valuesTextInputs, [key]: txt })
+    //   }
+    
     const handleConfirm = async () => {
         if (!userId) {
             Alert.alert("Error", "User ID not found! Please log in again.");
@@ -36,7 +54,7 @@ const ReviewBookingModal = ({ visible, onClose, eloc}) => {
                 "Guestcontacto": UserDetail?.mobile_number || "",
                 "guestemail": UserDetail?.email_id || "",
                 "Guestflight": corporateData?.flightTrainInfo || "",
-                "Reportingplace": corporateData?.pickupAddress?.placeAddress || "",
+                "Reportingplace": corporateData?.Reportingplace?.placeAddress || "",
                 "start_date": corporateData?.start_date || "",
                 "Reporingtime": corporateData?.Reporingtime || "00:00",
                 "assignment": corporateData?.assignment || "",
@@ -46,22 +64,41 @@ const ReviewBookingModal = ({ visible, onClose, eloc}) => {
                 "payment_mode": corporateData?.paymentValue || "",
                 "user_id": userId,
                 "PGorderid": '',
-                "custom_column": JSON.stringify(corporateData?.valuesTextInputs || {}),
-                "endate": corporateData?.endDate || "",
+                "custom_column": JSON.stringify(corporateData?.custom_column),
+                "endate": corporateData?.assignment === 'OUTSTATION' 
+                    ? dateConverter(new Date(endDate?.date).getTime() / 1000) 
+                    : dateConverter(new Date(corporateData?.start_date).getTime() / 1000),
                 "eloc": eloc
             };
     
             console.log("Sending Payload:", MyPayload);
     
-            const resultAction = await dispatch(createCorporateBooking(MyPayload)).unwrap();
+          
+            Alert.alert("Processing", "Please wait while we confirm your booking...");
+    
+        
+            const resultAction = await dispatch(createCorporateBooking(MyPayload));
+    
             console.log("Redux Action Result:", resultAction);
     
-            Alert.alert("Success", "Booking confirmed successfully!");
-            onClose();
-        } catch (error) {
-            console.error("Error during booking confirmation:", error);
-            Alert.alert("Error", error || "Failed to confirm booking.");
-        }
+            if (createCorporateBooking.fulfilled.match(resultAction)) {
+                Alert.alert("Success", "Booking confirmed successfully!");
+                onClose();
+            } else {
+                Alert.alert("Error", resultAction.payload || "Failed to confirm booking");
+            }
+        }catch (error) {
+            console.error("API Error:", error);
+            console.log("Error Response:", error.response?.data);
+            return rejectWithValue(
+              error.response?.data?.message || error.message || "An unexpected error occurred."
+            );
+          }
+          
+        // } catch (error) {
+        //     console.error("Error during booking confirmation:", error);
+        //     Alert.alert("Error", "An unexpected error occurred.");
+        // }
     };
     
     return (
@@ -89,11 +126,11 @@ const ReviewBookingModal = ({ visible, onClose, eloc}) => {
                         <Text style={styles.sectionTitle}>Reservation Details</Text>
                         {renderDetail('Rental City', corporateData?.city_of_usage)}
                         {renderDetail('Car Group', corporateData?.vehiclerequested)}
-                        {renderDetail('Pickup Address', corporateData?.pickupAddress?.placeAddress)}
+                        {renderDetail('Pickup Address', corporateData?.Reportingplace?.placeAddress)}
                         {renderDetail('Reporting Date/Time', `${corporateData?.start_date} , ${corporateData?.Reporingtime}`)}
                         {renderDetail('Reporting Address', corporateData?.eloc)}
-                        {renderDetail('Flight/Train Info', corporateData?.Guestflight)}
-                        {renderDetail('Special Instruction', corporateData?.instruction)}
+                        {renderDetail('Flight/Train Info', corporateData?.flightTrainInfo)}
+                        {renderDetail('Special Instruction', corporateData?.specialInstruction)}
                         {renderDetail('Payment Mode', corporateData?.payment_mode)}
                     </ScrollView>
                     <View style={styles.buttonContainer}>

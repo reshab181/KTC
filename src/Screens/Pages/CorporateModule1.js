@@ -2,7 +2,8 @@
 // Component: CorporateModule1
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import Notifications from '../../assets/info1.png';
+import { ScrollView, StyleSheet, Text, View ,Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomHeader from '../../component/CustomHeader';
@@ -16,24 +17,25 @@ import { fetchCities, fetchLocalities, fetchRentalType } from '../../Api/Corpora
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import { Alert } from 'react-native';
 import Menuu from '../../assets/svg/menu.svg';
-import Notifications from '../../assets/svg/notifications.svg';
+import Icon from 'react-native-vector-icons/Ionicons';
+// import Notifications from '../../assets/svg/notifications.svg';
 import ReviewBookingModal from '../../component/ReviewBookingModal';
 import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
 import LoaderModal from '../../component/LoaderModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NotificationService from '../../services/api/Notification';
-const CorporateModule1 = ({ navigation }) => {
+const CorporateModule1 = ({ navigation,item,index }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [accessToken, setAccessToken] = useState('');
   const [cityList, setCityList] = useState([]);
   const [Visible, setVisible] = useState(false)
   const [carGroupList, setCarGroupList] = useState([]);
   const [e_loc, seteloc] = useState('');
-  const { city_of_usage,  assignment ,vehiclerequested, pickupAddress, start_date, Reporingtime } = useSelector((state) => state.corporate);
+  const { city_of_usage, assignment, vehiclerequested, Reportingplace, start_date, Reporingtime } = useSelector((state) => state.corporate);
   const userDetails = useSelector((state) => state.userprofile);
   console.log(" Redux User Data:", userDetails);
 
-  
+
   const dispatch = useDispatch();
   const [unreadCount, setUnreadCount] = useState(0);
   const [specialInstruction, setspecialInstruction] = useState('');
@@ -48,7 +50,8 @@ const CorporateModule1 = ({ navigation }) => {
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingRentalType, setLoadingRentalType] = useState(false);
   const [loadingCarGroup, setloadingCarGroup] = useState(false)
-  const [isTimeSelected, setIsTimeSelected] = useState(false); 
+  const [isTimeSelected, setIsTimeSelected] = useState(false);
+  
   useEffect(() => {
     const getAccessToken = async () => {
       const token = await fetchJwtAccess();
@@ -58,10 +61,12 @@ const CorporateModule1 = ({ navigation }) => {
 
     };
     getAccessToken();
-    getUserData() ;
-    fetchUnreadCount() 
+    getUserData();
+    fetchUnreadCount()
   }, []);
-
+  const getNotificationIcon = (type) => {
+    return require('../../assets/info1.png');
+  };
   const getUserData = async () => {
     try {
       const keys = [
@@ -70,13 +75,13 @@ const CorporateModule1 = ({ navigation }) => {
         "gender", "mobile_number", "user_type",
         "bithdate", "country", "userToken"
       ];
-  
+
       const values = await AsyncStorage.multiGet(keys);
       const userData = Object.fromEntries(values);
-  
-      console.log("📌 Retrieved User Data:", userData); 
-  
-      if (userData.user_id) { 
+
+      console.log("📌 Retrieved User Data:", userData);
+
+      if (userData.user_id) {
         dispatch(updateCorporateSlice(userData));
       } else {
         console.warn("⚠️ No user data found in AsyncStorage.");
@@ -85,25 +90,29 @@ const CorporateModule1 = ({ navigation }) => {
       console.error("❌ Error retrieving user data:", error);
     }
   };
-  
-  
+  // const updateChanges = (key, txt) => {
+  //   setvaluesTextInputs({ ...valuesTextInputs, [key]: txt })
+  // }
+
 
 
   const fetchUnreadCount = async () => {
     try {
       await NotificationService.fetchNotifications(
-        {}, 
-        1, 
-        10, 
-        () => {}, 
-        setUnreadCount, 
-        () => {} 
+        {},
+        1,
+        10,
+        () => { },
+        (count) => {
+          console.log("Unread Count Fetched:", count); 
+          setUnreadCount(count);
+        },
+        () => { }
       );
     } catch (error) {
       console.error('Error fetching unread count:', error);
     }
   };
-
   const handleFetchCities = useCallback(async () => {
     setLoadingCities(true);
     try {
@@ -125,7 +134,7 @@ const CorporateModule1 = ({ navigation }) => {
     setLoadingRentalType(true);
     try {
       const client_id = await AsyncStorage.getItem('client_id')
-      const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city_of_usage , client_id, accessToken);
+      const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city_of_usage, client_id, accessToken);
       setCarGroupList(carGroupItems);
       seteloc(e_loc);
       setLoadingRentalType(false);
@@ -141,7 +150,7 @@ const CorporateModule1 = ({ navigation }) => {
       city_of_usage &&
       assignment &&
       vehiclerequested &&
-      pickupAddress 
+      Reportingplace
 
     );
   };
@@ -158,25 +167,44 @@ const CorporateModule1 = ({ navigation }) => {
   };
   return (
     <View style={styles.mainContainer}>
-      <CustomHeader title='Home'
-      justifyContent={'space-between'}
-        iconHeight={30}
-        iconWidth={36}
-        islogo
-        // imgPath={require('../../assets/ktc.png')}
-        leftIcon={Menuu}
-        rightIcon={Notifications}
-        handleLeftIcon={() => setIsSidebarVisible(true)}
-        handleRightIcon={() => navigation.navigate('Notifications')}
-        // Iconn={Notifications}
-        isSidebarVisible={isSidebarVisible}
-        unreadCount={unreadCount}
-      />
+      <CustomHeader
+  title="Home"
+  justifyContent="space-between"
+  iconHeight={30}
+  iconWidth={36}
+  islogo
+  leftIcon={Menuu}
+  rightIcon={() => (
+    <View style={{ position: "relative",color:"#fff" }}>
+       <Icon name="notifications" size={24} color="#fff" style={{ marginRight: 10 }} />
+      {unreadCount > 0 && (
+        <View
+          style={{
+            position: "absolute",
+            top: -5,
+            right: -5,
+            backgroundColor: "red",
+            borderRadius: 10,
+            paddingHorizontal: 6,
+            paddingVertical: 2,
+          }}
+        >
+          <Text style={{ color: "white", fontSize: 12, fontWeight: "bold" }}>
+            {unreadCount}
+          </Text>
+        </View>
+      )}
+    </View>
+  )}
+  handleLeftIcon={() => setIsSidebarVisible(true)}
+  handleRightIcon={() => navigation.navigate("Notifications")}
+  isSidebarVisible={isSidebarVisible}
+/>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {
           <ReviewBookingModal visible={modalVisible}
-            onClose={closeModal} eloc={e_loc}  />
+            onClose={closeModal} eloc={e_loc} />
         }
         <View style={styles.root}>
           <Section title="Car Reservation Details">
@@ -221,15 +249,15 @@ const CorporateModule1 = ({ navigation }) => {
             <View style={[styles.container2]}>
               <View style={{ marginHorizontal: 10 }}>
                 {renderCustomTile(
-                  (pickupAddress?.placeAddress?.length > 25
-                    ? pickupAddress.placeAddress.substring(0, 40) + "..."
-                    : pickupAddress?.placeAddress) || 'Pickup Address',
+                  (Reportingplace.placeAddress?.length > 25
+                    ? Reportingplace.placeAddress.substring(0, 40) + "..."
+                    : Reportingplace?.placeAddress) || 'Pickup Address',
                   () => {
                     if (!city_of_usage) {
                       Alert.alert("Selection Required", "Please select a city first.");
-                      return; 
+                      return;
                     }
-                    navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'pickupAddress' });
+                    navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'Reportingplace' });
                   },
                   loading
                 )}
@@ -297,69 +325,79 @@ const CorporateModule1 = ({ navigation }) => {
           <Section title="Additional Information">
             <View style={[styles.container2, {}]}>
               <View style={{ marginHorizontal: 10 }}>
-                <CustomTextInpt placeholder="Emp ID"
+                <CustomTextInpt
+                  placeholder="Emp ID"
                   value={EmpId}
-                  onChangeText={(text) => {
-                    setEmpId(text)
-                    dispatch(updateCorporateSlice({
-                      type: "empId",
-                      selectedItem: text
-                    }))
+                  onChangeText={(txt) => {
+                    setEmpId(txt);
+                    dispatch(
+                      updateCorporateSlice({
+                        type: "custom_column",
+                        selectedItem: { EmpId: txt },
+                      })
+                    );
                   }}
                 />
-                <CustomTextInpt placeholder="Reference Number"
+
+                <CustomTextInpt
+                  placeholder="Reference Number"
                   value={referenceNumber}
                   onChangeText={(text) => {
-                    setreferenceNumber(text)
+                    setreferenceNumber(text);
                     dispatch(
                       updateCorporateSlice({
-                        type: "referenceNumber",
-                        selectedItem: text,
+                        type: "custom_column",
+                        selectedItem: { referenceNumber: text }, 
                       })
-                    )
-                  }
-                  }
+                    );
+                  }}
                 />
-                <CustomTextInpt placeholder="Booking Code" onChangeText={(text) => {
-                  setBookingCode(text)
-                  dispatch(
-                    updateCorporateSlice({
-                      type: "bookingCode",
-                      selectedItem: text,
-                    })
-                  )
-                }
-                } value={BookingCode}
+
+                <CustomTextInpt
+                  placeholder="Booking Code"
+                  value={BookingCode}
+                  onChangeText={(text) => {
+                    setBookingCode(text);
+                    dispatch(
+                      updateCorporateSlice({
+                        type: "custom_column",
+                        selectedItem: { bookingCode: text }, 
+                      })
+                    );
+                  }}
                 />
-                <CustomTextInpt placeholder="TR No"
+
+                <CustomTextInpt
+                  placeholder="TR No"
                   value={trNumber}
                   onChangeText={(text) => {
-                    settrNumber(text)
+                    settrNumber(text);
                     dispatch(
                       updateCorporateSlice({
-                        type: "trNumber",
-                        selectedItem: text,
+                        type: "custom_column",
+                        selectedItem: { trNumber: text }, 
                       })
-                    )
-                  }
-                  }
+                    );
+                  }}
                 />
-                <CustomTextInpt placeholder="Bill No"
+
+                <CustomTextInpt
+                  placeholder="Bill No"
                   value={BillNumber}
                   onChangeText={(text) => {
-                    setBillNumber(text)
+                    setBillNumber(text);
                     dispatch(
                       updateCorporateSlice({
-                        type: "billNumber",
-                        selectedItem: text,
+                        type: "custom_column",
+                        selectedItem: { billNumber: text }, 
                       })
-                    )
-                  }
-                  }
+                    );
+                  }}
                 />
               </View>
             </View>
           </Section>
+
 
           <CustomButton title="Next" borderRadius={0} onPress={openModal}
           />
@@ -384,7 +422,7 @@ const renderCustomTile = (title, onPress, loading) => (
   <CustomCarGrouptile title={title} onPress={onPress} iconName="chevron-right" loader={loading} />
 );
 
-
+export default CorporateModule1;
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -418,11 +456,11 @@ const styles = StyleSheet.create({
   txt: {
     color: '#FFF',
     fontSize: 14,
-    fontWeight:'600'
+    fontWeight: '600'
   },
 });
 
-export default CorporateModule1;
+
 
 
 

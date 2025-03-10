@@ -31,7 +31,7 @@ const SidebarMenu = ({ isVisible, onClose }) => {
 
   const menuItems = [
     { name: 'Home', route: 'CorporateHomeScreen', icon: HomeSvg },
-    { name: 'My Bookings', route: 'Upcoming', icon: BookingSvg},
+    { name: 'Manage Bookings', route: 'Upcoming', icon: BookingSvg},
     { name: 'Profile', route: 'Profile', icon: ProfileSvg},
     { name: 'Notifications', route: 'Notifications', icon:NotificationSvg },
     { name: 'Logout', route: 'logout', icon: LogoutSvg }, 

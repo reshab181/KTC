@@ -14,3 +14,4 @@ export const ANCHOR_URL="https://anchor.mappls.com/api/users/authenticate"
 
 export const BOOKING_PARAM = COMMON_USER_API_URL+ "booking_param.php"
 export const NOTIFICATION =  COMMON_USER_API_URL+ "notification.php"
+export const CREATE_BOOKING = COMMON_USER_API_URL+ "create_booking.php"

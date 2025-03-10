@@ -29,14 +29,15 @@ const verifyOtpStyle = StyleSheet.create({
         justifyContent: 'space-evenly',
         marginBottom: 32,
       },
-      input: {
+      otpInput: {
         width: 40,
         height: 40,
         fontSize: 20,
-        textAlign: 'justify',
+        textAlign: 'center',
         borderBottomWidth: 1,
         borderBottomColor: '#1C4096',
         backgroundColor: '#F1F1F3',
+        color: '#000',
       },
       errorText: {
         color: 'red',

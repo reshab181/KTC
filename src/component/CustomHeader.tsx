@@ -81,9 +81,10 @@
 // export default CustomHeader;
 
 import React from 'react';
-import { useWindowDimensions, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { useWindowDimensions, StyleSheet, Text, View, Image, TouchableOpacity, GestureResponderEvent } from 'react-native';
 
 type CustomHeaderType = {
+  handlePress: ((event: GestureResponderEvent) => void) | undefined;
   title?: string;
   justifyContent?: any; 
  leftTitle ? : string;
@@ -95,6 +96,7 @@ type CustomHeaderType = {
   iconWidth?: number;
   handleLeftIcon?: () => void;
   handleRightIcon?: () => void;
+  unreadCount?:number;
 };
 
 const CustomHeader = (props: CustomHeaderType) => {
