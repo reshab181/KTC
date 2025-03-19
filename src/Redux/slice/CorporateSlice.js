@@ -255,7 +255,7 @@
 // import reviewConfirm from "../../Api/ReviewConfirm";
 // import { encryptPayload, decryptData } from "../../Utils/EncryptionUtility";
 
-// // ✅ Initial State
+// //  Initial State
 // const initialState = {
 //   paymentMode: "",
 //   companyname: "",
@@ -351,20 +351,20 @@
 //   extraReducers: (builder) => {
 //     builder
 //       .addCase(createCorporateBooking.pending, (state) => {
-//         console.log("🔵 Booking request pending...");'
+//         console.log(" Booking request pending...");'
 //        '
 //         state.loading = true;
 //         state.error = null;
 //       })
 //       .addCase(createCorporateBooking.fulfilled, (state, action) => {
-//         console.log("🟢 Booking request successful:", action.payload);
+//         console.log(" Booking request successful:", action.payload);
 //         state.loading = false;
 //         state.corporateBookingData = action.payload;
 //         state.alertVisible = true;
 //         state.testRemarks="test======================"
 //       })
 //       .addCase(createCorporateBooking.rejected, (state, action) => {
-//         console.error("❌ Booking request failed:", action.payload);
+//         console.error(" Booking request failed:", action.payload);
 //         state.loading = false;
 //         state.error = action.payload || "Failed to create corporate booking.";
 //       });
@@ -447,16 +447,18 @@ const corporateSlice = createSlice({
   reducers: {
     updateCorporateSlice: (state, action) => {
       const { type, selectedItem } = action.payload;
-
       if (type === "custom_column") {
         try {
-          const parsedData = JSON.parse(state.custom_column || "{}");
+          const parsedData = typeof state.custom_column === "string"
+            ? JSON.parse(state.custom_column)
+            : state.custom_column || {};
+      
           state.custom_column = { ...parsedData, ...selectedItem };
         } catch (error) {
           console.error("Error parsing custom_column:", error);
-          state.custom_column = selectedItem;
+          state.custom_column = selectedItem; 
         }
-      } else if (type in state) {
+      }else if (type in state) {
         state[type] = selectedItem;
       }
     },

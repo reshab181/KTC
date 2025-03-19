@@ -6,7 +6,7 @@ import {
     View, 
     TouchableOpacity, 
     Dimensions, 
-    Linking 
+    Linking ,Image
   } from 'react-native'
   import React from 'react'
   import { useNavigation } from '@react-navigation/native'
@@ -16,6 +16,7 @@ import CustomHeader from '../component/CustomHeader'
   const { height, width } = Dimensions.get('screen')
   
   const EmailLink = ({ email }) => (
+
     <TouchableOpacity 
       style={styles.emailButton}
       onPress={() => Linking.openURL(`mailto:${email}?subject=Account Deactivation Request&body=Hello,\n\nI would like to request account deactivation.\n\nRegards,`)}
@@ -25,7 +26,7 @@ import CustomHeader from '../component/CustomHeader'
   )
   
   const Help = () => {
-    // const navigation = useNavigation()
+    const navigation = useNavigation()
   
     // const navigateHome = () => navigation.navigate('Home')
     // const navigateToMessages = () => navigation.navigate('MessageScreen')
@@ -37,7 +38,12 @@ import CustomHeader from '../component/CustomHeader'
           onpressBack={navigateHome} 
           onpressIcon={navigateToMessages}
         /> */}
-        <CustomHeader title={"Help"}/>
+        <CustomHeader title={"Help"}
+         leftIcon={() => (
+                  <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Image source={require('../assets/ic_back_arrow_white_24.png')}/>
+                  </TouchableOpacity>
+                )}/>
         
         <View style={styles.contentContainer}>
           <View style={styles.card}>

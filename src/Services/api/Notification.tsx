@@ -103,14 +103,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { apiClient, postJWtHttpClient } from "./axiosClient";
 import { encryptPayload, decryptData } from "../../Utils/EncryptionUtility";
 import { BASE_URL, NOTIFICATION } from "../../config/api-config";
-// import NotificationClient from "../clients/NotificationClient";
 
 const NotificationClient = apiClient(BASE_URL + NOTIFICATION);
 
 const NotificationService = {
-    
     fetchNotifications: async (
-        item: { notification_id: any; }, 
+        item: { notification_id?: any }, 
         page: number,
         pageLimit: number,
         setNotification: (arg0: any[]) => void,
@@ -118,10 +116,10 @@ const NotificationService = {
         setRefreshing: (arg0: boolean) => void
     ) => {
         setRefreshing(true);
-        const userId = await AsyncStorage.getItem("user_id");
-        console.log("User ID:", userId);
-        
         try {
+            const userId = await AsyncStorage.getItem("user_id");
+            if (!userId) throw new Error("User ID not found in AsyncStorage");
+
             const payload = {
                 user_id: userId,
                 limit: `${(page - 1) * pageLimit},${pageLimit}`,
@@ -129,38 +127,38 @@ const NotificationService = {
             };
 
             const encryptedPayload = encryptPayload(payload);
-            const data = {
-                request_data: decodeURIComponent(encryptedPayload),
-            };
+            const data = { request_data: decodeURIComponent(encryptedPayload) };
 
             console.log("Fetching Notifications:", data);
-            console.log("Requesting from:", BASE_URL + NOTIFICATION);
 
-            let instance = NotificationClient;
-            let headers = {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-            };
+            let headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' };
+            const response = await postJWtHttpClient(await NotificationClient, '', null, data, headers);
 
-            const response = await postJWtHttpClient(await instance, '', null, data, headers);
-            console.log("API Response:", response);
-
-            if (response?.data) {
+            if (response?.data?.notification_data) {
                 const decryptedNotifications = decryptData(response.data.notification_data);
-                const unreadCount = decryptData(response.data.count_notification);
+                const unreadCount = decryptData(response.data.count_notification) || 0;
                 
-                console.log("Decrypted Notifications:", decryptedNotifications);
-                console.log("Unread Count:", unreadCount);
-
                 setNotification(Array.isArray(decryptedNotifications) ? decryptedNotifications : []);
-                setUnreadCount(unreadCount || 0);
+                setUnreadCount(unreadCount);
             } else {
                 console.warn("Invalid response structure:", response);
                 setNotification([]);
                 setUnreadCount(0);
             }
-        } catch (err) {
-            console.error("Error fetching notifications:", err);
-        } finally {
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                if ((error as any).response) {
+                    console.error("Server Error:", (error as any).response.status, (error as any).response.data);
+                } else if ((error as any).request) {
+                    console.error("No response received from server:", (error as any).request);
+                } else {
+                    console.error("Request Setup Error:", error.message);
+                }
+            } else {
+                console.error("An unknown error occurred:", error);
+            }
+        }
+        finally {
             setRefreshing(false);
         }
     },
@@ -171,9 +169,10 @@ const NotificationService = {
         setNotification: (arg0: never[]) => void,
         setUnreadCount: (arg0: number) => void
     ) => {
-        const userId = await AsyncStorage.getItem("user_id");
-        
         try {
+            const userId = await AsyncStorage.getItem("user_id");
+            if (!userId) throw new Error("User ID not found in AsyncStorage");
+
             const payload = {
                 user_id: userId,
                 limit: `${(page - 1) * pageLimit},${pageLimit}`,
@@ -181,25 +180,30 @@ const NotificationService = {
             };
 
             const encryptedPayload = encryptPayload(payload);
-            const data = {
-                request_data: decodeURIComponent(encryptedPayload),
-            };
+            const data = { request_data: decodeURIComponent(encryptedPayload) };
 
             console.log("Clearing Notifications:", data);
 
-            let instance = NotificationClient;
-            let headers = {
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-            };
-
-            const response = await postJWtHttpClient(await instance, '/clear', null, data, headers);
-            console.log("Clear Notifications Response:", response);
+            let headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' };
+            await postJWtHttpClient(await NotificationClient, '/clear', null, data, headers);
 
             setUnreadCount(0);
             setNotification([]);
-        } catch (err) {
-            console.error("Error clearing notifications:", err);
+        } catch (error: unknown) {
+            if (error instanceof Error) {
+                if ((error as any).response) {
+                    console.error("Server Error:", (error as any).response.status, (error as any).response.data);
+                } else if ((error as any).request) {
+                    console.error("No response received from server:", (error as any).request);
+                } else {
+                    console.error("Request Setup Error:", error.message);
+                }
+            } else {
+                console.error("An unknown error occurred:", error);
+            }
         }
+        
+        
     }
 };
 

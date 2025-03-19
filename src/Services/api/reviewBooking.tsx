@@ -34,7 +34,7 @@ console.log("Review Booking Client:", reviewBookingClient);
 
 //     return postJWtHttpClient(instance, '', null, data, headers);
 // };
-const reviewBookingApi = async (bookingData) => {
+const reviewBookingApi = async (bookingData: any) => {
     if (!bookingData) {
         console.error("Error: bookingData is undefined or null!");
         return;
@@ -63,7 +63,7 @@ const reviewBookingApi = async (bookingData) => {
     }
 
     const data = {
-        request_data: encodeURIComponent(encryptedRequestPayload)
+        request_data: decodeURIComponent(encryptedRequestPayload)
     };
 
     let headers = {

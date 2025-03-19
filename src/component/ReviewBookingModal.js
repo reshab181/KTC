@@ -53,14 +53,14 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
                 "Guestname": `${UserDetail?.f_name || ''} ${UserDetail?.l_name || ''}`,
                 "Guestcontacto": UserDetail?.mobile_number || "",
                 "guestemail": UserDetail?.email_id || "",
-                "Guestflight": corporateData?.flightTrainInfo || "",
+                "Guestflight": corporateData?.Guestflight || "",
                 "Reportingplace": corporateData?.Reportingplace?.placeAddress || "",
                 "start_date": corporateData?.start_date || "",
                 "Reporingtime": corporateData?.Reporingtime || "00:00",
                 "assignment": corporateData?.assignment || "",
                 "city_of_usage": corporateData?.city_of_usage || "",
                 "vehiclerequested": corporateData?.vehiclerequested || "",
-                "instruction": corporateData?.specialInstruction || "",
+                "instruction": corporateData?.instruction || "",
                 "payment_mode": corporateData?.paymentValue || "",
                 "user_id": userId,
                 "PGorderid": '',
@@ -108,7 +108,7 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
                     <CustomHeader
                         title="Review Booking Details"
                         leftIcon={() => (
-                            <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <TouchableOpacity onPress={onClose}>
                                 <Image source={require('../assets/ic_back_arrow_white_24.png')} />
                             </TouchableOpacity>
                         )}
@@ -128,9 +128,9 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
                         {renderDetail('Car Group', corporateData?.vehiclerequested)}
                         {renderDetail('Pickup Address', corporateData?.Reportingplace?.placeAddress)}
                         {renderDetail('Reporting Date/Time', `${corporateData?.start_date} , ${corporateData?.Reporingtime}`)}
-                        {renderDetail('Reporting Address', corporateData?.eloc)}
-                        {renderDetail('Flight/Train Info', corporateData?.flightTrainInfo)}
-                        {renderDetail('Special Instruction', corporateData?.specialInstruction)}
+                        {renderDetail('Reporting Address',eloc)}
+                        {renderDetail('Flight/Train Info', corporateData?.Guestflight)}
+                        {renderDetail('Special Instruction', corporateData?.instruction)}
                         {renderDetail('Payment Mode', corporateData?.payment_mode)}
                     </ScrollView>
                     <View style={styles.buttonContainer}>
