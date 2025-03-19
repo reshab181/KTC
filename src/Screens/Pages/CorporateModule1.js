@@ -161,6 +161,10 @@ const CorporateModule1 = ({ navigation,item,index }) => {
       Alert.alert("Incomplete Fields", "Please fill all required fields before proceeding.");
     }
   };
+  const handleRightIcon = () => {
+    setUnreadCount(0); 
+    navigation.navigate("Notifications");
+  }
 
   const closeModal = () => {
     setModalVisible(false);
@@ -197,7 +201,8 @@ const CorporateModule1 = ({ navigation,item,index }) => {
     </View>
   )}
   handleLeftIcon={() => setIsSidebarVisible(true)}
-  handleRightIcon={() => navigation.navigate("Notifications")}
+ 
+  handleRightIcon={handleRightIcon} 
   isSidebarVisible={isSidebarVisible}
 />
 

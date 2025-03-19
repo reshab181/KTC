@@ -312,7 +312,7 @@ const COLORS = {
 };
 
 const Register = ({ route }) => {
-    const { emailId, clientId, sub_entity } = route.params || {};
+    const {  emailId, clientId, sub_entity } = route.params || {};
     console.log(emailId,clientId,sub_entity,"data=========================");
     
     const navigation = useNavigation();
@@ -320,7 +320,7 @@ const Register = ({ route }) => {
 
     // Form state
     const [formData, setFormData] = useState({
-        email: emailId || '',
+        email:  emailId || '',
         firstName: '',
         lastName: '',
         password: '',
@@ -458,7 +458,7 @@ const Register = ({ route }) => {
                     'Account Created Successfully',
                     [{
                         text: 'OK',
-                        onPress: () => navigation.navigate('SignInCorporate', { email_id: formData.email })
+                        onPress: () => navigation.navigate("CorporateSignIn", { email_id: formData.email })
                     }]
                 );
             } else {
