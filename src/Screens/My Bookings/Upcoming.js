@@ -683,7 +683,7 @@ const Upcoming = ({ navigation }) => {
         const response = await postJWtHttpClient(await Cancellation, '', null, data, headers);
 
         if (response && response.status === 200) {
-            console.log("Booking cancelled successfully:", response.data);
+            Alert.alert("Booking cancelled successfully");
 
             const updatedList = list.map((booking) =>
                 booking.booking_id === modalVisible.values.booking_id

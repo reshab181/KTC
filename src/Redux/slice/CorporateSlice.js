@@ -380,7 +380,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { reviewBookingApi } from "../../services/api/reviewBooking";
 import { encryptPayload, decryptData } from "../../Utils/EncryptionUtility";
 
-// Initial State
+
 const initialState = {
   loading: false,
   error: null,
