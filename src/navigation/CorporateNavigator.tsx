@@ -7,6 +7,7 @@ import PickUpLocation from "../Screens/Pages/PickUpLocation";
 import ReviewBookingModal from "../component/ReviewBookingModal";
 import Upcoming from "../Screens/My Bookings/Upcoming";
 import Notification from "../Screens/Notification";
+import Help from "../Screens/Help";
 
 const CorporateStack = createNativeStackNavigator()
 
@@ -19,6 +20,7 @@ const CorporateNavigator = () => {
             <CorporateStack.Screen name="PickUpLocation" component={PickUpLocation} options={{ headerShown: false }}/>
             <CorporateStack.Screen name="Upcoming" component={Upcoming} options={{ headerShown: false }}/>
             <CorporateStack.Screen name="Notifications" component={Notification} options={{ headerShown: false }} />
+            <CorporateStack.Screen name="Help" component={Help} options={{ headerShown: false }} />
 
         </CorporateStack.Navigator>
     )

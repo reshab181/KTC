@@ -271,6 +271,7 @@ const VerifyOTPScreen = () => {
 
   const inputRefs = useRef<TextInput[]>([]);
   const verifyOtpApiState = useSelector((state: any) => state.verifyOtp);
+  console.log('Navigating with:', { emailId, clientId, sub_entity });
 
   useEffect(() => {
     if (route.params && typeof route.params === 'object') { 
@@ -285,9 +286,13 @@ const VerifyOTPScreen = () => {
   useEffect(() => {
     if (verifyOtpApiState.loading === false) {
       if (verifyOtpApiState.data) {
-        navigation.replace(screenType === 0 ? 'RegisterPage' : 'ForgotPassword', {
-          params: { emailId, clientId, sub_entity },
-        });
+        console.log('Navigating to:', screenType === 0 ? 'RegisterPage' : 'ForgotPassword');
+        console.log('Params being sent:', { emailId, clientId, sub_entity });
+      navigation.replace(screenType === 0 ? 'RegisterPage' : 'ForgotPassword', { 
+        emailId, 
+        clientId, 
+        sub_entity 
+      });
       } else if (verifyOtpApiState.error) {
         Alert.alert('Verification Failed', verifyOtpApiState.error.message || 'Invalid OTP. Try again.');
       }

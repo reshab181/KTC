@@ -17,6 +17,7 @@ import HomeSvg from '../assets/svg/home.svg'
 import BookingSvg from '../assets/svg/Mybookings.svg'
 import ProfileSvg from '../assets/svg/my-profile.svg'
 import NotificationSvg from '../assets/svg/notifications.svg';
+import HelpSvg from '../assets/svg/help.svg';
 import LogoutSvg from '../assets/svg/logout.svg'
 import { useDispatch, useSelector } from 'react-redux';
 import { resetSignInState } from '../Redux/slice/SignInSlice';
@@ -33,7 +34,7 @@ const SidebarMenu = ({ isVisible, onClose }) => {
     { name: 'Home', route: 'CorporateHomeScreen', icon: HomeSvg },
     { name: 'Manage Bookings', route: 'Upcoming', icon: BookingSvg},
     { name: 'Profile', route: 'Profile', icon: ProfileSvg},
-    { name: 'Notifications', route: 'Notifications', icon:NotificationSvg },
+    { name: 'Help', route: 'Help', icon: HelpSvg},
     { name: 'Logout', route: 'logout', icon: LogoutSvg }, 
   ];
 

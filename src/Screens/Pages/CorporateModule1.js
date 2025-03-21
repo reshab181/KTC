@@ -161,6 +161,10 @@ const CorporateModule1 = ({ navigation,item,index }) => {
       Alert.alert("Incomplete Fields", "Please fill all required fields before proceeding.");
     }
   };
+  const handleRightIcon = () => {
+    setUnreadCount(0); 
+    navigation.navigate("Notifications");
+  }
 
   const closeModal = () => {
     setModalVisible(false);
@@ -176,7 +180,7 @@ const CorporateModule1 = ({ navigation,item,index }) => {
   leftIcon={Menuu}
   rightIcon={() => (
     <View style={{ position: "relative",color:"#fff" }}>
-       <Icon name="notifications" size={24} color="#fff" style={{ marginRight: 10 }} />
+       <Icon name="notifications" size={24} color="#fff" style={{ marginRight: 10 }}  />
       {unreadCount > 0 && (
         <View
           style={{
@@ -197,7 +201,8 @@ const CorporateModule1 = ({ navigation,item,index }) => {
     </View>
   )}
   handleLeftIcon={() => setIsSidebarVisible(true)}
-  handleRightIcon={() => navigation.navigate("Notifications")}
+ 
+  handleRightIcon={handleRightIcon} 
   isSidebarVisible={isSidebarVisible}
 />
 
@@ -265,11 +270,11 @@ const CorporateModule1 = ({ navigation,item,index }) => {
                 <CustomTextInpt
                   placeholder="Reporting Landmark (Optional)"
                   value={reportingLandmark}
-                  onChangeText={(text) => {
-                    setreportingLandmark(text);
+                  onChangeText={(txt) => {
+                    setreportingLandmark(txt);
                     dispatch(updateCorporateSlice({
                       type: "reportingLandmark",
-                      selectedItem: text
+                      selectedItem: txt
                     }));
                   }}
                 />
@@ -282,22 +287,22 @@ const CorporateModule1 = ({ navigation,item,index }) => {
               <View style={{ marginHorizontal: 10 }}>
                 <CustomTextInpt placeholder="Flight/Train info"
                   value={flightTrainInfo}
-                  onChangeText={(text) => {
-                    setflightTrainInfo(text)
+                  onChangeText={(txt) => {
+                    setflightTrainInfo(txt)
                     dispatch(updateCorporateSlice({
                       type: "Guestflight",
-                      selectedItem: text
+                      selectedItem: txt
                     }))
                   }}
                 />
                 <CustomTextInpt placeholder="Special Instruction (Optional)"
                   value={specialInstruction}
-                  onChangeText={(text) => {
-                    setspecialInstruction(text)
+                  onChangeText={(txt) => {
+                    setspecialInstruction(txt)
                     dispatch(
                       updateCorporateSlice({
                         type: "instruction",
-                        selectedItem: text,
+                        selectedItem: txt,
                       })
                     )
                   }
@@ -342,12 +347,12 @@ const CorporateModule1 = ({ navigation,item,index }) => {
                 <CustomTextInpt
                   placeholder="Reference Number"
                   value={referenceNumber}
-                  onChangeText={(text) => {
-                    setreferenceNumber(text);
+                  onChangeText={(txt) => {
+                    setreferenceNumber(txt);
                     dispatch(
                       updateCorporateSlice({
                         type: "custom_column",
-                        selectedItem: { referenceNumber: text }, 
+                        selectedItem: { referenceNumber: txt }, 
                       })
                     );
                   }}
@@ -356,12 +361,12 @@ const CorporateModule1 = ({ navigation,item,index }) => {
                 <CustomTextInpt
                   placeholder="Booking Code"
                   value={BookingCode}
-                  onChangeText={(text) => {
-                    setBookingCode(text);
+                  onChangeText={(txt) => {
+                    setBookingCode(txt);
                     dispatch(
                       updateCorporateSlice({
                         type: "custom_column",
-                        selectedItem: { bookingCode: text }, 
+                        selectedItem: { bookingCode: txt }, 
                       })
                     );
                   }}
@@ -370,12 +375,12 @@ const CorporateModule1 = ({ navigation,item,index }) => {
                 <CustomTextInpt
                   placeholder="TR No"
                   value={trNumber}
-                  onChangeText={(text) => {
-                    settrNumber(text);
+                  onChangeText={(txt) => {
+                    settrNumber(txt);
                     dispatch(
                       updateCorporateSlice({
                         type: "custom_column",
-                        selectedItem: { trNumber: text }, 
+                        selectedItem: { trNumber: txt }, 
                       })
                     );
                   }}
@@ -384,12 +389,12 @@ const CorporateModule1 = ({ navigation,item,index }) => {
                 <CustomTextInpt
                   placeholder="Bill No"
                   value={BillNumber}
-                  onChangeText={(text) => {
-                    setBillNumber(text);
+                  onChangeText={(txt) => {
+                    setBillNumber(txt);
                     dispatch(
                       updateCorporateSlice({
                         type: "custom_column",
-                        selectedItem: { billNumber: text }, 
+                        selectedItem: { billNumber: txt }, 
                       })
                     );
                   }}

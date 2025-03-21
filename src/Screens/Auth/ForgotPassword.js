@@ -6,17 +6,17 @@ import {
   View,
   StyleSheet,
   SafeAreaView,
-  ActivityIndicator,
+
 } from 'react-native';
-import { fetchJwtAccess } from '../../Utils/JwtHelper';
+
 import CustomHeader from '../../component/CustomHeader';
 import CustomTextInpt from '../../component/CustomTextInpt';
 import CustomButton from '../../component/CustomButtons';
-import { emailsms } from '../../Api/Authentication';
+
 import { AuthStrings, Characters } from '../../constants/Strings';
 import { useDispatch, useSelector } from 'react-redux';
 import { resetSendOtpState, sendOtp } from '../../Redux/slice/SendOtpSlice';
-import { resetState } from '../../Redux/slice/VerifyEmailSlice';
+
 import { Alert } from 'react-native';
 
 const { height, width } = Dimensions.get('screen');

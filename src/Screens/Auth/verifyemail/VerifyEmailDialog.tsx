@@ -79,6 +79,9 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
   }, [sendOtpApiState])
 
   const getSendOtpResponse = () => {
+    console.log("Email:", email);
+    console.log("Client ID:", clientId);
+    console.log("Sub Entity:", sub_entity);
 
     if (sendOtpApiState.loading === false && sendOtpApiState.data && sendOtpApiState.data !== null) {
       console.log(sendOtpApiState.data)

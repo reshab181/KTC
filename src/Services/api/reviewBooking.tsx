@@ -34,7 +34,7 @@ console.log("Review Booking Client:", reviewBookingClient);
 
 //     return postJWtHttpClient(instance, '', null, data, headers);
 // };
-const reviewBookingApi = async (bookingData) => {
+const reviewBookingApi = async (bookingData: any) => {
     if (!bookingData) {
         console.error("Error: bookingData is undefined or null!");
         return;
@@ -62,9 +62,10 @@ const reviewBookingApi = async (bookingData) => {
         return;
     }
 
-    const data = {
-        request_data: encodeURIComponent(encryptedRequestPayload)
-    };
+    // const data = {
+    //     request_data: decodeURIComponent(encryptedRequestPayload)
+    // };
+    const data = { request_data: encryptedRequestPayload }
 
     let headers = {
         'Content-Type': 'application/x-www-form-urlencoded'
