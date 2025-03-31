@@ -62,10 +62,10 @@ const reviewBookingApi = async (bookingData: any) => {
         return;
     }
 
-    // const data = {
-    //     request_data: decodeURIComponent(encryptedRequestPayload)
-    // };
-    const data = { request_data: encryptedRequestPayload }
+    const data = {
+        request_data: decodeURIComponent(encryptedRequestPayload)
+    };
+    // const data = { request_data: decodeURIComponent(encryptedRequestPayload )}
 
     let headers = {
         'Content-Type': 'application/x-www-form-urlencoded'

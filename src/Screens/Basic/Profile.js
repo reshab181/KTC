@@ -17,6 +17,8 @@ import DobSvg from '../../assets/svg/cake_black.svg';
 import SmartPhoneSvg from '../../assets/svg/smartphone.svg';
 import EmailSvg from '../../assets/svg/email_black.svg';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import DeleteData from '../../services/api/deleteProfile';
+
 
 const Profile = () => {
   const [loader, setLoader] = useState(false);
@@ -71,17 +73,58 @@ const Profile = () => {
     fetchData();
   }, []);
 
-  const handleDeleteAccount = () => {
+  // const handleDeleteAccount = () => {
+  //   Alert.alert(
+  //     'Alert',
+  //     'Are you sure you want to delete your account?',
+  //     [
+  //       { text: 'Cancel', onPress: () => null },
+  //       { text: 'OK', onPress: () => console.log('Account deleted') },
+  //     ]
+  //   );
+  // };
+  const handleDeleteAccount = async () => {
     Alert.alert(
       'Alert',
       'Are you sure you want to delete your account?',
       [
         { text: 'Cancel', onPress: () => null },
-        { text: 'OK', onPress: () => console.log('Account deleted') },
+        { 
+          text: 'OK', 
+          onPress: async () => {
+            setLoader(true);
+            try {
+              const response = await DeleteData(formData.email);
+              setLoader(false);
+  
+              if (response) {
+                Alert.alert('Success', 'Your account has been deleted.');
+                await AsyncStorage.clear(); 
+                [{
+                  text: 'OK',
+                  onPress: () => navigation.replace("CorporateLoginNavigator", { 
+                      screen: "CorporateSignIn", 
+                     
+                  })
+              }]
+          
+                // navigation.reset({
+                //   index: 0,
+                //   routes: [{ name: 'CorporateSignIn' }],
+                // });
+              } else {
+                Alert.alert('Error', 'Failed to delete the account. Please try again.');
+              }
+            } catch (error) {
+              setLoader(false);
+              console.error('Error deleting account:', error);
+              Alert.alert('Error', 'Something went wrong. Please try again.');
+            }
+          } 
+        }
       ]
     );
   };
-
   const inputs = [
     { placeholder: "First Name", icon1: FirstName, value: formData.firstName, key: 'firstName' },
     { placeholder: "Last Name", icon1: FirstName, value: formData.lastName, key: 'lastName' },

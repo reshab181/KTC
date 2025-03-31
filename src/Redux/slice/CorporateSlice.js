@@ -415,7 +415,7 @@ export const createCorporateBooking = createAsyncThunk(
 
     
       const response = await reviewBookingApi(payload);
-      console.log("API Response:", response);
+      console.log("API Response:", response.data);
 
       if (response.data?.message === "Access denied.") {
         console.error(" Access Denied");

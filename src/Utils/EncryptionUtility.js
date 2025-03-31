@@ -15,20 +15,55 @@ export const encryptPayload = (data) => {
   return encryptedData.ciphertext.toString(CryptoJS.enc.Base64);
 };
 
+// export const decryptData = (encryptedData) => {
+
+
+//   const ClientID = '!IV@_$2123456789';
+//   const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
+//   const rawData = CryptoJS.enc.Base64.parse(encryptedData);
+//   const key = CryptoJS.enc.Latin1.parse(ClientKey);
+//   const iv = CryptoJS.enc.Latin1.parse(ClientID);
+
+//   const decryptedData = CryptoJS.AES.decrypt(
+//     {
+//       ciphertext: rawData
+//     },
+//     key,
+//     { iv: iv }
+//   );
+
+//   return JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
+// };
+
+
+
 export const decryptData = (encryptedData) => {
-  const ClientID = '!IV@_$2123456789';
-  const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
-  const rawData = CryptoJS.enc.Base64.parse(encryptedData);
-  const key = CryptoJS.enc.Latin1.parse(ClientKey);
-  const iv = CryptoJS.enc.Latin1.parse(ClientID);
+  try {
+    const ClientID = '!IV@_$2123456789';
+    const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
 
-  const decryptedData = CryptoJS.AES.decrypt(
-    {
-      ciphertext: rawData
-    },
-    key,
-    { iv: iv }
-  );
+    // Convert ClientKey and IV to Utf8
+    const key = CryptoJS.enc.Utf8.parse(ClientKey);
+    const iv = CryptoJS.enc.Utf8.parse(ClientID);
 
-  return JSON.parse(decryptedData.toString(CryptoJS.enc.Utf8));
+    // Decode Base64 Encrypted Data
+    const rawData = CryptoJS.enc.Base64.parse(encryptedData);
+
+    // Decrypt the Data
+    const decrypted = CryptoJS.AES.decrypt(
+      { ciphertext: rawData },
+      key,
+      { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 }
+    );
+
+    // Convert decrypted data to string
+    const decryptedText = decrypted.toString(CryptoJS.enc.Utf8);
+    
+    // Check if decrypted text is valid JSON
+    return decryptedText ? JSON.parse(decryptedText) : null;
+
+  } catch (error) {
+    console.error("Decryption failed:", error);
+    return null;
+  }
 };

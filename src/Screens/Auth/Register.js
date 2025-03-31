@@ -389,13 +389,12 @@ const Register = ({ route }) => {
         //     newErrors.alternatePhone = 'Alternate phone number must be 10 digits';
         // }
 
-        // Date of birth validation
+
         if (!dob) newErrors.dob = 'Date of birth is required';
 
-        // Gender validation
+    
         if (!selectedGender) newErrors.gender = 'Gender is required';
          
-        // Country validation
         if (!selectedCountry) newErrors.country = 'Country is required'
 
         setErrors(newErrors);
@@ -441,7 +440,7 @@ const Register = ({ route }) => {
                 mobile_number: formData.phone,
                 password: formData.password,
                 client_id:  clientId,
-                sub_enitityid: sub_entity,
+                sub_enitityid: sub_entity.sub_enitityid,
                 country: selectedCountry,
                 alternative_no: formData.alternatePhone,
             };
@@ -458,7 +457,10 @@ const Register = ({ route }) => {
                     'Account Created Successfully',
                     [{
                         text: 'OK',
-                        onPress: () => navigation.navigate("CorporateSignIn", { email_id: formData.email })
+                        onPress: () => navigation.replace("CorporateLoginNavigator", { 
+                            screen: "CorporateSignIn", 
+                            params: { email_id: formData.email } 
+                        })
                     }]
                 );
             } else {
@@ -466,6 +468,8 @@ const Register = ({ route }) => {
             }
         } catch (error) {
             Alert.alert('Error', error.message || 'Registration failed. Please try again.');
+            console.log(responseData?.message,"==============");
+            
         } finally {
             setLoading(false);
         }

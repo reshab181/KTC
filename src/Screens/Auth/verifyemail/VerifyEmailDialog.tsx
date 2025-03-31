@@ -11,12 +11,13 @@ import { useNavigation } from '@react-navigation/native';
 import NavigationService from '../../../navigation/NavigationService';
 import verifyEmailStyle from './VerifyEmailStyle';
 import CloseIcon from '../../../assets/icon/CloseIcon';
+import { decryptData } from '../../../Utils/EncryptionUtility';
 
 const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
 
   // const[email, setEmail] = useState('ashutosh.rai@mapmyindia.com')
   const navigation = useNavigation();
-  const [email, setEmail] = useState('saksham.tyagi@mapmyindia.com')
+  const [email, setEmail] = useState('')
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   const dispatch = useDispatch<any>();
@@ -84,8 +85,11 @@ const VerifyEmailDialog = ({ module, onClose, onSignIn, onSignUp }) => {
     console.log("Sub Entity:", sub_entity);
 
     if (sendOtpApiState.loading === false && sendOtpApiState.data && sendOtpApiState.data !== null) {
-      console.log(sendOtpApiState.data)
-      onSignUp(email, sendOtpApiState.data, clientId,sub_entity)
+      // const decryptedData = decryptData(sendOtpApiState.data);
+      const decryptedClientId = decryptData(clientId);
+      const decryptedSubEntity = decryptData(sub_entity)
+      console.log(sendOtpApiState.data,decryptedClientId,decryptedSubEntity)
+      onSignUp(email, sendOtpApiState.data, decryptedClientId ,decryptedSubEntity)
     } else if (sendOtpApiState.loading === false && sendOtpApiState.error !== null) {
       Alert.alert('Error', 'Failed to send otp. Please try again.');
     }
