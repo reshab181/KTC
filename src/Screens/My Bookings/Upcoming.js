@@ -607,7 +607,7 @@ const Upcoming = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(1);
-  const [pageLimit] = useState(10);
+  const [pageLimit] = useState(100);
   const [history, setHistory] = useState([]);
   const [upcoming, setUpcoming] = useState([]);
   const [selectedTab, setSelectedTab] = useState('Upcoming');
@@ -657,60 +657,105 @@ const Upcoming = ({ navigation }) => {
   const showDetails = (item) => {
     console.log('Showing details for booking:', item.booking_id);
   };
-  const handleCancelBooking = async () => {
-    const Cancellation = apiClient(BASE_URL + CANCELLATION);
-    setIsLoading(true);
-    try {
-        const item = { ...modalVisible?.values };
-        const userId = await AsyncStorage.getItem("user_id");
-        if (!userId || !item?.booking_id) {
-            console.error("User ID or Booking ID missing!");
-            setIsLoading(false);
-            return;
-        }
-        const MyPayLod = {
-            "user_id": userId,
-            "booking_number": item?.booking_id,
-            "reasonforcancelation": reject,
-            "requestdatetime": new Date().toISOString()
-        };
-        const encryptedPayLoad = encryptPayload(MyPayLod);
-        const data = { request_data: decodeURIComponent(encryptedPayLoad) };
+//   const handleCancelBooking = async () => {
+//     const Cancellation = apiClient(BASE_URL + CANCELLATION);
+//     setIsLoading(true);
+//     try {
+//         const item = { ...modalVisible?.values };
+//         const userId = await AsyncStorage.getItem("user_id");
+//         if (!userId || !item?.booking_id) {
+//             console.error("User ID or Booking ID missing!");
+//             setIsLoading(false);
+//             return;
+//         }
+//         const MyPayLod = {
+//             "user_id": userId,
+//             "booking_number": item?.booking_id,
+//             "reasonforcancelation": reject,
+//             "requestdatetime": new Date().toISOString()
+//         };
+//         const encryptedPayLoad = encryptPayload(MyPayLod);
+//         const data = { request_data: decodeURIComponent(encryptedPayLoad) };
 
-        console.log("Fetching Notifications:", data);
+//         console.log("Fetching Notifications:", data);
 
-        let headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' };
-        const response = await postJWtHttpClient(await Cancellation, '', null, data, headers);
+//         let headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' };
+//         const response = await postJWtHttpClient(await Cancellation, '', null, data, headers);
 
-        if (response && response.status === 200) {
-            Alert.alert("Booking cancelled successfully");
+//         if (response && response.status === 200) {
+//             Alert.alert("Booking cancelled successfully");
 
-            const updatedList = list.map((booking) =>
-                booking.booking_id === modalVisible.values.booking_id
-                    ? { ...booking, Bookingstatus: 'Cancelled' }
-                    : booking
-            );
-            setList(updatedList);
-            setModalVisible({ isVisible: false, values: {} });
-            setReject('');
-            setRefreshing(true)
+//             const updatedList = list.map((booking) =>
+//                 booking.booking_id === modalVisible.values.booking_id
+//                     ? { ...booking, Bookingstatus: 'Cancelled' }
+//                     : booking
+//             );
+//             setList(updatedList);
+//             setModalVisible({ isVisible: false, values: {} });
+//             setReject('');
+//             setRefreshing(true)
 
-        } else {
-            console.error("Failed to cancel booking:", response);
-            Alert.alert("Error", "Failed to cancel booking. Please try again.");
-            setIsLoading(false);
-            return;
-        }
-    } catch (error) {
-        console.error("Error cancelling booking:", error);
-        Alert.alert("Error", "An error occurred while cancelling your booking. Please try again.");
-        setIsLoading(false);
-        return;
-    } finally {
-        setIsLoading(false);
-    }
+//         } else {
+//             console.error("Failed to cancel booking:", response);
+//             Alert.alert("Error", "Failed to cancel booking. Please try again.");
+//             setIsLoading(false);
+//             return;
+//         }
+//     } catch (error) {
+//         console.error("Error cancelling booking:", error);
+//         Alert.alert("Error", "An error occurred while cancelling your booking. Please try again.");
+//         setIsLoading(false);
+//         return;
+//     } finally {
+//         setIsLoading(false);
+//     }
+// };
+const handleCancelBooking = async () => {
+  const Cancellation = apiClient(BASE_URL + CANCELLATION);
+  setIsLoading(true);
+  try {
+      const item = { ...modalVisible?.values };
+      const userId = await AsyncStorage.getItem("user_id");
+      if (!userId || !item?.booking_id) {
+          console.error("User ID or Booking ID missing!");
+          setIsLoading(false);
+          return;
+      }
+      const MyPayLod = {
+          "user_id": userId,
+          "booking_number": item?.booking_id,
+          "reasonforcancelation": reject,
+          "requestdatetime": new Date().toISOString()
+      };
+      const encryptedPayLoad = encryptPayload(MyPayLod);
+      const data = { request_data: decodeURIComponent(encryptedPayLoad) };
+
+      console.log("Fetching Notifications:", data);
+
+      let headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' };
+      const response = await postJWtHttpClient(await Cancellation, '', null, data, headers);
+
+      if (response && response.status === 200) {
+          Alert.alert("Booking cancelled successfully");
+
+         
+          setModalVisible({ isVisible: false, values: {} });
+          setReject('');
+          
+        
+          await fetchData();
+
+      } else {
+          console.error("Failed to cancel booking:", response);
+          Alert.alert("Error", "Failed to cancel booking. Please try again.");
+      }
+  } catch (error) {
+      console.error("Error cancelling booking:", error);
+      Alert.alert("Error", "An error occurred while cancelling your booking. Please try again.");
+  } finally {
+      setIsLoading(false);
+  }
 };
-
 
   const renderBookingItem = ({ item }) => (
     <TouchableOpacity style={styles.card}>

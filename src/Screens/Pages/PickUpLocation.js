@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { FlatList, StyleSheet, Text, View, ActivityIndicator, TouchableOpacity,useColorScheme } from 'react-native';
 import React, { useState, useEffect, useRef } from 'react';
 import CustomHeader from '../../component/CustomHeader';
 import CustomTextInput from '../../component/CustomIconTextInput';
@@ -9,6 +9,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import CloseSvg from '../../assets/svg/closeblack.svg';
 
 const PickUpLocation = ({ navigation, route }) => {
+       const theme = useColorScheme(); // Detect theme
+        const isDark = theme === 'dark';
     const [searchText, setSearchText] = useState('');
     const [locations, setLocations] = useState([]); 
     const [loading, setLoading] = useState(false); 
@@ -90,6 +92,7 @@ const PickUpLocation = ({ navigation, route }) => {
                     lefticon="search"
                     Righticon={CloseSvg}
                     iconSize={20}
+                    iconColor={isDark ? '#000' : '#000'}  
                     placeholder="Enter Location"
                     value={searchText}
                     handlePress={() => navigation.goBack() } 

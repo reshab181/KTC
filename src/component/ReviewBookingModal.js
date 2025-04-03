@@ -218,7 +218,7 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
 
             Alert.alert("Processing", "Please wait while we confirm your booking...");
 
-            const resultAction = await dispatch(createCorporateBooking(MyPayload));
+            const resultAction =  dispatch(createCorporateBooking(MyPayload));
 
             console.log("Redux Action Result:", resultAction);
 
