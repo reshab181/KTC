@@ -56,27 +56,61 @@ const fetchData = async (endpoint, payload, token) => {
 };
 
 // Fetch Cities
+// export const fetchCities = async (city, client_id, token, setCity) => {
+//     console.log("Fetching Cities...");
+
+//     const payload = {
+//         client_id: client_id,
+//         start_date: Math.floor(Date.now() / 1000),
+//         city_of_usage: city
+//     };
+
+//     try {
+//         const data = await fetchData("https://web.gst.fleet.ktcindia.com/user_apis_encoded/booking_param.php", payload, token);
+//         const cityList = decryptData(data?.city_of_usage);
+//         console.log("Decrypted City List:", cityList);
+//         setCity([...cityList]);
+//         return cityList;
+//     } catch (error) {
+//         console.error('Error Fetching Cities:', error.message);
+//         throw new Error('Error Fetching Cities');
+//     }
+// };
 export const fetchCities = async (city, client_id, token, setCity) => {
-    console.log("Fetching Cities...");
+  if (!client_id || !token) {
+      throw new Error('Missing required parameters');
+  }
 
-    const payload = {
-        client_id: client_id,
-        start_date: Math.floor(Date.now() / 1000),
-        city_of_usage: city
-    };
+  const payload = {
+      client_id,
+      start_date: Math.floor(Date.now() / 1000),
+      city_of_usage: city || ''
+  };
 
-    try {
-        const data = await fetchData("https://web.gst.fleet.ktcindia.com/user_apis_encoded/booking_param.php", payload, token);
-        const cityList = decryptData(data?.city_of_usage);
-        console.log("Decrypted City List:", cityList);
-        setCity([...cityList]);
-        return cityList;
-    } catch (error) {
-        console.error('Error Fetching Cities:', error.message);
-        throw new Error('Error Fetching Cities');
-    }
+  try {
+      const response = await fetchData("https://web.gst.fleet.ktcindia.com/user_apis_encoded/booking_param.php", payload, token);
+      
+   
+      if (response?.status === 204 || response?.message === "No City Found") {
+          setCity([]);
+          return [];
+      }
+
+      if (!response?.city_of_usage) {
+          console.log('API Response:', response);
+          throw new Error('No cities data available');
+      }
+
+      const cityList = decryptData(response.city_of_usage);
+      const validCityList = Array.isArray(cityList) ? cityList : [];
+      
+      setCity(validCityList);
+      return validCityList;
+  } catch (error) {
+      console.error('Error Fetching Cities:', error);
+      throw error;
+  }
 };
-
 export const fetchRentalType = async (city, client_id, token) => {
     console.log("Fetching Rental Types...");
     const date =  Math.floor(Date.now() / 1000) ;

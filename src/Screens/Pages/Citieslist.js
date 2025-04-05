@@ -1,4 +1,4 @@
-// Ashutosh Rai 
+
 
 import { SafeAreaView, Text, View, TextInput, TouchableOpacity,useColorScheme } from 'react-native';
 import React, { useState } from 'react';
@@ -59,7 +59,7 @@ const Citieslist = ({ route, navigation }) => {
                             borderColor: "#000000",  
                             borderRadius: 4,
                             height: 40,
-                            // color: isDark ? '#000' : '#000' ,
+                            color: isDark ? '#000' : '#000' ,
                             backgroundColor :'white', 
                             paddingHorizontal: 10,
                             fontSize: 16,

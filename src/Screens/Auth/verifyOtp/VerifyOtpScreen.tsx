@@ -288,7 +288,7 @@ const VerifyOTPScreen = () => {
       if (verifyOtpApiState.data) {
         console.log('Navigating to:', screenType === 0 ? 'RegisterPage' : 'ForgotPassword');
         console.log('Params being sent:', { emailId, clientId, sub_entity });
-      navigation.replace(screenType === 0 ? 'RegisterPage' : 'ForgotPassword', { 
+        navigation.replace(screenType === 0 ? 'RegisterPage' : 'ForgotPassword', { 
         emailId, 
         clientId, 
         sub_entity 
@@ -421,5 +421,9 @@ const VerifyOTPScreen = () => {
 };
 
 export default VerifyOTPScreen;
+
+
+
+
 
 

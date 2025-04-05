@@ -1,5 +1,4 @@
-// Author: Ashutosh Rai
-// Component: CustomIconTextInput
+
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -9,6 +8,7 @@ const CustomIconTextInput = ({
   Righticon,
   lefticon , 
   icon1,
+
   icon2,
   LeftSvg, 
   keyboardType = 'default',
