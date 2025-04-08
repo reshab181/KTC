@@ -67,31 +67,35 @@ export const encryptPayload = (data) => {
 //     return null;
 //   }
 // };
+
+
 export const decryptData = (encryptedData) => {
   try {
     console.log("Incoming encryptedData:", encryptedData);
-    if (typeof encryptedData !== 'string') {
-      console.error("Error: encryptedData is not a string!");
+
+    
+    if (typeof encryptedData !== "string") {
+      console.warn(" Warning: encryptedData is not a string. Converting to string...");
+      encryptedData = JSON.stringify(encryptedData);
+    }
+
+ 
+    const base64Regex = /^[A-Za-z0-9+/=]+$/;
+    if (!base64Regex.test(encryptedData)) {
+      console.error(" Error: encryptedData is not valid Base64!");
       return null;
     }
 
-    
-    if (encryptedData.length % 4 !== 0) {
-      console.error("Error: encryptedData does not seem to be Base64 encoded!");
-      return null;
-    }
+    const ClientID = "!IV@_$2123456789";
+    const ClientKey = "*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh";
 
-    const ClientID = '!IV@_$2123456789';
-    const ClientKey = '*F-JaNdRfUjXn2r5u8x/A?D(G+KbPeSh';
-
-    
     const key = CryptoJS.enc.Utf8.parse(ClientKey);
     const iv = CryptoJS.enc.Utf8.parse(ClientID);
 
-   
+  
     const rawData = CryptoJS.enc.Base64.parse(encryptedData);
 
-
+ 
     const decrypted = CryptoJS.AES.decrypt(
       { ciphertext: rawData },
       key,
@@ -103,17 +107,19 @@ export const decryptData = (encryptedData) => {
     if (decryptedText) {
       try {
         const jsonData = JSON.parse(decryptedText);
+        console.log(" Successfully decrypted:", jsonData);
         return jsonData;
       } catch (e) {
-        console.error("Error parsing decrypted data as JSON:", e);
-        return null;
+        console.error(" Error parsing decrypted data as JSON:", e, decryptedText);
+        return decryptedText; 
       }
     }
 
+    console.error(" Error: Decryption resulted in empty text!");
     return null;
 
   } catch (error) {
-    console.error("Decryption failed:", error);
+    console.error(" Decryption failed:", error);
     return null;
   }
 };

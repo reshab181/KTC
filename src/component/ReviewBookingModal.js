@@ -158,7 +158,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import CustomButton from './CustomButtons';
 import CustomHeader from './CustomHeader';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createCorporateBooking } from '../Redux/slice/CorporateSlice';
+import { createCorporateBooking, resetCorporateSlice } from '../Redux/slice/CorporateSlice';
 
 const ReviewBookingModal = ({ visible, onClose, eloc }) => {
     const navigation = useNavigation();
@@ -184,12 +184,61 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
         return `${year}-${month}-${day}`; 
     };
 
+    // const handleConfirm = async () => {
+    //     if (!userId) {
+    //         Alert.alert("Error", "User ID not found! Please log in again.");
+    //         return;
+    //     }
+
+    //     try {
+    //         const MyPayload = {
+    //             companyname: UserDetail?.client_name || "",
+    //             Guestname: `${UserDetail?.f_name || ''} ${UserDetail?.l_name || ''}`,
+    //             Guestcontacto: UserDetail?.mobile_number || "",
+    //             guestemail: UserDetail?.email_id || "",
+    //             Guestflight: corporateData?.Guestflight || "",
+    //             Reportingplace: corporateData?.Reportingplace?.placeAddress || "",
+    //             start_date: corporateData?.start_date || "",
+    //             Reporingtime: corporateData?.Reporingtime || "00:00",
+    //             assignment: corporateData?.assignment || "",
+    //             city_of_usage: corporateData?.city_of_usage || "",
+    //             vehiclerequested: corporateData?.vehiclerequested || "",
+    //             instruction: corporateData?.instruction || "",
+    //             payment_mode: corporateData?.paymentValue || "",
+    //             user_id: userId,
+    //             PGorderid: '',
+    //             custom_column: JSON.stringify(corporateData?.custom_column),
+    //             endate: corporateData?.assignment === 'OUTSTATION' 
+    //                 ? dateConverter(new Date(corporateData?.end_date).getTime() / 1000) 
+    //                 : dateConverter(new Date(corporateData?.start_date).getTime() / 1000),
+    //             eloc: eloc
+    //         };
+
+    //         console.log("Sending Payload:", MyPayload);
+
+    //         Alert.alert("Processing", "Please wait while we confirm your booking...");
+
+    //         const resultAction =  dispatch(createCorporateBooking(MyPayload));
+
+    //         console.log("Redux Action Result:", resultAction);
+
+    //         if (resultAction.MyPayload) {
+    //             Alert.alert("Success", "Booking confirmed successfully!");
+    //             onClose();
+    //         } else {
+    //             Alert.alert("Error", "Failed to confirm booking");
+    //         }
+    //     } catch (error) {
+    //         console.error("API Error:", error);
+    //         Alert.alert("Error", error.response?.data?.message || "An unexpected error occurred.");
+    //     }
+    // };
     const handleConfirm = async () => {
         if (!userId) {
             Alert.alert("Error", "User ID not found! Please log in again.");
             return;
         }
-
+    
         try {
             const MyPayload = {
                 companyname: UserDetail?.client_name || "",
@@ -204,36 +253,44 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
                 city_of_usage: corporateData?.city_of_usage || "",
                 vehiclerequested: corporateData?.vehiclerequested || "",
                 instruction: corporateData?.instruction || "",
-                payment_mode: corporateData?.paymentValue || "",
+                payment_mode: corporateData?.paymentValue || "abc",
                 user_id: userId,
                 PGorderid: '',
-                custom_column: JSON.stringify(corporateData?.custom_column),
+                custom_column: corporateData?.custom_column 
+                    ? JSON.stringify(corporateData.custom_column) 
+                    : "{}",
                 endate: corporateData?.assignment === 'OUTSTATION' 
-                    ? dateConverter(new Date(corporateData?.end_date).getTime() / 1000) 
-                    : dateConverter(new Date(corporateData?.start_date).getTime() / 1000),
-                eloc: eloc
+                    ? dateConverter(new Date(corporateData?.end_date || Date.now()).getTime() / 1000) 
+                    : dateConverter(new Date(corporateData?.start_date || Date.now()).getTime() / 1000),
+                eloc: eloc || ""
             };
-
-            console.log("Sending Payload:", MyPayload);
-
+    
+            console.log(" Sending Payload:", MyPayload);
+    
             Alert.alert("Processing", "Please wait while we confirm your booking...");
-
-            const resultAction =  dispatch(createCorporateBooking(MyPayload));
-
+    
+            const resultAction = await dispatch(createCorporateBooking(MyPayload));
+    
             console.log("Redux Action Result:", resultAction);
-
-            if (resultAction.payload) {
-                Alert.alert("Success", "Booking confirmed successfully!");
+    
+     
+            if (createCorporateBooking.fulfilled.match(resultAction)) {
+                Alert.alert(
+                    "Booking Confirmed",
+                    `Your booking has been successfully submitted.\nBooking ID: ${resultAction.payload}`,
+                    [{ text: "OK" }]
+                  );
+                dispatch(resetCorporateSlice());
                 onClose();
             } else {
-                Alert.alert("Error", "Failed to confirm booking");
+                Alert.alert("Error", resultAction.payload || "Failed to confirm booking");
             }
         } catch (error) {
-            console.error("API Error:", error);
-            Alert.alert("Error", error.response?.data?.message || "An unexpected error occurred.");
+            console.error(" API Error:", error);
+            Alert.alert("Error", error.response?.message || "An unexpected error occurred.");
         }
     };
-
+    
     return (
         <Modal visible={visible} animationType="slide" transparent={true}>
             <View style={styles.overlay}>

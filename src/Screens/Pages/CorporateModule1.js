@@ -482,7 +482,7 @@ import { Alert } from 'react-native';
 import Menuu from '../../assets/svg/menu.svg';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ReviewBookingModal from '../../component/ReviewBookingModal';
-import { updateCorporateSlice, resetCorporateSlice } from '../../Redux/slice/CorporateSlice'; // Add import for resetCorporateSlice
+import { updateCorporateSlice, resetCorporateSlice } from '../../Redux/slice/CorporateSlice';
 import LoaderModal from '../../component/LoaderModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NotificationService from '../../services/api/Notification';
@@ -537,19 +537,29 @@ const CorporateModule1 = ({ navigation, item, index }) => {
       const isLoggedIn = await checkUserLoginStatus();
       
       if (isLoggedIn) {
-        await getUserData();
+       
+        const lastBookingConfirmed = await AsyncStorage.getItem('lastBookingConfirmed');
+        const currentTime = new Date().getTime();
+        
+        if (lastBookingConfirmed && (currentTime - parseInt(lastBookingConfirmed) < 30000)) {
+    
+          await AsyncStorage.removeItem('lastBookingConfirmed');
+        } else {
+          await getUserData();
+        }
       } else {
-     
         dispatch(resetCorporateSlice());
         clearLocalFormState();
       }
       
-      fetchUnreadCount();
+      const unsubscribe = navigation.addListener('focus', () => {
+        fetchUnreadCount();
+      });
+      return unsubscribe;
     };
     
     initializeComponent();
-  }, []);
-  
+  }, [navigation]);
 
   const clearLocalFormState = () => {
     setspecialInstruction('');
@@ -662,22 +672,24 @@ const CorporateModule1 = ({ navigation, item, index }) => {
   };
 
 
-  const handleBookingConfirmed = () => {
-    // Reset all form fields
+  const handleBookingConfirmed = async () => {
+  
     dispatch(resetCorporateSlice());
+    
+    
     clearLocalFormState();
     
-
+  
+    await AsyncStorage.setItem('lastBookingConfirmed', new Date().getTime().toString());
+    
     setModalVisible(false);
     
-  
     Alert.alert(
       "Booking Confirmed", 
       "Your booking has been successfully submitted.",
       [{ text: "OK" }]
     );
   };
-  
   const closeModal = () => {
     setModalVisible(false);
   };

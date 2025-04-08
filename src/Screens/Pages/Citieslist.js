@@ -1,17 +1,17 @@
-
-
-import { SafeAreaView, Text, View, TextInput, TouchableOpacity,useColorScheme } from 'react-native';
+import { SafeAreaView, Text, View, TextInput, TouchableOpacity, useColorScheme, StyleSheet, StatusBar } from 'react-native';
 import React, { useState } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import CustomHeader from '../../component/CustomHeader';
 import { useDispatch } from 'react-redux';
 import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
-import IcBackArrowSvg from '../../assets/svg/backarrow.svg'
+import IcBackArrowSvg from '../../assets/svg/backarrow.svg';
 import Icon from "react-native-vector-icons/EvilIcons";
 import CloseSvg from '../../assets/svg/closeblack.svg';
+
 const Citieslist = ({ route, navigation }) => {
-      const theme = useColorScheme(); // Detect theme
+    const theme = useColorScheme();
     const isDark = theme === 'dark';
+    
     const { list = [], type = 'city_of_usage' } = route.params ?? {};
     const [searchText, setSearchText] = useState('');
     const [filteredList, setFilteredList] = useState(list);
@@ -22,15 +22,12 @@ const Citieslist = ({ route, navigation }) => {
     const handleSearch = (text) => {
         setSearchText(text);
         const filtered = list.filter(item =>
-            item.toLowerCase().startsWith(text.toLowerCase())
+            item.toLowerCase().includes(text.toLowerCase())
         );
         setFilteredList(filtered);
     };
 
     const handleSelect = (selectedItem) => {
-        // console.log('====================================');
-        // console.log("SELECTED ITEM ", selectedItem);
-        // console.log('====================================');
         dispatch(updateCorporateSlice({
             type: type,
             selectedItem: selectedItem
@@ -38,65 +35,231 @@ const Citieslist = ({ route, navigation }) => {
         navigation.goBack();
     };
 
+    const getTitle = () => {
+        switch(type) {
+            case 'rentalType': return 'Select Rental Type';
+            case 'carGroup': return 'Select Car Group';
+            case 'city': return 'Select City';
+            default: return 'Select ' + type.charAt(0).toUpperCase() + type.slice(1);
+        }
+    };
+
+    const getPlaceholderText = () => {
+        switch(type) {
+            case 'rentalType': return 'Search Rental Type';
+            case 'carGroup': return 'Search Car Group';
+            case 'city': return 'Search City';
+            default: return 'Search ' ;
+        }
+    };
+
     return (
-        <SafeAreaView style={{ flex: 1 , backgroundColor : 'white'}}>
-            <ScrollView keyboardShouldPersistTaps="handled">
-                <View>
-                    {/* <CustomHeader
-                        title={type}
-                        Iconn={IcBackArrowSvg}
-                        // iconPath={require('../../assets/icbackarrow.png')}
-                        iconHeight={24}
-                        iconWidth={24}
-                        handleLeftIcon={() => navigation.goBack()}
-                    /> */}
-                </View>
-                <View style={{ flexDirection : "row" , alignItems : "center" ,borderBottomWidth: 0.4 , borderColor: '#000000' , backgroundColor : 'white',  }}>
+        <SafeAreaView style={[styles.container, isDark ? styles.darkContainer : styles.lightContainer]}>
+            <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
+            
+            {/* <CustomHeader
+                title={getTitle()}
+                Iconn={IcBackArrowSvg}
+                iconHeight={24}
+                iconWidth={24}
+                handleLeftIcon={() => navigation.goBack()}
+                containerStyle={isDark ? styles.darkHeader : styles.lightHeader}
+                titleStyle={isDark ? styles.darkHeaderTitle : styles.lightHeaderTitle}
+            /> */}
+            
+            <View style={[styles.searchContainer, isDark ? styles.darkSearchContainer : styles.lightSearchContainer]}>
+                <View style={styles.inputWrapper}>
+                    <Icon name="search" size={24} color={isDark ? '#999' : '#666'} style={styles.searchIcon} />
                     <TextInput
-                        style={{
-                            margin: 5 , 
-                            borderWidth: 0.5,
-                            borderColor: "#000000",  
-                            borderRadius: 4,
-                            height: 40,
-                            color: isDark ? '#000' : '#000' ,
-                            backgroundColor :'white', 
-                            paddingHorizontal: 10,
-                            fontSize: 16,
-                            width: '90%'
-                        }}
-                        placeholder={`Search ${type === 'rentalType' ? 'Rental Type' : type=== 'carGroup' ? 'Car Group' : type === 'city' ? 'City' : ""}`}
-                        placeholderTextColor={isDark ? '#B0B0B0' : '#666666'}
+                        style={[styles.input, isDark ? styles.darkInput : styles.lightInput]}
+                        placeholder={getPlaceholderText()}
+                        placeholderTextColor={isDark ? '#999' : '#666'}
                         value={searchText}
                         onChangeText={handleSearch}
                     />
-                    <TouchableOpacity onPress={()=>navigation.goBack()}>
-                        <Icon name='close' size={24} color={'#000000'}/>
-                    </TouchableOpacity>
+                    {searchText.length > 0 && (
+                        <TouchableOpacity onPress={() => handleSearch('')} style={styles.clearButton}>
+                            <Icon name="close" size={22} color={isDark ? '#fff' : '#000'} />
+                        </TouchableOpacity>
+                    )}
                 </View>
-                <View style={{ marginHorizontal: 16}}>
-                    {filteredList.map((item, index) => (
-                        <TouchableOpacity style={{
-                            // backgroundColor : "white",
-                            // borderBottomWidth: 0.3,
-                            height: 35, 
-                            justifyContent: 'center'
-                        }} key={index} onPress={() => handleSelect(item)}>
-                            <Text
-                                style={{
-                                    color: 'black',
-                                    fontSize: 16,
-                                    marginVertical: 4,
-                                    marginHorizontal: 10,
-                                }}>
+                
+                <TouchableOpacity 
+                    onPress={() => navigation.goBack()} 
+                    style={[styles.cancelButton, isDark ? styles.darkCancelButton : styles.lightCancelButton]}
+                >
+                    <Text style={[styles.cancelText, isDark ? styles.darkCancelText : styles.lightCancelText]}>Cancel</Text>
+                </TouchableOpacity>
+            </View>
+            
+            <ScrollView 
+                keyboardShouldPersistTaps="handled"
+                contentContainerStyle={styles.scrollContent}
+            >
+                {filteredList.length > 0 ? (
+                    filteredList.map((item, index) => (
+                        <TouchableOpacity 
+                            style={[
+                                styles.itemContainer,
+                                isDark ? styles.darkItemContainer : styles.lightItemContainer,
+                                index === filteredList.length - 1 && styles.lastItem
+                            ]} 
+                            key={index} 
+                            onPress={() => handleSelect(item)}
+                        >
+                            <Text style={[
+                                styles.itemText,
+                                isDark ? styles.darkItemText : styles.lightItemText
+                            ]}>
                                 {item}
                             </Text>
                         </TouchableOpacity>
-                    ))}
-                </View>
+                    ))
+                ) : (
+                    <View style={styles.emptyContainer}>
+                        <Text style={[styles.emptyText, isDark ? styles.darkEmptyText : styles.lightEmptyText]}>
+                            No {type === 'rentalType' ? 'rental types' : type === 'carGroup' ? 'car groups' : 'cities'} found
+                        </Text>
+                    </View>
+                )}
             </ScrollView>
         </SafeAreaView>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    lightContainer: {
+        backgroundColor: '#F8F8FA',
+    },
+    darkContainer: {
+        backgroundColor: '#121212',
+    },
+    lightHeader: {
+        backgroundColor: '#fff',
+        borderBottomColor: '#eee',
+        borderBottomWidth: 1,
+    },
+    darkHeader: {
+        backgroundColor: '#1E1E1E',
+        borderBottomColor: '#333',
+        borderBottomWidth: 1,
+    },
+    lightHeaderTitle: {
+        color: '#333',
+    },
+    darkHeaderTitle: {
+        color: '#fff',
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+    },
+    lightSearchContainer: {
+        backgroundColor: '#fff',
+        borderBottomColor: '#eee',
+    },
+    darkSearchContainer: {
+        backgroundColor: '#1E1E1E',
+        borderBottomColor: '#333',
+    },
+    inputWrapper: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderRadius: 8,
+        paddingHorizontal: 8,
+        height: 46,
+    },
+    lightInput: {
+        backgroundColor: '#f2f2f2',
+        color: '#333',
+    },
+    darkInput: {
+        backgroundColor: '#2A2A2A',
+        color: '#fff',
+    },
+    input: {
+        flex: 1,
+        height: 46,
+        fontSize: 16,
+        paddingLeft: 36,
+        borderRadius: 8,
+    },
+    searchIcon: {
+        position: 'absolute',
+        left: 12,
+        zIndex: 1,
+    },
+    clearButton: {
+        padding: 8,
+    },
+    cancelButton: {
+        marginLeft: 12,
+        paddingVertical: 10,
+        paddingHorizontal: 12,
+    },
+    lightCancelButton: {
+        color: '#3C3567',
+    },
+    darkCancelButton: {
+        color: '#a0a0ff',
+    },
+    cancelText: {
+        fontSize: 16,
+    },
+    lightCancelText: {
+        color: '#3C3567',
+    },
+    darkCancelText: {
+        color: '#a0a0ff',
+    },
+    scrollContent: {
+        paddingHorizontal: 16,
+        paddingTop: 8,
+        paddingBottom: 20,
+    },
+    itemContainer: {
+        paddingVertical: 16,
+        borderBottomWidth: 1,
+    },
+    lightItemContainer: {
+        borderBottomColor: '#eee',
+    },
+    darkItemContainer: {
+        borderBottomColor: '#333',
+    },
+    lastItem: {
+        borderBottomWidth: 0,
+    },
+    itemText: {
+        fontSize: 16,
+    },
+    lightItemText: {
+        color: '#333',
+    },
+    darkItemText: {
+        color: '#fff',
+    },
+    emptyContainer: {
+        padding: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    emptyText: {
+        fontSize: 16,
+    },
+    lightEmptyText: {
+        color: '#777',
+    },
+    darkEmptyText: {
+        color: '#aaa',
+    },
+});
 
 export default Citieslist;

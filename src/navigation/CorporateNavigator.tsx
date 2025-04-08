@@ -8,6 +8,9 @@ import ReviewBookingModal from "../component/ReviewBookingModal";
 import Upcoming from "../Screens/My Bookings/Upcoming";
 import Notification from "../Screens/Notification";
 import Help from "../Screens/Help";
+import Track from "../Screens/My Bookings/Track";
+import Feedback from "../Screens/Feedback";
+import LocationScreen from "../Screens/My Bookings/Location";
 
 const CorporateStack = createNativeStackNavigator()
 
@@ -21,6 +24,9 @@ const CorporateNavigator = () => {
             <CorporateStack.Screen name="Upcoming" component={Upcoming} options={{ headerShown: false }}/>
             <CorporateStack.Screen name="Notifications" component={Notification} options={{ headerShown: false }} />
             <CorporateStack.Screen name="Help" component={Help} options={{ headerShown: false }} />
+            <CorporateStack.Screen name="Feedback" component={Feedback} options={{ headerShown: false }} />
+            <CorporateStack.Screen name="Track" component={Track} options={{ headerShown: false }} />
+            <CorporateStack.Screen name="Location" component={LocationScreen} options={{ headerShown: false }} />
 
         </CorporateStack.Navigator>
     )

@@ -1,6 +1,7 @@
 import { BASE_URL, CREATE_BOOKING } from "../../config/api-config";
 import { decryptData, encryptPayload } from "../../Utils/EncryptionUtility";
 import { apiClient, postJWtHttpClient } from "./axiosClient";
+import axios from "axios";
 
 console.log("BASE_URL:", BASE_URL);
 console.log("CREATE_BOOKING:", CREATE_BOOKING);
@@ -88,7 +89,6 @@ const reviewBookingApi = async (bookingData: any) => {
     return;
   }
 
-
   const encryptedRequestPayload = encryptPayload(bookingData);
   console.log("Encrypted Payload:", encryptedRequestPayload);
 
@@ -99,8 +99,7 @@ const reviewBookingApi = async (bookingData: any) => {
 
   let instance;
   try {
-  
-    instance = reviewBookingClient; 
+    instance = reviewBookingClient;
     console.log("Axios Instance:", instance);
   } catch (error) {
     console.error("Error creating API client:", error);
@@ -112,9 +111,8 @@ const reviewBookingApi = async (bookingData: any) => {
     return;
   }
 
-
   const data = {
-    request_data: encryptedRequestPayload 
+    request_data: decodeURIComponent(encryptedRequestPayload)
   };
 
   let headers = {
@@ -122,31 +120,84 @@ const reviewBookingApi = async (bookingData: any) => {
   };
 
   try {
-    // Send the POST request
     const response = await postJWtHttpClient(await instance, '', null, data, headers);
     console.log("Server Response:", response);
 
-    // if (response && response.data) {
-    //   // Decrypt the encrypted response data here
-    // //   const decryptedResponse = decryptData(response.data);
-    // //   console.log("Decrypted Response:", decryptedResponse);
+    if (response) {
+      console.log("Response Data:", response);
+      return response; 
+    } else {
+      console.error("API Response is empty or undefined:", response);
+      return null;
+    }
+  } catch (err) {
+    console.error("API Call Failed:", err);
 
-    //   return ;  // Return the decrypted response data
-    // } else {
-    //   console.error("Error: Invalid response data received:", response);
-    //   return null;
-    // }
-  } catch (error) {
-    console.error("API Call Failed:", error);
-
-    // if (error.response) {
-    //   console.error("API Response Error Status:", error.response.status);
-    //   console.error("API Response Error Data:", error.response.data);
-    // } else {
-    //   console.error("Error details:", error.message);
-    // }
+    if (axios.isAxiosError(err)) {
+      console.error("Response Status:", err.response?.status);
+      console.error("Response Data:", err.response?.data);
+    } else {
+      console.error("Non-Axios Error:", err);
+    }
+    throw err; 
   }
 };
+
+// const reviewBookingApi = async (bookingData: any) => {
+//   if (!bookingData) {
+//     console.error("Error: bookingData is undefined or null!");
+//     return;
+//   }
+
+//   let encryptedRequestPayload = encryptPayload(bookingData);
+//   console.log("Encrypted Payload Type:", typeof encryptedRequestPayload);
+//   console.log("Encrypted Payload:", encryptedRequestPayload);
+
+//   // Validate if encryptedRequestPayload is Base64
+//   const isBase64 = (str: string) => /^[A-Za-z0-9+/=]+$/.test(str);
+
+//   if (!isBase64(encryptedRequestPayload)) {
+//     console.error("Error: Encrypted data is not in Base64 format!", encryptedRequestPayload);
+//     encryptedRequestPayload = Buffer.from(encryptedRequestPayload).toString("base64");
+//   }
+
+//   let instance;
+//   try {
+//     instance = reviewBookingClient;
+//   } catch (error) {
+//     console.error("Error creating API client:", error);
+//     return;
+//   }
+
+//   const data = { request_data: encryptedRequestPayload };
+//   let headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+
+//   try {
+//     const response = await postJWtHttpClient(await instance, '', null, data, headers);
+//     console.log("Full API Response:", response);
+
+//     if (response && response.data) {
+//       console.log("Type of response.data:", typeof response.data);
+//       console.log("Response Data:", response.data);
+
+//       const decryptedResponse = isBase64(response.data) ? decryptData(response.data) : null;
+
+//       if (!decryptedResponse) {
+//         console.error("Error: Response data is not Base64 encoded!", response.data);
+//       } else {
+//         console.log("Decrypted Response:", decryptedResponse);
+//       }
+
+//       return decryptedResponse;
+//     } else {
+//       console.error("Error: Invalid response data received:", response);
+//       return null;
+//     }
+//   } catch (error) {
+//     console.error("API Call Failed:", error);
+//   }
+// };
+
 
 
 

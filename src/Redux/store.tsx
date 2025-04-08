@@ -40,12 +40,16 @@ import sendOtpReducer from './slice/SendOtpSlice';
 import signInReducer from './slice/SignInSlice';
 import verifyOtpReducer from './slice/VerifyOtpSlice';
 import bookingReducer from "./slice/BookingSlice";
+import coordsReducer from './slice/CoordsSlice';
+
+
+
 
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage, 
-  whitelist: ['userprofile', 'corporate', 'user'],
+  whitelist: ['userprofile', 'corporate', 'user', 'coords'],
 };
 
 
@@ -58,6 +62,7 @@ const rootReducer = combineReducers({
   signIn: signInReducer, 
   verifyOtp: verifyOtpReducer,
   booking: bookingReducer,
+  coords:coordsReducer
 });
 
 

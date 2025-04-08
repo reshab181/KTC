@@ -634,7 +634,7 @@ const initialState = {
   error: null,
   bookingData: null,
   alertVisible: false,
-  paymentMode: "",
+  paymentMode: "abc",
   companyname: "",
   Guestname: "",
   Guestcontacto: "",
@@ -654,35 +654,72 @@ const initialState = {
   eloc: ""
 };
 
-// Thunk for creating corporate booking
+
+// export const createCorporateBooking = createAsyncThunk(
+//   "review/createReviewBooking",
+//   async (payload, { rejectWithValue }) => {
+//     try {
+    
+//       const response = await reviewBookingApi(payload);
+
+     
+//       if (response.data?.message === "Access denied.") {
+//         return rejectWithValue("Access Denied. Please refresh token.");
+//       }
+
+    
+//       if (!response.data?.booking_number) {
+//         return rejectWithValue("Invalid response from the server.");
+//       }
+
+      
+//       const decryptedBookingNumber = decryptData(response.data.booking_number);
+//       return decryptedBookingNumber;
+//     } catch (error) {
+   
+//       return rejectWithValue(
+//         error.response?.data?.message || error.message || "An unexpected error occurred."
+//       );
+//     }
+//   }
+// );
 export const createCorporateBooking = createAsyncThunk(
   "review/createReviewBooking",
   async (payload, { rejectWithValue }) => {
     try {
-      // Send payload to API
       const response = await reviewBookingApi(payload);
+      console.log("Full API Response:", response);
 
-      // Check for access denial or invalid response
-      if (response.data?.message === "Access denied.") {
+      const data = response?.data;
+
+      if (!data || !data.message) {
+        return rejectWithValue("Invalid API response. Please check the server.");
+      }
+
+      if (data.message === "Access denied.") {
         return rejectWithValue("Access Denied. Please refresh token.");
       }
 
-      // If booking_number is missing, it's an invalid response
-      if (!response.data?.booking_number) {
-        return rejectWithValue("Invalid response from the server.");
+      if (!data.booking_number) {
+        return rejectWithValue("Invalid response: booking number missing.");
       }
 
-      // Decrypt the booking number and return it
-      const decryptedBookingNumber = decryptData(response.data.booking_number);
+      const decryptedBookingNumber = decryptData(data.booking_number);
       return decryptedBookingNumber;
     } catch (error) {
-      // If there's an error during the API call, reject with a message
+      console.error("API Error:", error);
+
+      if (!error.response) {
+        return rejectWithValue("Network error. Please check your connection.");
+      }
+
       return rejectWithValue(
         error.response?.data?.message || error.message || "An unexpected error occurred."
       );
     }
   }
 );
+
 
 // Reducer slice
 const corporateSlice = createSlice({
@@ -715,10 +752,10 @@ const corporateSlice = createSlice({
         state.error = null;
       })
       .addCase(createCorporateBooking.fulfilled, (state, action) => {
-        // When booking is successful, set booking data and alert visibility
+      
         state.loading = false;
         state.bookingData = action.payload;
-        state.alertVisible = true; // This triggers the alert
+        state.alertVisible = true; 
       })
       .addCase(createCorporateBooking.rejected, (state, action) => {
         // When booking fails, set error message

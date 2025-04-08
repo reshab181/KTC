@@ -30,33 +30,33 @@ import { useColorScheme } from 'react-native';
 const AppStack = createNativeStackNavigator();
 
 
-const MainAppNavigator = () => (
-  <AppStack.Navigator initialRouteName="HomeScreen1">
-    <AppStack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} />
-    <AppStack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
-    <AppStack.Screen name="City" component={Citieslist} options={{ headerShown: false }} />
-    <AppStack.Screen name="PickUpLocation" component={PickUpLocation} options={{ headerShown: false }} />
-    <AppStack.Screen name="HomeScreen1" component={HomeScreen1} options={{ headerShown: false }} />
-    <AppStack.Screen name="CarGroup" component={CarGroup} options={{ headerShown: false }} />
-    <AppStack.Screen name="CarSelection" component={CarSelection} options={{ headerShown: false }} />
-    <AppStack.Screen name="BookingConfirmation" component={BookingConfirmation} options={{ headerShown: false }} />
-    <AppStack.Screen name="Payment" component={PaymentMethod} options={{ headerShown: false }} />
-    <AppStack.Screen name="MyBooking" component={MyBooking} options={{ headerShown: false }} />
-    <AppStack.Screen name="Track" component={Track} options={{ headerShown: false }} />
-    <AppStack.Screen name="Upcoming" component={Upcoming} options={{ headerShown: false }} />
-    <AppStack.Screen name="Notifications" component={Notification} options={{ headerShown: false }} />
-    <AppStack.Screen name="BookingReview" component={ReviewBookingModal} options={{ headerShown: false }} />
+// const MainAppNavigator = () => (
+//   <AppStack.Navigator initialRouteName="HomeScreen1">
+//     <AppStack.Screen name="CorporateModule1" component={CorporateModule1} options={{ headerShown: false }} />
+//     <AppStack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+//     <AppStack.Screen name="City" component={Citieslist} options={{ headerShown: false }} />
+//     <AppStack.Screen name="PickUpLocation" component={PickUpLocation} options={{ headerShown: false }} />
+//     <AppStack.Screen name="HomeScreen1" component={HomeScreen1} options={{ headerShown: false }} />
+//     <AppStack.Screen name="CarGroup" component={CarGroup} options={{ headerShown: false }} />
+//     <AppStack.Screen name="CarSelection" component={CarSelection} options={{ headerShown: false }} />
+//     <AppStack.Screen name="BookingConfirmation" component={BookingConfirmation} options={{ headerShown: false }} />
+//     <AppStack.Screen name="Payment" component={PaymentMethod} options={{ headerShown: false }} />
+//     <AppStack.Screen name="MyBooking" component={MyBooking} options={{ headerShown: false }} />
+//     <AppStack.Screen name="Track" component={Track} options={{ headerShown: false }} />
+//     <AppStack.Screen name="Upcoming" component={Upcoming} options={{ headerShown: false }} />
+//     <AppStack.Screen name="Notifications" component={Notification} options={{ headerShown: false }} />
+//     <AppStack.Screen name="BookingReview" component={ReviewBookingModal} options={{ headerShown: false }} />
 
-  </AppStack.Navigator>
-);
+//   </AppStack.Navigator>
+// );
 
 const App = () => {
   const theme = useColorScheme() === 'dark' ? MD3DarkTheme : MD3LightTheme;
 
-  MapplsGL.setMapSDKKey( 'a3b6ecfc98829a83dd2d90f31acbfa8e');//place your mapsdkKey
-  MapplsGL.setRestAPIKey('886b8e770b7b5314cd9ed9e669676599');//your restApiKey
-  MapplsGL.setAtlasClientId('33OkryzDZsIk6jfukki-FfOGzG6jGTz_X-NBQnWydvjbP03ss7EjTOcBXKwiRpM5GJlnuBJESQ37rGeGouOH0Q==');//your atlasClientId key
-  MapplsGL.setAtlasClientSecret( 'lrFxI-iSEg9eBbkGuWL0S-z4QTwM_t31-Fla-GsyLUNUdLw-VluK9Uq3GDgMsq6L0sh4tcAPNKN-FkKeuC7tKljvi7cElTNw'); //your atlasClientSecret key
+  MapplsGL.setMapSDKKey( 'a3b6ecfc98829a83dd2d90f31acbfa8e');
+  MapplsGL.setRestAPIKey('886b8e770b7b5314cd9ed9e669676599');
+  MapplsGL.setAtlasClientId('33OkryzDZsIk6jfukki-FfOGzG6jGTz_X-NBQnWydvjbP03ss7EjTOcBXKwiRpM5GJlnuBJESQ37rGeGouOH0Q==');
+  MapplsGL.setAtlasClientSecret( 'lrFxI-iSEg9eBbkGuWL0S-z4QTwM_t31-Fla-GsyLUNUdLw-VluK9Uq3GDgMsq6L0sh4tcAPNKN-FkKeuC7tKljvi7cElTNw'); 
 
   useEffect(() => {
     SplashScreen.hide()
