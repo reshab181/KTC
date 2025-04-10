@@ -1128,8 +1128,11 @@ import { apiClient, postJWtHttpClient } from '../../services/api/axiosClient';
 import { encryptPayload } from '../../Utils/EncryptionUtility';
 import { BASE_URL, CANCELLATION } from '../../config/api-config';
 import UpcomingApi from '../../services/api/upcoming';
+import { useRoute } from '@react-navigation/native';
 
 const Upcoming = ({ navigation }) => {
+  const route = useRoute();
+  const { eloc } = route?.params || {};
   const [isLoading, setIsLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [page, setPage] = useState(1);
@@ -1176,6 +1179,7 @@ const Upcoming = ({ navigation }) => {
   };
 
   const onPressTrack = (item, index) => {
+    const elocValue = route?.params?.eloc;
     if (selectedTab === 'Upcoming') {
       if (item.Bookingstatus === 'Confirmed' && 
           item.Track_chauffeur === 'Yes' && 
@@ -1185,12 +1189,13 @@ const Upcoming = ({ navigation }) => {
           params: {
             item: item,
             index,
-            pageName: "UP"
+            pageName: "UP",
+            eloc:elocValue
           }
         });
         console.log(index,"abc");
       } else {
-        Alert.alert('Info', 'Tracking is only available for confirmed bookings with track_chauffeur enabled.');
+        Alert.alert('Info', 'Tracking is only available for confirmed bookings with track chauffeur enabled.');
       }
     } else {
       navigation.navigate('CorporateNavigator', {
@@ -1280,7 +1285,23 @@ const Upcoming = ({ navigation }) => {
             {selectedTab === 'Upcoming' && item.Bookingstatus !== 'Cancelled' ? (
               <TouchableOpacity
                 style={styles.cancelButton}
-                onPress={() => setModalVisible({ isVisible: true, values: item })}
+                onPress={() => {
+                  Alert.alert(
+                    'Cancel Ride',
+                    'Are you sure you want to cancel this ride?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel',
+                      },
+                      {
+                        text: 'OK',
+                        onPress: () => setModalVisible({ isVisible: true, values: item }),
+                      },
+                    ],
+                    { cancelable: false }
+                  );
+                }}
               >
                 <Text style={styles.cancelText}>Cancel Ride</Text>
               </TouchableOpacity>
@@ -1370,7 +1391,7 @@ const Upcoming = ({ navigation }) => {
             <TextInput
               value={reject}
               onChangeText={setReject}
-              style={styles.inputField}
+              style={[styles.inputField, { color: '#000' }]}
               placeholder="Enter Reason for Cancellation"
               multiline={true}
               numberOfLines={3}

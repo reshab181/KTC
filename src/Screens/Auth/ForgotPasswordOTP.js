@@ -101,7 +101,7 @@ function useStyles() {
     img: { marginTop: 32, marginBottom: 32, width: 122, height: 100 },
     txt: { width: winwidth * 0.8, textAlign: 'center', fontSize: 16, color: '#212121', opacity: 0.87, fontWeight: '600' },
     txtInputBox: { width: 270, flexDirection: 'row', justifyContent: 'space-between', marginBottom: 50 , marginTop: 40 },
-    input: { width: 40, height: 40, fontSize: 20, textAlign: 'center', borderBottomWidth: 1, borderBottomColor: '#1C4096' },
+    input: { width: 40, height: 40, fontSize: 20, textAlign: 'center', borderBottomWidth: 1, borderBottomColor: '#1C4096' ,color:"#000"},
     errorInput: { borderBottomColor: '#D32F2F' },
     footerText: { marginTop: 32, fontSize: 15, color: '#212121' },
     footerText2: { marginTop: 10, fontSize: 14, textAlign: 'center', color: '#212121', opacity: 0.54 },

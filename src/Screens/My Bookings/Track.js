@@ -29,7 +29,7 @@ const { width, height } = Dimensions.get('window');
 const Track = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { index, pageName, status, feedback_arr, item } = props?.route?.params;
+  const { index, pageName, status, feedback_arr, item, eloc } = props?.route?.params;
 
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -129,7 +129,8 @@ const Track = (props) => {
       const finalPosition = positionList[bestIndex];
       dispatch({ type: 'SET_COORDS', payload: { coords: [finalPosition.latitude, finalPosition.longitude] } });
       if (finalPosition?.latitude && finalPosition?.longitude) {
-        navigation.navigate('Location', { item, dataTrackChiffer: deviceData, access_token: token, showResult: res, index });
+        navigation.navigate('Location', { item, dataTrackChiffer: deviceData, access_token: token, showResult: res, index,eloc });
+        
       } else {
         throw new Error('Invalid coordinates');
       }
@@ -149,15 +150,19 @@ const Track = (props) => {
   }, [fetchUpcomingBookings]);
 
   const home = useCallback(() => navigation.navigate('Manage Bookings'), [navigation]);
-  const getDateFromTimestamp = useCallback((timestamp) => new Date(timestamp).toLocaleString(), []);
-  const getNegativeDateFromTimestamp = useCallback((timestamp) => new Date(Date.now() + timestamp).toLocaleString(), []);
-  const btn = useCallback((date) => (date > 0 ? getDateFromTimestamp(date) : getNegativeDateFromTimestamp(date)), [getDateFromTimestamp, getNegativeDateFromTimestamp]);
+  // const getDateFromTimestamp = useCallback((timestamp) => new Date(timestamp).toLocaleString(), []);
+  // const getNegativeDateFromTimestamp = useCallback((timestamp) => new Date(Date.now() + timestamp).toLocaleString(), []);
+  // const btn = useCallback((date) => (date > 0 ? getDateFromTimestamp(date) : getNegativeDateFromTimestamp(date)), [getDateFromTimestamp, getNegativeDateFromTimestamp]);
   const stephistroy = useCallback((currentitem) => {
     if (currentitem?.Bookingstatus !== 'Confirmed') return 1;
     if (currentitem?.Bookingstatus === 'Confirmed') return currentitem?.vehicle_no ? (currentitem?.Track_chauffeur === 'Yes' ? 4 : 3) : 2;
     return 1;
   }, []);
   const icons = useCallback(() => navigation.navigate('Notifications'), [navigation]);
+  const formatDate = (timestamp) => {
+    if (!timestamp) return 'N/A';
+    return new Date(timestamp * 1000).toLocaleDateString();
+  };
 
   return (
     <SafeAreaView style={pageName === 'HIS' && { flex: 1 }}>
@@ -193,7 +198,7 @@ const Track = (props) => {
             <View style={[styles.santosh, { marginTop: item?.startotp && item?.endotp ? 15 : 10 }]}>
               <Text style={styles.name1}>{item.Guestname}</Text>
               <Text style={styles.infoText}>Vehicle number : {item.vehicle_no}</Text>
-              <Text style={styles.infoText}>Booking for : {btn(item.start_date)}</Text>
+              <Text style={styles.infoText}>Booking for : {formatDate(item.start_date)}</Text>
               <Text style={styles.infoText}>Time : {item.Reporingtime}</Text>
               <Text style={styles.infoText}>Reporting place : {item.Reportingplace}</Text>
             </View>

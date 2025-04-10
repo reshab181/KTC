@@ -634,7 +634,7 @@ const initialState = {
   error: null,
   bookingData: null,
   alertVisible: false,
-  paymentMode: "abc",
+  paymentMode: "",
   companyname: "",
   Guestname: "",
   Guestcontacto: "",

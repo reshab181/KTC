@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 // import DirectionWidgetActivity from '../Map/DirectionWidgetActivity';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../component/CustomHeader';
-import GetDirection from './DirectionWidgetActivity';
+import GetDirection from './GetDirection';
 import MapIndex from './MapIndex';
 
 const { height, width } = Dimensions.get('screen');
@@ -20,11 +20,11 @@ const { height, width } = Dimensions.get('screen');
 const LocationScreen = (props) => {
   const navigation = useNavigation();
 
-  const { item, dataTrackChiffer, access_token, showResult, index } =
+  const { item, dataTrackChiffer, access_token, showResult, index,eloc } =
     props?.route?.params || {};
 
     const coordinates = useSelector((state) => state?.coords?.coords); 
-    const elocData = useSelector((state) => state?.user); 
+    const elocData = useSelector((state) => state?.corporate); 
   useEffect(() => {
     console.log('Location Coordinates:', coordinates);
     console.log(

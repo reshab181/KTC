@@ -276,15 +276,20 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
      
             if (createCorporateBooking.fulfilled.match(resultAction)) {
                 Alert.alert(
-                    "Booking Confirmed",
-                    `Your booking has been successfully submitted.\nBooking ID: ${resultAction.payload}`,
-                    [{ text: "OK" }]
-                  );
-                dispatch(resetCorporateSlice());
-                onClose();
-            } else {
+                  "Booking Confirmed",
+                  `Your booking has been successfully submitted.\nBooking ID: ${resultAction.payload}`,
+                  [{
+                    text: "OK",
+                    onPress: () => {
+                      dispatch(resetCorporateSlice());
+                      onClose();
+                      navigation.navigate('Upcoming', { eloc: eloc});
+                    },
+                  }]
+                );
+              } else {
                 Alert.alert("Error", resultAction.payload || "Failed to confirm booking");
-            }
+              }
         } catch (error) {
             console.error(" API Error:", error);
             Alert.alert("Error", error.response?.message || "An unexpected error occurred.");

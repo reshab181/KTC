@@ -67,7 +67,7 @@ function useStyles() {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Overlay background color
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', 
     },
     modalContainer: {
       width: winwidth * 0.96,
@@ -83,6 +83,7 @@ function useStyles() {
     modalText: {
       fontSize: 14,
       marginBottom: 10,
+      color:"#000"
     },
     closeButton: {
       backgroundColor: '#3C3567',

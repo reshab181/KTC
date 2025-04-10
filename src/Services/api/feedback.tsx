@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { apiClient, postJWtHttpClient } from "./axiosClient";
 import { encryptPayload, decryptData } from "../../Utils/EncryptionUtility";
 import { BASE_URL, FEEDBACK } from "../../config/api-config";
@@ -7,7 +7,7 @@ const FeedbackClient = apiClient(BASE_URL + FEEDBACK);
 
 const FeedbackApi = async()=>{
     const payload = {
-      "feeback_param": "",
+      feeback_param: "",
       };
       const encryptedRequestPayload = encryptPayload(payload)
 
@@ -23,7 +23,12 @@ const FeedbackApi = async()=>{
 export {FeedbackApi}
 
 
-const submitFeedback = async ({ remarks, booking_id, label }) => {
+
+const submitFeedback = async ({ remarks, booking_id, label }: {
+  remarks: string;
+  booking_id: string | number; 
+  label: string[]; 
+})  => {
     const payload = {
       feeback_submit: "",
       remarks,
