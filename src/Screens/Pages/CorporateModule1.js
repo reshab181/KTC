@@ -618,6 +618,7 @@ const CorporateModule1 = ({ navigation, item, index }) => {
     }
   };
   
+
   const handleFetchCities = useCallback(async () => {
     setLoadingCities(true);
     try {
@@ -648,6 +649,8 @@ const CorporateModule1 = ({ navigation, item, index }) => {
   }, [city_of_usage, userDetails, accessToken]);
   
   const [modalVisible, setModalVisible] = useState(false);
+  console.log(e_loc,"abc");
+  
   
   const areFieldsFilled = () => {
     return (
@@ -693,6 +696,7 @@ const CorporateModule1 = ({ navigation, item, index }) => {
   const closeModal = () => {
     setModalVisible(false);
   };
+  console.log(e_loc,"123" );
   
   return (
     <View style={styles.mainContainer}>
@@ -729,6 +733,7 @@ const CorporateModule1 = ({ navigation, item, index }) => {
         handleRightIcon={handleRightIcon} 
         isSidebarVisible={isSidebarVisible}
       />
+
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {

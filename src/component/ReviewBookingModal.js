@@ -175,6 +175,9 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
         fetchUserId();
     }, []);
 
+    console.log(eloc,"eloc aaya re");
+    
+
     const dateConverter = (value) => {
         const date = new Date(value * 1000);
         if (isNaN(date.getTime())) return ""; 

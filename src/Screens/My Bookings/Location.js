@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   View,
   BackHandler,
+  TouchableOpacity,Image
 } from 'react-native';
 // import MapIndex from '../Map/index';
 
@@ -20,21 +21,23 @@ const { height, width } = Dimensions.get('screen');
 const LocationScreen = (props) => {
   const navigation = useNavigation();
 
-  const { item, dataTrackChiffer, access_token, showResult, index,eloc } =
+  const { item, dataTrackChiffer, access_token, showResult, index} =
     props?.route?.params || {};
 
     const coordinates = useSelector((state) => state?.coords?.coords); 
-    const elocData = useSelector((state) => state?.corporate); 
+    const elocData = useSelector((state) => state?.corporate.eloc); 
   useEffect(() => {
     console.log('Location Coordinates:', coordinates);
     console.log(
       'Location Props:',
-      item,
-      dataTrackChiffer,
-      access_token,
-      showResult
+      // item,
+      // dataTrackChiffer,
+      // access_token,
+      // showResult,
+      // elocData
+ 
     );
-    console.log('Location eloc:', item?.eloc);
+    // console.log('Location eloc:', item?.eloc);
   }, [coordinates, item, dataTrackChiffer, access_token, showResult, item?.eloc]);
 
   const handleBack = useCallback(() => {
@@ -66,9 +69,15 @@ const LocationScreen = (props) => {
           title={'Track Chauffeur'}
           onpressBack={handleBack}
           onpressIcon={handleMessages}
+
+            leftIcon={() => (
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                      <Image source={require('../../assets/ic_back_arrow_white_24.png')} />
+                    </TouchableOpacity>
+                  )}
         />
-        <GetDirection item={item} />
-        <MapIndex item={item} />
+        <GetDirection item={item}  coordinates={coordinates}/>
+        <MapIndex item={item} coordinates={coordinates} />
       </View>
     </SafeAreaView>
   );

@@ -1177,13 +1177,16 @@ const Upcoming = ({ navigation }) => {
     setRefreshing(true);
     fetchData()
   };
-
+  const elocValue = route?.params?.eloc;
+  console.log(elocValue,"123");
   const onPressTrack = (item, index) => {
     const elocValue = route?.params?.eloc;
+    console.log(elocValue);
+    
     if (selectedTab === 'Upcoming') {
       if (item.Bookingstatus === 'Confirmed' && 
-          item.Track_chauffeur === 'Yes' && 
-          (item.vehicle_no === null || item.vehicle_no === undefined)) {
+          item.Track_chauffeur === 'Yes' 
+         ) {
         navigation.navigate('CorporateNavigator', {
           screen: 'Track',
           params: {
@@ -1193,6 +1196,8 @@ const Upcoming = ({ navigation }) => {
             eloc:elocValue
           }
         });
+        console.log(eloc,"eloc fetched");
+        
         console.log(index,"abc");
       } else {
         Alert.alert('Info', 'Tracking is only available for confirmed bookings with track chauffeur enabled.');

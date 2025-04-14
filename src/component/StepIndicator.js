@@ -15,9 +15,9 @@ const customStyles = {
     currentStepStrokeWidth: 3,
     stepStrokeCurrentColor: '#aaaa',
     stepStrokeWidth: 3,
-    stepStrokeFinishedColor: '#3C3567',//
+    stepStrokeFinishedColor: '#3C3567',
     stepStrokeUnFinishedColor: '#aaaaaa',
-    separatorFinishedColor: '#3C3567',//
+    separatorFinishedColor: '#3C3567',
     separatorUnFinishedColor: '#aaaaaa',
     stepIndicatorFinishedColor: '#3C3567',
     stepIndicatorUnFinishedColor: '#ffffff',
