@@ -4,6 +4,9 @@ import {CLIENT_ID, CLIENT_SECRET,BASE_URL} from '@env'
 
 export async function tokenFromMMI() {
   // console.log(CLIENT_ID,CLIENT_SECRET)
+  console.log("CLIENT_ID:", CLIENT_ID);
+console.log("CLIENT_SECRET:", CLIENT_SECRET);
+console.log("BASE_URL:", BASE_URL);
   try {
    
     const response = await fetch(

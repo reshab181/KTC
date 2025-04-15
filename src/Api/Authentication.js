@@ -4,7 +4,7 @@ import axios from 'axios';
 import CryptoJS from 'crypto-js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import debounce from 'lodash.debounce';
-import { ANCHOR_URL } from '@env';
+import { ANCHOR_URL } from '../config/api-config';
 import Api from '../services/Api';
 
 export const encryptPayload = (data) => {
@@ -327,19 +327,19 @@ export const verifyOTP = async (url, passPhrase, processs) => {
       throw new Error('Access token is missing.');
     }
 
-    console.log("VERIFY OTP REQUEST", url, mmiToken?.access_token, encodedPassPhrase);
+    // console.log("VERIFY OTP REQUEST", url, mmiToken?.access_token, encodedPassPhrase);
 
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${mmiToken?.access_token}`,
-      },
-      params: {
-        passPhrase: encodedPassPhrase,
-      },
-    });
+    // const response = await axios.get(url, {
+    //   headers: {
+    //     Authorization: `Bearer ${mmiToken?.access_token}`,
+    //   },
+    //   params: {
+    //     passPhrase: encodedPassPhrase,
+    //   },
+    // });
 
     
-    return response.data;
+    // return response.data;
 
   } catch (error) {
    
