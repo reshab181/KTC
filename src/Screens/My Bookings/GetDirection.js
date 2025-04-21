@@ -1,3 +1,6 @@
+//Reshab Kumar Pandey
+//GetDirection.js
+
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Text,
@@ -84,6 +87,7 @@ const GetDirection = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [destinationCoordinates, setDestinationCoordinates] = useState(item?.eloc);
+  // const [destinationCoordinates, setDestinationCoordinates] = useState('77.3910,28.5355');
   const [sourceCoordinates, setSourceCoordinates] = useState('');
   const [center, setCenter] = useState([0, 0]);
   const [route, setRoute] = useState(null);
@@ -170,6 +174,7 @@ const GetDirection = (props) => {
         setCenter([coordinates.coords[1], coordinates.coords[0]]);
 
         const destination = item?.eloc;
+        //  const destination='77.3910,28.5355'
         if (destination) {
           setDestinationCoordinates(destination);
           await callApi('driving');

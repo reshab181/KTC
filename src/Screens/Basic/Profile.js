@@ -1,4 +1,5 @@
-
+//Reshab Kumar Pandey
+//Profile.js
 
 import React, { useState, useEffect} from 'react';
 import {
@@ -15,7 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../component/CustomHeader';
 import CustomIconTextInput from '../../component/CustomIconTextInput';
 import CustomButton from '../../component/CustomButtons';
-import { useSelector } from 'react-redux';
+
 import FirstName from '../../assets/svg/first-name.svg';
 import DobSvg from '../../assets/svg/cake_black.svg';
 import SmartPhoneSvg from '../../assets/svg/smartphone.svg';
@@ -73,6 +74,45 @@ const Profile = () => {
     fetchData();
   }, []);
 
+  // const handleDeleteAccount = async () => {
+  //   Alert.alert(
+  //     'Alert',
+  //     'Are you sure you want to delete your account?',
+  //     [
+  //       { text: 'Cancel', onPress: () => null },
+  //       {
+  //         text: 'OK',
+  //         onPress: async () => {
+  //           setLoader(true);
+  //           try {
+  //             const response = await DeleteData(formData.email);
+  //             setLoader(false);
+
+  //             if (response) {
+  //               Alert.alert('Success', 'Your account has been deleted.',
+  //                 [{
+  //                   text: 'OK',
+  //                   onPress: async () => {
+  //                     await AsyncStorage.clear();
+  //                     navigation.navigate("CorporateLoginNavigator", {
+  //                       screen: "CorporateSignIn",
+  //                     });
+  //                   }
+  //                 }]
+  //               );
+  //             } else {
+  //               Alert.alert('Error', 'Failed to delete the account. Please try again.');
+  //             }
+  //           } catch (error) {
+  //             setLoader(false);
+  //             console.error('Error deleting account:', error);
+  //             Alert.alert('Error', 'Something went wrong. Please try again.');
+  //           }
+  //         }
+  //       }
+  //     ]
+  //   );
+  // };
   const handleDeleteAccount = async () => {
     Alert.alert(
       'Alert',
@@ -85,21 +125,21 @@ const Profile = () => {
             setLoader(true);
             try {
               const response = await DeleteData(formData.email);
-              setLoader(false);
-
               if (response) {
-                Alert.alert('Success', 'Your account has been deleted.',
-                  [{
+                await AsyncStorage.clear();  
+                setLoader(false);
+                Alert.alert('Success', 'Your account has been deleted.', [
+                  {
                     text: 'OK',
-                    onPress: async () => {
-                      await AsyncStorage.clear();
+                    onPress: () => {
                       navigation.navigate("CorporateLoginNavigator", {
-                        screen: "CorporateHomeScreen",
+                        screen: "CorporateSignIn",
                       });
                     }
-                  }]
-                );
+                  }
+                ]);
               } else {
+                setLoader(false);
                 Alert.alert('Error', 'Failed to delete the account. Please try again.');
               }
             } catch (error) {
@@ -112,7 +152,7 @@ const Profile = () => {
       ]
     );
   };
-
+  
   const handleInputChange = (key, value) => {
     setFormData(prevState => ({
       ...prevState,

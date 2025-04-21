@@ -1,29 +1,44 @@
-import React, { useState } from 'react'
-import { TouchableOpacity, View, Image, Text, StyleSheet, ImageSourcePropType } from 'react-native'
+import React, {useState} from 'react';
+import {
+  TouchableOpacity,
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  ImageSourcePropType,
+} from 'react-native';
 
 interface HomeItemCardProps {
   title: string;
-  image?: string | ImageSourcePropType; 
+  image?: string | ImageSourcePropType;
   description?: string;
   onPress?: () => void;
 }
 
-
-const HomeItemCard: React.FC<HomeItemCardProps> = ({ title, image, description = 'No description provided', onPress = () => {} }) => {
-
-    return(<TouchableOpacity style={styles.moduleContainer} onPress={onPress} activeOpacity={0.9}>
-          <View style={styles.module}>
-            <View style={styles.moduleHeader}>
-              <Text style={styles.moduleHeaderText}>{title}</Text>
-            </View>
-            <View style={styles.moduleBody}>
-              {/* <Image source={image} style={styles.moduleImage} /> */}
-              {image}
-              <Text style={styles.moduleBodyText}>{description}</Text>
-            </View>
-          </View>
-        </TouchableOpacity>)
-}
+const HomeItemCard: React.FC<HomeItemCardProps> = ({
+  title,
+  image,
+  description = 'No description provided',
+  onPress = () => {},
+}) => {
+  return (
+    <TouchableOpacity
+      style={styles.moduleContainer}
+      onPress={onPress}
+      activeOpacity={0.9}>
+      <View style={styles.module}>
+        <View style={styles.moduleHeader}>
+          <Text style={styles.moduleHeaderText}>{title}</Text>
+        </View>
+        <View style={styles.moduleBody}>
+          {/* <Image source={image} style={styles.moduleImage} /> */}
+          {image}
+          <Text style={styles.moduleBodyText}>{description}</Text>
+        </View>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 export default HomeItemCard;
 
@@ -38,7 +53,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     elevation: 2,
     // borderTopLeftRadius: 15,
-    // borderTopRightRadius: 15, 
+    // borderTopRightRadius: 15,
   },
   moduleHeader: {
     height: '22%',

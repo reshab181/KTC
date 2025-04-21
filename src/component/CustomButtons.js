@@ -1,22 +1,26 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 
-const CustomButton = ({ 
-  title, 
-  onPress, 
-  borderWidth, 
-  textColor, 
-  loading, 
-  disabled,   // ✅ Add this prop
-  widthSize = "100%", 
-  borderRadius = 4, 
-  btnHeight, 
-  textSize, 
-  fontWeight, 
-  btnColor, 
-  backgroundColor 
+const CustomButton = ({
+  title,
+  onPress,
+  borderWidth,
+  textColor,
+  loading,
+  disabled,
+  widthSize = '100%',
+  borderRadius = 4,
+  btnHeight,
+  textSize,
+  fontWeight,
+  btnColor,
+  backgroundColor,
 }) => {
-
   return (
     <TouchableOpacity
       style={[
@@ -28,20 +32,23 @@ const CustomButton = ({
           backgroundColor: btnColor ? btnColor : '#3C3567',
           backgroundColor: backgroundColor ? backgroundColor : '#3C3567',
           borderWidth: borderWidth ? borderWidth : 0,
-          opacity: disabled ? 0.5 : 1,  // ✅ Reduce opacity when disabled
-        }
+          opacity: disabled ? 0.5 : 1,
+        },
       ]}
-      onPress={!disabled ? onPress : null}  // ✅ Prevent click when disabled
-      disabled={disabled}  // ✅ Apply disabled state
-    >
+      onPress={!disabled ? onPress : null}
+      disabled={disabled}>
       {loading ? (
         <ActivityIndicator size="large" color="#FFFFFF" style={styles.loader} />
       ) : (
-        <Text style={[styles.buttonText, {
-          color: textColor ? textColor : '#FFFFFF',
-          fontSize: textSize ? textSize : 18,
-          fontWeight: fontWeight ? fontWeight : '600',
-        }]}>
+        <Text
+          style={[
+            styles.buttonText,
+            {
+              color: textColor ? textColor : '#FFFFFF',
+              fontSize: textSize ? textSize : 18,
+              fontWeight: fontWeight ? fontWeight : '600',
+            },
+          ]}>
           {title}
         </Text>
       )}
@@ -57,7 +64,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   disabledButton: {
-    opacity: 0.5,  // Reduce opacity when disabled
+    opacity: 0.5,
   },
   buttonText: {
     color: '#FFFFFF',

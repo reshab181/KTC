@@ -1,19 +1,16 @@
-// Author: Ashutosh Rai
-// Component: CustomTextInpt
-import React, { useState } from 'react';
-import { StyleSheet, TextInput, View, Text } from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, TextInput, View, Text} from 'react-native';
 
-const CustomTextInpt = ({ 
-  placeholder, 
-  value, 
-  onChangeText, 
-  keyboardType = 'default', 
+const CustomTextInpt = ({
+  placeholder,
+  value,
+  onChangeText,
+  keyboardType = 'default',
   secureTextEntry = false,
   error = '',
   style,
-  containerStyle ,
-  editable=true
-
+  containerStyle,
+  editable = true,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -43,21 +40,20 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   input: {
-    height: 48, 
+    height: 48,
     backgroundColor: '#FFFFFF',
-    borderWidth:1.5,
+    borderWidth: 1.5,
     borderColor: '#E5E5E5',
     borderRadius: 4,
     paddingHorizontal: 16,
     fontSize: 16,
     color: '#000',
-
   },
   inputFocused: {
-    borderColor: '#3C3567', 
-    shadowColor: '#3C3567', 
+    borderColor: '#3C3567',
+    shadowColor: '#3C3567',
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowRadius: 2,
   },
   errorText: {

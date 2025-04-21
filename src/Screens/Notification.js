@@ -1,3 +1,7 @@
+// Reshab Kumar Pandey
+//Notifications.js
+
+
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet, Text, View, Image, Dimensions, SafeAreaView,
@@ -85,12 +89,7 @@ const NotificationScreen = ({ navigation }) => {
             </Text>
           </View>
         </View>
-        {/* <View style={styles.cardFooter}>
-          <Image source={require('../assets/calendar.png')} style={styles.icon} />
-          <Text style={styles.footerText}>{item.notification_date || "No Date"}</Text>
-          <Image source={require('../assets/watch.png')} style={styles.icon} />
-          <Text style={styles.footerText}>{item.notification_time || "No Time"}</Text>
-        </View> */}
+    
       </Card>
     </TouchableOpacity>
   );

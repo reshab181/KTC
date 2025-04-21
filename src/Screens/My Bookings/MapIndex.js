@@ -1,4 +1,5 @@
-
+// Reshab Kumar Pandey
+//MapIndex.js
 
 import React, { useEffect, useState } from 'react';
 import {
@@ -22,6 +23,7 @@ const MapIndex = (props) => {
   const { item } = props;
   const coordinates = useSelector((state) => state?.coords?.coords);
   const [destinationCoordinates, setDestinationCoordinates] = useState(item?.eloc);
+    // const [destinationCoordinates, setDestinationCoordinates] = useState('77.3910,28.5355');
   const [sourceCoordinates, setSourceCoordinates] = useState(
     `${coordinates?.coords[1]},${coordinates?.coords[0]}`
   );
@@ -37,6 +39,7 @@ const MapIndex = (props) => {
 
     const fetchData = async () => {
       if (coordinates?.coords && item?.eloc) {
+        // if (coordinates?.coords) {
         setSourceCoordinates(
           `${coordinates?.coords[1]},${coordinates?.coords[0]}`
         );
@@ -48,7 +51,7 @@ const MapIndex = (props) => {
       }
     };
     fetchData();
-  }, [coordinates?.coords, item?.eloc]);
+  }, [coordinates?.coords,item?.eloc]);
 
   const fetchDirectionData = async (profile) => {
     console.log('fetchDirectionData called with profile:', profile);

@@ -1,4 +1,5 @@
-// Reshabh
+// Reshab Kumar Pandey
+// Help.js
 import { 
     SafeAreaView, 
     StyleSheet, 
@@ -28,16 +29,11 @@ import CustomHeader from '../component/CustomHeader'
   const Help = () => {
     const navigation = useNavigation()
   
-    // const navigateHome = () => navigation.navigate('Home')
-    // const navigateToMessages = () => navigation.navigate('MessageScreen')
+  
   
     return (
       <SafeAreaView style={styles.container}>
-        {/* <BackButtonHeader 
-          title="Help" 
-          onpressBack={navigateHome} 
-          onpressIcon={navigateToMessages}
-        /> */}
+    
         <CustomHeader title={"Help"}
          leftIcon={() => (
                   <TouchableOpacity onPress={() => navigation.goBack()}>

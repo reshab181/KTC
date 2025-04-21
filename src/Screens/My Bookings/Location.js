@@ -1,3 +1,7 @@
+//Reshab Kumar Pandey
+//Location.js
+
+
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Dimensions,
@@ -7,10 +11,10 @@ import {
   BackHandler,
   TouchableOpacity,Image
 } from 'react-native';
-// import MapIndex from '../Map/index';
+
 
 import { useSelector } from 'react-redux';
-// import DirectionWidgetActivity from '../Map/DirectionWidgetActivity';
+
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../component/CustomHeader';
 import GetDirection from './GetDirection';
