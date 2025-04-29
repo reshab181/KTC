@@ -142,6 +142,69 @@ const SidebarMenu = ({ isVisible, onClose }) => {
   );
 };
 
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     flexDirection: 'row',
+//   },
+//   overlay: {
+//     flex: 1,
+//     backgroundColor: 'rgba(0, 0, 0, 0.6)',
+//   },
+//   menu: {
+//     width: windowWidth * 0.8,
+//     height: '100%',
+//     backgroundColor: '#FFFFFF',
+//     paddingBottom: 30,
+//     position: 'absolute',
+//     left: 0,
+//     elevation: 5,
+//     shadowColor: '#000',
+//     shadowOffset: { width: 0, height: 2 },
+//     shadowOpacity: 0.2,
+//     shadowRadius: 4,
+//   },
+//   header: {
+//     flexDirection: 'row',
+//     backgroundColor: '#3C3567',
+//     paddingVertical: 5,
+//     paddingHorizontal: 10,
+//     justifyContent: 'space-between',
+//     alignItems: 'center',
+//   },
+//   logo: {
+//     width: 120,
+//     height: 40,
+//   },
+//   closeButton: {
+//     padding: 10,
+//   },
+//   closeText: {
+//     fontSize: 22,
+//     fontWeight: '600',
+//     color: '#FFF',
+//   },
+//   menuItems: {
+//     marginTop: 10,
+//   },
+//   menuItem: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     paddingVertical: 12,
+//     paddingHorizontal: 20,
+//   },
+//   menuIcon: {
+//     width: 28,
+//     height: 28,
+//     marginRight: 15,
+//   },
+//   menuText: {
+//     fontSize: 20,
+//     color: '#666666',
+//     fontWeight: 'normal',
+//   },
+// });
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -149,60 +212,67 @@ const styles = StyleSheet.create({
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   menu: {
     width: windowWidth * 0.8,
     height: '100%',
     backgroundColor: '#FFFFFF',
-    paddingBottom: 30,
     position: 'absolute',
     left: 0,
-    elevation: 5,
+    elevation: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+    borderTopRightRadius: 12,
+    borderBottomRightRadius: 12,
   },
   header: {
     flexDirection: 'row',
-    backgroundColor: '#3C3567',
-    paddingVertical: 5,
-    paddingHorizontal: 10,
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#3C3567',
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderTopRightRadius: 12,
   },
   logo: {
     width: 120,
     height: 40,
   },
   closeButton: {
-    padding: 10,
+    padding: 6,
+    backgroundColor: 'rgba(255,255,255,0.15)',
+    // borderRadius: 20,
   },
   closeText: {
-    fontSize: 22,
-    fontWeight: '600',
+    fontSize: 20,
     color: '#FFF',
+    fontWeight: 'bold',
   },
   menuItems: {
-    marginTop: 10,
+    marginTop: 20,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 12,
+    paddingVertical: 14,
     paddingHorizontal: 20,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#eee',
   },
   menuIcon: {
-    width: 28,
-    height: 28,
-    marginRight: 15,
+    width: 26,
+    height: 26,
+    marginRight: 18,
   },
   menuText: {
     fontSize: 20,
-    color: '#666666',
-    fontWeight: 'normal',
+    color: '#333',
+    fontWeight: '500',
   },
 });
+
 
 export default SidebarMenu;
