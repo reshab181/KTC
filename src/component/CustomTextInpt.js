@@ -8,6 +8,7 @@ const CustomTextInpt = ({
   keyboardType = 'default',
   secureTextEntry = false,
   error = '',
+  selectable = false,
   style,
   containerStyle,
   editable = true,
@@ -24,6 +25,7 @@ const CustomTextInpt = ({
         onChangeText={onChangeText}
         keyboardType={keyboardType}
         secureTextEntry={secureTextEntry}
+        selectable = {selectable}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         editable={editable}

@@ -2,11 +2,10 @@
 //CorporateModule1.js
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomHeader from '../../component/CustomHeader';
-import CustomDropdown from '../../component/CustomDropdown';
 import CustomTextInpt from '../../component/CustomTextInpt';
 import CustomCalender from '../../component/CustomCalender';
 import CustomButton from '../../component/CustomButtons';
@@ -14,28 +13,24 @@ import CustomCarGrouptile from '../../component/CustomCarGrouptile';
 import SidebarMenu from '../../component/SidebarMenu';
 import { fetchCities, fetchLocalities, fetchRentalType } from '../../Api/CorporateModuleApis';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
-import { Alert } from 'react-native';
 import Menuu from '../../assets/svg/menu.svg';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ReviewBookingModal from '../../component/ReviewBookingModal';
 import { updateCorporateSlice, resetCorporateSlice } from '../../Redux/slice/CorporateSlice';
-import LoaderModal from '../../component/LoaderModal';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NotificationService from '../../services/api/Notification';
 
-const CorporateModule1 = ({ navigation, item, index }) => {
+const CorporateModule1 = ({ navigation }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [accessToken, setAccessToken] = useState('');
   const [cityList, setCityList] = useState([]);
-  const [Visible, setVisible] = useState(false);
   const [carGroupList, setCarGroupList] = useState([]);
   const [e_loc, seteloc] = useState('');
-  const { city_of_usage, assignment, vehiclerequested, Reportingplace, start_date, Reporingtime } = useSelector((state) => state.corporate);
+  const { city_of_usage, assignment, vehiclerequested, Reportingplace, start_date, Reporingtime } = useSelector((state) => state.reviewBooking);
   const userDetails = useSelector((state) => state.userprofile);
-  console.log(" Redux User Data:", userDetails);
-
-
   const dispatch = useDispatch();
+  
+  // Local state for form fields
   const [unreadCount, setUnreadCount] = useState(0);
   const [specialInstruction, setspecialInstruction] = useState('');
   const [reportingLandmark, setreportingLandmark] = useState('');
@@ -45,12 +40,15 @@ const CorporateModule1 = ({ navigation, item, index }) => {
   const [BookingCode, setBookingCode] = useState('');
   const [trNumber, settrNumber] = useState('');
   const [BillNumber, setBillNumber] = useState('');
+  
+  // Loading states
   const [loading, setLoading] = useState(false);
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingRentalType, setLoadingRentalType] = useState(false);
   const [loadingCarGroup, setloadingCarGroup] = useState(false);
-  const [isTimeSelected, setIsTimeSelected] = useState(false);
   
+  // Modal visibility state
+  const [modalVisible, setModalVisible] = useState(false);
 
   const checkUserLoginStatus = async () => {
     try {
@@ -78,24 +76,38 @@ const CorporateModule1 = ({ navigation, item, index }) => {
         const currentTime = new Date().getTime();
         
         if (lastBookingConfirmed && (currentTime - parseInt(lastBookingConfirmed) < 30000)) {
-    
+        
           await AsyncStorage.removeItem('lastBookingConfirmed');
         } else {
+         
           await getUserData();
         }
       } else {
+     
         dispatch(resetCorporateSlice());
         clearLocalFormState();
+        seteloc('');
+        setflightTrainInfo('');
       }
       
+    
       const unsubscribe = navigation.addListener('focus', () => {
         fetchUnreadCount();
       });
+      
       return unsubscribe;
     };
     
     initializeComponent();
-  }, [navigation]);
+  }, [navigation, dispatch]);
+
+ 
+  useEffect(() => {
+    return () => {
+      // This cleanup function runs when component unmounts
+      console.log("CorporateModule1 unmounting, cleaning up state");
+    };
+  }, []);
 
   const clearLocalFormState = () => {
     setspecialInstruction('');
@@ -106,10 +118,6 @@ const CorporateModule1 = ({ navigation, item, index }) => {
     setBookingCode('');
     settrNumber('');
     setBillNumber('');
-  };
-  
-  const getNotificationIcon = (type) => {
-    return require('../../assets/info1.png');
   };
   
   const getUserData = async () => {
@@ -154,7 +162,6 @@ const CorporateModule1 = ({ navigation, item, index }) => {
     }
   };
   
-
   const handleFetchCities = useCallback(async () => {
     setLoadingCities(true);
     try {
@@ -162,43 +169,38 @@ const CorporateModule1 = ({ navigation, item, index }) => {
       const list = await fetchCities('', client_id, accessToken, setCityList);
       setLoadingCities(false)
       navigation.navigate('City', { list, type: 'city_of_usage' });
-      // setLoading(false)
     } catch (error) {
       console.error("Error fetching cities:", error);
     }
     setLoadingCities(false)
-  }, [userDetails, accessToken]);
+  }, [userDetails, accessToken, navigation]);
 
   const handleFetchRentalType = useCallback(async () => {
     setLoadingRentalType(true);
     try {
-      const client_id = await AsyncStorage.getItem('client_id')
-      const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city_of_usage, client_id, accessToken);
+      const client_id = await AsyncStorage.getItem('client_id');
+      const { rentalItems, carGroupItems, e_loc: fetchedEloc } = await fetchRentalType(city_of_usage, client_id, accessToken);
       setCarGroupList(carGroupItems);
-      seteloc(e_loc);
+      seteloc(fetchedEloc);
       setLoadingRentalType(false);
-
       navigation.navigate('City', { list: rentalItems, type: 'assignment' });
     } catch (error) {
       console.error("Error fetching rental types:", error);
+    } finally {
+      setLoadingRentalType(false);
     }
-  }, [city_of_usage, userDetails, accessToken]);
-  
-  const [modalVisible, setModalVisible] = useState(false);
-  console.log(e_loc,"abc");
-  
-  
+  }, [city_of_usage, userDetails, accessToken, navigation]);
+
   const areFieldsFilled = () => {
-    return (
-      city_of_usage &&
-      assignment &&
-      vehiclerequested &&
-      Reportingplace
-    );
-  };
+    const filled = city_of_usage && assignment && vehiclerequested && Reportingplace?.placeAddress;
+    console.log("areFieldsFilled:", filled, { city_of_usage, assignment, vehiclerequested, Reportingplace });
+    return filled;
+  }
   
   const openModal = () => {
+    console.log("openModal function called");
     if (areFieldsFilled()) {
+      console.log("Setting modalVisible to true");
       setModalVisible(true);
     } else {
       Alert.alert("Incomplete Fields", "Please fill all required fields before proceeding.");
@@ -210,29 +212,35 @@ const CorporateModule1 = ({ navigation, item, index }) => {
     navigation.navigate("Notifications");
   };
 
-
   const handleBookingConfirmed = async () => {
-  
-    dispatch(resetCorporateSlice());
+    console.log("Booking confirmed, resetting state");
     
-    
-    clearLocalFormState();
-    
-  
+
     await AsyncStorage.setItem('lastBookingConfirmed', new Date().getTime().toString());
     
+  
     setModalVisible(false);
     
-    Alert.alert(
-      "Booking Confirmed", 
-      "Your booking has been successfully submitted.",
-      [{ text: "OK" }]
-    );
+
+    setTimeout(() => {
+      dispatch(resetCorporateSlice());
+      clearLocalFormState();
+      
+      // Navigate to the upcoming bookings screen or reset to a fresh booking form
+      // navigation.navigate('Upcoming', { eloc: e_loc }); // Uncomment if you want to navigate
+      
+      Alert.alert(
+        "Booking Confirmed", 
+        "Your booking has been successfully submitted.",
+        [{ text: "OK" }]
+      );
+    }, 500);
   };
+  
   const closeModal = () => {
     setModalVisible(false);
   };
-  console.log(e_loc,"123" );
+  
   
   return (
     <View style={styles.mainContainer}>
@@ -484,7 +492,6 @@ const renderCustomTile = (title, onPress, loading) => (
 );
 
 export default CorporateModule1;
-
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -520,6 +527,10 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
 });
+
+
+
+
 
 
 

@@ -134,8 +134,8 @@
 // export default VerifyEmailDialog;
 
 import React, { useState, useEffect } from 'react';
-import { Alert, Image, TouchableOpacity } from 'react-native';
-import { Modal, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Alert, Image, TouchableOpacity,Platform, NativeModules } from 'react-native';
+import { Modal, SafeAreaView, StyleSheet, Text, View,TextInput } from 'react-native';
 import CustomTextInpt from '../../../component/CustomTextInpt';
 import { AuthStrings } from '../../../constants/Strings';
 import CustomButton from '../../../component/CustomButtons';
@@ -188,6 +188,16 @@ const VerifyEmailDialog: React.FC<VerifyEmailDialogProps> = ({
   const sendOtpApiState = useSelector((state: RootState) => state.sendOtp);
   const [clientId, setClientId] = useState<string>('');
   const [sub_entity, setSub_entity] = useState<string>('');
+  const [emailFieldKey, setEmailFieldKey] = useState<string>('email-field-' + Date.now());
+
+  const preventCopying = () => {
+    if (Platform.OS === 'ios') {
+      NativeModules.Clipboard?.setString('');
+    } else {
+      // For Android
+      NativeModules.ClipboardManager?.setString('');
+    }
+  };
 
   const handleSubmit = async (): Promise<void> => {
     if (email && email !== '') {
@@ -265,15 +275,29 @@ const VerifyEmailDialog: React.FC<VerifyEmailDialogProps> = ({
             </View>
             <View style={{ marginHorizontal: 16, marginTop: 14, marginBottom: 19 }}>
               <Text style={verifyEmailStyle.instruction}>{AuthStrings.EnterEmail}</Text>
-              <CustomTextInpt
-                placeholder="Official Email ID"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                secureTextEntry={false}
-                style={undefined}
-                containerStyle={undefined}
-              />
+              {/* Using direct TextInput for more control */}
+              <View style={verifyEmailStyle.customInputContainer || styles.customInputContainer}>
+                <TextInput
+                  key={emailFieldKey}
+                  placeholder="Official Email ID"
+                  value={email}
+                  onChangeText={setEmail}
+                  keyboardType="email-address"
+                  secureTextEntry={false}
+                  style={verifyEmailStyle.customInput || styles.customInput}
+                  selectable={false}
+                  contextMenuHidden={true}
+                  textContentType="none"
+                  autoCorrect={false}
+                  caretHidden={false}
+                  onSelectionChange={preventCopying}
+                  onLongPress={() => {
+                 
+                    setEmailFieldKey('email-field-' + Date.now());
+                    return false;
+                  }}
+                  selection={{start: email.length, end: email.length}}
+                />
 
               {errorMessage && <Text style={verifyEmailStyle.errorText}>{errorMessage}</Text>}
             </View>
@@ -293,9 +317,22 @@ const VerifyEmailDialog: React.FC<VerifyEmailDialogProps> = ({
             />
           </View>
         </View>
+        </View>
       </SafeAreaView>
     </Modal>
   );
 };
-
+const styles = StyleSheet.create({
+  customInputContainer: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginVertical: 8,
+  },
+  customInput: {
+    padding: 12,
+    fontSize: 16,
+    color: '#333',
+  }
+});
 export default VerifyEmailDialog;

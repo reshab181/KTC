@@ -165,9 +165,32 @@ const GetDirection = (props) => {
       setIsLoading(false);
     }
   };
+  const requestLocationPermission = async () => {
+    if (Platform.OS === 'android') {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {
+            title: 'Location Access Required',
+            message: 'This app needs to access your location',
+            buttonPositive: 'OK',
+          },
+        );
+  
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          console.log('Location permission granted');
+        } else {
+          console.log('Location permission denied');
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+  };
 
   useEffect(() => {
     const initializeComponent = async () => {
+      await requestLocationPermission();
       if (coordinates?.coords) {
         const sourceCoords = `${coordinates.coords[1]},${coordinates.coords[0]}`;
         setSourceCoordinates(sourceCoords);

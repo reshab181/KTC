@@ -93,8 +93,10 @@ const Register = ({ route }) => {
         // Password validation
         if (!formData.password) {
             newErrors.password = 'Password is required';
-        } else if (formData.password.length < 4) {
-            newErrors.password = 'Password must be at least 4 characters';
+        } else if (formData.password.length < 10) {
+            newErrors.password = 'Password must be at least 10 characters';
+        } else if (!/(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).*/.test(formData.password)) {
+            newErrors.password = 'Password must contain letters, numbers, and a special character';
         }
 
         if (!formData.confirmPassword) {

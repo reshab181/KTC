@@ -91,12 +91,14 @@ export const fetchCities = async (city, client_id, token, setCity) => {
       throw error;
   }
 };
+
 export const fetchRentalType = async (city, client_id, token) => {
     console.log("Fetching Rental Types...");
     const date =  Math.floor(Date.now() / 1000) ;
+    
     const payload = {
         client_id: client_id,
-        start_date:date ,
+        start_date: date ,
         city_of_usage: city
     };
 
@@ -114,7 +116,7 @@ export const fetchRentalType = async (city, client_id, token) => {
         var plaintextData = CryptoJS.AES.decrypt({ ciphertext: rawData }, key1, { iv: iv1 })
         var plaintexte_loc = plaintextData.toString(CryptoJS.enc.Utf8)
         console.log('====================================');
-        console.log(plaintexte_loc);
+        console.log(plaintexte_loc,"eloc");
         const e_loc = plaintexte_loc ; 
         console.log('====================================');
         return { rentalItems, carGroupItems , e_loc};
