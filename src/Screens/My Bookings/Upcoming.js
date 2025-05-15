@@ -738,6 +738,7 @@ import {
   Alert,
   ScrollView,
   Dimensions,
+  Platform, PermissionsAndroid,Linking
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomHeader from '../../component/CustomHeader';
@@ -839,6 +840,8 @@ const Upcoming = ({ navigation }) => {
   
   const onPressTrack = (item, index) => {
     const elocValue = route?.params?.eloc;
+    console.log(elocValue,"abc");
+    
     
     if (selectedTab === 'Upcoming') {
       if (item.Bookingstatus === 'Confirmed' && 
@@ -869,6 +872,57 @@ const Upcoming = ({ navigation }) => {
       });
     }
   };
+
+  
+    const onCallCLick = async (item) => {
+      console.log('onCallCLick called');
+      let phone = null;
+    
+      if (item.call_masking === 'Yes' && item.drdNumber) {
+        phone = item.drdNumber;
+        console.log('Call masking active. Calling via masked number:', phone);
+      } else {
+        Alert.alert('NUMBER NOT AVAILABLE');
+        console.log('No phone number available.');
+        return;
+      }
+  
+      phone = phone.replace(/\s+/g, '');
+      
+      if (Platform.OS === 'android') {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CALL_PHONE,
+            {
+              title: 'Phone Call Permission',
+              message: 'App needs access to make calls',
+              buttonNeutral: 'Ask Me Later',
+              buttonNegative: 'Cancel',
+              buttonPositive: 'OK',
+            },
+          );
+          
+          if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+            Alert.alert('Permission Denied', 'Cannot make calls without permission');
+            return;
+          }
+        } catch (err) {
+          console.warn(err);
+          return;
+        }
+      }
+    
+      
+      let phoneNumber = Platform.OS === 'android' ? `tel:${phone}` : `telprompt:${phone}`;
+    
+      // Open phone app
+      Linking.openURL(phoneNumber)
+        .then(() => console.log('Phone app opened successfully'))
+        .catch(err => {
+          console.error('Error opening phone app:', err);
+          Alert.alert('Error', 'Could not open phone app');
+        });
+    };
 
   const showDetails = (item) => {
     setDetailsModalVisible({ isVisible: true, booking: item });
@@ -932,6 +986,14 @@ const Upcoming = ({ navigation }) => {
     const showCancelButton = 
       selectedTab === 'Upcoming' && 
       item.Bookingstatus !== 'Cancelled';
+
+
+      const showCallButton = 
+      selectedTab === 'Upcoming' &&
+      item.Bookingstatus === 'Confirmed' &&
+      item.vehicle_no && // Check if vehicle is assigned
+      item.call_masking === 'Yes' &&
+      item.drdNumber;
     
     return (
       <TouchableOpacity style={styles.card} activeOpacity={0.9}>
@@ -996,7 +1058,15 @@ const Upcoming = ({ navigation }) => {
                   <Text style={styles.trackText}>Track</Text>
                 </TouchableOpacity>
               )}
-              
+                {showCallButton && (
+                <TouchableOpacity 
+                  style={styles.callButton} 
+                  onPress={() => onCallCLick(item)}
+                >
+                  <Icon name="phone" size={12} color="#fff" style={styles.callIcon} />
+                  <Text style={styles.callText}>Call Driver</Text>
+                </TouchableOpacity>
+              )}
               {selectedTab === 'History' && (
                 <TouchableOpacity 
                   style={styles.detailsButton} 
@@ -1228,6 +1298,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 15,
   },
+
   activeTab: {
     borderBottomWidth: 3,
     borderBottomColor: '#3C3567',
@@ -1328,6 +1399,29 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginRight: 10,
     marginBottom: 5, 
+  },
+  callButton: {
+    backgroundColor: '#4CAF50',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 8, 
+    marginRight: 10,
+    marginBottom: 5,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  callIcon: {
+    marginRight: 5,
+  },
+  callText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 12,
   },
   trackText: {
     color: '#fff',

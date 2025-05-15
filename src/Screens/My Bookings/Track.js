@@ -31,6 +31,8 @@ const Track = (props) => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { index, pageName, status, feedback_arr, item, eloc } = props?.route?.params;
+  console.log(item.eloc,"123");
+  
 
   const [refreshing, setRefreshing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -69,140 +71,44 @@ const Track = (props) => {
       return null;
     }
   }, []);
-  // const fetchLocationData = useCallback(async (deviceId, token) => {
-  //   try {
-  //     const headers = { Accept: '*/*', Authorization: `Bearer ${token}` };
-  //     const now = Date.now();
-      
-  //     // Try to get location data from the last 24 hours instead of just 15 minutes
-  //     const oneDayAgo = now - 24 * 60 * 60 * 1000;
-  //     const startTime = Math.floor(oneDayAgo / 1000);
-  //     const endTime = Math.floor(now / 1000);
-  
-  //     console.log(`Fetching location data from ${new Date(oneDayAgo).toLocaleString()} to ${new Date(now).toLocaleString()}`);
-      
-  //     const response = await fetch(
-  //       `${INTOUCH_URL}${GET_DEVICES}/${deviceId}/events?startTime=${startTime}&endTime=${endTime}`,
-  //       { method: 'GET', headers }
-  //     );
-  
-  //     const res = await response.json();
-  //     console.log('API Response:', JSON.stringify(res?.data));
-  
-  //     if (res?.error === 'Daily Limit Expired') {
-  //       Alert.alert('Alert!', 'Daily Limit Expired', [
-  //         { text: 'OK', onPress: () => navigation.navigate('Upcoming') }
-  //       ]);
-  //       return;
-  //     }
-  
-  //     const positionList = Array.isArray(res?.data?.positionList) ? res.data.positionList : [];
-  //     console.log(`Found ${positionList.length} positions`);
-  
-  //     // First attempt: Try to use position history
-  //     if (positionList.length > 0) {
-  //       const bestIndex = positionList.reduce((best, current, index, arr) => {
-  //         return current.timestamp > arr[best].timestamp ? index : best;
-  //       }, 0);
-  
-  //       const finalPosition = positionList[bestIndex];
-  
-  //       if (
-  //         finalPosition &&
-  //         typeof finalPosition.latitude === 'number' &&
-  //         typeof finalPosition.longitude === 'number' &&
-  //         finalPosition.latitude !== 0 &&
-  //         finalPosition.longitude !== 0
-  //       ) {
-  //         console.log(`Using position history: Lat ${finalPosition.latitude}, Long ${finalPosition.longitude}`);
-  //         dispatch(setCoords({ coords: [finalPosition.latitude, finalPosition.longitude] }));
-  
-  //         navigation.navigate('Location', {
-  //           item,
-  //           dataTrackChiffer: deviceData,
-  //           access_token: token,
-  //           showResult: res.data,
-  //           index,
-  //           eloc
-  //         });
-  //         return;
-  //       }
-  //     }
-  
-     
-  //     if (deviceData?.location?.latitude && deviceData?.location?.longitude) {
-  //       console.log(`Using current device location: Lat ${deviceData.location.latitude}, Long ${deviceData.location.longitude}`);
-  //       dispatch(setCoords({ coords: [deviceData.location.latitude, deviceData.location.longitude] }));
-  
-  //       navigation.navigate('Location', {
-  //         item,
-  //         dataTrackChiffer: deviceData,
-  //         access_token: token,
-  //         showResult: { data: { positionList: [] } },
-  //         index,
-  //         eloc
-  //       });
-  //       return;
-  //     }
-  
-  //     // If both attempts fail, inform the user
-  //     Alert.alert(
-  //       'Alert!',
-  //       'No recent location data available for this vehicle',
-  //       [{ text: 'OK', onPress: () => navigation.navigate("Upcoming") }],
-  //       { cancelable: false }
-  //     );
-  
-  //   } catch (error) {
-  //     console.error('Error fetching location data:', error);
-  //     Alert.alert(
-  //       'Alert!',
-  //       'This vehicle cannot be tracked',
-  //       [{ text: 'OK', onPress: () => navigation.navigate("Upcoming") }],
-  //       { cancelable: false }
-  //     );
-  //   }
-  // }, [dispatch, deviceData, item, navigation, index, eloc]);
-  
 
   const fetchLocationData = useCallback(async (deviceId, token) => {
     try {
       const headers = { Accept: '*/*', Authorization: `Bearer ${token}` };
-  
+
       // ⏱ Time range: last 24 hours
       const now = Date.now();
       const oneDayAgo = now - 24 * 60 * 60 * 1000;
       const startTime = Math.floor(oneDayAgo / 1000);
       const endTime = Math.floor(now / 1000);
-  
+
       console.log(`📡 Fetching location data from ${new Date(oneDayAgo).toLocaleString()} to ${new Date(now).toLocaleString()}`);
-  
-     
+
+
       const response = await fetch(
         `${INTOUCH_URL}${GET_DEVICES}/${deviceId}/events?startTime=${startTime}&endTime=${endTime}`,
         { method: 'GET', headers }
       );
-  
+
       const res = await response.json();
       console.log('📦 API Response:', JSON.stringify(res?.data));
-  
-    
+
+
       if (res?.error === 'Daily Limit Expired') {
         Alert.alert('Alert!', 'Daily Limit Expired', [
           { text: 'OK', onPress: () => navigation.navigate('Upcoming') }
         ]);
         return;
       }
-  
-  
+
+
       const positionList = Array.isArray(res?.data?.positionList) ? res.data.positionList : [];
       console.log(` Found ${positionList.length} positions`);
-  
+
       positionList.forEach((pos, i) => {
-        console.log(`  → Position ${i}: lat=${pos.latitude}, lng=${pos.longitude}, time=${new Date(pos.timestamp * 1000).toLocaleString()}`);
+        console.log(`  → Position ${i}: lat=${pos.latitude}, lng=${pos.longitude}, time=${new Date(pos.timestamp * 1000).toLocaleString()}`);
       });
-  console.log( typeof latitude,"ffrfrfrfr");
-  
+
 
       const validPosition = positionList.find(pos =>
         typeof pos.latitude === 'number' &&
@@ -210,13 +116,12 @@ const Track = (props) => {
         pos.latitude !== 0 &&
         pos.longitude !== 0
       );
-  
+
       if (validPosition) {
         console.log(`Using valid position: Lat ${validPosition.latitude}, Long ${validPosition.longitude}`);
-        console.log(typeof validPosition.latitude);
-        
+
         dispatch(setCoords({ coords: [validPosition.latitude, validPosition.longitude] }));
-  
+
         navigation.navigate('Location', {
           item,
           dataTrackChiffer: deviceData,
@@ -227,13 +132,13 @@ const Track = (props) => {
         });
         return;
       }
-  
+
       console.warn(" Position data exists but all coordinates are invalid or zero.");
-  
-   
+
+
       const fallbackLocation = deviceData?.location;
       console.log(" Checking fallback deviceData.location:", fallbackLocation);
-  
+
       if (
         fallbackLocation?.latitude &&
         fallbackLocation?.longitude &&
@@ -242,7 +147,7 @@ const Track = (props) => {
       ) {
         console.log(`Using fallback device location: Lat ${fallbackLocation.latitude}, Long ${fallbackLocation.longitude}`);
         dispatch(setCoords({ coords: [fallbackLocation.latitude, fallbackLocation.longitude] }));
-  
+
         navigation.navigate('Location', {
           item,
           dataTrackChiffer: deviceData,
@@ -253,17 +158,17 @@ const Track = (props) => {
         });
         return;
       }
-  
+
       console.warn("⚠️ Fallback deviceData.location is missing or invalid.");
-  
-      // ❌ Final fallback: no valid location found
+
+    
       Alert.alert(
         'Alert!',
         'No recent location data available for this vehicle',
         [{ text: 'OK', onPress: () => navigation.navigate("Upcoming") }],
         { cancelable: false }
       );
-  
+
     } catch (error) {
       console.error('❌ Error fetching location data:', error);
       Alert.alert(
@@ -274,8 +179,7 @@ const Track = (props) => {
       );
     }
   }, [dispatch, deviceData, item, navigation, index, eloc]);
-  
-  
+
 
   const fetchDeviceAndLocation = useCallback(async () => {
     setLoading(true);
@@ -283,37 +187,37 @@ const Track = (props) => {
       let token = accessToken;
       if (!token) {
         token = await fetchOAuthToken();
-        if(!token) return;
+        if (!token) return;
       }
-  
+
       const response = await fetch(`${INTOUCH_URL}${GET_DEVICES}`, {
         method: 'GET',
         headers: { Authorization: `Bearer ${token}` },
       });
-      
+
       const responseData = await response.json();
       const devices = responseData?.data || [];
-      
+
       console.log('Available devices:', devices.map(d => d.deviceDetails?.registrationNumber));
       console.log('Looking for vehicle:', item?.Drivernumber);
-      
+
       const matchedDevice = devices?.find(
         (dev) => dev?.deviceDetails?.registrationNumber === item?.Drivernumber
       );
-  
+
       if (!matchedDevice) {
         Alert.alert('Tracking Error', 'This vehicle cannot be tracked.');
         setLoading(false);
         return;
       }
-      
+
       console.log('Found device:', matchedDevice.id);
       setDeviceData(matchedDevice);
-      
+
       await fetchLocationData(matchedDevice.id, token);
-      console.log(deviceData,"abc");
-      
-      
+      console.log(deviceData, "abc");
+
+
     } catch (err) {
       console.error('Error fetching device data:', err);
       Alert.alert('Tracking Error', 'Something went wrong while tracking the vehicle.');
@@ -323,16 +227,11 @@ const Track = (props) => {
   }, [accessToken, fetchOAuthToken, item?.Drivernumber, fetchLocationData]);
 
 
-  
-  
   useEffect(() => {
     fetchUpcomingBookings();
   }, [fetchUpcomingBookings]);
 
   const home = useCallback(() => navigation.navigate('Upcoming'), [navigation]);
-  // const getDateFromTimestamp = useCallback((timestamp) => new Date(timestamp).toLocaleString(), []);
-  // const getNegativeDateFromTimestamp = useCallback((timestamp) => new Date(Date.now() + timestamp).toLocaleString(), []);
-  // const btn = useCallback((date) => (date > 0 ? getDateFromTimestamp(date) : getNegativeDateFromTimestamp(date)), [getDateFromTimestamp, getNegativeDateFromTimestamp]);
   const stephistroy = useCallback((currentitem) => {
     if (currentitem?.Bookingstatus !== 'Confirmed') return 1;
     if (currentitem?.Bookingstatus === 'Confirmed') return currentitem?.vehicle_no ? (currentitem?.Track_chauffeur === 'Yes' ? 4 : 3) : 2;
@@ -381,6 +280,8 @@ const Track = (props) => {
               <Text style={styles.infoText}>Booking for : {formatDate(item.start_date)}</Text>
               <Text style={styles.infoText}>Time : {item.Reporingtime}</Text>
               <Text style={styles.infoText}>Reporting place : {item.Reportingplace}</Text>
+              {/* <Text style={styles.infoText}>Reporting place : {item.eloc}</Text> */}
+             
             </View>
             {stephistroy(item) > 0 && (
               <TouchableOpacity style={styles.trackBtnContainer} disabled={loading} onPress={fetchDeviceAndLocation}>
@@ -508,6 +409,35 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
+
+
+//   StyleSheet,
+//   Text,
+//   View,
+//   SafeAreaView,
+//   Dimensions,
+//   TouchableOpacity,
+//   ScrollView,
+//   RefreshControl,
+//   Alert,
+//   ActivityIndicator,
+//   Image,
+// } from 'react-native';
+// import React, { useEffect, useState, useCallback, useMemo, memo, useRef } from 'react';
+// import { useNavigation } from '@react-navigation/native';
+// import { useDispatch } from 'react-redux';
+
+// import StepIndicator from '../../component/StepIndicator';
+// import { oauthApi } from '../../services/api/oauthToken';
+// import { INTOUCH_URL, GET_DEVICES } from '../../config/api-config';
+// import UpcomingApi from '../../services/api/upcoming';
+// import CustomHeader from '../../component/CustomHeader';
+// import { setCoords } from '../../Redux/slice/CoordsSlice';
+
+
+
+
+
 
 
 

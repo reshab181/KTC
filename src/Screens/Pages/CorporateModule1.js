@@ -27,6 +27,7 @@ const CorporateModule1 = ({ navigation }) => {
   const [carGroupList, setCarGroupList] = useState([]);
   const [e_loc, seteloc] = useState('');
   const { city_of_usage, assignment, vehiclerequested, Reportingplace, start_date, Reporingtime } = useSelector((state) => state.reviewBooking);
+  const selectedItem = useSelector((state) => state.reviewBooking.selectedItem);
   const userDetails = useSelector((state) => state.userprofile);
   const dispatch = useDispatch();
   
@@ -227,7 +228,7 @@ const CorporateModule1 = ({ navigation }) => {
       clearLocalFormState();
       
       // Navigate to the upcoming bookings screen or reset to a fresh booking form
-      // navigation.navigate('Upcoming', { eloc: e_loc }); // Uncomment if you want to navigate
+      navigation.navigate('Upcoming', { eloc: e_loc }); // Uncomment if you want to navigate
       
       Alert.alert(
         "Booking Confirmed", 
@@ -285,7 +286,7 @@ const CorporateModule1 = ({ navigation }) => {
             visible={modalVisible}
             onClose={closeModal} 
             onConfirm={handleBookingConfirmed}
-            eloc={e_loc} 
+            eloc={Reportingplace?.mapplsPin} 
           />
         }
         <View style={styles.root}>
@@ -329,19 +330,21 @@ const CorporateModule1 = ({ navigation }) => {
             </View>
             <View style={[styles.container2]}>
               <View style={{ marginHorizontal: 10 }}>
-                {renderCustomTile(
-                  (Reportingplace.placeAddress?.length > 25
-                    ? Reportingplace.placeAddress.substring(0, 40) + "..."
-                    : Reportingplace?.placeAddress) || 'Pickup Address',
-                  () => {
-                    if (!city_of_usage) {
-                      Alert.alert("Selection Required", "Please select a city first.");
-                      return;
-                    }
-                    navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'Reportingplace' });
-                  },
-                  loading
-                )}
+              {renderCustomTile(
+  <Text style={{ fontSize: 16 ,marginHorizontal:8}}> 
+    {(Reportingplace.placeAddress?.length > 25
+      ? Reportingplace.placeAddress.substring(0, 40) + "..."
+      : Reportingplace?.placeAddress) || 'Pickup Address'}
+  </Text>,
+  () => {
+    if (!city_of_usage) {
+      Alert.alert("Selection Required", "Please select a city first.");
+      return;
+    }
+    navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'Reportingplace' });
+  },
+  loading
+)}
 
                 <CustomTextInpt
                   placeholder="Reporting Landmark (Optional)"

@@ -15,6 +15,7 @@ const PickUpLocation = ({ navigation, route }) => {
     const [searchText, setSearchText] = useState('');
     const [locations, setLocations] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [mapplsPins, setMapplsPins] = useState([]);
     const dispatch = useDispatch();
     
     console.log("Route Params:", route.params?.eloc, route.params?.type);
@@ -29,6 +30,8 @@ const PickUpLocation = ({ navigation, route }) => {
                     if (Array.isArray(response)) {
                         console.log("API Response:", response);
                         setLocations(response);
+                     
+                        
                     } else {
                         console.error("Unexpected API Response Format:", response);
                         setLocations([]);

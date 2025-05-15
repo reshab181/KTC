@@ -851,7 +851,7 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
             setBookingSuccess(false);
             setBookingId('');
         }, 500);
-        navigation.navigate('Upcoming');
+    navigation.navigate('Upcoming', { eloc: eloc });
     };
     
     if (!visible) return null;
