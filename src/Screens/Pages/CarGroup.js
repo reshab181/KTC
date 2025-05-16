@@ -1,5 +1,4 @@
-// Author: Ashutosh Rai
-// Component: Car Group
+
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import CustomHeader from '../../component/CustomHeader'

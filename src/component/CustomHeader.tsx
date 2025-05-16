@@ -1,106 +1,32 @@
-// // Author: Ashutosh Rai
-// // Component: CustomHeader
-// import React, { Component } from 'react';
-// import { useWindowDimensions, StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
-// import { ImageProps } from 'react-native-svg';
-
-// type CustomHeaderType={
-//   title?: string; 
-//   justifyContent?: any; 
-//   imgPath?:  any; 
-//   iconPath?:  any; 
-//   Iconn?: any; 
-//   iconHeight?: number; 
-//   handleLeftIcon?: () => void; 
-//   iconWidth?: number; 
-//   leftTitle?: string; 
-//   handlePress?: () => void;
-// }
-
-// const CustomHeader = (props:CustomHeaderType) => {
-//   const { width: winWidth } = useWindowDimensions();
-
-//   const styles = StyleSheet.create({
-//     header: {
-//       justifyContent: props.justifyContent ? props.justifyContent : '',
-//       width: winWidth,
-//       height: 60,
-//       backgroundColor: '#3C3567',
-//       flexDirection: 'row',
-//       alignItems: 'center',
-//       paddingHorizontal: 10,
-//     },
-//     title: {
-//       fontSize: 20,
-//       marginStart: 16,
-//       color: '#FFFFFF',
-//       fontWeight: '600',
-//       textTransform : "capitalize"
-//     },
-//     icon: {
-//       height: props.iconHeight? props.iconHeight:30,
-//       width: props.iconWidth ? props.iconWidth:25,
-//     },
-//     img: {
-//       height: 27,
-//       width: 69,
-//       marginStart: 20,
-//     },
-//     ltitle: {
-//       position: 'absolute',
-//       right: 20,
-//     },
-//     ltitletxt: {
-//       color: "#FFFFFF",
-
-//     }
-//   });
-
-//   return (
-//     <View>
-//       <View style={styles.header}>
-//         <TouchableOpacity onPress={props.handleLeftIcon}>
-//           {props.Iconn && (
-//             <TouchableOpacity onPress={props.handleLeftIcon}>
-//               <props.Iconn height={props.iconHeight} width={props.iconWidth} />
-//             </TouchableOpacity>
-//           )}
-
-//           {props.iconPath && <Image source={props?.iconPath} style={styles.icon} />}
-//         </TouchableOpacity>
-//         {props.imgPath && <Image source={props?.imgPath} style={styles.img} />}
-//         <Text style={styles.title}>{props?.title}</Text>
-//         <TouchableOpacity style={styles.ltitle} onPress={props?.handlePress}>
-//           <Text style={styles.ltitletxt}>{props.leftTitle}</Text>
-//         </TouchableOpacity>
-//       </View>
-//     </View>
-//   );
-// };
-
-// export default CustomHeader;
-
 import React from 'react';
-import { useWindowDimensions, StyleSheet, Text, View, Image, TouchableOpacity, GestureResponderEvent } from 'react-native';
+import {
+  useWindowDimensions,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  GestureResponderEvent,
+} from 'react-native';
 
 type CustomHeaderType = {
   handlePress: ((event: GestureResponderEvent) => void) | undefined;
   title?: string;
-  justifyContent?: any; 
- leftTitle ? : string;
+  justifyContent?: any;
+  leftTitle?: string;
   imgPath?: any;
-  iconPath?:  any; 
-  leftIcon?: any; 
-  rightIcon?: any; 
+  iconPath?: any;
+  leftIcon?: any;
+  rightIcon?: any;
   iconHeight?: number;
   iconWidth?: number;
   handleLeftIcon?: () => void;
   handleRightIcon?: () => void;
-  unreadCount?:number;
+  unreadCount?: number;
 };
 
 const CustomHeader = (props: CustomHeaderType) => {
-  const { width: winWidth } = useWindowDimensions();
+  const {width: winWidth} = useWindowDimensions();
 
   const styles = StyleSheet.create({
     header: {
@@ -114,55 +40,58 @@ const CustomHeader = (props: CustomHeaderType) => {
     },
     title: {
       fontSize: 20,
-      marginLeft: 10, 
+      marginLeft: 10,
       color: '#FFFFFF',
       fontWeight: '600',
       textTransform: 'capitalize',
-      // flex: 1, 
+      // flex: 1,
     },
     icon: {
       // color:'#ffffff',
       height: props.iconHeight || 30,
       width: props.iconWidth || 30,
     },
-        img: {
+    img: {
       height: 27,
       width: 69,
       marginStart: 20,
     },
     ltitle: {
-            position: 'absolute',
-            right: 20,
-          },
-          ltitletxt: {
-            color: "#FFFFFF",
-      
-          }
+      position: 'absolute',
+      right: 20,
+    },
+    ltitletxt: {
+      color: '#FFFFFF',
+    },
   });
 
   return (
     <View style={styles.header}>
       {/* Left Icon (Menu) */}
       <TouchableOpacity onPress={props.handleLeftIcon}>
-        {props.leftIcon && <props.leftIcon height={props.iconHeight} width={props.iconWidth} />}
-        {props.iconPath && <Image source={props?.iconPath} style={styles.icon} />}
+        {props.leftIcon && (
+          <props.leftIcon height={props.iconHeight} width={props.iconWidth} />
+        )}
+        {props.iconPath && (
+          <Image source={props?.iconPath} style={styles.icon} />
+        )}
       </TouchableOpacity>
 
       {/* Title (Centered) */}
       {props.imgPath && <Image source={props?.imgPath} style={styles.img} />}
       <Text style={styles.title}>{props?.title}</Text>
       <TouchableOpacity style={styles.ltitle} onPress={props?.handlePress}>
-          <Text style={styles.ltitletxt}>{props.leftTitle}</Text>
-       </TouchableOpacity>
+        <Text style={styles.ltitletxt}>{props.leftTitle}</Text>
+      </TouchableOpacity>
 
       {/* Right Icon (Notifications) */}
       <TouchableOpacity onPress={props.handleRightIcon}>
-        {props.rightIcon && <props.rightIcon height={props.iconHeight} width={props.iconWidth} />}
+        {props.rightIcon && (
+          <props.rightIcon height={props.iconHeight} width={props.iconWidth} />
+        )}
       </TouchableOpacity>
     </View>
   );
 };
 
 export default CustomHeader;
-
-

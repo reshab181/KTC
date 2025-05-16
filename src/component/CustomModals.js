@@ -1,5 +1,3 @@
-// Author: Ashutosh Rai
-// Component: CustomModal
 import React from 'react';
 import {
   Modal,
@@ -10,10 +8,19 @@ import {
   Image,
   TouchableWithoutFeedback,
 } from 'react-native';
-import TickSvg from '../assets/svg/tick.svg'
-import { useWindowDimensions } from 'react-native';
+import TickSvg from '../assets/svg/tick.svg';
+import {useWindowDimensions} from 'react-native';
 
-const CustomModal = ({ loading , message1, message2, isVisible, onClose, isButtonVisible = true, btnText , handlePress }) => {
+const CustomModal = ({
+  loading,
+  message1,
+  message2,
+  isVisible,
+  onClose,
+  isButtonVisible = true,
+  btnText,
+  handlePress,
+}) => {
   const styles = useStyles();
 
   return (
@@ -21,21 +28,30 @@ const CustomModal = ({ loading , message1, message2, isVisible, onClose, isButto
       animationType="fade"
       transparent={true}
       visible={isVisible}
-      onRequestClose={onClose}
-    >
+      onRequestClose={onClose}>
       <TouchableWithoutFeedback onPress={onClose}>
         <View style={styles.modalOverlay}>
           <TouchableWithoutFeedback>
             <View style={styles.modalContainer}>
               <View style={styles.img}>
-              <TickSvg height={64} width={64}/>
+                <TickSvg height={64} width={64} />
               </View>
               {/* <Image source={require('../assets/tickbuttn.png')} style={styles.img} /> */}
               <Text style={styles.modalText}>{message1}</Text>
               <Text style={styles.modalText}>{message2}</Text>
               {isButtonVisible ? (
-                <TouchableOpacity onPress={handlePress} style={styles.closeButton}>
-                  {loading ? <ActivityIndicator size="large" color="#FFFFFF" style={styles.loader} /> : <Text style={styles.closeButtonText}>{btnText}</Text>}
+                <TouchableOpacity
+                  onPress={handlePress}
+                  style={styles.closeButton}>
+                  {loading ? (
+                    <ActivityIndicator
+                      size="large"
+                      color="#FFFFFF"
+                      style={styles.loader}
+                    />
+                  ) : (
+                    <Text style={styles.closeButtonText}>{btnText}</Text>
+                  )}
                 </TouchableOpacity>
               ) : null}
             </View>
@@ -49,7 +65,7 @@ const CustomModal = ({ loading , message1, message2, isVisible, onClose, isButto
 export default CustomModal;
 
 function useStyles() {
-  const { width: winwidth, height: winheight } = useWindowDimensions();
+  const {width: winwidth, height: winheight} = useWindowDimensions();
 
   return StyleSheet.create({
     container: {
@@ -67,7 +83,7 @@ function useStyles() {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Overlay background color
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContainer: {
       width: winwidth * 0.96,
@@ -83,6 +99,7 @@ function useStyles() {
     modalText: {
       fontSize: 14,
       marginBottom: 10,
+      color: '#000',
     },
     closeButton: {
       backgroundColor: '#3C3567',

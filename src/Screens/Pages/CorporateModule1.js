@@ -1,476 +1,11 @@
-// Author: Ashutosh Rai
-// Component: CorporateModule1
-
-// import React, { useEffect, useState, useCallback } from 'react';
-// import Notifications from '../../assets/info1.png';
-// import { ScrollView, StyleSheet, Text, View ,Image} from 'react-native';
-// import { useNavigation } from '@react-navigation/native';
-// import { useDispatch, useSelector } from 'react-redux';
-// import CustomHeader from '../../component/CustomHeader';
-// import CustomDropdown from '../../component/CustomDropdown';
-// import CustomTextInpt from '../../component/CustomTextInpt';
-// import CustomCalender from '../../component/CustomCalender';
-// import CustomButton from '../../component/CustomButtons';
-// import CustomCarGrouptile from '../../component/CustomCarGrouptile';
-// import SidebarMenu from '../../component/SidebarMenu';
-// import { fetchCities, fetchLocalities, fetchRentalType } from '../../Api/CorporateModuleApis';
-// import { fetchJwtAccess } from '../../Utils/JwtHelper';
-// import { Alert } from 'react-native';
-// import Menuu from '../../assets/svg/menu.svg';
-// import Icon from 'react-native-vector-icons/Ionicons';
-// // import Notifications from '../../assets/svg/notifications.svg';
-// import ReviewBookingModal from '../../component/ReviewBookingModal';
-// import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
-// import LoaderModal from '../../component/LoaderModal';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-// import NotificationService from '../../services/api/Notification';
-// const CorporateModule1 = ({ navigation,item,index }) => {
-//   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-//   const [accessToken, setAccessToken] = useState('');
-//   const [cityList, setCityList] = useState([]);
-//   const [Visible, setVisible] = useState(false)
-//   const [carGroupList, setCarGroupList] = useState([]);
-//   const [e_loc, seteloc] = useState('');
-//   const { city_of_usage, assignment, vehiclerequested, Reportingplace, start_date, Reporingtime } = useSelector((state) => state.corporate);
-//   const userDetails = useSelector((state) => state.userprofile);
-//   console.log(" Redux User Data:", userDetails);
-
-
-//   const dispatch = useDispatch();
-//   const [unreadCount, setUnreadCount] = useState(0);
-//   const [specialInstruction, setspecialInstruction] = useState('');
-//   const [reportingLandmark, setreportingLandmark] = useState('');
-//   const [flightTrainInfo, setflightTrainInfo] = useState('');
-//   const [EmpId, setEmpId] = useState('');
-//   const [referenceNumber, setreferenceNumber] = useState('');
-//   const [BookingCode, setBookingCode] = useState('');
-//   const [trNumber, settrNumber] = useState('')
-//   const [BillNumber, setBillNumber] = useState('')
-//   const [loading, setLoading] = useState(false);
-//   const [loadingCities, setLoadingCities] = useState(false);
-//   const [loadingRentalType, setLoadingRentalType] = useState(false);
-//   const [loadingCarGroup, setloadingCarGroup] = useState(false)
-//   const [isTimeSelected, setIsTimeSelected] = useState(false);
-  
-//   useEffect(() => {
-//     const getAccessToken = async () => {
-//       const token = await fetchJwtAccess();
-//       if (token) setAccessToken(token);
-
-
-
-//     };
-//     getAccessToken();
-//     getUserData();
-//     fetchUnreadCount()
-//   }, []);
-//   const getNotificationIcon = (type) => {
-//     return require('../../assets/info1.png');
-//   };
-//   const getUserData = async () => {
-//     try {
-//       const keys = [
-//         "status", "isLoggedInn", "user_id", "email_id",
-//         "f_name", "l_name", "client_name", "client_id",
-//         "gender", "mobile_number", "user_type",
-//         "bithdate", "country", "userToken"
-//       ];
-
-//       const values = await AsyncStorage.multiGet(keys);
-//       const userData = Object.fromEntries(values);
-
-//       console.log("📌 Retrieved User Data:", userData);
-
-//       if (userData.user_id) {
-//         dispatch(updateCorporateSlice(userData));
-//       } else {
-//         console.warn("⚠️ No user data found in AsyncStorage.");
-//       }
-//     } catch (error) {
-//       console.error("❌ Error retrieving user data:", error);
-//     }
-//   };
-//   // const updateChanges = (key, txt) => {
-//   //   setvaluesTextInputs({ ...valuesTextInputs, [key]: txt })
-//   // }
-
-
-
-//   const fetchUnreadCount = async () => {
-//     try {
-//       await NotificationService.fetchNotifications(
-//         {},
-//         1,
-//         10,
-//         () => { },
-//         (count) => {
-//           console.log("Unread Count Fetched:", count); 
-//           setUnreadCount(count);
-//         },
-//         () => { }
-//       );
-//     } catch (error) {
-//       console.error('Error fetching unread count:', error);
-//     }
-//   };
-//   const handleFetchCities = useCallback(async () => {
-//     setLoadingCities(true);
-//     try {
-//       const client_id = await AsyncStorage.getItem('client_id')
-//       const list = await fetchCities('', client_id, accessToken, setCityList);
-//       setLoadingCities(false)
-//       navigation.navigate('City', { list, type: 'city_of_usage' });
-//       // setLoading(false)
-//     } catch (error) {
-//       console.error("Error fetching cities:", error);
-
-//     }
-//     setLoadingCities(false)
-
-
-//   }, [userDetails, accessToken]);
-
-//   const handleFetchRentalType = useCallback(async () => {
-//     setLoadingRentalType(true);
-//     try {
-//       const client_id = await AsyncStorage.getItem('client_id')
-//       const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city_of_usage, client_id, accessToken);
-//       setCarGroupList(carGroupItems);
-//       seteloc(e_loc);
-//       setLoadingRentalType(false);
-
-//       navigation.navigate('City', { list: rentalItems, type: 'assignment' });
-//     } catch (error) {
-//       console.error("Error fetching rental types:", error);
-//     }
-//   }, [city_of_usage, userDetails, accessToken]);
-//   const [modalVisible, setModalVisible] = useState(false);
-//   const areFieldsFilled = () => {
-//     return (
-//       city_of_usage &&
-//       assignment &&
-//       vehiclerequested &&
-//       Reportingplace
-
-//     );
-//   };
-//   const openModal = () => {
-//     if (areFieldsFilled()) {
-//       setModalVisible(true);
-//     } else {
-//       Alert.alert("Incomplete Fields", "Please fill all required fields before proceeding.");
-//     }
-//   };
-//   const handleRightIcon = () => {
-//     setUnreadCount(0); 
-//     navigation.navigate("Notifications");
-//   }
-
-//   const closeModal = () => {
-//     setModalVisible(false);
-//   };
-//   return (
-//     <View style={styles.mainContainer}>
-//       <CustomHeader
-//   title="Home"
-//   justifyContent="space-between"
-//   iconHeight={30}
-//   iconWidth={36}
-//   islogo
-//   leftIcon={Menuu}
-//   rightIcon={() => (
-//     <View style={{ position: "relative",color:"#fff" }}>
-//        <Icon name="notifications" size={24} color="#fff" style={{ marginRight: 10 }}  />
-//       {unreadCount > 0 && (
-//         <View
-//           style={{
-//             position: "absolute",
-//             top: -5,
-//             right: -5,
-//             backgroundColor: "red",
-//             borderRadius: 10,
-//             paddingHorizontal: 6,
-//             paddingVertical: 2,
-//           }}
-//         >
-//           <Text style={{ color: "white", fontSize: 12, fontWeight: "bold" }}>
-//             {unreadCount}
-//           </Text>
-//         </View>
-//       )}
-//     </View>
-//   )}
-//   handleLeftIcon={() => setIsSidebarVisible(true)}
- 
-//   handleRightIcon={handleRightIcon} 
-//   isSidebarVisible={isSidebarVisible}
-// />
-
-//       <ScrollView contentContainerStyle={styles.scrollContainer}>
-//         {
-//           <ReviewBookingModal visible={modalVisible}
-//             onClose={closeModal} eloc={e_loc} />
-//         }
-//         <View style={styles.root}>
-//           <Section title="Car Reservation Details">
-//             <View style={[styles.container2]}>
-//               <View style={{ marginHorizontal: 10, marginTop: 5 }}>
-//                 {renderCustomTile(city_of_usage || 'City', handleFetchCities, loadingCities)}
-
-//                 {renderCustomTile(
-//                   assignment || 'Rental Type',
-//                   () => {
-//                     if (!city_of_usage) {
-//                       Alert.alert("Selection Required", "Please select a city first.");
-//                       return;
-//                     }
-//                     handleFetchRentalType();
-//                   },
-//                   loadingRentalType
-//                 )}
-
-//                 {renderCustomTile(
-//                   vehiclerequested || 'Car Group',
-//                   () => {
-//                     if (!assignment) {
-//                       Alert.alert("Selection Required", "Please select a Rental Type.");
-//                       return;
-//                     }
-//                     setloadingCarGroup(true)
-//                     navigation.navigate('City', { list: carGroupList, type: 'vehiclerequested' });
-//                     setloadingCarGroup(false)
-//                   },
-//                   loadingCarGroup
-//                 )}
-
-//               </View>
-//             </View>
-//           </Section>
-
-//           <Section title="Car Reporting Details">
-//             <View style={{ backgroundColor: '#FFFFFF' }}>
-//               <CustomCalender />
-//             </View>
-//             <View style={[styles.container2]}>
-//               <View style={{ marginHorizontal: 10 }}>
-//                 {renderCustomTile(
-//                   (Reportingplace.placeAddress?.length > 25
-//                     ? Reportingplace.placeAddress.substring(0, 40) + "..."
-//                     : Reportingplace?.placeAddress) || 'Pickup Address',
-//                   () => {
-//                     if (!city_of_usage) {
-//                       Alert.alert("Selection Required", "Please select a city first.");
-//                       return;
-//                     }
-//                     navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'Reportingplace' });
-//                   },
-//                   loading
-//                 )}
-
-//                 <CustomTextInpt
-//                   placeholder="Reporting Landmark (Optional)"
-//                   value={reportingLandmark}
-//                   onChangeText={(txt) => {
-//                     setreportingLandmark(txt);
-//                     dispatch(updateCorporateSlice({
-//                       type: "reportingLandmark",
-//                       selectedItem: txt
-//                     }));
-//                   }}
-//                 />
-//               </View>
-//             </View>
-//           </Section>
-
-//           <Section title="Other Information">
-//             <View style={[styles.container2, {}]}>
-//               <View style={{ marginHorizontal: 10 }}>
-//                 <CustomTextInpt placeholder="Flight/Train info"
-//                   value={flightTrainInfo}
-//                   onChangeText={(txt) => {
-//                     setflightTrainInfo(txt)
-//                     dispatch(updateCorporateSlice({
-//                       type: "Guestflight",
-//                       selectedItem: txt
-//                     }))
-//                   }}
-//                 />
-//                 <CustomTextInpt placeholder="Special Instruction (Optional)"
-//                   value={specialInstruction}
-//                   onChangeText={(txt) => {
-//                     setspecialInstruction(txt)
-//                     dispatch(
-//                       updateCorporateSlice({
-//                         type: "instruction",
-//                         selectedItem: txt,
-//                       })
-//                     )
-//                   }
-//                   }
-//                 />
-//                 {/* <CustomDropdown
-//                   data={cityList}
-//                   placeholder="Payment Mode"
-//                   searchPlaceholder="Search Payment Mode..."
-//                   onChange={(item) => console.log('Selected Payment Mode:', item)}
-//                 /> */}
-//                 {/* {renderCustomTile
-//                   ('Payment Method',
-//                     () => {
-//                       if (!city) {
-//                         Alert.alert("Selection Required", "Please select a Above options.");
-//                         return; // Prevent navigation
-//                       }
-//                       navigation.navigate('Payment', { eloc: e_loc, type: 'paymentMethod' });
-//                     }
-//                   )} */}
-//               </View>
-//             </View>
-//           </Section>
-//           <Section title="Additional Information">
-//             <View style={[styles.container2, {}]}>
-//               <View style={{ marginHorizontal: 10 }}>
-//                 <CustomTextInpt
-//                   placeholder="Emp ID"
-//                   value={EmpId}
-//                   onChangeText={(txt) => {
-//                     setEmpId(txt);
-//                     dispatch(
-//                       updateCorporateSlice({
-//                         type: "custom_column",
-//                         selectedItem: { EmpId: txt },
-//                       })
-//                     );
-//                   }}
-//                 />
-
-//                 <CustomTextInpt
-//                   placeholder="Reference Number"
-//                   value={referenceNumber}
-//                   onChangeText={(txt) => {
-//                     setreferenceNumber(txt);
-//                     dispatch(
-//                       updateCorporateSlice({
-//                         type: "custom_column",
-//                         selectedItem: { referenceNumber: txt }, 
-//                       })
-//                     );
-//                   }}
-//                 />
-
-//                 <CustomTextInpt
-//                   placeholder="Booking Code"
-//                   value={BookingCode}
-//                   onChangeText={(txt) => {
-//                     setBookingCode(txt);
-//                     dispatch(
-//                       updateCorporateSlice({
-//                         type: "custom_column",
-//                         selectedItem: { bookingCode: txt }, 
-//                       })
-//                     );
-//                   }}
-//                 />
-
-//                 <CustomTextInpt
-//                   placeholder="TR No"
-//                   value={trNumber}
-//                   onChangeText={(txt) => {
-//                     settrNumber(txt);
-//                     dispatch(
-//                       updateCorporateSlice({
-//                         type: "custom_column",
-//                         selectedItem: { trNumber: txt }, 
-//                       })
-//                     );
-//                   }}
-//                 />
-
-//                 <CustomTextInpt
-//                   placeholder="Bill No"
-//                   value={BillNumber}
-//                   onChangeText={(txt) => {
-//                     setBillNumber(txt);
-//                     dispatch(
-//                       updateCorporateSlice({
-//                         type: "custom_column",
-//                         selectedItem: { billNumber: txt }, 
-//                       })
-//                     );
-//                   }}
-//                 />
-//               </View>
-//             </View>
-//           </Section>
-
-
-//           <CustomButton title="Next" borderRadius={0} onPress={openModal}
-//           />
-//         </View>
-//       </ScrollView>
-
-//       <SidebarMenu isVisible={isSidebarVisible} onClose={() => setIsSidebarVisible(false)} />
-//     </View>
-//   );
-// };
-
-// const Section = ({ title, children }) => (
-//   <View style={styles.container}>
-//     <View style={styles.container1}>
-//       <Text style={styles.txt}>{title}</Text>
-//     </View>
-//     {children}
-//   </View>
-// );
-
-// const renderCustomTile = (title, onPress, loading) => (
-//   <CustomCarGrouptile title={title} onPress={onPress} iconName="chevron-right" loader={loading} />
-// );
-
-// export default CorporateModule1;
-
-// const styles = StyleSheet.create({
-//   mainContainer: {
-//     flex: 1,
-//     backgroundColor: '#F1F1F3',
-//   },
-//   scrollContainer: {
-//     paddingTop: 20,
-//   },
-//   root: {
-//     flex: 1,
-//     backgroundColor: '#F1F1F3',
-//   },
-//   container: {
-//     margin: 16,
-//     backgroundColor: '#F1F1F3',
-//     elevation: 5,
-//   },
-//   container1: {
-//     height: 32,
-//     backgroundColor: '#374852',
-//     borderTopLeftRadius: 4,
-//     borderTopRightRadius: 4,
-//     justifyContent: 'center',
-//     paddingStart: 10,
-//   },
-//   container2: {
-//     backgroundColor: '#FFFFFF',
-//     paddingBottom: 10
-//   },
-//   txt: {
-//     color: '#FFF',
-//     fontSize: 14,
-//     fontWeight: '600'
-//   },
-// });
+// Reshab Kumar Pandey
+//CorporateModule1.js
 
 import React, { useEffect, useState, useCallback } from 'react';
-import { ScrollView, StyleSheet, Text, View, Image } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomHeader from '../../component/CustomHeader';
-import CustomDropdown from '../../component/CustomDropdown';
 import CustomTextInpt from '../../component/CustomTextInpt';
 import CustomCalender from '../../component/CustomCalender';
 import CustomButton from '../../component/CustomButtons';
@@ -478,28 +13,25 @@ import CustomCarGrouptile from '../../component/CustomCarGrouptile';
 import SidebarMenu from '../../component/SidebarMenu';
 import { fetchCities, fetchLocalities, fetchRentalType } from '../../Api/CorporateModuleApis';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
-import { Alert } from 'react-native';
 import Menuu from '../../assets/svg/menu.svg';
 import Icon from 'react-native-vector-icons/Ionicons';
 import ReviewBookingModal from '../../component/ReviewBookingModal';
-import { updateCorporateSlice, resetCorporateSlice } from '../../Redux/slice/CorporateSlice'; // Add import for resetCorporateSlice
-import LoaderModal from '../../component/LoaderModal';
+import { updateCorporateSlice, resetCorporateSlice } from '../../Redux/slice/CorporateSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NotificationService from '../../services/api/Notification';
 
-const CorporateModule1 = ({ navigation, item, index }) => {
+const CorporateModule1 = ({ navigation }) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [accessToken, setAccessToken] = useState('');
   const [cityList, setCityList] = useState([]);
-  const [Visible, setVisible] = useState(false);
   const [carGroupList, setCarGroupList] = useState([]);
   const [e_loc, seteloc] = useState('');
-  const { city_of_usage, assignment, vehiclerequested, Reportingplace, start_date, Reporingtime } = useSelector((state) => state.corporate);
+  const { city_of_usage, assignment, vehiclerequested, Reportingplace, start_date, Reporingtime } = useSelector((state) => state.reviewBooking);
+  const selectedItem = useSelector((state) => state.reviewBooking.selectedItem);
   const userDetails = useSelector((state) => state.userprofile);
-  console.log(" Redux User Data:", userDetails);
-
-
   const dispatch = useDispatch();
+  
+  // Local state for form fields
   const [unreadCount, setUnreadCount] = useState(0);
   const [specialInstruction, setspecialInstruction] = useState('');
   const [reportingLandmark, setreportingLandmark] = useState('');
@@ -509,12 +41,15 @@ const CorporateModule1 = ({ navigation, item, index }) => {
   const [BookingCode, setBookingCode] = useState('');
   const [trNumber, settrNumber] = useState('');
   const [BillNumber, setBillNumber] = useState('');
+  
+  // Loading states
   const [loading, setLoading] = useState(false);
   const [loadingCities, setLoadingCities] = useState(false);
   const [loadingRentalType, setLoadingRentalType] = useState(false);
   const [loadingCarGroup, setloadingCarGroup] = useState(false);
-  const [isTimeSelected, setIsTimeSelected] = useState(false);
   
+  // Modal visibility state
+  const [modalVisible, setModalVisible] = useState(false);
 
   const checkUserLoginStatus = async () => {
     try {
@@ -537,19 +72,43 @@ const CorporateModule1 = ({ navigation, item, index }) => {
       const isLoggedIn = await checkUserLoginStatus();
       
       if (isLoggedIn) {
-        await getUserData();
+       
+        const lastBookingConfirmed = await AsyncStorage.getItem('lastBookingConfirmed');
+        const currentTime = new Date().getTime();
+        
+        if (lastBookingConfirmed && (currentTime - parseInt(lastBookingConfirmed) < 30000)) {
+        
+          await AsyncStorage.removeItem('lastBookingConfirmed');
+        } else {
+         
+          await getUserData();
+        }
       } else {
      
         dispatch(resetCorporateSlice());
         clearLocalFormState();
+        seteloc('');
+        setflightTrainInfo('');
       }
       
-      fetchUnreadCount();
+    
+      const unsubscribe = navigation.addListener('focus', () => {
+        fetchUnreadCount();
+      });
+      
+      return unsubscribe;
     };
     
     initializeComponent();
+  }, [navigation, dispatch]);
+
+ 
+  useEffect(() => {
+    return () => {
+      // This cleanup function runs when component unmounts
+      console.log("CorporateModule1 unmounting, cleaning up state");
+    };
   }, []);
-  
 
   const clearLocalFormState = () => {
     setspecialInstruction('');
@@ -560,10 +119,6 @@ const CorporateModule1 = ({ navigation, item, index }) => {
     setBookingCode('');
     settrNumber('');
     setBillNumber('');
-  };
-  
-  const getNotificationIcon = (type) => {
-    return require('../../assets/info1.png');
   };
   
   const getUserData = async () => {
@@ -615,41 +170,38 @@ const CorporateModule1 = ({ navigation, item, index }) => {
       const list = await fetchCities('', client_id, accessToken, setCityList);
       setLoadingCities(false)
       navigation.navigate('City', { list, type: 'city_of_usage' });
-      // setLoading(false)
     } catch (error) {
       console.error("Error fetching cities:", error);
     }
     setLoadingCities(false)
-  }, [userDetails, accessToken]);
+  }, [userDetails, accessToken, navigation]);
 
   const handleFetchRentalType = useCallback(async () => {
     setLoadingRentalType(true);
     try {
-      const client_id = await AsyncStorage.getItem('client_id')
-      const { rentalItems, carGroupItems, e_loc } = await fetchRentalType(city_of_usage, client_id, accessToken);
+      const client_id = await AsyncStorage.getItem('client_id');
+      const { rentalItems, carGroupItems, e_loc: fetchedEloc } = await fetchRentalType(city_of_usage, client_id, accessToken);
       setCarGroupList(carGroupItems);
-      seteloc(e_loc);
+      seteloc(fetchedEloc);
       setLoadingRentalType(false);
-
       navigation.navigate('City', { list: rentalItems, type: 'assignment' });
     } catch (error) {
       console.error("Error fetching rental types:", error);
+    } finally {
+      setLoadingRentalType(false);
     }
-  }, [city_of_usage, userDetails, accessToken]);
-  
-  const [modalVisible, setModalVisible] = useState(false);
-  
+  }, [city_of_usage, userDetails, accessToken, navigation]);
+
   const areFieldsFilled = () => {
-    return (
-      city_of_usage &&
-      assignment &&
-      vehiclerequested &&
-      Reportingplace
-    );
-  };
+    const filled = city_of_usage && assignment && vehiclerequested && Reportingplace?.placeAddress;
+    console.log("areFieldsFilled:", filled, { city_of_usage, assignment, vehiclerequested, Reportingplace });
+    return filled;
+  }
   
   const openModal = () => {
+    console.log("openModal function called");
     if (areFieldsFilled()) {
+      console.log("Setting modalVisible to true");
       setModalVisible(true);
     } else {
       Alert.alert("Incomplete Fields", "Please fill all required fields before proceeding.");
@@ -661,26 +213,35 @@ const CorporateModule1 = ({ navigation, item, index }) => {
     navigation.navigate("Notifications");
   };
 
-
-  const handleBookingConfirmed = () => {
-    // Reset all form fields
-    dispatch(resetCorporateSlice());
-    clearLocalFormState();
+  const handleBookingConfirmed = async () => {
+    console.log("Booking confirmed, resetting state");
     
 
-    setModalVisible(false);
+    await AsyncStorage.setItem('lastBookingConfirmed', new Date().getTime().toString());
     
   
-    Alert.alert(
-      "Booking Confirmed", 
-      "Your booking has been successfully submitted.",
-      [{ text: "OK" }]
-    );
+    setModalVisible(false);
+    
+
+    setTimeout(() => {
+      dispatch(resetCorporateSlice());
+      clearLocalFormState();
+      
+      // Navigate to the upcoming bookings screen or reset to a fresh booking form
+      navigation.navigate('Upcoming', { eloc: e_loc }); // Uncomment if you want to navigate
+      
+      Alert.alert(
+        "Booking Confirmed", 
+        "Your booking has been successfully submitted.",
+        [{ text: "OK" }]
+      );
+    }, 500);
   };
   
   const closeModal = () => {
     setModalVisible(false);
   };
+  
   
   return (
     <View style={styles.mainContainer}>
@@ -718,13 +279,14 @@ const CorporateModule1 = ({ navigation, item, index }) => {
         isSidebarVisible={isSidebarVisible}
       />
 
+
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {
           <ReviewBookingModal 
             visible={modalVisible}
             onClose={closeModal} 
             onConfirm={handleBookingConfirmed}
-            eloc={e_loc} 
+            eloc={Reportingplace?.mapplsPin} 
           />
         }
         <View style={styles.root}>
@@ -768,19 +330,21 @@ const CorporateModule1 = ({ navigation, item, index }) => {
             </View>
             <View style={[styles.container2]}>
               <View style={{ marginHorizontal: 10 }}>
-                {renderCustomTile(
-                  (Reportingplace.placeAddress?.length > 25
-                    ? Reportingplace.placeAddress.substring(0, 40) + "..."
-                    : Reportingplace?.placeAddress) || 'Pickup Address',
-                  () => {
-                    if (!city_of_usage) {
-                      Alert.alert("Selection Required", "Please select a city first.");
-                      return;
-                    }
-                    navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'Reportingplace' });
-                  },
-                  loading
-                )}
+              {renderCustomTile(
+  <Text style={{ fontSize: 16 ,marginHorizontal:8}}> 
+    {(Reportingplace.placeAddress?.length > 25
+      ? Reportingplace.placeAddress.substring(0, 40) + "..."
+      : Reportingplace?.placeAddress) || 'Pickup Address'}
+  </Text>,
+  () => {
+    if (!city_of_usage) {
+      Alert.alert("Selection Required", "Please select a city first.");
+      return;
+    }
+    navigation.navigate('PickUpLocation', { eloc: e_loc, type: 'Reportingplace' });
+  },
+  loading
+)}
 
                 <CustomTextInpt
                   placeholder="Reporting Landmark (Optional)"
@@ -931,7 +495,6 @@ const renderCustomTile = (title, onPress, loading) => (
 );
 
 export default CorporateModule1;
-
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
@@ -967,6 +530,10 @@ const styles = StyleSheet.create({
     fontWeight: '600'
   },
 });
+
+
+
+
 
 
 

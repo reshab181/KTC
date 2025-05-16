@@ -1,3 +1,7 @@
+// Reshab Kumar Pandey
+//Notifications.js
+
+
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet, Text, View, Image, Dimensions, SafeAreaView,
@@ -85,12 +89,7 @@ const NotificationScreen = ({ navigation }) => {
             </Text>
           </View>
         </View>
-        {/* <View style={styles.cardFooter}>
-          <Image source={require('../assets/calendar.png')} style={styles.icon} />
-          <Text style={styles.footerText}>{item.notification_date || "No Date"}</Text>
-          <Image source={require('../assets/watch.png')} style={styles.icon} />
-          <Text style={styles.footerText}>{item.notification_time || "No Time"}</Text>
-        </View> */}
+    
       </Card>
     </TouchableOpacity>
   );
@@ -126,7 +125,7 @@ const NotificationScreen = ({ navigation }) => {
       {notificationList.length > 0 && (
         <View style={styles.actionButtonContainer}>
           <TouchableOpacity onPress={clearAllNotifications} style={styles.actionButton}>
-            <Text style={styles.actionButtonText}>Clear All</Text>
+            <Text style={styles.actionButtonText}>Read All</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -137,7 +136,7 @@ const NotificationScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#EDEDED', 
+    backgroundColor: '#F4F4F4', 
   },
 
   header: {
@@ -145,110 +144,118 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 15,
-    backgroundColor: '#4A3F7A', 
-    height: 60,
-    elevation: 4, 
+    backgroundColor: '#4A3F7A',
+    height: 55, 
+    elevation: 3, 
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 1,
   },
 
   headerTitle: {
     fontSize: 18,
     color: '#fff',
-    fontWeight: '600',
-    textTransform: 'uppercase',
-    letterSpacing: 1, 
+    fontWeight: 'bold',
+    textTransform: 'capitalize', 
+    letterSpacing: 0.3,
   },
 
   cardStyle: {
-    marginVertical: 8,
+    marginVertical: 7, 
     marginHorizontal: 15,
     padding: 15,
     backgroundColor: '#fff',
-    // // borderRadius: 10,
-    // shadowColor: '#000',
-    // shadowOpacity: 0.1,
-    // // shadowRadius: 5,
-    // shadowOffset: { width: 0, height: 3 },
-    // elevation: 5, 
+    borderRadius: 8, 
+    elevation: 2, 
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 1.5,
   },
 
   textColor: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    marginLeft: 12,
-    color: '#000',
+    fontSize: 16, 
+    fontWeight: '600',
+    marginLeft: 10,
+    color: '#333',
   },
 
   icon: {
-    width: 22,
-    height: 22,
-    marginHorizontal: 6,
-    tintColor: '#4A3F7A', 
+    width: 20, 
+    height: 20,
+    marginHorizontal: 5,
+    tintColor: '#4A3F7A',
   },
 
   emptyContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: 60,
+    marginTop: 50,
   },
 
   emptyText: {
-    fontSize: 18,
-    color: '#888',
+    fontSize: 16,
+    color: '#777',
     fontStyle: 'italic',
   },
 
   actionButtonContainer: {
     alignItems: 'center',
-    marginVertical: 20,
+    paddingVertical: 15,
+    backgroundColor: '#F4F4F4', 
+    borderTopWidth: 1,
+    borderTopColor: '#ddd',
   },
 
   actionButton: {
     backgroundColor: '#4A3F7A',
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    // borderRadius: 8,
-    elevation: 3,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    elevation: 2,
     shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 1,
   },
 
   actionButtonText: {
     color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-    letterSpacing: 0.5,
+    fontSize: 15,
+    fontWeight: '500',
+    letterSpacing: 0.2,
   },
 
   cardFooter: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 8, 
   },
 
   footerText: {
-    fontSize: 14,
-    color: '#666',
-    marginHorizontal: 5,
+    fontSize: 12, 
+    color: '#777',
+    marginHorizontal: 3,
   },
 
   rejectionText: {
-    color: '#D9534F', 
-    fontWeight: 'bold',
-    fontSize: 16,
+    color: '#C62828', 
+    fontWeight: '500',
+    fontSize: 15,
+    marginTop: 3,
   },
 
   confirmationText: {
-    color: '#000', 
-    // fontWeight: '600',
-    fontSize: 16,
+    color: '#2E7D32', 
+    fontSize: 15,
+    marginTop: 3,
   },
 
   flexDirectionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 3,
   },
 
   flex1: {
@@ -257,7 +264,11 @@ const styles = StyleSheet.create({
 
   cardContent: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start', 
+  },
+
+  cardAlternate: {
+    backgroundColor: '#F9F9F9', 
   },
 });
 

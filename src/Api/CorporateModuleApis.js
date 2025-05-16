@@ -55,27 +55,7 @@ const fetchData = async (endpoint, payload, token) => {
     }
 };
 
-// Fetch Cities
-// export const fetchCities = async (city, client_id, token, setCity) => {
-//     console.log("Fetching Cities...");
 
-//     const payload = {
-//         client_id: client_id,
-//         start_date: Math.floor(Date.now() / 1000),
-//         city_of_usage: city
-//     };
-
-//     try {
-//         const data = await fetchData("https://web.gst.fleet.ktcindia.com/user_apis_encoded/booking_param.php", payload, token);
-//         const cityList = decryptData(data?.city_of_usage);
-//         console.log("Decrypted City List:", cityList);
-//         setCity([...cityList]);
-//         return cityList;
-//     } catch (error) {
-//         console.error('Error Fetching Cities:', error.message);
-//         throw new Error('Error Fetching Cities');
-//     }
-// };
 export const fetchCities = async (city, client_id, token, setCity) => {
   if (!client_id || !token) {
       throw new Error('Missing required parameters');
@@ -111,12 +91,14 @@ export const fetchCities = async (city, client_id, token, setCity) => {
       throw error;
   }
 };
+
 export const fetchRentalType = async (city, client_id, token) => {
     console.log("Fetching Rental Types...");
     const date =  Math.floor(Date.now() / 1000) ;
+    
     const payload = {
         client_id: client_id,
-        start_date:date ,
+        start_date: date ,
         city_of_usage: city
     };
 
@@ -134,7 +116,7 @@ export const fetchRentalType = async (city, client_id, token) => {
         var plaintextData = CryptoJS.AES.decrypt({ ciphertext: rawData }, key1, { iv: iv1 })
         var plaintexte_loc = plaintextData.toString(CryptoJS.enc.Utf8)
         console.log('====================================');
-        console.log(plaintexte_loc);
+        console.log(plaintexte_loc,"eloc");
         const e_loc = plaintexte_loc ; 
         console.log('====================================');
         return { rentalItems, carGroupItems , e_loc};
@@ -159,7 +141,7 @@ export const fetchLocalities = (city, eloc) => {
                     }));
                     resolve(suggestedLocations);
                 } else {
-                    resolve([]); // Return empty array if no results found
+                    resolve([]); 
                 }
             })
             .catch(error => {
@@ -206,7 +188,7 @@ export const fetchHistoryBookings = async (page, pageLimit) => {
       console.log(result);
       console.log('====================================');
       return result
-      // setList(ValueText);
+    
     } catch (err) {
       console.log(err)
     }
@@ -270,7 +252,7 @@ export const fetchUpcomingBookings = async (page, pageLimit) => {
         const result = decryptData(data?.booking_arr)
         return result ; 
       }
-      // setList(ValueText);
+     
     } catch (err) {
       console.log(err)
     }

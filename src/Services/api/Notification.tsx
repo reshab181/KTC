@@ -185,7 +185,7 @@ const NotificationService = {
             console.log("Clearing Notifications:", data);
 
             let headers = { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' };
-            await postJWtHttpClient(await NotificationClient, '/clear', null, data, headers);
+            await postJWtHttpClient(await NotificationClient, '', null, data, headers);
 
             setUnreadCount(0);
             setNotification([]);

@@ -1,25 +1,30 @@
-
-import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const CustomIconTextInput = ({
   placeholder,
   Righticon,
-  lefticon , 
+  lefticon,
   icon1,
 
   icon2,
-  LeftSvg, 
+  LeftSvg,
   keyboardType = 'default',
   value,
-  iconSize ,
-  handlePress , 
-  onChangeText, 
+  iconSize,
+  handlePress,
+  onChangeText,
 }) => {
   const [showLeftimg, setShowLeftimg] = useState(icon1 ? true : false);
   const [showLeftIcon, setShowLeftIcon] = useState(lefticon ? true : false);
-  const [showLeftSvg , setShowLeftSvg] = useState(LeftSvg ? true : false ) ; 
+  const [showLeftSvg, setShowLeftSvg] = useState(LeftSvg ? true : false);
   const [showRightImg, setShowRightImg] = useState(icon2 ? true : false);
 
   const [showRightIcon, setShowRightIcon] = useState(Righticon ? true : false);
@@ -28,16 +33,18 @@ const CustomIconTextInput = ({
     <View style={styles.container}>
       <View style={styles.inputContainer}>
         {showLeftimg && <Image style={styles.icon1} source={icon1} />}
-        {showLeftIcon && <Icon name={lefticon} size={iconSize} style={{marginRight: 15}}/>}
-        {showLeftSvg && <LeftSvg height={24} width={24}/>}
+        {showLeftIcon && (
+          <Icon name={lefticon} size={iconSize} style={{marginRight: 15}} />
+        )}
+        {showLeftSvg && <LeftSvg height={24} width={24} />}
 
         <TextInput
           style={styles.textInput}
           placeholder={placeholder}
           keyboardType={keyboardType}
           placeholderTextColor="#A9A9A9"
-          value={value} 
-          onChangeText={onChangeText} 
+          value={value}
+          onChangeText={onChangeText}
         />
         {showRightIcon && (
           <TouchableOpacity onPress={handlePress}>

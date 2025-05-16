@@ -1,5 +1,4 @@
-// Author: Ashutosh Rai
-// Component: CarSelection
+
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View, ScrollView } from 'react-native';
 import CustomHeader from '../../component/CustomHeader';

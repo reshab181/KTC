@@ -1,4 +1,4 @@
-// Ashutosh Rai
+
 import React, { useEffect, useState } from 'react';
 import {
   Dimensions,
@@ -31,9 +31,9 @@ const ForgotPassword = ({ route, navigation }) => {
 
 
   useEffect(() => {
-    // setLoading(true)
+  
     getSendOtpResponse()
-    // setLoading(false)
+    
   }, [sendOtpApiState])
 
   const getSendOtpResponse = () => {
@@ -51,23 +51,7 @@ const ForgotPassword = ({ route, navigation }) => {
     }
   }
 
-  // useEffect(() => {
-  //   const getAccessToken = async () => {
-  //     try {
-  //       console.log('Fetching JWT Access Token...');
-  //       const token = await fetchJwtAccess();
-  //       console.log('Fetched JWT Access Token:', token);
-  //       if (token) {
-  //         setAccessToken(token);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching JWT access token:', error.message);
-  //       setError('Failed to fetch access token.');
-  //     }
-  //   };
 
-  //   getAccessToken();
-  // }, []);
     useEffect(() => {
       return () => {
         dispatch(resetSendOtpState())
@@ -76,9 +60,9 @@ const ForgotPassword = ({ route, navigation }) => {
 
   const sendForgotOTP = () => {
     console.log("Sending Click")
-    // setLoading(true)
+   
     dispatch(sendOtp(email))
-    // setLoading(false)
+  
 
   };
 

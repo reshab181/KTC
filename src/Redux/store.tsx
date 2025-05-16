@@ -30,7 +30,7 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import { persistStore, persistReducer } from 'redux-persist';
-import AsyncStorage from '@react-native-async-storage/async-storage'; // ✅ For React Native
+import AsyncStorage from '@react-native-async-storage/async-storage'; 
 import { combineReducers } from "redux";
 import userReducer from './slice/Userslice';
 import profileReducer from './slice/UserProfileSlice';
@@ -40,24 +40,29 @@ import sendOtpReducer from './slice/SendOtpSlice';
 import signInReducer from './slice/SignInSlice';
 import verifyOtpReducer from './slice/VerifyOtpSlice';
 import bookingReducer from "./slice/BookingSlice";
+import coordsReducer from './slice/CoordsSlice';
+
+
+
 
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage, 
-  whitelist: ['userprofile', 'corporate', 'user'],
+  whitelist: ['userprofile', 'reviewBooking', 'user', 'coords'],
 };
 
 
 const rootReducer = combineReducers({
   user: userReducer, 
   userprofile: profileReducer,  
-  corporate: corporateReducer, 
+  reviewBooking: corporateReducer, 
   verifyEmail: verifyEmailReducer,
   sendOtp: sendOtpReducer,
   signIn: signInReducer, 
   verifyOtp: verifyOtpReducer,
   booking: bookingReducer,
+  coords:coordsReducer
 });
 
 

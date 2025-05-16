@@ -21,9 +21,7 @@ const initialState: SignInState = {
       try {
         console.log("SLICE SIGNIN");
         const response = await SignInApii(email, password);
-        // console.log("SLICE SIGNIN", response.data);
-        // const decryptedData = response.data; // Decrypt data
-        // console.log("SLICE SIGNIN", decryptedData);
+      
         return response.data; // Return decrypted data
       }catch (error: any) {
         console.log("SLICE SIGNIN ERROR", error);
