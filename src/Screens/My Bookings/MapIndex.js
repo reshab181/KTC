@@ -1,6 +1,3 @@
-// Reshab Kumar Pandey
-// MapIndex.js
-
 import React, {useEffect, useState} from 'react';
 import {
   View,
@@ -45,29 +42,39 @@ const MapIndex = props => {
     console.log('MapIndex component mounted or updated');
     console.log('Item prop:', item);
     console.log('Redux coordinates:', coordinates?.coords);
-
+  
     const fetchData = async () => {
       if (coordinates?.coords && item?.eloc) {
         setSourceCoordinates(
-          `${coordinates?.coords[1]},${coordinates?.coords[0]}`,
+          `${coordinates?.coords[1]},${coordinates?.coords[0]}`
         );
         console.log(
           'Source Coordinates set to:',
-          `${coordinates?.coords[1]},${coordinates?.coords[0]}`,
+          `${coordinates?.coords[1]},${coordinates?.coords[0]}`
         );
         console.log('Fetching direction data...');
         await fetchDirectionData('driving');
       } else {
         console.log(
-          'Coordinates or eloc are missing, skipping fetchDirectionData',
+          'Coordinates or eloc are missing, skipping fetchDirectionData'
         );
         setIsLoading(false);
         setError('Location data not available');
       }
     };
+  
+    // Call the fetch data once initially
     fetchData();
+  
+    // Set up interval for refreshing data
+    const intervalId = setInterval(() => {
+      console.log('Refreshing trip details...');
+      fetchData();
+    }, 30000); 
+  
+    return () => clearInterval(intervalId);
   }, [coordinates?.coords, item?.eloc]);
-
+  
   const fetchDirectionData = async profile => {
     console.log('fetchDirectionData called with profile:', profile);
     console.log('Source:', sourceCoordinates);
@@ -142,54 +149,6 @@ const MapIndex = props => {
     return `${min}m`;
   };
 
-  // const onCallClick = async () => {
-  //   console.log('onCallClick called');
-  //   let phone = null;
-
-  //   if (item?.drdNumber) {
-  //     phone = item.drdNumber;
-  //     console.log('Calling via number:', phone);
-  //   } else {
-  //     Alert.alert('Notice', 'Phone number not available');
-  //     console.log('No phone number available.');
-  //     return;
-  //   }
-
-  //   phone = phone.replace(/\s+/g, '');
-
-  //   if (Platform.OS === 'android') {
-  //     try {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.CALL_PHONE,
-  //         {
-  //           title: 'Phone Call Permission',
-  //           message: 'App needs access to make calls',
-  //           buttonNeutral: 'Ask Me Later',
-  //           buttonNegative: 'Cancel',
-  //           buttonPositive: 'OK',
-  //         },
-  //       );
-
-  //       if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-  //         Alert.alert('Permission Denied', 'Cannot make calls without permission');
-  //         return;
-  //       }
-  //     } catch (err) {
-  //       console.warn(err);
-  //       return;
-  //     }
-  //   }
-
-  //   let phoneNumber = Platform.OS === 'android' ? `tel:${phone}` : `telprompt:${phone}`;
-
-  //   Linking.openURL(phoneNumber)
-  //     .then(() => console.log('Phone app opened successfully'))
-  //     .catch(err => {
-  //       console.error('Error opening phone app:', err);
-  //       Alert.alert('Error', 'Could not open phone app');
-  //     });
-  // };
-
   const renderInfoItem = (icon, label, value, valueStyle = styles.value) => (
     <View style={styles.infoItem}>
       <View style={styles.iconContainer}>
@@ -199,7 +158,7 @@ const MapIndex = props => {
       {isLoading && (label === 'Distance' || label === 'Duration') ? (
         <ActivityIndicator size="small" color="#4A90E2" />
       ) : (
-        <Text style={valueStyle} numberOfLines={2}>
+        <Text style={valueStyle} numberOfLines={1} ellipsizeMode="tail">
           {value}
         </Text>
       )}
@@ -208,66 +167,53 @@ const MapIndex = props => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.container}>
-          <View style={styles.infoCard}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.cardTitle}>Trip Details</Text>
+      <View style={styles.container}>
+        <View style={styles.infoCard}>
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Trip Details</Text>
+          </View>
+
+          {error && (
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>⚠️ {error}</Text>
+            </View>
+          )}
+
+          <View style={styles.infoSection}>
+            <View style={styles.infoRow}>
+              {renderInfoItem(
+                require('../../assets/route.png'),
+                'Distance',
+                distance || 'Calculating...',
+              )}
+
+              {renderInfoItem(
+                require('../../assets/mapcar.png'),
+                'Vehicle Type',
+                item?.vehiclerequested || 'Not specified',
+                styles.valueHighlight,
+              )}
             </View>
 
-            {error && (
-              <View style={styles.errorContainer}>
-                <Text style={styles.errorText}>⚠️ {error}</Text>
-              </View>
-            )}
+            <View style={styles.divider} />
 
-            <View style={styles.infoSection}>
-              <View style={styles.infoRow}>
-                {renderInfoItem(
-                  require('../../assets/route.png'),
-                  'Distance',
-                  distance || 'Calculating...',
-                )}
+            <View style={styles.infoRow}>
+              {renderInfoItem(
+                require('../../assets/clock.png'),
+                'Duration',
+                duration || 'Calculating...',
+              )}
 
-                {renderInfoItem(
-                  require('../../assets/mapcar.png'),
-                  'Vehicle Type',
-                  item?.vehiclerequested || 'Not specified',
-                  styles.valueHighlight,
-                )}
-              </View>
-
-              <View style={styles.divider} />
-
-              <View style={styles.infoRow}>
-                {renderInfoItem(
-                  require('../../assets/clock.png'),
-                  'Duration',
-                  duration || 'Calculating...',
-                )}
-
-                {renderInfoItem(
-                  require('../../assets/dl.png'),
-                  'Vehicle Number',
-                  item?.vehicle_no || 'Not assigned',
-                  styles.valueAccent,
-                )}
-              </View>
+              {renderInfoItem(
+                require('../../assets/dl.png'),
+                'Vehicle Number',
+                item?.vehicle_no || 'Not assigned',
+                styles.valueAccent,
+              )}
             </View>
-
-            {/* {item?.drdNumber && (
-              <TouchableOpacity
-                style={styles.callButtonContainer}
-                onPress={onCallClick}
-                activeOpacity={0.8}>
-                <View style={styles.callButton}>
-                  <Text style={styles.callButtonText}>📞 Call Driver</Text>
-                </View>
-              </TouchableOpacity>
-            )} */}
           </View>
         </View>
-      </ScrollView>
+      </View>
     </SafeAreaView>
   );
 };
@@ -277,130 +223,103 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f7fa',
   },
-  scrollContainer: {
-    flexGrow: 1,
-  },
   container: {
     flex: 1,
-    paddingHorizontal: 16,
-    // paddingTop: 16,
-    // paddingBottom: 24,
+    padding: 8, // Reduced padding
   },
   infoCard: {
     backgroundColor: '#ffffff',
-    borderRadius: 16,
+    borderRadius: 10, // Smaller border radius
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 4},
+    shadowOffset: {width: 0, height: 2}, // Reduced shadow
     shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 5,
+    shadowRadius: 4,
+    elevation: 3,
     overflow: 'hidden',
   },
   cardHeader: {
     backgroundColor: '#4A90E2',
-    paddingVertical: 8,
-    paddingHorizontal: 20,
+    paddingVertical: 6, // Reduced padding
+    paddingHorizontal: 16,
   },
   cardTitle: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 16, // Reduced font size
     fontWeight: '700',
     textAlign: 'center',
     letterSpacing: 0.5,
   },
   errorContainer: {
     backgroundColor: '#ffe6e6',
-    padding: 12,
+    padding: 8, // Reduced padding
     borderBottomWidth: 1,
     borderBottomColor: '#ffcccc',
   },
   errorText: {
     color: '#d32f2f',
-    fontSize: 14,
+    fontSize: 12, // Reduced font size
     textAlign: 'center',
     fontWeight: '500',
   },
   infoSection: {
-    padding: 8,
+    padding: 6, // Reduced padding
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 8,
+    marginBottom: 4, // Reduced margin
   },
   infoItem: {
     flex: 1,
     alignItems: 'center',
-    paddingHorizontal: 12,
+    paddingHorizontal: 8, // Reduced padding
   },
   iconContainer: {
     backgroundColor: '#f0f4ff',
-    padding: 12,
-    borderRadius: 50,
-    marginBottom: 12,
+    padding: 8, // Reduced padding
+    borderRadius: 25, // Smaller border radius
+    marginBottom: 6, // Reduced margin
   },
   icon: {
-    width: 28,
-    height: 28,
+    width: 20, // Smaller icon
+    height: 20, // Smaller icon
     resizeMode: 'contain',
     tintColor: '#4A90E2',
   },
   label: {
-    fontSize: 14,
+    fontSize: 12, // Reduced font size
     color: '#666',
-    marginBottom: 8,
+    marginBottom: 4, // Reduced margin
     fontWeight: '600',
     textAlign: 'center',
   },
   value: {
-    fontSize: 16,
+    fontSize: 14, // Reduced font size
     color: '#333',
     fontWeight: '700',
     textAlign: 'center',
-    lineHeight: 20,
+    lineHeight: 16, // Reduced line height
   },
   valueHighlight: {
-    fontSize: 16,
+    fontSize: 14, // Reduced font size
     color: '#2E7D32',
     fontWeight: '700',
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 16, // Reduced line height
   },
   valueAccent: {
-    fontSize: 16,
+    fontSize: 14, // Reduced font size
     color: '#D32F2F',
     fontWeight: '700',
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 16, // Reduced line height
   },
   divider: {
     height: 1,
     backgroundColor: '#E8EAF0',
-    marginVertical: 20,
-    marginHorizontal: 20,
+    marginVertical: 10, // Reduced margin
+    marginHorizontal: 10, // Reduced margin
   },
-  // callButtonContainer: {
-  //   paddingHorizontal: 20,
-  //   paddingBottom: 20,
-  // },
-  // callButton: {
-  //   backgroundColor: '#4A90E2',
-  //   paddingVertical: 16,
-  //   borderRadius: 30,
-  //   alignItems: 'center',
-  //   justifyContent: 'center',
-  //   shadowColor: '#4A90E2',
-  //   shadowOffset: { width: 0, height: 4 },
-  //   shadowOpacity: 0.3,
-  //   shadowRadius: 8,
-  //   elevation: 6,
-  // },
-  // callButtonText: {
-  //   color: '#fff',
-  //   fontSize: 18,
-  //   fontWeight: '700',
-  //   letterSpacing: 0.5,
-  // },
 });
-export default MapIndex;
 
+export default MapIndex;

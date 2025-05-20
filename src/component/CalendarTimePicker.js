@@ -37,7 +37,7 @@ const CalendarTimePicker = ({ selectDate, selectTime }) => {
     const weekData = getNextWeek(startDate);
 
     const handleDateSelect = (date) => {
-        setSelectedDate(date); 
+        setSelectedDate(date);                      
         selectDate(date); 
     };
 

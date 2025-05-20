@@ -151,109 +151,109 @@ export const fetchLocalities = (city, eloc) => {
     });
 };
 
-export const fetchHistoryBookings = async (page, pageLimit) => {
-    const token = await AsyncStorage.getItem("userToken")
-    try {
-      var userId = await AsyncStorage.getItem('user_id');
-      const MyPayLod = {
-        "user_id": userId,
-        "type": 'history',
-        "limit": `${(page - 1) * pageLimit},${pageLimit}`
-      }
-      const MyPayLoad = encryptPayload(MyPayLod)
-      var details = {
-        'request_data': MyPayLoad,
-      };
-      var formBody = [];
-      for (var property in details) {
-        var encodedKey = encodeURIComponent(property);
-        var encodedValue = encodeURIComponent(details[property]);
-        formBody.push(encodedKey + "=" + encodedValue);
-      }
-      formBody = formBody.join("&");
-      let response = await fetch(Api.VIEW_BOOKING, {
-        method: "POST",
-        body: formBody,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          jwt: token
-        },
-      })
-      let data = await response?.json();
-      if (data?.message == "Access denied.") {
-        accessRefresh(token, fetchHistoryBookings)
-      }
-      const result = decryptData(data?.booking_arr)
-      console.log('====================================');
-      console.log(result);
-      console.log('====================================');
-      return result
+// export const fetchHistoryBookings = async (page, pageLimit) => {
+//     const token = await AsyncStorage.getItem("userToken")
+//     try {
+//       var userId = await AsyncStorage.getItem('user_id');
+//       const MyPayLod = {
+//         "user_id": userId,
+//         "type": 'history',
+//         "limit": `${(page - 1) * pageLimit},${pageLimit}`
+//       }
+//       const MyPayLoad = encryptPayload(MyPayLod)
+//       var details = {
+//         'request_data': MyPayLoad,
+//       };
+//       var formBody = [];
+//       for (var property in details) {
+//         var encodedKey = encodeURIComponent(property);
+//         var encodedValue = encodeURIComponent(details[property]);
+//         formBody.push(encodedKey + "=" + encodedValue);
+//       }
+//       formBody = formBody.join("&");
+//       let response = await fetch(Api.VIEW_BOOKING, {
+//         method: "POST",
+//         body: formBody,
+//         headers: {
+//           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+//           jwt: token
+//         },
+//       })
+//       let data = await response?.json();
+//       if (data?.message == "Access denied.") {
+//         accessRefresh(token, fetchHistoryBookings)
+//       }
+//       const result = decryptData(data?.booking_arr)
+//       console.log('====================================');
+//       console.log(result);
+//       console.log('====================================');
+//       return result
     
-    } catch (err) {
-      console.log(err)
-    }
-  }
+//     } catch (err) {
+//       console.log(err)
+//     }
+//   }
 
   
-export const fetchUpcomingBookings = async (page, pageLimit) => {
-    const token = await AsyncStorage.getItem("userToken")
-    try {
-      var userId = await AsyncStorage.getItem('user_id');
-      const MyPayLod = {
-        "user_id": userId,
-        "type": 'upcoming',
-        "limit": `${(page - 1) * pageLimit},${pageLimit}`
-      }
-      console.log('====================================');
-      console.log("MyPayload", userId);
-      console.log('====================================');
-      const MyPayLoad = encryptPayload(MyPayLod)
-      var details = {
-        'request_data': MyPayLoad,
-      };
-      var formBody = [];
-      for (var property in details) {
-        var encodedKey = encodeURIComponent(property);
-        var encodedValue = encodeURIComponent(details[property]);
-        formBody.push(encodedKey + "=" + encodedValue);
-      }
-      console.log('====================================');
-      console.log("MYpayload" , MyPayLoad);
-      console.log('====================================');
-      console.log('====================================');
-      console.log("FORMBODY" , formBody);
-      console.log('====================================');
-      formBody = formBody.join("&");
-      let response = await fetch("https://web.gst.fleet.ktcindia.com/user_apis_encoded/view_booking.php", {
-        method: "POST",
-        body: formBody,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
-          jwt: token
-        },
-      })
+// export const fetchUpcomingBookings = async (page, pageLimit) => {
+//     const token = await AsyncStorage.getItem("userToken")
+//     try {
+//       var userId = await AsyncStorage.getItem('user_id');
+//       const MyPayLod = {
+//         "user_id": userId,
+//         "type": 'upcoming',
+//         "limit": `${(page - 1) * pageLimit},${pageLimit}`
+//       }
+//       console.log('====================================');
+//       console.log("MyPayload", userId);
+//       console.log('====================================');
+//       const MyPayLoad = encryptPayload(MyPayLod)
+//       var details = {
+//         'request_data': MyPayLoad,
+//       };
+//       var formBody = [];
+//       for (var property in details) {
+//         var encodedKey = encodeURIComponent(property);
+//         var encodedValue = encodeURIComponent(details[property]);
+//         formBody.push(encodedKey + "=" + encodedValue);
+//       }
+//       console.log('====================================');
+//       console.log("MYpayload" , MyPayLoad);
+//       console.log('====================================');
+//       console.log('====================================');
+//       console.log("FORMBODY" , formBody);
+//       console.log('====================================');
+//       formBody = formBody.join("&");
+//       let response = await fetch("https://web.gst.fleet.ktcindia.com/user_apis_encoded/view_booking.php", {
+//         method: "POST",
+//         body: formBody,
+//         headers: {
+//           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+//           jwt: token
+//         },
+//       })
 
-      let data = await response?.json();
-      console.log('====================================');
-      console.log(data, "UPCOMING");
-      console.log('====================================');
-      if (data?.message == "Access denied.") {
-        accessRefresh(token, fetchHistoryBookings)
-      }
-      console.log('====================================');
-      console.log("RESULT" , data.booking_arr);
-      console.log('====================================');
-      if(data.booking_arr === "No Booking Found."){
-        console.log('====================================');
-        console.log("REturning" );
-        console.log('====================================');
-        return ; 
-      }else{
-        const result = decryptData(data?.booking_arr)
-        return result ; 
-      }
+//       let data = await response?.json();
+//       console.log('====================================');
+//       console.log(data, "UPCOMING");
+//       console.log('====================================');
+//       if (data?.message == "Access denied.") {
+//         accessRefresh(token, fetchHistoryBookings)
+//       }
+//       console.log('====================================');
+//       console.log("RESULT" , data.booking_arr);
+//       console.log('====================================');
+//       if(data.booking_arr === "No Booking Found."){
+//         console.log('====================================');
+//         console.log("REturning" );
+//         console.log('====================================');
+//         return ; 
+//       }else{
+//         const result = decryptData(data?.booking_arr)
+//         return result ; 
+//       }
      
-    } catch (err) {
-      console.log(err)
-    }
-  }
+//     } catch (err) {
+//       console.log(err)
+//     }
+//   }

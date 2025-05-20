@@ -1092,7 +1092,15 @@ const Upcoming = ({ navigation }) => {
       <CustomHeader
         title="Bookings"
         leftIcon={() => (
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          // <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+          onPress={() => {
+            navigation.reset({
+              index: 0,
+              routes: [{name: "CorporateHomeScreen"}], // yahan apna screen name daalein
+            });
+          }}
+        >
             <Image
               source={require('../../assets/ic_back_arrow_white_24.png')}
               style={styles.backIcon}

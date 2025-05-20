@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ACCESS_CODE_NAME, ACCESS_CODE_PASS } from '../config/api-config';
 export async function accessRefresh(token, fun) {
   try {
     var myHeaders = new Headers();
@@ -6,7 +7,7 @@ export async function accessRefresh(token, fun) {
     myHeaders.append('Content-Type', 'application/x-www-form-urlencoded');
 
     let bodyContent =
-      'access_codename_jwt=GciOiJIUzI1NiJ9&access_codepass_jwt=bGciOiJIkUzI1NiJ9eyJpc3MiOiJrdGNhZG1pbiIsImF1ZCI62Fkb';
+      `access_codename_jwt=${ACCESS_CODE_NAME}&access_codepass_jwt=${ACCESS_CODE_PASS}`;
 
     let response = await fetch(
       'http://web.gst.fleet.ktcindia.com/user_apis/gettoken.php',

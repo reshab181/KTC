@@ -1,5 +1,5 @@
-// **Author--- Reshab Kumar Pandey
-// Component--- Track.js
+
+
 
 import {
   StyleSheet,
@@ -114,7 +114,7 @@ const Track = props => {
 
         positionList.forEach((pos, i) => {
           console.log(
-            `  → Position ${i}: lat=${pos.latitude}, lng=${
+            `  → Position ${i}: lat=${pos.latitude}, lng=${
               pos.longitude
             }, time=${new Date(pos.timestamp * 1000).toLocaleString()}`,
           );
@@ -280,8 +280,21 @@ const Track = props => {
     return new Date(timestamp * 1000).toLocaleDateString();
   };
 
+  // Icon components to make the UI more visual
+  const renderInfoRow = (icon, label, value) => (
+    <View style={styles.infoRow}>
+      <View style={styles.iconWrapper}>
+        <Image source={icon} style={styles.infoIcon} />
+      </View>
+      <View style={styles.infoTextContainer}>
+        <Text style={styles.infoLabel}>{label}</Text>
+        <Text style={styles.infoValue}>{value}</Text>
+      </View>
+    </View>
+  );
+
   return (
-    <SafeAreaView style={pageName === 'HIS' && {flex: 1}}>
+    <SafeAreaView style={[styles.container, pageName === 'HIS' && {flex: 1}]}>
       <CustomHeader
         title={'My Bookings'}
         handleLeftIcon={home}
@@ -295,6 +308,8 @@ const Track = props => {
         )}
       />
       <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -304,83 +319,111 @@ const Track = props => {
         {pageName !== 'HIS' && (
           <StepIndicator activeNumber={stephistroy(item)} />
         )}
-        <View>
-          <View style={styles.cardContainer}>
-            {/* Booking Details Card */}
-            <View style={styles.rowBetween}>
-              <View style={{width: '50%'}}>
-                <Text style={styles.name}>{item.vehiclerequested}</Text>
+        <View style={styles.contentContainer}>
+          {/* Modern Booking Card */}
+          <View style={styles.card}>
+            {/* Header with Booking ID */}
+            <View style={styles.cardHeader}>
+              <View style={styles.vehicleTypeContainer}>
+                <Image 
+                  source={require('../../assets/mapcar.png')} 
+                  style={styles.vehicleIcon} 
+                />
+                <Text style={styles.vehicleType}>{item.vehiclerequested}</Text>
               </View>
-              <View style={styles.centeredRight}>
-                <Text style={styles.bookId}>
-                  {'Booking ID :' + item.booking_id}
-                </Text>
+              <View style={styles.bookingIdContainer}>
+                <Text style={styles.bookingIdLabel}>BOOKING ID</Text>
+                <Text style={styles.bookingIdValue}>{item.booking_id}</Text>
               </View>
             </View>
+
+            {/* OTP Section */}
             {(item?.startotp || item?.endotp) && (
-              <View style={styles.otpContainer}>
+              <View style={styles.otpSection}>
                 {item?.startotp && (
-                  <Text style={styles.otpText}>
-                    Start OTP : {item?.startotp}
-                  </Text>
+                  <View style={styles.otpItem}>
+                    <Text style={styles.otpLabel}>START OTP</Text>
+                    <Text style={styles.otpValue}>{item?.startotp}</Text>
+                  </View>
                 )}
                 {item?.endotp && (
-                  <Text style={styles.otpText}>End OTP : {item?.endotp}</Text>
+                  <View style={styles.otpItem}>
+                    <Text style={styles.otpLabel}>END OTP</Text>
+                    <Text style={styles.otpValue}>{item?.endotp}</Text>
+                  </View>
                 )}
               </View>
             )}
-            <View
-              style={[
-                styles.santosh,
-                {marginTop: item?.startotp && item?.endotp ? 15 : 10},
-              ]}>
-              <Text style={styles.name1}>{item.Guestname}</Text>
-              <Text style={styles.infoText}>
-                Vehicle number : {item.vehicle_no}
-              </Text>
-              <Text style={styles.infoText}>
-                Booking for : {formatDate(item.start_date)}
-              </Text>
-              <Text style={styles.infoText}>Time : {item.Reporingtime}</Text>
-              <Text style={styles.infoText}>
-                Reporting place : {item.Reportingplace}
-              </Text>
+
+            {/* Guest Information */}
+            <View style={styles.guestSection}>
+              <Text style={styles.guestName}>{item.Guestname}</Text>
+              <View style={styles.divider} />
             </View>
+
+            {/* Booking Details */}
+            <View style={styles.detailsSection}>
+              {renderInfoRow(
+                require('../../assets/dl.png'),
+                'Vehicle Number',
+                item.vehicle_no || 'Not assigned'
+              )}
+              
+              {renderInfoRow(
+                require('../../assets/calendar.png'),
+                'Booking Date',
+                formatDate(item.start_date)
+              )}
+              
+              {renderInfoRow(
+                require('../../assets/clock.png'),
+                'Reporting Time',
+                item.Reporingtime
+              )}
+              
+              {renderInfoRow(
+                require('../../assets/place.png'),
+                'Reporting Place',
+                item.Reportingplace
+              )}
+            </View>
+
+            {/* Track Button */}
             {stephistroy(item) > 0 && (
               <TouchableOpacity
-                style={styles.trackBtnContainer}
+                style={[styles.trackButton, loading && styles.trackButtonDisabled]}
                 disabled={loading}
                 onPress={fetchDeviceAndLocation}>
-                <View
-                  style={[
-                    styles.SignIn1,
-                    loading && {backgroundColor: 'grey'},
-                  ]}>
-                  {loading ? (
-                    <ActivityIndicator color={'white'} size={20} />
-                  ) : (
-                    <Text style={styles.trackBtnText}>Track Chauffeur</Text>
-                  )}
-                </View>
+                {loading ? (
+                  <ActivityIndicator color={'white'} size={20} />
+                ) : (
+                  <>
+                    <Image 
+                      source={require('../../assets/route.png')} 
+                      style={styles.trackIcon} 
+                    />
+                    <Text style={styles.trackButtonText}>Track Chauffeur</Text>
+                  </>
+                )}
               </TouchableOpacity>
             )}
+
+            {/* Feedback Button */}
             {pageName === 'HIS' && (
-              <View style={styles.feedbackBtnWrapper}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('Feedback', {
-                      item,
-                      Booking: item.booking_id,
-                      feedback_arr,
-                      status,
-                    })
-                  }
-                  style={styles.feedbackBtn}>
-                  <Text style={styles.trackBtnText}>
-                    {status === 0 ? 'Feedback' : 'View Feedback'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Feedback', {
+                    item,
+                    Booking: item.booking_id,
+                    feedback_arr,
+                    status,
+                  })
+                }
+                style={styles.feedbackButton}>
+                <Text style={styles.feedbackButtonText}>
+                  {status === 0 ? 'Give Feedback' : 'View Feedback'}
+                </Text>
+              </TouchableOpacity>
             )}
           </View>
         </View>
@@ -388,129 +431,209 @@ const Track = props => {
     </SafeAreaView>
   );
 };
+
 export default Track;
 
 const styles = StyleSheet.create({
-  name: {
+  container: {
+    flex: 1,
+    backgroundColor: '#374852',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 30,
+  },
+  contentContainer: {
+    padding: 16,
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+  
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
+    elevation: 5, 
+    marginTop: 16,
+    marginBottom: 8, 
+    marginHorizontal: 2, 
+    overflow: 'hidden',
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 16,
+    backgroundColor: '#3C3567',
+  },
+  vehicleTypeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  vehicleIcon: {
+    width: 66,
+    height: 28,
+    tintColor: '#ffffff',
+    marginRight: 8,
+  },
+  vehicleType: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  bookingIdContainer: {
+    alignItems: 'flex-end',
+  },
+  bookingIdLabel: {
+    fontSize: 10,
+    color: '#E0E6ED',
+    fontWeight: '600',
+  },
+  bookingIdValue: {
     fontSize: 12,
     fontWeight: 'bold',
-    marginLeft: 10,
-    color: '#000',
+    color: '#ffffff',
   },
-  bookId: {
-    fontSize: 12,
-    marginRight: 10,
-    color: '#000',
+  otpSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 12,
+    backgroundColor: '#f0f4ff',
   },
-  name1: {
-    fontSize: 14,
+  otpItem: {
+    flex: 1,
+    padding: 8,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    marginHorizontal: 4,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  otpLabel: {
+    fontSize: 10,
+    color: '#6B7280',
     fontWeight: 'bold',
-    marginLeft: 20,
-    color: '#000',
-    marginTop: 10,
+    marginBottom: 4,
   },
-  otpText: {
-    color: '#000',
+  otpValue: {
+    fontSize: 18,
+    color: '#4A90E2',
     fontWeight: 'bold',
-    fontSize: 13,
+    letterSpacing: 1,
   },
-  infoText: {
-    marginLeft: 20,
-    color: '#000',
+  guestSection: {
+    padding: 16,
+  },
+  guestName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#1F2937',
+    marginBottom: 12,
+  },
+  divider: {
+    height: 1,
+    backgroundColor: '#E5E7EB',
     marginTop: 8,
   },
-  cardContainer: {
-    justifyContent: 'center',
-    alignSelf: 'center',
-    backgroundColor: '#fff',
-    borderRadius: 15,
-    paddingTop: 9,
-    width: '90%',
-    marginBottom: 90,
-    paddingBottom: 30,
-    marginTop: 50,
+  detailsSection: {
+    padding: 16,
   },
-  rowBetween: {
+  infoRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingTop: 20,
-    width: '100%',
+    alignItems: 'center',
+    marginBottom: 16,
   },
-  centeredRight: {
-    width: '50%',
+  iconWrapper: {
+    width: 36,
+    height: 36,
+    backgroundColor: '#E5E7EB',
+    borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginRight: 12,
   },
-  otpContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    backgroundColor: '#FAFAFA',
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-    borderRadius: 5,
-    marginHorizontal: 20,
+  infoIcon: {
+    width: 18,
+    height: 18,
+    tintColor: '#4B5563',
   },
-  santosh: {
-    alignSelf: 'center',
-    backgroundColor: '#FAFAFA',
-    width: '85%',
+  infoTextContainer: {
+    flex: 1,
   },
-  trackBtnContainer: {
-    backgroundColor: '#3C3567',
-    borderRadius: 10,
-    width: '94%',
-    height: 50,
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 10,
-    marginTop: 20,
+  infoLabel: {
+    fontSize: 12,
+    color: '#6B7280',
+    marginBottom: 2,
   },
-  SignIn1: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  trackBtnText: {
-    color: '#fff',
+  infoValue: {
     fontSize: 14,
+    color: '#1F2937',
+    fontWeight: '500',
   },
-  feedbackBtnWrapper: {
-    width: '100%',
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-    padding: 5,
-  },
-  feedbackBtn: {
+  trackButton: {
+    flexDirection: 'row',
     backgroundColor: '#3C3567',
-    borderRadius: 10,
-    width: 130,
-    height: 50,
-    justifyContent: 'center',
+    borderRadius: 8,
+    padding: 14,
+    margin: 16,
     alignItems: 'center',
-    marginTop: 10,
+    justifyContent: 'center',
+    shadowColor: '#4A90E2',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 6,
+  },
+  trackButtonDisabled: {
+    backgroundColor: '#A0AEC0',
+  },
+  trackIcon: {
+    width: 16,
+    height: 16,
+    tintColor: '#ffffff',
+    marginRight: 8,
+  },
+  trackButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 15,
+  },
+  feedbackButton: {
+    backgroundColor: '#10B981',
+    borderRadius: 8,
+    padding: 14,
+    marginHorizontal: 16,
+    marginBottom: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#10B981',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  feedbackButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 15,
   },
 });
-
-//   StyleSheet,
-//   Text,
-//   View,
-//   SafeAreaView,
-//   Dimensions,
-//   TouchableOpacity,
-//   ScrollView,
-//   RefreshControl,
-//   Alert,
-//   ActivityIndicator,
-//   Image,
-// } from 'react-native';
-// import React, { useEffect, useState, useCallback, useMemo, memo, useRef } from 'react';
-// import { useNavigation } from '@react-navigation/native';
-// import { useDispatch } from 'react-redux';
-
-// import StepIndicator from '../../component/StepIndicator';
-// import { oauthApi } from '../../services/api/oauthToken';
-// import { INTOUCH_URL, GET_DEVICES } from '../../config/api-config';
-// import UpcomingApi from '../../services/api/upcoming';
-// import CustomHeader from '../../component/CustomHeader';
-// import { setCoords } from '../../Redux/slice/CoordsSlice';

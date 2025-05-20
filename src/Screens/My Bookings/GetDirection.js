@@ -1,7 +1,6 @@
-//Reshab Kumar Pandey
-//GetDirection.js
 
-import React, {useState, useEffect, useRef} from 'react';
+
+import React, {useState, useEffect, useRef, useCallback, useMemo} from 'react';
 import {
   Text,
   View,
@@ -64,7 +63,6 @@ const styles = {
     iconAnchor: 'bottom',
     iconColor: 'red',
   },
-  // Customer marker style
   customerMarkerIcon: {
     iconSize: 0.7,
     iconAllowOverlap: true,
@@ -78,7 +76,64 @@ const styles = {
     lineJoin: 'round',
     lineBlur: 1,
   },
+  statusIndicator: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    elevation: 5,
+  },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
 };
+
+
+const CustomerMarker = React.memo(({coordinate}) => {
+  if (!coordinate) return null;
+  
+  return (
+    <MapplsGL.PointAnnotation
+      id="customerMarker"
+      coordinate={coordinate}>
+      <View
+        style={{
+          width: 30,
+          height: 30,
+          borderRadius: 15,
+          backgroundColor: '#FF4444',
+          justifyContent: 'center',
+          alignItems: 'center',
+          borderWidth: 2,
+          borderColor: 'white',
+        }}>
+        <Text
+          style={{color: 'white', fontSize: 12, fontWeight: 'bold'}}>
+          📍
+        </Text>
+      </View>
+    </MapplsGL.PointAnnotation>
+  );
+});
+
+// Separate component for route - prevents re-render when other states change
+const RouteShape = React.memo(({route}) => {
+  if (!route) return null;
+  
+  return (
+    <MapplsGL.ShapeSource id="routeSource" shape={route}>
+      <MapplsGL.SymbolLayer
+        id="symbolLocationSymbols"
+        style={styles.icon}
+      />
+      <MapplsGL.LineLayer id="routeFill" style={styles.lineStyle} />
+    </MapplsGL.ShapeSource>
+  );
+});
 
 const GetDirection = ({
   item,
@@ -86,6 +141,9 @@ const GetDirection = ({
   coordinates,
   sourceCoordinates,
   destinationCoordinates,
+  autoUpdateInterval = 30000,
+  enableAutoUpdate = true,
+  onRouteUpdate = null,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [center, setCenter] = useState([0, 0]);
@@ -93,19 +151,25 @@ const GetDirection = ({
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
   const [customerLocation, setCustomerLocation] = useState(null);
+  const [lastUpdateTime, setLastUpdateTime] = useState(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  
   const cameraRef = useRef();
+  const intervalRef = useRef(null);
+  const mapviewRef = useRef();
 
-  const formatCoordinates = coords =>
+  // Memoized formatCoordinates to prevent recreation on every render
+  const formatCoordinates = useCallback((coords) =>
     Array.isArray(coords) && coords.length === 2
       ? `${coords[1]},${coords[0]}`
-      : coords;
+      : coords, []);
 
-  const getFormattedDistance = distance =>
+  const getFormattedDistance = useCallback((distance) =>
     distance / 1000 < 1
       ? `${distance} meter`
-      : `${(distance / 1000).toFixed(2)} kilometer`;
+      : `${(distance / 1000).toFixed(2)} kilometer`, []);
 
-  const getFormattedDuration = duration => {
+  const getFormattedDuration = useCallback((duration) => {
     const min = Math.floor((duration % 3600) / 60);
     const hours = Math.floor((duration % 86400) / 3600);
     const days = Math.floor(duration / 86400);
@@ -116,10 +180,21 @@ const GetDirection = ({
       : hours > 0
       ? `${hours} hour${min > 0 ? ' ' + min + ' minute' : ''}`
       : `${min} minute`;
-  };
+  }, []);
 
-  const callApi = async (profile = 'driving') => {
-    setIsLoading(true);
+  // Memoized camera config to prevent re-render
+  const cameraConfig = useMemo(() => ({
+    zoomLevel: 12,
+    centerCoordinate: center,
+  }), [center]);
+
+  // Optimized callApi with useCallback
+  const callApi = useCallback(async (profile = 'driving', isManualRefresh = false) => {
+    if (isManualRefresh) {
+      setIsRefreshing(true);
+    } else {
+      setIsLoading(true);
+    }
 
     try {
       let source = '';
@@ -136,12 +211,7 @@ const GetDirection = ({
       ) {
         source = formatCoordinates(coordinates.coords.coords);
       } else {
-        console.error(
-          'No valid source coordinates. SourceCoordinates:',
-          sourceCoordinates,
-          'Coordinates:',
-          coordinates,
-        );
+        console.error('No valid source coordinates.');
         setIsLoading(false);
         return;
       }
@@ -149,15 +219,13 @@ const GetDirection = ({
       let destination = '';
       let destCoords = null;
 
-      // Handle destination coordinates if provided directly
       if (
         destinationCoordinates &&
         Array.isArray(destinationCoordinates) &&
         destinationCoordinates.length === 2
       ) {
         destination = formatCoordinates(destinationCoordinates);
-        destCoords = [destinationCoordinates[1], destinationCoordinates[0]]; // [longitude, latitude]
-        setCustomerLocation(destCoords);
+        destCoords = [destinationCoordinates[1], destinationCoordinates[0]];
       } else if (item?.eloc) {
         destination = item.eloc;
       } else if (eloc) {
@@ -167,10 +235,6 @@ const GetDirection = ({
         setIsLoading(false);
         return;
       }
-
-      console.log('=== Route Calculation ===');
-      console.log('Source (Driver):', source);
-      console.log('Destination (Customer):', destination);
 
       if (!source || !destination) {
         console.error('Source or Destination is invalid.');
@@ -190,36 +254,102 @@ const GetDirection = ({
         const routeGeometry = response.routes[0].geometry;
         const routeGeoJSON = polyline.toGeoJSON(routeGeometry, 6);
 
-        setRoute(routeGeoJSON);
+        // Only update state if route has actually changed
+        setRoute(prevRoute => {
+          if (JSON.stringify(prevRoute) !== JSON.stringify(routeGeoJSON)) {
+            return routeGeoJSON;
+          }
+          return prevRoute;
+        });
 
-        // Get destination coordinates from the route
         if (routeGeoJSON?.coordinates && routeGeoJSON.coordinates.length > 0) {
-          setCenter(routeGeoJSON.coordinates[0]);
+          // Only update center if it has actually changed
+          setCenter(prevCenter => {
+            const newCenter = routeGeoJSON.coordinates[0];
+            if (prevCenter[0] !== newCenter[0] || prevCenter[1] !== newCenter[1]) {
+              return newCenter;
+            }
+            return prevCenter;
+          });
 
-          // Set the last coordinate as the customer location if not already set
           if (!destCoords && routeGeoJSON.coordinates.length > 1) {
             const lastCoordinate =
               routeGeoJSON.coordinates[routeGeoJSON.coordinates.length - 1];
-            setCustomerLocation(lastCoordinate);
+            setCustomerLocation(prevLoc => {
+              if (!prevLoc || prevLoc[0] !== lastCoordinate[0] || prevLoc[1] !== lastCoordinate[1]) {
+                return lastCoordinate;
+              }
+              return prevLoc;
+            });
+          } else if (destCoords) {
+            setCustomerLocation(prevLoc => {
+              if (!prevLoc || prevLoc[0] !== destCoords[0] || prevLoc[1] !== destCoords[1]) {
+                return destCoords;
+              }
+              return prevLoc;
+            });
           }
         }
 
-        setDistance(getFormattedDistance(response.routes[0].distance));
-        setDuration(getFormattedDuration(response.routes[0].duration));
-      } else {
-        console.log('No routes found in response');
+        const newDistance = getFormattedDistance(response.routes[0].distance);
+        const newDuration = getFormattedDuration(response.routes[0].duration);
+        
+        // Only update if values have changed
+        setDistance(prev => prev !== newDistance ? newDistance : prev);
+        setDuration(prev => prev !== newDuration ? newDuration : prev);
+        setLastUpdateTime(new Date());
+
+        if (onRouteUpdate) {
+          onRouteUpdate({
+            distance: newDistance,
+            duration: newDuration,
+            route: routeGeoJSON,
+            updateTime: new Date(),
+          });
+        }
       }
     } catch (error) {
       console.error('Direction API Error:', error?.message);
     } finally {
       setIsLoading(false);
+      setIsRefreshing(false);
     }
-  };
-  // useEffect(() => {
-  //   trackDriverLocation();
-  // }, []);
+  }, [
+    formatCoordinates,
+    getFormattedDistance,
+    getFormattedDuration,
+    sourceCoordinates,
+    destinationCoordinates,
+    coordinates,
+    item?.eloc,
+    eloc,
+    onRouteUpdate
+  ]);
 
-  const requestLocationPermission = async () => {
+  const startAutoUpdate = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+    
+    if (enableAutoUpdate) {
+      intervalRef.current = setInterval(() => {
+        callApi();
+      }, autoUpdateInterval);
+    }
+  }, [enableAutoUpdate, autoUpdateInterval, callApi]);
+
+  const stopAutoUpdate = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
+
+  const manualRefresh = useCallback(() => {
+    callApi('driving', true);
+  }, [callApi]);
+
+  const requestLocationPermission = useCallback(async () => {
     if (Platform.OS === 'android') {
       try {
         const granted = await PermissionsAndroid.request(
@@ -232,22 +362,48 @@ const GetDirection = ({
         console.warn(err);
       }
     }
-  };
+  }, []);
 
+  // Initial setup - only run once
   useEffect(() => {
     const initializeComponent = async () => {
       await requestLocationPermission();
-      setCenter([sourceCoordinates?.[1], sourceCoordinates?.[0]]);
+      if (sourceCoordinates?.[1] && sourceCoordinates?.[0]) {
+        setCenter([sourceCoordinates[1], sourceCoordinates[0]]);
+      }
       await callApi();
     };
     initializeComponent();
-  }, [
-    coordinates,
-    sourceCoordinates,
-    destinationCoordinates,
-    item?.eloc,
-    eloc,
-  ]);
+  }, []); // Empty dependency array - run only once
+
+  // Handle coordinate changes - only update when necessary
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      callApi();
+    }, 1000); 
+
+    return () => clearTimeout(timeoutId);
+  }, [sourceCoordinates, destinationCoordinates, item?.eloc, eloc]);
+
+  // Handle auto-update settings
+  useEffect(() => {
+    if (enableAutoUpdate) {
+      startAutoUpdate();
+    } else {
+      stopAutoUpdate();
+    }
+    return () => stopAutoUpdate();
+  }, [enableAutoUpdate, autoUpdateInterval, startAutoUpdate, stopAutoUpdate]);
+
+  // Memoized distance info to prevent re-render
+  const distanceInfo = useMemo(() => (
+    distance && duration && (
+      <View style={styles.distanceInfo}>
+        <Text style={styles.infoText}>Distance: {distance}</Text>
+        <Text style={styles.infoText}>Duration: {duration}</Text>
+      </View>
+    )
+  ), [distance, duration]);
 
   return (
     <View style={styles.container}>
@@ -255,64 +411,46 @@ const GetDirection = ({
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="blue" />
         </View>
-      ) : (
+    ) : ( 
         <>
-          <MapplsGL.MapView style={styles.container}>
+          <MapplsGL.MapView 
+            ref={mapviewRef}
+            style={styles.container}>
             <MapplsGL.Camera
               ref={cameraRef}
-              zoomLevel={16}
-              centerCoordinate={center}
+              {...cameraConfig}
             />
-            {route && (
-              <MapplsGL.ShapeSource id="routeSource" shape={route}>
-                <MapplsGL.SymbolLayer
-                  id="symbolLocationSymbols"
-                  style={styles.icon}
-                />
-                <MapplsGL.LineLayer id="routeFill" style={styles.lineStyle} />
-              </MapplsGL.ShapeSource>
-            )}
-
-            {/* Customer destination marker */}
-            {customerLocation && (
-              <MapplsGL.PointAnnotation
-                id="customerMarker"
-                coordinate={customerLocation}>
-                <View
-                  style={{
-                    width: 30,
-                    height: 30,
-                    borderRadius: 15,
-                    backgroundColor: '#FF4444',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderWidth: 2,
-                    borderColor: 'white',
-                  }}>
-                  <Text
-                    style={{color: 'white', fontSize: 12, fontWeight: 'bold'}}>
-                    📍
-                  </Text>
-                </View>
-              </MapplsGL.PointAnnotation>
-            )}
+            
+            {/* Memoized components to prevent unnecessary re-renders */}
+            <RouteShape route={route} />
+            <CustomerMarker coordinate={customerLocation} />
+            
           </MapplsGL.MapView>
+
+          {lastUpdateTime && (
+            <View style={styles.statusIndicator}>
+              <Text style={styles.statusText}>
+                Last updated: {lastUpdateTime.toLocaleTimeString()}
+              </Text>
+            </View>
+          )}
+
           <TouchableOpacity
             style={styles.refreshButton}
-            onPress={() => callApi()}>
+            onPress={manualRefresh}
+            disabled={isRefreshing}>
             <FontAwesome
               name="refresh"
               size={30}
-              color={'#000'}
-              style={styles.refreshIcon}
+              color={isRefreshing ? '#ccc' : '#000'}
+              style={[
+                styles.refreshIcon,
+                isRefreshing && {transform: [{rotate: '180deg'}]}
+              ]}
             />
           </TouchableOpacity>
-          {distance && duration && (
-            <View style={styles.distanceInfo}>
-              <Text style={styles.infoText}>Distance: {distance}</Text>
-              <Text style={styles.infoText}>Duration: {duration}</Text>
-            </View>
-          )}
+
+          {distanceInfo}
         </>
       )}
     </View>

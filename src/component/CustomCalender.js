@@ -194,11 +194,11 @@ const CustomCalendar = () => {
     setSelectedTime(reportingTimeFromRedux || null);
   }, [reportingTimeFromRedux]);
 
-    useEffect(() => {
-      return () => {
-      dispatch(resetCorporateSlice())
-      };
-    }, []);
+    // useEffect(() => {
+    //   return () => {
+    //   dispatch(resetCorporateSlice())
+    //   };
+    // }, []);
 
   // Disable past dates
   const disablePastDates = date => {
@@ -228,6 +228,8 @@ const CustomCalendar = () => {
       }),
     );
   };
+
+
 
   // Handle time selection
   const handleTimeSelect = time => {
