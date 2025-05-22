@@ -437,7 +437,7 @@ export default Track;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#374852',
+    backgroundColor: '#f3f3f3',
   },
   scrollView: {
     flex: 1,

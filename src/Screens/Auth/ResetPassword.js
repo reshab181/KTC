@@ -35,16 +35,56 @@ const ResetPassword = ({route, navigation}) => {
   }, []);
 
   const handleSubmit = async () => {
-    setloading(true)
-    if (!newPassword || !confirmPassword ) {
+    setloading(true);
+  
+    if (!newPassword || !confirmPassword) {
       Alert.alert('Error', 'Please fill in all fields.');
+      setloading(false);
       return;
     }
-
-    await resetPassword(email, newPassword, confirmPassword, accessToken, (loading) => {});
-    setloading(false)
-    setIsVisible(true);
+  
+    if (newPassword.length < 10) {
+      Alert.alert('Error', 'Password must be at least 10 characters long.');
+      setloading(false);
+      return;
+    }
+  
+    const hasDigit = [...newPassword].some(char => !isNaN(char) && char !== ' ');
+    const hasLetter = [...newPassword].some(char => /[a-zA-Z]/.test(char));
+    const hasSpecialChar = [...newPassword].some(char => !/[a-zA-Z0-9]/.test(char));
+  
+    if (!hasDigit || !hasLetter || !hasSpecialChar) {
+      Alert.alert(
+        'Error',
+        'Password must include at least one letter, one number, and one special character.'
+      );
+      setloading(false);
+      return;
+    }
+  
+    if (newPassword !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match.');
+      setloading(false);
+      return;
+    }
+  
+    const result = await resetPassword(
+      email,
+      newPassword,
+      confirmPassword,
+      accessToken,
+      setloading
+    );
+  
+    if (result?.status === 200) {
+      setIsVisible(true);
+    } else {
+      Alert.alert('Error', result?.response_message || 'Failed to reset password.');
+    }
+  
+    setloading(false);
   };
+  
 
   return (
     <View style={styles.container}>
