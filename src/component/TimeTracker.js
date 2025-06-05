@@ -1,4 +1,3 @@
-// // Ashutosh Rai
 import React, { useEffect, useState, useRef } from 'react';
 import {
   StyleSheet,
@@ -8,10 +7,10 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const TimeTracker = ({ selectTime, selectedDate }) => {
+const TimeTracker = ({ selectTime, selectedDate, initialTime }) => {
   const [timeArray, setTimeArray] = useState([]);
   const [currentTime, setCurrentTime] = useState('');
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedTime, setSelectedTime] = useState(initialTime || null);
   const scrollViewRef = useRef(null);
 
   const generateTimeRange = () => {
@@ -55,23 +54,41 @@ const TimeTracker = ({ selectTime, selectedDate }) => {
     }
   }, [timeArray, currentTime]);
 
+  useEffect(() => {
+    setSelectedTime(initialTime);
+  }, [initialTime]);
+
   const isPastTime = (time) => {
     if (!selectedDate) return false;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0); 
 
-    const isToday = selectedDate.toDateString() === today.toDateString();
+    const selectedDateStart = new Date(selectedDate);
+    selectedDateStart.setHours(0, 0, 0, 0);
+
+    const isToday = selectedDateStart.getTime() === today.getTime();
     if (!isToday) return false;
 
+   
     const [hours, minutes] = time.split(':').map(Number);
+    
+ 
+    const timeSlot = new Date();
+    timeSlot.setHours(hours, minutes, 0, 0);
+    
+   
     const now = new Date();
-    return hours < now.getHours() || (hours === now.getHours() && minutes < now.getMinutes());
+    const minBookingTime = new Date(now.getTime() + (4 * 60 * 60 * 1000)); 
+    
+  
+    return timeSlot <= minBookingTime;
   };
 
   useEffect(() => {
     if (selectedTime && isPastTime(selectedTime)) {
       setSelectedTime(null);
+      selectTime(null); // Also update parent component
     }
   }, [selectedDate]);
 
@@ -121,7 +138,6 @@ const TimeTracker = ({ selectTime, selectedDate }) => {
   );
 };
 
-
 export default TimeTracker;
 
 const styles = StyleSheet.create({
@@ -145,8 +161,8 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   selectedTimeBox: {
-    backgroundColor: '#3C3567', // Blue background
-    borderRadius: 30, // Ensures a circular shape
+    backgroundColor: '#3C3567',
+    borderRadius: 30,
   },
   selectedTimeText: {
     color: '#fff', 
@@ -158,7 +174,6 @@ const styles = StyleSheet.create({
   },
   disabledTimeText: {
     color: '#A9A9A9',
-    backfaceVisibility : "hidden"
+    backfaceVisibility: "hidden"
   },
 });
-

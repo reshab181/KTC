@@ -227,6 +227,8 @@ const CorporateModule1 = ({navigation}) => {
       city_of_usage &&
       assignment &&
       vehiclerequested &&
+      start_date &&
+      Reporingtime &&
       Reportingplace?.placeAddress;
     console.log('areFieldsFilled:', filled, {
       city_of_usage,
@@ -389,10 +391,19 @@ const CorporateModule1 = ({navigation}) => {
             <View style={[styles.container2]}>
               <View style={{marginHorizontal: 10}}>
                 {renderCustomTile(
-                  <Text style={{fontSize: 16, marginHorizontal: 8}}>
-                    {(Reportingplace.placeAddress?.length > 25
-                      ? Reportingplace.placeAddress.substring(0, 40) + '...'
-                      : Reportingplace?.placeAddress) || 'Pickup Address'}
+                  // <Text style={{fontSize: 16, marginHorizontal: 8}}>
+                  //   {(Reportingplace.placeAddress?.length > 25
+                  //     ? Reportingplace.placeAddress.substring(0, 40) + '...'
+                  //     : Reportingplace?.placeAddress) || 'Pickup Address'}
+                  // </Text>,
+                  <Text
+                    style={{fontSize: 16, marginHorizontal: 8}}
+                    numberOfLines={2} 
+                    ellipsizeMode="tail" 
+                  >
+                    {Reportingplace?.placeName &&
+                      `${Reportingplace.placeName}\n`}
+                    {Reportingplace?.placeAddress || 'Pickup Address'}
                   </Text>,
                   () => {
                     if (!city_of_usage) {

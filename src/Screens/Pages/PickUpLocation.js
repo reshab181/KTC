@@ -16,6 +16,8 @@ const PickUpLocation = ({ navigation, route }) => {
     const [locations, setLocations] = useState([]);
     const [loading, setLoading] = useState(false);
     const [mapplsPins, setMapplsPins] = useState([]);
+    const [manualAddress, setManualAddress] = useState('');
+
     const dispatch = useDispatch();
     
     console.log("Route Params:", route.params?.eloc, route.params?.type);
@@ -57,27 +59,99 @@ const PickUpLocation = ({ navigation, route }) => {
         }));
         navigation.goBack();
     };
+    const allLocations = searchText.length > 1 && locations.length === 0
+        ? [{ 
+            placeName: "", 
+            placeAddress: searchText,
+            mapplsPin: `manual_${Date.now()}` // Unique ID for manual entry
+          }]
+        : locations;
+    // return (
+    //     <View style={[styles.container, isDark ? styles.darkContainer : styles.lightContainer]}>
+    //         {/* <CustomHeader
+    //             handleLeftIcon={() => navigation.goBack()}
+    //             islogo={true}
+    //             title="Pickup Location"
+    //             iconPath={require('../../assets/icbackarrow.png')}
+    //             iconHeight={24}
+    //             iconWidth={24}
+    //             titleStyle={isDark ? styles.darkHeaderTitle : styles.lightHeaderTitle}
+    //             containerStyle={isDark ? styles.darkHeader : styles.lightHeader}
+    //         /> */}
 
+    //         <View style={styles.searchContainer}>
+    //             <CustomTextInput
+    //                 lefticon="search"
+    //                 Righticon={CloseSvg}
+    //                 iconSize={20}
+    //                 iconColor={isDark ? '#fff' : '#000'}
+    //                 placeholder="Enter Location"
+    //                 value={searchText}
+    //                 handlePress={() => navigation.goBack()}
+    //                 onChangeText={setSearchText}
+    //                 inputStyle={isDark ? styles.darkInput : styles.lightInput}
+    //                 placeholderTextColor={isDark ? '#aaa' : '#888'}
+    //                 containerStyle={isDark ? styles.darkInputContainer : styles.lightInputContainer}
+    //             />
+    //         </View>
+
+    //         {loading ? (
+    //             <View style={styles.loaderWrapper}>
+    //                 <View style={[styles.loaderContainer, isDark ? styles.darkLoader : styles.lightLoader]}>
+    //                     <ActivityIndicator size="large" color={isDark ? '#fff' : '#2C0CDF'} />
+    //                 </View>
+    //             </View>
+    //         ) : (
+    //             <FlatList
+    //                 data={locations}
+    //                 keyExtractor={(item) => item.mapplsPin.toString()}
+    //                 ListEmptyComponent={() => (
+    //                     searchText.length > 1 ? (
+    //                         <View style={styles.emptyContainer}>
+    //                             <Text style={[styles.emptyText, isDark ? styles.darkText : styles.lightText]}>
+    //                                 No locations found
+    //                             </Text>
+    //                         </View>
+    //                     ) : null
+    //                 )}
+    //                 renderItem={({ item }) => (
+    //                     <TouchableOpacity 
+    //                         onPress={() => handleSelectLocation(item)} 
+    //                         style={[styles.item, isDark ? styles.darkItem : styles.lightItem]}
+    //                     >
+    //                         <View style={styles.locationContainer}>
+    //                             <View style={[styles.iconContainer, isDark ? styles.darkIconContainer : styles.lightIconContainer]}>
+    //                                 <Icon name="map-marker" size={20} color={isDark ? '#fff' : '#3C3567'} />
+    //                             </View>
+    //                             <View style={styles.textContainer}>
+    //                                 <Text style={[styles.placeName, isDark ? styles.darkPlaceName : styles.lightPlaceName]}>
+    //                                     {item.placeName}
+    //                                 </Text>
+    //                                 <Text 
+    //                                     style={[styles.placeAddress, isDark ? styles.darkPlaceAddress : styles.lightPlaceAddress]} 
+    //                                     numberOfLines={2} 
+    //                                     ellipsizeMode="tail"
+    //                                 >
+    //                                     {item.placeAddress}
+    //                                 </Text>
+    //                             </View>
+    //                         </View>
+    //                     </TouchableOpacity>
+    //                 )}
+    //                 contentContainerStyle={styles.listContent}
+    //             />
+    //         )}
+    //     </View>
+    // );
     return (
         <View style={[styles.container, isDark ? styles.darkContainer : styles.lightContainer]}>
-            {/* <CustomHeader
-                handleLeftIcon={() => navigation.goBack()}
-                islogo={true}
-                title="Pickup Location"
-                iconPath={require('../../assets/icbackarrow.png')}
-                iconHeight={24}
-                iconWidth={24}
-                titleStyle={isDark ? styles.darkHeaderTitle : styles.lightHeaderTitle}
-                containerStyle={isDark ? styles.darkHeader : styles.lightHeader}
-            /> */}
-
             <View style={styles.searchContainer}>
                 <CustomTextInput
                     lefticon="search"
                     Righticon={CloseSvg}
                     iconSize={20}
                     iconColor={isDark ? '#fff' : '#000'}
-                    placeholder="Enter Location"
+                    placeholder="Search or enter address"
                     value={searchText}
                     handlePress={() => navigation.goBack()}
                     onChangeText={setSearchText}
@@ -89,22 +163,20 @@ const PickUpLocation = ({ navigation, route }) => {
 
             {loading ? (
                 <View style={styles.loaderWrapper}>
-                    <View style={[styles.loaderContainer, isDark ? styles.darkLoader : styles.lightLoader]}>
-                        <ActivityIndicator size="large" color={isDark ? '#fff' : '#2C0CDF'} />
-                    </View>
+                    <ActivityIndicator size="large" color={isDark ? '#fff' : '#2C0CDF'} />
                 </View>
             ) : (
                 <FlatList
-                    data={locations}
+                    data={allLocations}
                     keyExtractor={(item) => item.mapplsPin.toString()}
                     ListEmptyComponent={() => (
-                        searchText.length > 1 ? (
-                            <View style={styles.emptyContainer}>
-                                <Text style={[styles.emptyText, isDark ? styles.darkText : styles.lightText]}>
-                                    No locations found
-                                </Text>
-                            </View>
-                        ) : null
+                        <View style={styles.emptyContainer}>
+                            <Text style={[styles.emptyText, isDark ? styles.darkText : styles.lightText]}>
+                                {searchText.length > 1 
+                                    ? "No locations found" 
+                                    : "Start typing to search locations"}
+                            </Text>
+                        </View>
                     )}
                     renderItem={({ item }) => (
                         <TouchableOpacity 
@@ -112,9 +184,13 @@ const PickUpLocation = ({ navigation, route }) => {
                             style={[styles.item, isDark ? styles.darkItem : styles.lightItem]}
                         >
                             <View style={styles.locationContainer}>
-                                <View style={[styles.iconContainer, isDark ? styles.darkIconContainer : styles.lightIconContainer]}>
-                                    <Icon name="map-marker" size={20} color={isDark ? '#fff' : '#3C3567'} />
-                                </View>
+                                {/* <View style={[styles.iconContainer, isDark ? styles.darkIconContainer : styles.lightIconContainer]}>
+                                    <Icon 
+                                        name={item.mapplsPin.startsWith('manual') ? "edit" : "map-marker"} 
+                                        size={20} 
+                                        color={isDark ? '#fff' : '#3C3567'} 
+                                    />
+                                </View> */}
                                 <View style={styles.textContainer}>
                                     <Text style={[styles.placeName, isDark ? styles.darkPlaceName : styles.lightPlaceName]}>
                                         {item.placeName}

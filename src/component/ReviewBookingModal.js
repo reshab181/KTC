@@ -65,7 +65,10 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
                 Guestcontacto: UserDetail?.mobile_number || "",
                 guestemail: UserDetail?.email_id || "",
                 Guestflight: corporateData?.Guestflight || "",
-                Reportingplace: corporateData?.Reportingplace?.placeAddress || "",
+                // Reportingplace: corporateData?.Reportingplace?.placeAddress || "",
+                Reportingplace: corporateData?.Reportingplace 
+                ? `${corporateData.Reportingplace.placeName || ''}, ${corporateData.Reportingplace.placeAddress || ''}`
+                : "",
                 start_date: corporateData?.start_date || "",
                 Reporingtime: corporateData?.Reporingtime || "00:00",
                 assignment: corporateData?.assignment || "",
@@ -185,7 +188,7 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
                                 <Text style={styles.sectionTitle}>Reservation Details</Text>
                                 {renderDetail('Rental City', corporateData?.city_of_usage)}
                                 {renderDetail('Car Group', corporateData?.vehiclerequested)}
-                                {renderDetail('Pickup Address', corporateData?.Reportingplace?.placeAddress)}
+                                {renderDetail('Pickup Address',  `${corporateData?.Reportingplace?.placeName} ,${corporateData?.Reportingplace?.placeAddress}`)}
                                 {renderDetail('Reporting Date/Time', `${corporateData?.start_date} , ${corporateData?.Reporingtime}`)}
                                 {renderDetail('Reporting Address', eloc)}
                                 {renderDetail('Flight/Train Info', corporateData?.Guestflight)}

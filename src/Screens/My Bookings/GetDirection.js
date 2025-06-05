@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   Platform,
   PermissionsAndroid,
-  useColorScheme,
+  useColorScheme
 } from 'react-native';
 import MapplsGL from 'mappls-map-react-native';
 import polyline from 'mappls-polyline';
@@ -135,7 +135,7 @@ const RouteShape = React.memo(
     JSON.stringify(prevProps.route) === JSON.stringify(nextProps.route),
 );
 
-const MemoizedMap = memo(({ route, customerLocation }) => (
+const MemoizedMap = memo(({ route, customerLocation, driverLocation }) => (
   <MapplsGL.MapView
     style={{ flex: 1 }}
     logoEnabled={false}
@@ -148,7 +148,7 @@ const MemoizedMap = memo(({ route, customerLocation }) => (
     attributionEnabled={false}
     onDidFinishLoadingMap={() => console.log('Map Loaded')}
   >
-    <MapplsGL.Camera zoomLevel={12} centerCoordinate={customerLocation} />
+    <MapplsGL.Camera zoomLevel={12} centerCoordinate={driverLocation} />
     <RouteShape route={route} />
     <CustomerMarker coordinate={customerLocation} />
   </MapplsGL.MapView>
@@ -165,7 +165,7 @@ const GetDirection = ({
   onRouteUpdate = null,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [center, setCenter] = useState([0, 0]);
+  const [driverLocation, setDriverLocation] = useState([0, 0]); 
   const [route, setRoute] = useState(null);
   const [distance, setDistance] = useState('');
   const [duration, setDuration] = useState('');
@@ -209,13 +209,13 @@ const GetDirection = ({
       : `${min} minute`;
   }, []);
 
-  // Memoized camera config to prevent re-render
+  // Memoized camera config to prevent re-render - now uses driverLocation
   const cameraConfig = useMemo(
     () => ({
       zoomLevel: 12,
-      centerCoordinate: center,
+      centerCoordinate: driverLocation,
     }),
-    [center],
+    [driverLocation],
   );
 
   // Optimized callApi with useCallback
@@ -229,18 +229,21 @@ const GetDirection = ({
 
       try {
         let source = '';
+        let sourceCoords = null;
         if (
           sourceCoordinates &&
           Array.isArray(sourceCoordinates) &&
           sourceCoordinates.length === 2
         ) {
           source = formatCoordinates(sourceCoordinates);
+          sourceCoords = [sourceCoordinates[1], sourceCoordinates[0]]; // Driver location coordinates
         } else if (
           coordinates?.coords?.coords &&
           Array.isArray(coordinates.coords.coords) &&
           coordinates.coords.coords.length === 2
         ) {
           source = formatCoordinates(coordinates.coords.coords);
+          sourceCoords = [coordinates.coords.coords[1], coordinates.coords.coords[0]]; // Driver location coordinates
         } else {
           console.error('No valid source coordinates.');
           setIsLoading(false);
@@ -293,47 +296,48 @@ const GetDirection = ({
             return prevRoute;
           });
 
-          if (
-            routeGeoJSON?.coordinates &&
-            routeGeoJSON.coordinates.length > 0
-          ) {
-            // Only update center if it has actually changed
-            setCenter(prevCenter => {
-              const newCenter = routeGeoJSON.coordinates[0];
+          // Set driver location (source coordinates) for camera focus
+          if (sourceCoords) {
+            setDriverLocation(prevLoc => {
               if (
-                prevCenter[0] !== newCenter[0] ||
-                prevCenter[1] !== newCenter[1]
+                !prevLoc ||
+                prevLoc[0] !== sourceCoords[0] ||
+                prevLoc[1] !== sourceCoords[1]
               ) {
-                return newCenter;
+                return sourceCoords;
               }
-              return prevCenter;
+              return prevLoc;
             });
+          }
 
-            if (!destCoords && routeGeoJSON.coordinates.length > 1) {
-              const lastCoordinate =
-                routeGeoJSON.coordinates[routeGeoJSON.coordinates.length - 1];
-              setCustomerLocation(prevLoc => {
-                if (
-                  !prevLoc ||
-                  prevLoc[0] !== lastCoordinate[0] ||
-                  prevLoc[1] !== lastCoordinate[1]
-                ) {
-                  return lastCoordinate;
-                }
-                return prevLoc;
-              });
-            } else if (destCoords) {
-              setCustomerLocation(prevLoc => {
-                if (
-                  !prevLoc ||
-                  prevLoc[0] !== destCoords[0] ||
-                  prevLoc[1] !== destCoords[1]
-                ) {
-                  return destCoords;
-                }
-                return prevLoc;
-              });
-            }
+          // Set customer location (destination)
+          if (destCoords) {
+            setCustomerLocation(prevLoc => {
+              if (
+                !prevLoc ||
+                prevLoc[0] !== destCoords[0] ||
+                prevLoc[1] !== destCoords[1]
+              ) {
+                return destCoords;
+              }
+              return prevLoc;
+            });
+          } else if (
+            routeGeoJSON?.coordinates &&
+            routeGeoJSON.coordinates.length > 1
+          ) {
+            const lastCoordinate =
+              routeGeoJSON.coordinates[routeGeoJSON.coordinates.length - 1];
+            setCustomerLocation(prevLoc => {
+              if (
+                !prevLoc ||
+                prevLoc[0] !== lastCoordinate[0] ||
+                prevLoc[1] !== lastCoordinate[1]
+              ) {
+                return lastCoordinate;
+              }
+              return prevLoc;
+            });
           }
 
           const newDistance = getFormattedDistance(response.routes[0].distance);
@@ -415,8 +419,9 @@ const GetDirection = ({
   useEffect(() => {
     const initializeComponent = async () => {
       await requestLocationPermission();
+      // Set initial driver location for camera
       if (sourceCoordinates?.[1] && sourceCoordinates?.[0]) {
-        setCenter([sourceCoordinates[1], sourceCoordinates[0]]);
+        setDriverLocation([sourceCoordinates[1], sourceCoordinates[0]]);
       }
       await callApi();
     };
@@ -461,7 +466,11 @@ const GetDirection = ({
         </View>
       ) : (
         <>
-  <MemoizedMap route={route} customerLocation={customerLocation} />
+          <MemoizedMap 
+            route={route} 
+            customerLocation={customerLocation} 
+            driverLocation={driverLocation} 
+          />
 
           {lastUpdateTime && (
             <View style={styles.statusIndicator}>
@@ -1184,4 +1193,3 @@ export default GetDirection;
 // };
 
 // export default GetDirection;
-

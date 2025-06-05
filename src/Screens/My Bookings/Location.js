@@ -289,6 +289,7 @@ const LocationScreen = ({ route }) => {
           coordinates={{ coords: driverCoordinates }}
           sourceCoordinates={driverCoordinates}
           destinationCoordinates={customerLocation}
+ 
         />
         
         <MapIndex 
