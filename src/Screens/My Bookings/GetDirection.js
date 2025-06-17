@@ -179,7 +179,7 @@ const GetDirection = ({
   const mapviewRef = useRef();
   const colorScheme = useColorScheme();
 
-  // Memoized formatCoordinates to prevent recreation on every render
+
   const formatCoordinates = useCallback(
     coords =>
       Array.isArray(coords) && coords.length === 2
@@ -280,6 +280,8 @@ const GetDirection = ({
           origin: source,
           destination: destination,
           profile: profile,
+          resource: 'route_eta',
+          traffic: true,
           overview: MapplsGL?.RestApi?.DirectionsCriteria?.OVERVIEW_FULL,
           geometries: 'polyline6',
         });

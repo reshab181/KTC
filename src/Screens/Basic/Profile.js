@@ -286,13 +286,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   countryCodeInput: {
-    width: width / 4, // Adjusted width
+    width: width / 4, 
   },
   fixedCountryCode: {
     backgroundColor: '#e0e0e0',
     color: '#333',
-    borderRadius: 5, // Optional: Add some rounding to match other inputs
-    paddingVertical: 14, // Adjust padding to match CustomIconTextInput
+    borderRadius: 5, 
+    paddingVertical: 14, 
     paddingHorizontal: 12,
   },
   deleteButtonContainer: {

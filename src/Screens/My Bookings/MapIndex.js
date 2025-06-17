@@ -87,6 +87,8 @@ const MapIndex = props => {
         origin: sourceCoordinates,
         destination: destinationCoordinates,
         profile,
+        resource:'route_eta',
+        traffic:true,
         overview: MapplsGL.RestApi.DirectionsCriteria.OVERVIEW_FULL,
         geometries: 'polyline6',
       });
@@ -225,13 +227,13 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 8, // Reduced padding
+    padding: 8, 
   },
   infoCard: {
     backgroundColor: '#ffffff',
-    borderRadius: 10, // Smaller border radius
+    borderRadius: 10, 
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2}, // Reduced shadow
+    shadowOffset: {width: 0, height: 2}, 
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
@@ -239,86 +241,86 @@ const styles = StyleSheet.create({
   },
   cardHeader: {
     backgroundColor: '#4A90E2',
-    paddingVertical: 6, // Reduced padding
+    paddingVertical: 6,
     paddingHorizontal: 16,
   },
   cardTitle: {
     color: '#fff',
-    fontSize: 16, // Reduced font size
+    fontSize: 16, 
     fontWeight: '700',
     textAlign: 'center',
     letterSpacing: 0.5,
   },
   errorContainer: {
     backgroundColor: '#ffe6e6',
-    padding: 8, // Reduced padding
+    padding: 8, 
     borderBottomWidth: 1,
     borderBottomColor: '#ffcccc',
   },
   errorText: {
     color: '#d32f2f',
-    fontSize: 12, // Reduced font size
+    fontSize: 12,
     textAlign: 'center',
     fontWeight: '500',
   },
   infoSection: {
-    padding: 6, // Reduced padding
+    padding: 6, 
   },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: 4, // Reduced margin
+    marginBottom: 4, 
   },
   infoItem: {
     flex: 1,
     alignItems: 'center',
-    paddingHorizontal: 8, // Reduced padding
+    paddingHorizontal: 8,
   },
   iconContainer: {
     backgroundColor: '#f0f4ff',
-    padding: 8, // Reduced padding
-    borderRadius: 25, // Smaller border radius
-    marginBottom: 6, // Reduced margin
+    padding: 8,
+    borderRadius: 25, 
+    marginBottom: 6, 
   },
   icon: {
-    width: 20, // Smaller icon
-    height: 20, // Smaller icon
+    width: 20,
+    height: 20, 
     resizeMode: 'contain',
     tintColor: '#4A90E2',
   },
   label: {
-    fontSize: 12, // Reduced font size
+    fontSize: 12,
     color: '#666',
-    marginBottom: 4, // Reduced margin
+    marginBottom: 4,
     fontWeight: '600',
     textAlign: 'center',
   },
   value: {
-    fontSize: 14, // Reduced font size
+    fontSize: 14,
     color: '#333',
     fontWeight: '700',
     textAlign: 'center',
-    lineHeight: 16, // Reduced line height
+    lineHeight: 16, 
   },
   valueHighlight: {
-    fontSize: 14, // Reduced font size
+    fontSize: 14, 
     color: '#2E7D32',
     fontWeight: '700',
     textAlign: 'center',
-    lineHeight: 16, // Reduced line height
+    lineHeight: 16,
   },
   valueAccent: {
-    fontSize: 14, // Reduced font size
+    fontSize: 14, 
     color: '#D32F2F',
     fontWeight: '700',
     textAlign: 'center',
-    lineHeight: 16, // Reduced line height
-  },
+    lineHeight: 16,
+   },
   divider: {
     height: 1,
     backgroundColor: '#E8EAF0',
-    marginVertical: 10, // Reduced margin
-    marginHorizontal: 10, // Reduced margin
+    marginVertical: 10,
+    marginHorizontal: 10, 
   },
 });
 
