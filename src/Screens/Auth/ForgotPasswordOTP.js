@@ -1,5 +1,5 @@
-// Ashutosh Rai 
-import { StyleSheet, Text, View, Alert, TextInput } from 'react-native';
+
+import { StyleSheet, Text, View, Alert, TextInput,SafeAreaView } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import { useRef, useState, useCallback } from 'react';
 import CustomButton from '../../component/CustomButtons';
@@ -57,6 +57,7 @@ const ForgotPasswordOTP = ({ route, navigation }) => {
   };
 
   return (
+       <SafeAreaView style={styles.safeArea}>
     <View style={styles.root}>
       <CustomHeader title={AuthStrings.ForgotPassword} />
       <View style={styles.img}>
@@ -89,6 +90,8 @@ const ForgotPasswordOTP = ({ route, navigation }) => {
         <Text style={styles.footerText2}>{AuthStrings.ResendOtpText} 00:11</Text>
       </View>
     </View>
+    </SafeAreaView>
+    
   );
 };
 
@@ -97,6 +100,10 @@ export default ForgotPasswordOTP;
 function useStyles() {
   const { width: winwidth } = useWindowDimensions();
   return StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: '#F1F1F3', 
+    },
     root: { flex: 1, backgroundColor: '#F1F1F3', alignItems: 'center' },
     img: { marginTop: 32, marginBottom: 32, width: 122, height: 100 },
     txt: { width: winwidth * 0.8, textAlign: 'center', fontSize: 16, color: '#212121', opacity: 0.87, fontWeight: '600' },

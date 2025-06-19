@@ -2,7 +2,7 @@
 // CorporateModule1.js
 
 import React, {useEffect, useState, useCallback} from 'react';
-import {ScrollView, StyleSheet, Text, View, Alert} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, Alert,SafeAreaView} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
 import CustomHeader from '../../component/CustomHeader';
@@ -26,6 +26,7 @@ import {
 } from '../../Redux/slice/CorporateSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import NotificationService from '../../services/api/Notification';
+import Menu from '../../assets/icon/Menu';
 
 const CorporateModule1 = ({navigation}) => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
@@ -185,14 +186,35 @@ const CorporateModule1 = ({navigation}) => {
       console.error('Error fetching unread count:', error);
     }
   };
+  // useEffect(() => {
+  
+  //   const resetDependentFields = async () => {
+  //     dispatch(updateCorporateSlice({
+  //       assignment: '',
+  //       vehiclerequested: '',
+  //       Reportingplace: {}
+  //     }));
+  //     seteloc('');
+  //     setCarGroupList([]);
+  //   };
+  
+   
+  //   if (city_of_usage) {
+  //     resetDependentFields();
+  //   }
+  // }, [city_of_usage, dispatch]);
+
 
   const handleFetchCities = useCallback(async () => {
     setLoadingCities(true);
     try {
       const client_id = await AsyncStorage.getItem('client_id');
       const list = await fetchCities('', client_id, accessToken, setCityList);
+     
       setLoadingCities(false);
-      navigation.navigate('City', {list, type: 'city_of_usage'});
+      navigation.navigate('City', {list, type: 'city_of_usage',   
+       
+      });
     } catch (error) {
       console.error('Error fetching cities:', error);
     }
@@ -286,6 +308,7 @@ const CorporateModule1 = ({navigation}) => {
   };
 
   return (
+       <SafeAreaView style={styles.safeArea}>
     <View style={styles.mainContainer}>
       <CustomHeader
         title="Home"
@@ -293,7 +316,7 @@ const CorporateModule1 = ({navigation}) => {
         iconHeight={30}
         iconWidth={36}
         islogo
-        leftIcon={Menuu}
+        leftIcon={Menu}
         rightIcon={() => (
           <View style={{position: 'relative', color: '#fff'}}>
             <Icon
@@ -554,6 +577,7 @@ const CorporateModule1 = ({navigation}) => {
         onClose={() => setIsSidebarVisible(false)}
       />
     </View>
+    </SafeAreaView>
   );
 };
 
@@ -577,6 +601,11 @@ const renderCustomTile = (title, onPress, loading) => (
 
 export default CorporateModule1;
 const styles = StyleSheet.create({
+
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F1F1F3',
+  },
   mainContainer: {
     flex: 1,
     backgroundColor: '#F1F1F3',

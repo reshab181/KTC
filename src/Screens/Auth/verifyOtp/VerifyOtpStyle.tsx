@@ -3,6 +3,11 @@ import { StyleSheet, useWindowDimensions } from "react-native";
 // const { width: winwidth, height: winheight } = useWindowDimensions();
 
 const verifyOtpStyle = StyleSheet.create({
+
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#F1F1F3', // or your preferred background color
+  },
     root: {
         flex: 1,
         backgroundColor: '#F1F1F3',

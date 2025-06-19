@@ -22,6 +22,11 @@ import LogoutSvg from '../assets/svg/logout.svg'
 import { useDispatch, useSelector } from 'react-redux';
 import { resetSignInState } from '../Redux/slice/SignInSlice';
 import { persistor } from '../Redux/store';
+import Mybooking from '../assets/icon/Mybookings';
+import Home from '../assets/icon/Home';
+import MyProfile from '../assets/icon/MyProfile';
+import Help from '../assets/icon/Help';
+import Logout from '../assets/icon/Logout';
 const windowWidth = Dimensions.get('window').width;
 
 const SidebarMenu = ({ isVisible, onClose }) => {
@@ -31,11 +36,11 @@ const SidebarMenu = ({ isVisible, onClose }) => {
   const SignInApiState = useSelector((state) => state.signIn);
 
   const menuItems = [
-    { name: 'Home', route: 'CorporateHomeScreen', icon: HomeSvg },
-    { name: 'Manage Bookings', route: 'Upcoming', icon: BookingSvg},
-    { name: 'Profile', route: 'Profile', icon: ProfileSvg},
-    { name: 'Help', route: 'Help', icon: HelpSvg},
-    { name: 'Logout', route: 'logout', icon: LogoutSvg }, 
+    { name: 'Home', route: 'CorporateHomeScreen', icon: Home },
+    { name: 'Manage Bookings', route: 'Upcoming', icon: Mybooking},
+    { name: 'Profile', route: 'Profile', icon: MyProfile},
+    { name: 'Help', route: 'Help', icon: Help},
+    { name: 'Logout', route: 'logout', icon: Logout}, 
   ];
 
   const handleNavigation = (route) => {

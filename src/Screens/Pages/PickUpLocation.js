@@ -399,7 +399,7 @@
 //     },
 // });
 
-import { FlatList, StyleSheet, Text, View, ActivityIndicator, TouchableOpacity, useColorScheme } from 'react-native';
+import { FlatList, StyleSheet, Text, View, ActivityIndicator, TouchableOpacity, useColorScheme, SafeAreaView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CustomHeader from '../../component/CustomHeader';
 import CustomTextInput from '../../component/CustomIconTextInput';
@@ -409,6 +409,7 @@ import { updateCorporateSlice } from '../../Redux/slice/CorporateSlice';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CloseSvg from '../../assets/svg/closeblack.svg';
 import MapplsGL from 'mappls-map-react-native';
+import CloseIcon from '../../assets/icon/CloseIcon';
 
 const PickUpLocation = ({ navigation, route }) => {
     const theme = useColorScheme();
@@ -615,11 +616,12 @@ const PickUpLocation = ({ navigation, route }) => {
     }, [searchText, locations]);
 
     return (
+        <SafeAreaView style={styles.safeArea}>
         <View style={[styles.container, isDark ? styles.darkContainer : styles.lightContainer]}>
             <View style={styles.searchContainer}>
                 <CustomTextInput
                     lefticon="search"
-                    Righticon={CloseSvg}
+                    Righticon={CloseIcon}
                     iconSize={20}
                     iconColor={isDark ? '#fff' : '#000'}
                     placeholder="Search or enter address"
@@ -696,12 +698,16 @@ const PickUpLocation = ({ navigation, route }) => {
                 />
             )}
         </View>
+        </SafeAreaView>
     );
 };
 
 export default PickUpLocation;
 
 const styles = StyleSheet.create({
+    safeArea:{
+        flex:1
+    },
     container: {
         flex: 1,
     },

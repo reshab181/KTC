@@ -1,6 +1,6 @@
 // Author: Ashutosh Rai
 // Component: ResetPassword
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, SafeAreaView } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CustomHeader from '../../component/CustomHeader';
@@ -87,6 +87,7 @@ const ResetPassword = ({route, navigation}) => {
   
 
   return (
+    <SafeAreaView style = {styles.safeArea}>
     <View style={styles.container}>
       <CustomHeader title="Reset Password" />
       <View style={styles.content}>
@@ -133,6 +134,7 @@ const ResetPassword = ({route, navigation}) => {
         </View>
       )}
     </View>
+    </SafeAreaView>
   );
 };
 
@@ -142,6 +144,9 @@ function useStyles() {
   const { width: winWidth, height: winHeight } = useWindowDimensions();
 
   return StyleSheet.create({
+    safeArea:{
+      flex:1
+    },
     container: {
       flex: 1,
       backgroundColor: '#F1F1F3',

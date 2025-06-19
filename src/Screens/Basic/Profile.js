@@ -17,12 +17,13 @@ import CustomHeader from '../../component/CustomHeader';
 import CustomIconTextInput from '../../component/CustomIconTextInput';
 import CustomButton from '../../component/CustomButtons';
 
-import FirstName from '../../assets/svg/first-name.svg';
-import DobSvg from '../../assets/svg/cake_black.svg';
-import SmartPhoneSvg from '../../assets/svg/smartphone.svg';
-import EmailSvg from '../../assets/svg/email_black.svg';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DeleteData from '../../services/api/deleteProfile';
+import FirstNameIcon from '../../assets/icon/FirstNameIcon';
+import EmailIcon from '../../assets/icon/EmailIcon';
+import DobIcon from '../../assets/icon/DobIcon';
+import PhoneIcon from '../../assets/icon/PhoneIcon';
 
 const { width, height } = Dimensions.get('window');
 
@@ -182,7 +183,7 @@ const Profile = () => {
           <View style={styles.inputWrapper}>
             <CustomIconTextInput
               placeholder="First Name"
-              LeftSvg={FirstName}
+              LeftSvg={FirstNameIcon}
               value={formData.firstName}
               onChangeText={(value) => handleInputChange('firstName', value)}
             />
@@ -190,7 +191,7 @@ const Profile = () => {
           <View style={styles.inputWrapper}>
             <CustomIconTextInput
               placeholder="Last Name"
-              LeftSvg={FirstName}
+              LeftSvg={FirstNameIcon}
               value={formData.lastName}
               onChangeText={(value) => handleInputChange('lastName', value)}
             />
@@ -198,7 +199,7 @@ const Profile = () => {
           <View style={styles.inputWrapper}>
             <CustomIconTextInput
               placeholder="Email"
-              LeftSvg={EmailSvg}
+              LeftSvg={EmailIcon}
               value={formData.email}
               onChangeText={(value) => handleInputChange('email', value)}
             />
@@ -206,7 +207,7 @@ const Profile = () => {
           <View style={styles.inputWrapper}>
             <CustomIconTextInput
               placeholder="YYYY-MM-DD"
-              LeftSvg={DobSvg}
+              LeftSvg={DobIcon}
               value={formData.birthDate}
               onChangeText={(value) => handleInputChange('birthDate', value)}
             />
@@ -224,7 +225,7 @@ const Profile = () => {
               <CustomIconTextInput
                 keyboardType="numeric"
                 placeholder="Mobile Number"
-                LeftSvg={SmartPhoneSvg}
+                LeftSvg={PhoneIcon}
                 value={formData.mobileNumber}
                 onChangeText={(value) => handleInputChange('mobileNumber', value)}
               />

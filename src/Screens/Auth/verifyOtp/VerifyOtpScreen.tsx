@@ -3,7 +3,7 @@
 
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Text, View, TextInput, TouchableOpacity } from 'react-native';
+import { Alert, Text, View, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
 import verifyOtpStyle from './VerifyOtpStyle';
 import CustomHeader from '../../../component/CustomHeader';
 import OtpIcon from '../../../assets/icon/OtpIcon';
@@ -122,57 +122,51 @@ const VerifyOTPScreen = () => {
 
   
   return (
-    <View style={verifyOtpStyle.root}>
-      <CustomHeader title={screenType === 0 ? 'Register' : 'Forgot Password'} handlePress={undefined} />
-      <View style={verifyOtpStyle.img}>
-        <OtpIcon />
+    <SafeAreaView style={verifyOtpStyle.safeArea}>
+      <View style={verifyOtpStyle.root}>
+        <CustomHeader title={screenType === 0 ? 'Register' : 'Forgot Password'} handlePress={undefined} />
+        <View style={verifyOtpStyle.img}>
+          <OtpIcon />
+        </View>
+
+        <Text style={verifyOtpStyle.txt}>{AuthStrings.PleaseEnterOtpRecieved}</Text>
+
+        <View style={verifyOtpStyle.txtInputBox}>
+          {Array(6)
+            .fill('')
+            .map((_, index) => (
+              <TextInput
+                key={index}
+                ref={(el) => (inputRefs.current[index] = el as TextInput)}
+                style={verifyOtpStyle.otpInput}
+                maxLength={1}
+                keyboardType="numeric"
+                value={otp[index] || ''}
+                onChangeText={(text) => handleOtpChange(index, text)}
+                onKeyPress={({ nativeEvent }) => handleKeyPress(index, nativeEvent.key)}
+                caretHidden={true} 
+                selectTextOnFocus={false} 
+              />
+            ))}
+        </View>
+
+        <View style={verifyOtpStyle.btn}>
+          <CustomButton
+            title={verifyOtpApiState.loading ? 'Verifying...' : 'Next'}
+            onPress={handleSubmit}
+            loading={verifyOtpApiState.loading}
+            disabled={verifyOtpApiState.loading}
+            borderWidth={undefined}
+            textColor={undefined}
+            btnHeight={undefined}
+            textSize={undefined}
+            fontWeight={undefined}
+            btnColor={undefined}
+            backgroundColor={undefined}
+          />
+        </View>
       </View>
-
-      <Text style={verifyOtpStyle.txt}>{AuthStrings.PleaseEnterOtpRecieved}</Text>
-
-    
-      <View style={verifyOtpStyle.txtInputBox}>
-        {Array(6)
-          .fill('')
-          .map((_, index) => (
-            <TextInput
-              key={index}
-              ref={(el) => (inputRefs.current[index] = el as TextInput)}
-              style={verifyOtpStyle.otpInput}
-              maxLength={1}
-              keyboardType="numeric"
-              value={otp[index] || ''}
-              onChangeText={(text) => handleOtpChange(index, text)}
-              onKeyPress={({ nativeEvent }) => handleKeyPress(index, nativeEvent.key)}
-              caretHidden={true} 
-              selectTextOnFocus={false} 
-            />
-          ))}
-      </View>
-
-      <View style={verifyOtpStyle.btn}>
-        <CustomButton
-          title={verifyOtpApiState.loading ? 'Verifying...' : 'Next'}
-          onPress={handleSubmit}
-          loading={verifyOtpApiState.loading}
-          disabled={verifyOtpApiState.loading}
-          borderWidth={undefined}
-          textColor={undefined}
-          btnHeight={undefined}
-          textSize={undefined}
-          fontWeight={undefined}
-          btnColor={undefined}
-          backgroundColor={undefined}
-        />
-      </View>
-
-      {/* Resend OTP */}
-      {/* <TouchableOpacity onPress={handleResendOtp} disabled={resendDisabled}>
-        <Text style={[verifyOtpStyle.resendText, resendDisabled && { opacity: 0.5 }]}>
-          {resendDisabled ? 'Resend OTP in 30s' : 'Resend OTP'}
-        </Text>
-      </TouchableOpacity> */}
-    </View>
+    </SafeAreaView>
   );
 };
 
