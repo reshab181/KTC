@@ -9,17 +9,20 @@ PODS:
   - hermes-engine/Pre-built (0.75.4)
   - jail-monkey (2.8.3):
     - React-Core
-  - mappls-map-react-native (1.0.10):
+  - mappls-direction-widget-react-native (1.1.0):
+    - MapplsDirectionUI
+    - React-Core
+  - mappls-map-react-native (1.0.12):
     - DoubleConversion
     - glog
     - hermes-engine
-    - MapplsAnnotationExtension/Base (= 1.0.1)
-    - MapplsAPICore (= 1.0.15)
-    - MapplsAPIKit/Base (= 2.0.29)
+    - MapplsAnnotationExtension/Base (= 1.0.2)
+    - MapplsAPICore (= 1.0.16)
+    - MapplsAPIKit/Base (= 2.0.30)
     - MapplsFeedbackKit/Base (= 2.0.0)
     - MapplsGeoanalytics/Base (= 1.0.0)
-    - MapplsLMS/Base (= 1.0.5)
-    - MapplsMap/Base (= 5.13.15)
+    - MapplsLMS/Base (= 1.0.6)
+    - MapplsMap/Base (= 5.13.16)
     - RCT-Folly (= 2024.01.01.00)
     - RCTRequired
     - RCTTypeSafety
@@ -37,13 +40,28 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - MapplsAnnotationExtension/Base (1.0.1)
-  - MapplsAPICore (1.0.15)
-  - MapplsAPIKit/Base (2.0.29)
+  - MapplsAnnotationExtension/Base (1.0.2)
+  - MapplsAPICore (1.0.16)
+  - MapplsAPIKit/Base (2.0.30)
+  - MapplsDirectionUI (1.0.10):
+    - MapplsDirectionUI/Complete (= 1.0.10)
+  - MapplsDirectionUI/Base (1.0.10)
+  - MapplsDirectionUI/Complete (1.0.10):
+    - MapplsDirectionUI/Base
+    - MapplsDirectionUI/Dependencies
+  - MapplsDirectionUI/Dependencies (1.0.10):
+    - MapplsAPICore (~> 1.0.16)
+    - MapplsAPIKit/Base (~> 2.0.30)
+    - MapplsLMS/Base (~> 1.0.5)
+    - MapplsMap/Base (~> 5.13.16)
+    - MapplsNearbyUI/Base (~> 1.0.1)
+    - MapplsUIWidgets/Base (~> 1.0.10)
   - MapplsFeedbackKit/Base (2.0.0)
   - MapplsGeoanalytics/Base (1.0.0)
-  - MapplsLMS/Base (1.0.5)
-  - MapplsMap/Base (5.13.15)
+  - MapplsLMS/Base (1.0.6)
+  - MapplsMap/Base (5.13.16)
+  - MapplsNearbyUI/Base (1.0.2)
+  - MapplsUIWidgets/Base (1.0.11)
   - RCT-Folly (2024.01.01.00):
     - boost
     - DoubleConversion
@@ -1280,6 +1298,29 @@ PODS:
     - React-Core
   - react-native-date-picker (5.0.8):
     - React-Core
+  - react-native-geolocation (3.4.0):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - react-native-geolocation-service (5.3.1):
+    - React
   - react-native-hash (3.0.3):
     - React
   - react-native-randombytes (3.6.1):
@@ -1656,6 +1697,7 @@ DEPENDENCIES:
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - hermes-engine (from `../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec`)
   - jail-monkey (from `../node_modules/jail-monkey`)
+  - mappls-direction-widget-react-native (from `../node_modules/mappls-direction-widget-react-native`)
   - mappls-map-react-native (from `../node_modules/mappls-map-react-native`)
   - RCT-Folly (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
   - RCT-Folly/Fabric (from `../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec`)
@@ -1690,6 +1732,8 @@ DEPENDENCIES:
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
   - react-native-config (from `../node_modules/react-native-config`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
+  - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
+  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-hash (from `../node_modules/react-native-hash`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -1737,10 +1781,13 @@ SPEC REPOS:
     - MapplsAnnotationExtension
     - MapplsAPICore
     - MapplsAPIKit
+    - MapplsDirectionUI
     - MapplsFeedbackKit
     - MapplsGeoanalytics
     - MapplsLMS
     - MapplsMap
+    - MapplsNearbyUI
+    - MapplsUIWidgets
     - SocketRocket
 
 EXTERNAL SOURCES:
@@ -1759,6 +1806,8 @@ EXTERNAL SOURCES:
     :tag: hermes-2024-08-15-RNv0.75.1-4b3bf912cc0f705b51b71ce1a5b8bd79b93a451b
   jail-monkey:
     :path: "../node_modules/jail-monkey"
+  mappls-direction-widget-react-native:
+    :path: "../node_modules/mappls-direction-widget-react-native"
   mappls-map-react-native:
     :path: "../node_modules/mappls-map-react-native"
   RCT-Folly:
@@ -1823,6 +1872,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-config"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
+  react-native-geolocation:
+    :path: "../node_modules/@react-native-community/geolocation"
+  react-native-geolocation-service:
+    :path: "../node_modules/react-native-geolocation-service"
   react-native-hash:
     :path: "../node_modules/react-native-hash"
   react-native-randombytes:
@@ -1914,14 +1967,18 @@ SPEC CHECKSUMS:
   glog: 69ef571f3de08433d766d614c73a9838a06bf7eb
   hermes-engine: ea92f60f37dba025e293cbe4b4a548fd26b610a0
   jail-monkey: 066e0af74e67cbf432fbb4d214b046ef6dccf910
-  mappls-map-react-native: 5618c2ccc9638062fcd5b28080ad4a54a15d959c
-  MapplsAnnotationExtension: 9b12f907df2ff894478f22797c0cfcc800506d59
-  MapplsAPICore: ef9565cd30c27731ca2a81ac0dfe324f23ff925a
-  MapplsAPIKit: c39cbf3944ae2f377474d99077f83eb3764b553a
+  mappls-direction-widget-react-native: aef2e6c079739653cc21319682f29dd39ece7aa8
+  mappls-map-react-native: 062ba461184f0d35008236414beff8c71351b2fc
+  MapplsAnnotationExtension: 2e63c96e540cc3b2f383c2b8ab1d4839a82ed350
+  MapplsAPICore: 922af98586ffbddb054822b302804f77f662fca5
+  MapplsAPIKit: 697b5bfdad8f31965ed142d9e91d9f896ae0c65a
+  MapplsDirectionUI: cf443db2c783cd49fba89feef45bbc7a2060d3df
   MapplsFeedbackKit: 3c96bcd142304b115ad9b15d557190ac1de9e2f9
   MapplsGeoanalytics: fa3434679c22d73a4ff47fac50a246c9b61b0192
-  MapplsLMS: c32e855a5bfe6e6a1f5a355c8f1c51ec54ffb15d
-  MapplsMap: e74ab61e115e6dfe7e0f671c56e76bfa0774e57c
+  MapplsLMS: e74a9047ae1c5a977f61eaaa42ae89a57c499e57
+  MapplsMap: ed09c505e87ba92602ec408ccae222bba68929ad
+  MapplsNearbyUI: 0fe0677a102ef1fc433a4e3ae75c72d9b087c7d9
+  MapplsUIWidgets: d0aabd956ac01889b2bb4dd00fbaf24542a46bda
   RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
   RCTDeprecation: 726d24248aeab6d7180dac71a936bbca6a994ed1
   RCTRequired: a94e7febda6db0345d207e854323c37e3a31d93b
@@ -1953,6 +2010,8 @@ SPEC CHECKSUMS:
   React-microtasksnativemodule: 2b73e68f0462f3175f98782db08896f8501afd20
   react-native-config: 8f7283449bbb048902f4e764affbbf24504454af
   react-native-date-picker: 8a0d56cdef18f61945e6d0dfd250dc1b8e7a313e
+  react-native-geolocation: 0c7a8496962d3268ac5b28f22a8e5d7a04c43f1a
+  react-native-geolocation-service: 608e1da71a1ac31b4de64d9ef2815f697978c55b
   react-native-hash: 4664516df1834e1293b30e711c63f61f7f801b6a
   react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
   react-native-safe-area-context: 04803a01f39f31cc6605a5531280b477b48f8a88
@@ -1996,6 +2055,6 @@ SPEC CHECKSUMS:
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: aa3df615739504eebb91925fc9c58b4922ea9a08
 
-PODFILE CHECKSUM: b89e2342a88b635f9bc8f4f3c65f33b2b7bcbc99
+PODFILE CHECKSUM: 514c27cd2f93bb16885b8810f9be29cc98041e56
 
 COCOAPODS: 1.13.0

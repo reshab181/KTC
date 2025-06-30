@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import RNHash from "react-native-hash";
+import RNHash, { CONSTANTS } from "react-native-hash";
 import { string } from "yup";
 import verifyOtpApi from "../../services/api/verifyOtpApi";
 
@@ -18,8 +18,10 @@ const initialState: VerifyOtpState = {
 export const verifyOtp = createAsyncThunk(
     "verifyOtp",
     async({url, otp, process}: {url: string, otp: string, process: string}, {rejectWithValue}) =>{
-     
-        const md5Hash = await RNHash.hashString(otp, 'md5');
+
+        const md5Hash = await RNHash.hashString(otp, CONSTANTS.HashAlgorithms.md5);
+        
+        console.log(md5Hash)
         const sha256Hash = await RNHash.hashString(md5Hash, 'sha256');
         try {
             console.log(url, sha256Hash, process)
@@ -61,7 +63,7 @@ const verifyOtpSlice = createSlice({
         })
         .addCase(verifyOtp.rejected, (state, action) => {
           state.loading = false;
-          state.error = action.payload;
+          state.error = action.error;
           state.data = null;
         });
     },

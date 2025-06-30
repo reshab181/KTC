@@ -36,7 +36,7 @@ const VerifyOTPScreen = () => {
 
   const inputRefs = useRef<TextInput[]>([]);
   const verifyOtpApiState = useSelector((state: any) => state.verifyOtp);
-  console.log('Navigating with:', { emailId, clientId, sub_entity });
+  // console.log('Navigating with:', { emailId, clientId, sub_entity });
 
   useEffect(() => {
     if (route.params && typeof route.params === 'object') { 
@@ -62,6 +62,7 @@ const VerifyOTPScreen = () => {
         Alert.alert('Verification Failed', verifyOtpApiState.error.message || 'Invalid OTP. Try again.');
       }
     }
+    console.log("verifyOtpApiState", verifyOtpApiState)
   }, [verifyOtpApiState, screenType, emailId, clientId, sub_entity]);
 
   

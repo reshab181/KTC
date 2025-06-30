@@ -32,7 +32,7 @@
     "formik": "^2.4.6",
     "jail-monkey": "^2.8.3",
     "mappls-direction-widget-react-native": "^1.1.0",
-    "mappls-map-react-native": "^1.0.10",
+    "mappls-map-react-native": "^1.0.12",
     "mappls-polyline": "^1.0.0",
     "react": "18.3.1",
     "react-native": "0.75.4",

@@ -20,7 +20,7 @@ const KTCSplashScreen = () => {
             return;
         }
 
-        const isRootedDevice = JailMonkey.isJailBroken();
+        const isRootedDevice = await JailMonkey.isJailBroken();
         if (isRootedDevice) {
             Alert.alert("Alert", "App cannot run on a Rooted Device", [
                 { text: 'OK', onPress: () => RNExit.exitApp() }

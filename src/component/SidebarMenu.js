@@ -9,7 +9,8 @@ import {
   Image,
   Dimensions,
   Animated,
-  Alert, 
+  Alert,
+  SafeAreaView, 
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage, { useAsyncStorage } from '@react-native-async-storage/async-storage';
@@ -118,31 +119,36 @@ const SidebarMenu = ({ isVisible, onClose }) => {
       transparent={true}
       onRequestClose={handleClose}
     >
-      <View style={styles.container}>
-        <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={handleClose} />
-        <Animated.View style={[styles.menu, { transform: [{ translateX }] }]}>
-          <View style={styles.header}>
-            <Image source={require('../assets/ktc.png')} style={styles.logo} resizeMode="contain" />
-            <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
-              <Text style={styles.closeText}>✕</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.menuItems}>
-            {menuItems.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.menuItem}
-                onPress={() => handleNavigation(item.route)}
-              >
-                {item.icon && <item.icon  style={styles.menuIcon}/>}
-                {/* <Image source={item.icon} style={styles.menuIcon} /> */}
-                <Text style={styles.menuText}>{item.name}</Text>
+      <SafeAreaView style={{flex: 1}}>
+        <View style={styles.container}>
+          <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={handleClose} />
+          <Animated.View style={[styles.menu, { transform: [{ translateX }] }]}>
+            <View style={styles.header}>
+              <Image
+                source={require('../assets/ktc.png')}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+              <TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+                <Text style={styles.closeText}>✕</Text>
               </TouchableOpacity>
-            ))}
-          </View>
-        </Animated.View>
-      </View>
+            </View>
+
+            <View style={styles.menuItems}>
+              {menuItems.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.menuItem}
+                  onPress={() => handleNavigation(item.route)}
+                >
+                  {item.icon && <item.icon style={styles.menuIcon} />}
+                  <Text style={styles.menuText}>{item.name}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </Animated.View>
+        </View>
+      </SafeAreaView>
     </Modal>
   );
 };
