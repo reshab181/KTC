@@ -127,6 +127,16 @@ const SignInCorporate = ({ route }) => {
           screen: "CorporateHomeScreen",
         });
       }
+
+      if (SignInApiState.data.status === 204){
+         const userDataMessage = decryptData(SignInApiState.data.message);
+         Alert.alert(
+            userDataMessage,
+           
+            [{ text: "OK" }]
+          );
+
+      }
     } else if (SignInApiState.loading === false && SignInApiState.error !== null) {
       console.log("Error:", SignInApiState.error);
       Alert.alert("Error", "Failed to Sign In. Please try again.");

@@ -1,6 +1,3 @@
-
-
-
 import {
   StyleSheet,
   Text,
@@ -25,6 +22,7 @@ import UpcomingApi from '../../services/api/upcoming';
 import CustomHeader from '../../component/CustomHeader';
 import {setCoords} from '../../Redux/slice/CoordsSlice';
 
+
 const {width, height} = Dimensions.get('window');
 
 const Track = props => {
@@ -40,55 +38,20 @@ const Track = props => {
   const [bookings, setBookings] = useState([]);
   const [accessToken, setAccessToken] = useState(null);
 
-  const fetchUpcomingBookings = useCallback(async () => {
-    setLoading(true);
-    try {
-      const bookingType = pageName === 'HIS' ? 'history' : 'upcoming';
-      const fetchedBookings = await UpcomingApi(bookingType, 1, 100);
-      setBookings(fetchedBookings || []);
-    } catch (error) {
-      console.error('Error fetching bookings:', error);
-      Alert.alert('Error', 'Failed to fetch bookings.');
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, [pageName]);
-
-  const fetchOAuthToken = useCallback(async () => {
-    try {
-      const tokenResponse = await oauthApi();
-      if (tokenResponse?.data?.access_token) {
-        setAccessToken(tokenResponse.data.access_token);
-      } else {
-        Alert.alert(
-          'Authentication Error',
-          'Unable to authenticate. Please try again.',
-        );
-        return null;
-      }
-      return tokenResponse.data.access_token;
-    } catch (err) {
-      console.error('Error fetching OAuth token:', err);
-      Alert.alert('Authentication Error', 'Failed to authenticate.');
-      return null;
-    }
-  }, []);
-
   const fetchLocationData = useCallback(
     async (deviceId, token) => {
       try {
         const headers = {Accept: '*/*', Authorization: `Bearer ${token}`};
 
-        // ⏱ Time range: last 24 hours
+        // For 5 minute range:
         const now = Date.now();
-        const oneDayAgo = now - 24 * 60 * 60 * 1000;
-        const startTime = Math.floor(oneDayAgo / 1000);
+        const fiveMinutesAgo = now - 5 * 60 * 1000; // 5 minutes in milliseconds
+        const startTime = Math.floor(fiveMinutesAgo / 1000);
         const endTime = Math.floor(now / 1000);
 
         console.log(
           `📡 Fetching location data from ${new Date(
-            oneDayAgo,
+            fiveMinutesAgo,
           ).toLocaleString()} to ${new Date(now).toLocaleString()}`,
         );
 
@@ -110,11 +73,11 @@ const Track = props => {
         const positionList = Array.isArray(res?.data?.positionList)
           ? res.data.positionList
           : [];
-        console.log(` Found ${positionList.length} positions`);
+        console.log(`Found ${positionList.length} positions`);
 
         positionList.forEach((pos, i) => {
           console.log(
-            `  → Position ${i}: lat=${pos.latitude}, lng=${
+            `Position ${i}: lat=${pos.latitude}, lng=${
               pos.longitude
             }, time=${new Date(pos.timestamp * 1000).toLocaleString()}`,
           );
@@ -130,7 +93,7 @@ const Track = props => {
 
         if (validPosition) {
           console.log(
-            `Using valid position: Lat ${validPosition.latitude}, Long ${validPosition.longitude}`,
+            ` Using valid position: Lat ${validPosition.latitude}, Long ${validPosition.longitude}`,
           );
 
           dispatch(
@@ -154,11 +117,9 @@ const Track = props => {
           ' Position data exists but all coordinates are invalid or zero.',
         );
 
+        // Check fallback location from deviceData
         const fallbackLocation = deviceData?.location;
-        console.log(
-          ' Checking fallback deviceData.location:',
-          fallbackLocation,
-        );
+        console.log('Checking fallback deviceData.location:', fallbackLocation);
 
         if (
           fallbackLocation?.latitude &&
@@ -167,7 +128,7 @@ const Track = props => {
           fallbackLocation.longitude !== 0
         ) {
           console.log(
-            `Using fallback device location: Lat ${fallbackLocation.latitude}, Long ${fallbackLocation.longitude}`,
+            ` Using fallback device location: Lat ${fallbackLocation.latitude}, Long ${fallbackLocation.longitude}`,
           );
           dispatch(
             setCoords({
@@ -179,23 +140,23 @@ const Track = props => {
             item,
             dataTrackChiffer: deviceData,
             access_token: token,
-            showResult: {data: {positionList: []}},
+            showResult: {data: {positionList: [validPosition]}},
             index,
             eloc,
           });
           return;
         }
 
-        console.warn('⚠️ Fallback deviceData.location is missing or invalid.');
+        console.warn(' Fallback deviceData.location is missing or invalid.');
 
         Alert.alert(
           'Alert!',
           'No recent location data available for this vehicle',
-          [{text: 'OK', onPress: () => navigation.navigate('Upcoming')}],
+          [{text: 'OK', onPress: () => {}}],
           {cancelable: false},
         );
       } catch (error) {
-        console.error('❌ Error fetching location data:', error);
+        console.error(' Error fetching location data:', error);
         Alert.alert(
           'Alert!',
           'This vehicle cannot be tracked',
@@ -206,6 +167,70 @@ const Track = props => {
     },
     [dispatch, deviceData, item, navigation, index, eloc],
   );
+
+  useEffect(() => {
+    let isMounted = true;
+    let intervalId;
+
+    const pollLocation = async () => {
+        if (!isMounted) return;
+      if (!deviceData?.id || !accessToken) {
+        console.log(' Skipping poll - missing deviceId or token');
+        return;
+      }
+      console.log(' Polling location for device:', deviceData.id);
+      await fetchLocationData(deviceData.id, accessToken);
+    };
+
+    if (deviceData?.id && accessToken) {
+      pollLocation(); // initial call
+
+      intervalId = setInterval(() => {
+        pollLocation(); // call every 30s
+      }, 30000); // 30,000 ms = 30 seconds
+    }
+
+     return () => {
+    isMounted = false;
+    if (intervalId) clearInterval(intervalId);
+  };
+  }, [deviceData?.id, accessToken, fetchLocationData]);
+
+  const fetchUpcomingBookings = useCallback(async () => {
+    setLoading(true);
+    try {
+      const bookingType = pageName === 'HIS' ? 'history' : 'upcoming';
+      const fetchedBookings = await UpcomingApi(bookingType, 1, 100);
+      setBookings(fetchedBookings || []);
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      Alert.alert('Error', 'Failed to fetch bookings.');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, [pageName]);
+
+  const fetchOAuthToken = useCallback(async () => {
+    try {
+      const tokenResponse = await oauthApi();
+      if (tokenResponse?.data?.access_token) {
+        setAccessToken(tokenResponse.data.access_token);
+        console.log(' OAuth token fetched successfully');
+      } else {
+        Alert.alert(
+          'Authentication Error',
+          'Unable to authenticate. Please try again.',
+        );
+        return null;
+      }
+      return tokenResponse.data.access_token;
+    } catch (err) {
+      console.error(' Error fetching OAuth token:', err);
+      Alert.alert('Authentication Error', 'Failed to authenticate.');
+      return null;
+    }
+  }, []);
 
   const fetchDeviceAndLocation = useCallback(async () => {
     setLoading(true);
@@ -227,11 +252,15 @@ const Track = props => {
       console.log(
         'Available devices:',
         devices.map(d => d.deviceDetails?.registrationNumber),
+        devices.map(d => d.deviceDetails?.name),
+        devices.map(d => d.deviceDetails?.id),
       );
       console.log('Looking for vehicle:', item?.Drivernumber);
 
       const matchedDevice = devices?.find(
-        dev => dev?.deviceDetails?.registrationNumber === item?.Drivernumber,
+        dev =>
+          dev?.deviceDetails?.registrationNumber === item?.Drivernumber ||
+          dev?.deviceDetails?.name === item?.Drivernumber,
       );
 
       if (!matchedDevice) {
@@ -240,13 +269,12 @@ const Track = props => {
         return;
       }
 
-      console.log('Found device:', matchedDevice.id);
+      console.log(' Found device:', matchedDevice.id);
       setDeviceData(matchedDevice);
 
       await fetchLocationData(matchedDevice.id, token);
-      console.log(deviceData, 'abc');
     } catch (err) {
-      console.error('Error fetching device data:', err);
+      console.error(' Error fetching device data:', err);
       Alert.alert(
         'Tracking Error',
         'Something went wrong while tracking the vehicle.',
@@ -261,6 +289,7 @@ const Track = props => {
   }, [fetchUpcomingBookings]);
 
   const home = useCallback(() => navigation.navigate('Upcoming'), [navigation]);
+
   const stephistroy = useCallback(currentitem => {
     if (currentitem?.Bookingstatus !== 'Confirmed') return 1;
     if (currentitem?.Bookingstatus === 'Confirmed')
@@ -271,16 +300,17 @@ const Track = props => {
         : 2;
     return 1;
   }, []);
+
   const icons = useCallback(
     () => navigation.navigate('Notifications'),
     [navigation],
   );
+
   const formatDate = timestamp => {
     if (!timestamp) return 'N/A';
     return new Date(timestamp * 1000).toLocaleDateString();
   };
 
-  // Icon components to make the UI more visual
   const renderInfoRow = (icon, label, value) => (
     <View style={styles.infoRow}>
       <View style={styles.iconWrapper}>
@@ -325,9 +355,9 @@ const Track = props => {
             {/* Header with Booking ID */}
             <View style={styles.cardHeader}>
               <View style={styles.vehicleTypeContainer}>
-                <Image 
-                  source={require('../../assets/mapcar.png')} 
-                  style={styles.vehicleIcon} 
+                <Image
+                  source={require('../../assets/mapcar.png')}
+                  style={styles.vehicleIcon}
                 />
                 <Text style={styles.vehicleType}>{item.vehiclerequested}</Text>
               </View>
@@ -366,41 +396,44 @@ const Track = props => {
               {renderInfoRow(
                 require('../../assets/dl.png'),
                 'Vehicle Number',
-                item.vehicle_no || 'Not assigned'
+                item.vehicle_no || 'Not assigned',
               )}
-              
+
               {renderInfoRow(
                 require('../../assets/calendar.png'),
                 'Booking Date',
-                formatDate(item.start_date)
+                formatDate(item.start_date),
               )}
-              
+
               {renderInfoRow(
                 require('../../assets/clock.png'),
                 'Reporting Time',
-                item.Reporingtime
+                item.Reporingtime,
               )}
-              
+
               {renderInfoRow(
                 require('../../assets/place.png'),
                 'Reporting Place',
-                item.Reportingplace
+                item.Reportingplace,
               )}
             </View>
 
             {/* Track Button */}
             {stephistroy(item) > 0 && (
               <TouchableOpacity
-                style={[styles.trackButton, loading && styles.trackButtonDisabled]}
+                style={[
+                  styles.trackButton,
+                  loading && styles.trackButtonDisabled,
+                ]}
                 disabled={loading}
                 onPress={fetchDeviceAndLocation}>
                 {loading ? (
                   <ActivityIndicator color={'white'} size={20} />
                 ) : (
                   <>
-                    <Image 
-                      source={require('../../assets/route.png')} 
-                      style={styles.trackIcon} 
+                    <Image
+                      source={require('../../assets/route.png')}
+                      style={styles.trackIcon}
                     />
                     <Text style={styles.trackButtonText}>Track Chauffeur</Text>
                   </>
@@ -451,7 +484,6 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: '#ffffff',
     borderRadius: 16,
-  
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -459,10 +491,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.1,
     shadowRadius: 10,
-    elevation: 5, 
+    elevation: 5,
     marginTop: 16,
-    marginBottom: 8, 
-    marginHorizontal: 2, 
+    marginBottom: 8,
+    marginHorizontal: 2,
     overflow: 'hidden',
   },
   cardHeader: {

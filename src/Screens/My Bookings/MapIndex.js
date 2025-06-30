@@ -1,19 +1,14 @@
-import React, {useEffect, useState} from 'react';
+// import React, {useEffect, useState, useCallback, useMemo, useRef} from 'react';
 import {
   View,
   Image,
   Dimensions,
   Text,
   StyleSheet,
-  Linking,
-  Alert,
-  Platform,
-  PermissionsAndroid,
-  TouchableOpacity,
   SafeAreaView,
-  ScrollView,
   ActivityIndicator,
 } from 'react-native';
+import React, {useState, useEffect, useRef, useCallback, useMemo, memo} from 'react';
 import {useSelector} from 'react-redux';
 import MapplsGL from 'mappls-map-react-native';
 import Polyline from 'mappls-polyline';
@@ -21,125 +16,49 @@ import Polyline from 'mappls-polyline';
 const {height, width} = Dimensions.get('screen');
 
 const MapIndex = props => {
-  const {item} = props;
+  const {item, autoUpdateInterval = 30000, enableAutoUpdate = true} = props;
   const coordinates = useSelector(state => state?.coords?.coords);
-  const [destinationCoordinates, setDestinationCoordinates] = useState(
-    item?.eloc,
-  );
-  const [sourceCoordinates, setSourceCoordinates] = useState(
-    `${coordinates?.coords[1]},${coordinates?.coords[0]}`,
-  );
-  const [center, setcenter] = useState(
-    coordinates?.coords ? coordinates?.coords[0] : null,
-  );
-  const [route, setroute] = useState('');
-  const [distance, setDistance] = useState('');
-  const [duration, setDuration] = useState('');
+  
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [distance, setDistance] = useState('');
+  const [duration, setDuration] = useState('');
+  const [lastUpdateTime, setLastUpdateTime] = useState(null);
+  
+  const intervalRef = useRef(null);
+  const isFirstLoad = useRef(true);
 
-  useEffect(() => {
-    console.log('MapIndex component mounted or updated');
-    console.log('Item prop:', item);
-    console.log('Redux coordinates:', coordinates?.coords);
-  
-    const fetchData = async () => {
-      if (coordinates?.coords && item?.eloc) {
-        setSourceCoordinates(
-          `${coordinates?.coords[1]},${coordinates?.coords[0]}`
-        );
-        console.log(
-          'Source Coordinates set to:',
-          `${coordinates?.coords[1]},${coordinates?.coords[0]}`
-        );
-        console.log('Fetching direction data...');
-        await fetchDirectionData('driving');
-      } else {
-        console.log(
-          'Coordinates or eloc are missing, skipping fetchDirectionData'
-        );
-        setIsLoading(false);
-        setError('Location data not available');
-      }
-    };
-  
-    // Call the fetch data once initially
-    fetchData();
-  
-    // Set up interval for refreshing data
-    const intervalId = setInterval(() => {
-      console.log('Refreshing trip details...');
-      fetchData();
-    }, 30000); 
-  
-    return () => clearInterval(intervalId);
-  }, [coordinates?.coords, item?.eloc]);
-  
-  const fetchDirectionData = async profile => {
-    console.log('fetchDirectionData called with profile:', profile);
-    console.log('Source:', sourceCoordinates);
-    console.log('Destination:', destinationCoordinates);
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const data = await MapplsGL?.RestApi?.direction({
-        origin: sourceCoordinates,
-        destination: destinationCoordinates,
-        profile,
-        resource:'route_eta',
-        traffic:true,
-        overview: MapplsGL.RestApi.DirectionsCriteria.OVERVIEW_FULL,
-        geometries: 'polyline6',
-      });
-      console.log('Direction API Response:', data);
-      if (data?.routes && data?.routes.length > 0) {
-        let routeGeoJSON = Polyline?.toGeoJSON(data?.routes[0]?.geometry, 6);
-        setDistance(getFormattedDistance(data?.routes[0]?.distance));
-        setDuration(getFormattedDuration(data?.routes[0]?.duration));
-        setroute(routeGeoJSON);
-        console.log('Route GeoJSON:', routeGeoJSON);
-        if (routeGeoJSON?.coordinates && routeGeoJSON?.coordinates.length > 0) {
-          setcenter(routeGeoJSON?.coordinates[0]);
-          console.log('Center set to:', routeGeoJSON?.coordinates[0]);
-        } else {
-          console.log('Route GeoJSON coordinates are empty.');
-          setcenter(coordinates?.coords ? coordinates?.coords[0] : null);
-        }
-      } else {
-        console.log('No routes found in the direction API response.');
-        setDistance('Not available');
-        setDuration('Not available');
-        setroute('');
-        setcenter(coordinates?.coords ? coordinates?.coords[0] : null);
-      }
-    } catch (error) {
-      console.error('Direction API Error:', error?.message);
-      setError('Unable to fetch route information');
-      setDistance('Error');
-      setDuration('Error');
-    } finally {
-      setIsLoading(false);
+  // Memoized and stabilized coordinates to prevent unnecessary API calls
+  const stableSourceCoords = useMemo(() => {
+    if (coordinates?.coords && Array.isArray(coordinates.coords) && coordinates.coords.length === 2) {
+      return coordinates.coords;
     }
-  };
+    return null;
+  }, [coordinates?.coords]);
 
-  const getFormattedDistance = distance => {
-    console.log('getFormattedDistance called with distance:', distance);
+  const stableDestination = useMemo(() => {
+    return item?.eloc || null;
+  }, [item?.eloc]);
+
+  const sourceCoordinates = useMemo(() => {
+    if (stableSourceCoords) {
+      return `${stableSourceCoords[1]},${stableSourceCoords[0]}`;
+    }
+    return null;
+  }, [stableSourceCoords]);
+
+  // Optimized formatting functions
+  const getFormattedDistance = useCallback(distance => {
     if (!distance || distance === 0) return 'N/A';
 
     if (distance / 1000 < 1) {
-      const result = `${Math.round(distance)} m`;
-      console.log('Formatted distance:', result);
-      return result;
+      return `${Math.round(distance)} m`;
     }
     const dis = (distance / 1000).toFixed(1);
-    const result = `${dis} km`;
-    console.log('Formatted distance:', result);
-    return result;
-  };
+    return `${dis} km`;
+  }, []);
 
-  const getFormattedDuration = duration => {
-    console.log('getFormattedDuration called with duration:', duration);
+  const getFormattedDuration = useCallback(duration => {
     if (!duration || duration === 0) return 'N/A';
 
     const min = Math.round((duration % 3600) / 60);
@@ -149,9 +68,125 @@ const MapIndex = props => {
       return min > 0 ? `${hours}h ${min}m` : `${hours}h`;
     }
     return `${min}m`;
-  };
+  }, []);
 
-  const renderInfoItem = (icon, label, value, valueStyle = styles.value) => (
+  // Main API call function with error handling and optimization
+  const fetchDirectionData = useCallback(async (profile = 'driving', isManualRefresh = false) => {
+    if (!sourceCoordinates || !stableDestination) {
+      console.log('Source coordinates or destination not available');
+      setIsLoading(false);
+      setError('Location data not available');
+      return;
+    }
+
+    if (isFirstLoad.current) {
+      setIsLoading(true);
+    }
+    setError(null);
+
+    try {
+      console.log('Fetching direction data...');
+      console.log('Source:', sourceCoordinates);
+      console.log('Destination:', stableDestination);
+
+      const response = await MapplsGL?.RestApi?.direction({
+        origin: sourceCoordinates,
+        destination: stableDestination,
+        profile,
+        resource: 'route_eta',
+        traffic: true,
+        overview: MapplsGL?.RestApi?.DirectionsCriteria?.OVERVIEW_FULL,
+        geometries: 'polyline6',
+      });
+
+      console.log('Direction API Response:', response);
+
+      if (response?.routes && response.routes.length > 0) {
+        const route = response.routes[0];
+        
+        const newDistance = getFormattedDistance(route.distance);
+        const newDuration = getFormattedDuration(route.duration);
+
+        // Only update state if values have changed
+        setDistance(prev => prev !== newDistance ? newDistance : prev);
+        setDuration(prev => prev !== newDuration ? newDuration : prev);
+        setLastUpdateTime(new Date());
+        
+        console.log('Route data updated successfully');
+      } else {
+        console.log('No routes found in the direction API response.');
+        setDistance('Not available');
+        setDuration('Not available');
+        setError('No route found');
+      }
+    } catch (error) {
+      console.error('Direction API Error:', error?.message);
+      setError('Unable to fetch route information');
+      setDistance('Error');
+      setDuration('Error');
+    } finally {
+      setIsLoading(false);
+      isFirstLoad.current = false;
+    }
+  }, [sourceCoordinates, stableDestination, getFormattedDistance, getFormattedDuration]);
+
+  // Auto-update functionality
+  const startAutoUpdate = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    if (enableAutoUpdate) {
+      intervalRef.current = setInterval(() => {
+        console.log('Auto-refreshing trip details...');
+        fetchDirectionData();
+      }, autoUpdateInterval);
+    }
+  }, [enableAutoUpdate, autoUpdateInterval, fetchDirectionData]);
+
+  const stopAutoUpdate = useCallback(() => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  }, []);
+
+  // Initial fetch effect
+  useEffect(() => {
+    if (sourceCoordinates && stableDestination) {
+      console.log('MapIndex: Initial data fetch');
+      fetchDirectionData();
+    } else {
+      console.log('MapIndex: Missing coordinates or destination');
+      setIsLoading(false);
+      if (!sourceCoordinates) {
+        setError('Driver location not available');
+      } else if (!stableDestination) {
+        setError('Destination not available');
+      }
+    }
+  }, []); // Only run once on mount
+
+  // Auto-update effect
+  useEffect(() => {
+    if (enableAutoUpdate && !isLoading && !error) {
+      startAutoUpdate();
+    } else {
+      stopAutoUpdate();
+    }
+
+    return () => stopAutoUpdate();
+  }, [enableAutoUpdate, autoUpdateInterval, startAutoUpdate, stopAutoUpdate, isLoading, error]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      stopAutoUpdate();
+    };
+  }, [stopAutoUpdate]);
+
+  // Memoized render functions to prevent unnecessary re-renders
+  const renderInfoItem = useCallback((icon, label, value, valueStyle = styles.value) => (
     <View style={styles.infoItem}>
       <View style={styles.iconContainer}>
         <Image style={styles.icon} source={icon} />
@@ -165,7 +200,29 @@ const MapIndex = props => {
         </Text>
       )}
     </View>
-  );
+  ), [isLoading]);
+
+  // Memoized error display
+  const errorDisplay = useMemo(() => {
+    if (!error) return null;
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={styles.errorText}>⚠️ {error}</Text>
+      </View>
+    );
+  }, [error]);
+
+  // Memoized last update time display
+  const lastUpdateDisplay = useMemo(() => {
+    if (!lastUpdateTime) return null;
+    return (
+      <View style={styles.updateTimeContainer}>
+        <Text style={styles.updateTimeText}>
+          Last updated: {lastUpdateTime.toLocaleTimeString()}
+        </Text>
+      </View>
+    );
+  }, [lastUpdateTime]);
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -175,11 +232,8 @@ const MapIndex = props => {
             <Text style={styles.cardTitle}>Trip Details</Text>
           </View>
 
-          {error && (
-            <View style={styles.errorContainer}>
-              <Text style={styles.errorText}>⚠️ {error}</Text>
-            </View>
-          )}
+          {errorDisplay}
+          {/* {lastUpdateDisplay} */}
 
           <View style={styles.infoSection}>
             <View style={styles.infoRow}>
@@ -240,7 +294,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   cardHeader: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: '#3C3567',
     paddingVertical: 6,
     paddingHorizontal: 16,
   },
@@ -260,6 +314,18 @@ const styles = StyleSheet.create({
   errorText: {
     color: '#d32f2f',
     fontSize: 12,
+    textAlign: 'center',
+    fontWeight: '500',
+  },
+  updateTimeContainer: {
+    backgroundColor: '#f0f8ff',
+    padding: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e8f0',
+  },
+  updateTimeText: {
+    color: '#4A90E2',
+    fontSize: 11,
     textAlign: 'center',
     fontWeight: '500',
   },

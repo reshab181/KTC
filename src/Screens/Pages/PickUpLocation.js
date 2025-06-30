@@ -623,7 +623,7 @@ const PickUpLocation = ({ navigation, route }) => {
                     lefticon="search"
                     Righticon={CloseIcon}
                     iconSize={20}
-                    iconColor={isDark ? '#fff' : '#000'}
+                    iconColor={isDark ? '#fff' : '#888'}
                     placeholder="Search or enter address"
                     value={searchText}
                     handlePress={() => navigation.goBack()}
@@ -668,7 +668,7 @@ const PickUpLocation = ({ navigation, route }) => {
                                     <Icon 
                                         name="map-marker" 
                                         size={20} 
-                                        color={item.isManual ? '#2C0CDF' : (isDark ? '#fff' : '#3C3567')} 
+                                        color={item.isManual ?  '#673AB7' : (isDark ? '#fff' : '#3C3567')} 
                                     />
                                 </View>
                                 <View style={styles.textContainer}>
@@ -784,8 +784,8 @@ const styles = StyleSheet.create({
     },
     manualItem: {
         borderWidth: 1,
-        borderColor: '#2C0CDF',
-        backgroundColor: 'rgba(44, 12, 223, 0.05)',
+        borderColor: '#333',
+        // backgroundColor: 'rgba(44, 12, 223, 0.05)',
     },
     locationContainer: {
         flexDirection: 'row',
@@ -834,7 +834,7 @@ const styles = StyleSheet.create({
         color: '#aaa',
     },
     manualAddress: {
-        color: '#2C0CDF',
+        color:  '#673AB7',
         fontWeight: '500',
     },
     loaderWrapper: {

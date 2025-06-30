@@ -112,12 +112,7 @@ const Register = ({ route }) => {
             newErrors.phone = 'Phone number must be 10 digits';
         }
 
-        // if (!formData.alternatePhone) {
-        //     newErrors.alternatePhone = 'Alternate phone number is required';
-        // } else if (formData.alternatePhone.length !== 10) {
-        //     newErrors.alternatePhone = 'Alternate phone number must be 10 digits';
-        // }
-
+     
 
         if (!dob) newErrors.dob = 'Date of birth is required';
 

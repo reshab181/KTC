@@ -50,6 +50,7 @@ const CustomIconTextInput = ({
           <TouchableOpacity onPress={handlePress}>
             <Righticon />
             {/* <Icon name={Righticon} size={iconSize} style={{marginLeft: 10}} /> */}
+               {/* <Image style={styles.icon1} source={icon1} /> */}
           </TouchableOpacity>
         )}
         {showRightImg && (
