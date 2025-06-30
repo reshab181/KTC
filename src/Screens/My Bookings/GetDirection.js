@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   Platform,
   PermissionsAndroid,
-  useColorScheme
+  useColorScheme,SafeAreaView
 } from 'react-native';
 import MapplsGL from 'mappls-map-react-native';
 import polyline from 'mappls-polyline';
@@ -14,6 +14,9 @@ import exampleIcon from '../../assets/car.png';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const styles = {
+  safeArea:{
+    flex:1
+  },
   container: {
     flex: 1,
     backgroundColor: '#f9f9f9',
@@ -29,7 +32,7 @@ const styles = {
     width: 55,
     height: 55,
     position: 'absolute',
-    bottom: 110,
+    bottom: 170,
     right: 20,
     borderRadius: 27.5,
     justifyContent: 'center',
@@ -41,7 +44,7 @@ const styles = {
   },
   distanceInfo: {
     position: 'absolute',
-    bottom: 10,
+    bottom: 70,
     left: 20,
     right: 20,
     backgroundColor: 'rgba(255,255,255,0.85)',
@@ -461,6 +464,7 @@ const GetDirection = ({
   );
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <View style={styles.container}>
       {isLoading ? (
         <View style={styles.loadingContainer}>
@@ -505,6 +509,7 @@ const GetDirection = ({
         </>
       )}
     </View>
+    </SafeAreaView>
   );
 };
 

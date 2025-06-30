@@ -67,12 +67,12 @@ const LocationScreen = ({ route }) => {
           destinationCoordinates={customerLocation}
         />
         
-        <MapIndex 
+        {/* <MapIndex 
           item={item} 
           coordinates={{ coords: driverCoordinates }}
            sourceCoordinates={driverCoordinates}
           eloc={customerLocation}
-        />
+        /> */}
       </View>
     </SafeAreaView>
   );
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   mainContainer: {
-    height: height / 0.86,
+    height: height /1,
     width: width / 1,
   },
 });
