@@ -447,7 +447,7 @@ const GetDirection = ({
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       callApi();
-    }, 1000);
+    }, 3000);
 
     return () => clearTimeout(timeoutId);
   }, [sourceCoordinates, destinationCoordinates, item?.eloc, eloc]);
