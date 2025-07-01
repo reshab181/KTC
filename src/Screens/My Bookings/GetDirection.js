@@ -433,6 +433,17 @@ const GetDirection = ({
     initializeComponent();
   }, []);
 
+  
+  useEffect(() => {
+  if (
+    coordinates?.coords?.coords &&
+    Array.isArray(coordinates.coords.coords) &&
+    coordinates.coords.coords.length === 2
+  ) {
+    callApi(); 
+  }
+}, [coordinates]);
+
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       callApi();
@@ -1022,3 +1033,4 @@ export default GetDirection;
 // };
 
 // export default GetDirection;
+

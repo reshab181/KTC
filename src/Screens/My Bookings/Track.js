@@ -36,152 +36,10 @@ const Track = props => {
   const [deviceData, setDeviceData] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [accessToken, setAccessToken] = useState(null);
-  // Add state to control tracking
+
   const [isTrackingActive, setIsTrackingActive] = useState(false);
 
-  // const fetchLocationData = useCallback(
-  //   async (deviceId, token, shouldNavigate = false) => {
-  //     try {
-  //       const headers = {Accept: '*/*', Authorization: `Bearer ${token}`};
 
-  //       // For 5 minute range:
-  //       const now = Date.now();
-  //       const twoMinutesAgo = now - 2 * 60 * 1000; // 2 minutes in milliseconds
-  //       const startTime = Math.floor(twoMinutesAgo / 1000);
-  //       const endTime = Math.floor(now / 1000);
-
-  //       console.log(
-  //         `📡 Fetching location data from ${new Date(
-  //           twoMinutesAgo,
-  //         ).toLocaleString()} to ${new Date(now).toLocaleString()}`,
-  //       );
-
-  //       const response = await fetch(
-  //         `${INTOUCH_URL}${GET_DEVICES}/${deviceId}/events?startTime=${startTime}&endTime=${endTime}`,
-  //         {method: 'GET', headers},
-  //       );
-
-  //       const res = await response.json();
-  //       console.log('📦 API Response:', JSON.stringify(res?.data));
-
-  //       if (res?.error === 'Daily Limit Expired') {
-  //         Alert.alert('Alert!', 'Daily Limit Expired', [
-  //           {text: 'OK', onPress: () => navigation.navigate('Upcoming')},
-  //         ]);
-  //         return;
-  //       }
-
-  //       const positionList = Array.isArray(res?.data?.positionList)
-  //         ? res.data.positionList
-  //         : [];
-  //       console.log(`Found ${positionList.length} positions`);
-
-  //       positionList.forEach((pos, i) => {
-  //         console.log(
-  //           `Position ${i}: lat=${pos.latitude}, lng=${
-  //             pos.longitude
-  //           }, time=${new Date(pos.timestamp * 1000).toLocaleString()}`,
-  //         );
-  //       });
-
-  //       const validPosition = positionList.find(
-  //         pos =>
-  //           typeof pos.latitude === 'number' &&
-  //           typeof pos.longitude === 'number' &&
-  //           pos.latitude !== 0 &&
-  //           pos.longitude !== 0,
-  //       );
-
-  //       if (validPosition) {
-  //         console.log(
-  //           `✅ Using valid position: Lat ${validPosition.latitude}, Long ${validPosition.longitude}`,
-  //         );
-
-  //         dispatch(
-  //           setCoords({
-  //             coords: [validPosition.latitude, validPosition.longitude],
-  //           }),
-  //         );
-
-  //         // Only navigate if shouldNavigate is true (i.e., user clicked track button)
-  //         if (shouldNavigate) {
-  //           setIsTrackingActive(false); // Reset tracking state
-  //           navigation.navigate('Location', {
-  //             item,
-  //             dataTrackChiffer: deviceData,
-  //             access_token: token,
-  //             showResult: res.data,
-  //             index,
-  //             eloc,
-  //           });
-  //         }
-  //         return;
-  //       }
-
-  //       console.warn(
-  //         '⚠️ Position data exists but all coordinates are invalid or zero.',
-  //       );
-
-  //       // Check fallback location from deviceData
-  //       const fallbackLocation = deviceData?.location;
-  //       console.log('Checking fallback deviceData.location:', fallbackLocation);
-
-  //       if (
-  //         fallbackLocation?.latitude &&
-  //         fallbackLocation?.longitude &&
-  //         fallbackLocation.latitude !== 0 &&
-  //         fallbackLocation.longitude !== 0
-  //       ) {
-  //         console.log(
-  //           `🔄 Using fallback device location: Lat ${fallbackLocation.latitude}, Long ${fallbackLocation.longitude}`,
-  //         );
-  //         dispatch(
-  //           setCoords({
-  //             coords: [fallbackLocation.latitude, fallbackLocation.longitude],
-  //           }),
-  //         );
-
-  //         // Only navigate if shouldNavigate is true
-  //         if (shouldNavigate) {
-  //           setIsTrackingActive(false); // Reset tracking state
-  //           navigation.navigate('Location', {
-  //             item,
-  //             dataTrackChiffer: deviceData,
-  //             access_token: token,
-  //             showResult: {data: {positionList: [validPosition]}},
-  //             index,
-  //             eloc,
-  //           });
-  //         }
-  //         return;
-  //       }
-
-  //       console.warn('⚠️ Fallback deviceData.location is missing or invalid.');
-
-  //       // Only show alert if user clicked track button
-  //       if (shouldNavigate) {
-  //         Alert.alert(
-  //           'Alert!',
-  //           'No recent location data available for this vehicle',
-  //           [{text: 'OK', onPress: () => {}}],
-  //           {cancelable: false},
-  //         );
-  //       }
-  //     } catch (error) {
-  //       console.error('❌ Error fetching location data:', error);
-  //       // Only show alert if user clicked track button
-  //       if (shouldNavigate) {
-  //         Alert.alert(
-  //           'Alert!',
-  //           'This vehicle cannot be tracked',
-  //           [{text: 'OK', onPress: () => {}}],
-  //           {cancelable: false},
-  //         );
-  //       }
-  //     }
-  //   },
-  //   [dispatch, deviceData, item, navigation, index, eloc],
-  // );
   const fetchLocationData = useCallback(
   async (deviceId, token, shouldNavigate = false) => {
     try {
@@ -199,7 +57,7 @@ const Track = props => {
       if (response.ok) {
         const currentRes = await response.json();
         currentPosition = currentRes?.data;
-        console.log('🎯 Current Position:', currentPosition);
+        console.log(' Current Position:', currentPosition);
       }
   const now = Date.now();
       console.log(now ,"now time");
@@ -254,9 +112,9 @@ const Track = props => {
             pos.latitude !== 0 &&
             pos.longitude !== 0
           )
-          .sort((a, b) => b.timestamp - a.timestamp);
+          // .sort((a, b) => b.timestamp - a.timestamp);
 
-        validPosition = sortedPositions[0];
+        validPosition = sortedPositions[sortedPositions.length-1];
         
         if (validPosition) {
           console.log(' Using most recent valid position from events:', validPosition);
@@ -266,12 +124,13 @@ const Track = props => {
 
       if (validPosition) {
         const coords = [validPosition.latitude, validPosition.longitude];
-        dispatch(setCoords({ coords }));
-
+     
+      console.log("🛰️ Dispatching coords to Redux:", coords);
         // Calculate position age for user feedback
         const positionAge = validPosition.timestamp 
           ? Math.floor((now - validPosition.timestamp * 1000) / 1000)
           : 0;
+            dispatch(setCoords({ coords: [...coords], positionAge }));
 
         if (shouldNavigate) {
           setIsTrackingActive(false);
@@ -361,70 +220,23 @@ const Track = props => {
   //     }
   //     console.log('🔄 Polling location for device:', deviceData.id);
   //     // Pass false for shouldNavigate - just update data, don't navigate
+  //     // await fetchDeviceAndLocation()
   //     await fetchLocationData(deviceData.id, accessToken, false);
   //   };
 
   //   if (deviceData?.id && accessToken && isTrackingActive) {
   //     intervalId = setInterval(() => {
-  //       pollLocation(); // call every 30s
+  //       pollLocation(); 
   //     }, 30000); // 30,000 ms = 30 seconds
   //   }
+  //   console.log("🔁 Polling triggered at:", new Date().toLocaleTimeString());
 
   //   return () => {
   //     isMounted = false;
   //     if (intervalId) clearInterval(intervalId);
   //   };
   // }, [deviceData?.id, accessToken, fetchLocationData, isTrackingActive]);
-  useEffect(() => {
-  let isMounted = true;
-  let intervalId;
-  let pollCount = 0;
 
-  const pollLocation = async () => {
-    if (!isMounted || !deviceData?.id || !accessToken || !isTrackingActive) {
-      return;
-    }
-    
-    pollCount++;
-    console.log(`🔄 Poll #${pollCount} for device:`, deviceData.id);
-    
-    await fetchLocationData(deviceData.id, accessToken, false);
-  };
-
-  if (deviceData?.id && accessToken && isTrackingActive) {
-    // Initial poll
-    pollLocation();
-    
-    // Adaptive polling: Start with frequent polls, then reduce frequency
-    let currentInterval = 10000; // Start with 10 seconds
-    const maxInterval = 30000; // Max 30 seconds
-    const intervalIncrement = 5000; // Increase by 5 seconds each time
-
-    const setAdaptiveInterval = () => {
-      if (intervalId) clearInterval(intervalId);
-      
-      intervalId = setInterval(() => {
-        if (!isMounted) return;
-        pollLocation();
-        
-        // Gradually increase interval (less frequent polling over time)
-        if (currentInterval < maxInterval) {
-          currentInterval = Math.min(currentInterval + intervalIncrement, maxInterval);
-          setAdaptiveInterval(); // Reset with new interval
-        }
-      }, currentInterval);
-      
-      console.log(`⏰ Polling interval set to ${currentInterval}ms`);
-    };
-
-    setAdaptiveInterval();
-  }
-
-  return () => {
-    isMounted = false;
-    if (intervalId) clearInterval(intervalId);
-  };
-}, [deviceData?.id, accessToken, fetchLocationData, isTrackingActive]);
 
   const fetchUpcomingBookings = useCallback(async () => {
     setLoading(true);
@@ -464,7 +276,7 @@ const Track = props => {
 
   const fetchDeviceAndLocation = useCallback(async () => {
     setLoading(true);
-    setIsTrackingActive(true); // Set tracking active when user clicks
+    setIsTrackingActive(true); 
     try {
       let token = accessToken;
       if (!token) {

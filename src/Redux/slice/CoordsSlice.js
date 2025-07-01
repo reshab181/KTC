@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   coords: null,
+  positionAge: null,
 };
 
 const coordsSlice = createSlice({
@@ -9,7 +10,8 @@ const coordsSlice = createSlice({
   initialState,
   reducers: {
     setCoords: (state, action) => {
-      state.coords = action.payload;
+      state.coords = action.payload.coords;
+      state.positionAge = action.payload.positionAge; 
     },
   },
 });

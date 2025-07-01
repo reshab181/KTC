@@ -16,7 +16,7 @@ const TimeTracker = ({ selectTime, selectedDate, initialTime }) => {
   const generateTimeRange = () => {
     const timeRange = [];
     for (let hour = 0; hour < 24; hour++) {
-      for (let minute = 0; minute < 60; minute += 30) {
+      for (let minute = 0; minute < 60; minute += 15) {
         const formattedTime = `${hour.toString().padStart(2, '0')}:${minute
           .toString()
           .padStart(2, '0')}`;
@@ -29,7 +29,7 @@ const TimeTracker = ({ selectTime, selectedDate, initialTime }) => {
   const getCurrentTime = () => {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
-    const minutes = Math.floor(now.getMinutes() / 30) * 30;
+    const minutes = Math.floor(now.getMinutes() / 15) * 15;
     const formattedMinutes = minutes.toString().padStart(2, '0');
     return `${hours}:${formattedMinutes}`;
   };
