@@ -488,7 +488,7 @@ const GetDirection = ({
             customerLocation={customerLocation} 
             driverLocation={driverLocation} 
           />
-
+{/* 
           {lastUpdateTime && (
             <View style={styles.statusIndicator}>
               <Text
@@ -499,7 +499,7 @@ const GetDirection = ({
                 Last updated: {lastUpdateTime.toLocaleTimeString()}
               </Text>
             </View>
-          )}
+          )} */}
 
           <TouchableOpacity
             style={styles.refreshButton}
