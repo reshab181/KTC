@@ -71,6 +71,7 @@ const HomeScreen: React.FC = () => {
   return (
     <SafeAreaView style={homeStyle.container}>
       {/* Conditionally render VerifyEmailDialog */}
+    
       {isModalVisible && (
         <VerifyEmailDialog
         module={selectedModule || 'defaultModule'} 

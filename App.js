@@ -52,6 +52,7 @@ const AppStack = createNativeStackNavigator();
 
 const App = () => {
   const theme = useColorScheme() === 'dark' ? MD3DarkTheme : MD3LightTheme;
+    const isDarkMode = useColorScheme() === 'dark';
 
   MapplsGL.setMapSDKKey( 'a3b6ecfc98829a83dd2d90f31acbfa8e');
   MapplsGL.setRestAPIKey('886b8e770b7b5314cd9ed9e669676599');
@@ -72,6 +73,10 @@ const App = () => {
   return (
     <PaperProvider theme={theme}>
         <GestureHandlerRootView style={{ flex: 1 }}>
+           <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={isDarkMode ? '#121212' : '#ffffff'} 
+      />
       <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
