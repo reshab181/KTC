@@ -13,8 +13,8 @@ const CustomIconTextInput = ({
   Righticon,
   lefticon,
   icon1,
-
   icon2,
+  iconColor,
   LeftSvg,
   keyboardType = 'default',
   value,
@@ -34,7 +34,7 @@ const CustomIconTextInput = ({
       <View style={styles.inputContainer}>
         {showLeftimg && <Image style={styles.icon1} source={icon1} />}
         {showLeftIcon && (
-          <Icon name={lefticon} size={iconSize} style={{marginRight: 15}} />
+          <Icon name={lefticon} size={iconSize} style={{marginRight: 15,color: iconColor }} />
         )}
         {showLeftSvg && <LeftSvg height={24} width={24} />}
 
