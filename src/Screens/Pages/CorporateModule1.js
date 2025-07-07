@@ -10,6 +10,8 @@ import {
   Alert,
   SafeAreaView,
   BackHandler,
+  StatusBar,
+  useColorScheme,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -36,6 +38,12 @@ import NotificationService from '../../services/api/Notification';
 import Menu from '../../assets/icon/Menu';
 
 const CorporateModule1 = ({navigation}) => {
+      const colorScheme = useColorScheme();
+      const isDarkMode = colorScheme === 'dark';
+      
+      const backgroundStyle = {
+        backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+      };
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [accessToken, setAccessToken] = useState('');
   const [cityList, setCityList] = useState([]);
@@ -379,6 +387,10 @@ const CorporateModule1 = ({navigation}) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+         <StatusBar
+                          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                          backgroundColor={backgroundStyle.backgroundColor}
+                        />
       <View style={styles.mainContainer}>
         <CustomHeader
           title="Home"

@@ -9,6 +9,8 @@ import {
   View,
   Alert,
   Image,
+  StatusBar,
+  useColorScheme,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { fetchJwtAccess } from '../../Utils/JwtHelper';
@@ -29,6 +31,12 @@ import { decryptData } from '../../Utils/EncryptionUtility';
 
 
 const SignInCorporate = ({ route }) => {
+      const colorScheme = useColorScheme();
+    const isDarkMode = colorScheme === 'dark';
+    
+    const backgroundStyle = {
+      backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+    };
   const { email: prefilledEmail } = route.params || {};
   const navigation = useNavigation();
   const [email, setEmail] = useState(prefilledEmail || '');
@@ -155,6 +163,10 @@ const SignInCorporate = ({ route }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+       <StatusBar
+                    barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                    backgroundColor={backgroundStyle.backgroundColor}
+                  />
       <CustomHeader
         title={AuthStrings.SignIn}
         leftTitle={Characters.Skip}

@@ -12,7 +12,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  SafeAreaView
+  SafeAreaView,
+  useColorScheme
 } from 'react-native';
 
 import { FeedbackApi, submitFeedback } from '../services/api/feedback';
@@ -20,6 +21,12 @@ import { decryptData } from '../Utils/EncryptionUtility';
 import CustomHeader from '../component/CustomHeader';
 
 const FeedbackScreen = ({ route, navigation }) => {
+       const colorScheme = useColorScheme();
+          const isDarkMode = colorScheme === 'dark';
+          
+          const backgroundStyle = {
+            backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+          };
   const { Booking } = route?.params || {};
 
   const [feedbackFormData, setFeedbackFormData] = useState([]);
@@ -111,6 +118,10 @@ const FeedbackScreen = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+         <StatusBar
+                          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                          backgroundColor={backgroundStyle.backgroundColor}
+                        />
       <CustomHeader
         title={'Feedback'}
         leftIcon={() => (

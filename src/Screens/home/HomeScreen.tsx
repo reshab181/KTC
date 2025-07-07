@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, SafeAreaView, View } from 'react-native';
+import { Alert, SafeAreaView, View,useColorScheme,StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CustomHeader from '../../component/CustomHeader';
 import HomeItemCard from '../../component/HomeItemCard';
@@ -14,6 +14,12 @@ type ModuleType = 'Corporate' | 'Personal';
 type HomeScreenNavigationProp = StackNavigationProp<any, 'HomeScreen'>;
 
 const HomeScreen: React.FC = () => {
+  const colorScheme = useColorScheme();
+const isDarkMode = colorScheme === 'dark';
+
+const backgroundStyle = {
+  backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+};
 
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
@@ -71,7 +77,10 @@ const HomeScreen: React.FC = () => {
   return (
     <SafeAreaView style={homeStyle.container}>
       {/* Conditionally render VerifyEmailDialog */}
-    
+       <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
       {isModalVisible && (
         <VerifyEmailDialog
         module={selectedModule || 'defaultModule'} 

@@ -5,7 +5,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   StyleSheet, Text, View, Image, Dimensions, SafeAreaView,
-  TouchableOpacity, FlatList, RefreshControl
+  TouchableOpacity, FlatList, RefreshControl,
+  useColorScheme,
+  StatusBar
 } from 'react-native';
 import { Card } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -16,6 +18,12 @@ import NotificationService from '../services/api/Notification';
 const { height, width } = Dimensions.get('screen');
 
 const NotificationScreen = ({ navigation }) => {
+     const colorScheme = useColorScheme();
+        const isDarkMode = colorScheme === 'dark';
+        
+        const backgroundStyle = {
+          backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+        };
   const [unreadCount, setUnreadCount] = useState(0);
 
   const [notificationList, setNotification] = useState([]);
@@ -96,6 +104,10 @@ const NotificationScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+             <StatusBar
+                                  barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                                  backgroundColor={backgroundStyle.backgroundColor}
+                                />
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={{ flexDirection: 'row' }}>
           <AntDesign name="arrowleft" size={24} color="#fff" />

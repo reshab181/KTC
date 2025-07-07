@@ -3,7 +3,7 @@
 
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Text, View, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
+import { Alert, Text, View, TextInput, TouchableOpacity, SafeAreaView, StatusBar, useColorScheme } from 'react-native';
 import verifyOtpStyle from './VerifyOtpStyle';
 import CustomHeader from '../../../component/CustomHeader';
 import OtpIcon from '../../../assets/icon/OtpIcon';
@@ -22,6 +22,13 @@ type VerifyOtpScreenParams = {
 };
 
 const VerifyOTPScreen = () => {
+    const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
+  
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+  };
+  
   const route = useRoute<RouteProp<{ VerifyOTPScreen: VerifyOtpScreenParams }, 'VerifyOTPScreen'>>();
   const navigation = useNavigation<any>();
   const dispatch = useDispatch<any>();
@@ -124,6 +131,10 @@ const VerifyOTPScreen = () => {
   
   return (
     <SafeAreaView style={verifyOtpStyle.safeArea}>
+        <StatusBar
+              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+              backgroundColor={backgroundStyle.backgroundColor}
+            />
       <View style={verifyOtpStyle.root}>
         <CustomHeader title={screenType === 0 ? 'Register' : 'Forgot Password'} handlePress={undefined} />
         <View style={verifyOtpStyle.img}>

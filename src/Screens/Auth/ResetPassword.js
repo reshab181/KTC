@@ -1,6 +1,6 @@
 // Author: Ashutosh Rai
 // Component: ResetPassword
-import { StyleSheet, View, Alert, SafeAreaView } from 'react-native';
+import { StyleSheet, View, Alert, SafeAreaView, StatusBar, useColorScheme } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import CustomHeader from '../../component/CustomHeader';
@@ -13,6 +13,12 @@ import { fetchJwtAccess } from '../../Utils/JwtHelper';
 import { resetPassword } from '../../Api/Authentication';
 
 const ResetPassword = ({route, navigation}) => {
+      const colorScheme = useColorScheme();
+      const isDarkMode = colorScheme === 'dark';
+      
+      const backgroundStyle = {
+        backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+      };
 
   // const navigation = useNavigation();
   const {email} = route.params ;
@@ -88,6 +94,10 @@ const ResetPassword = ({route, navigation}) => {
 
   return (
     <SafeAreaView style = {styles.safeArea}>
+         <StatusBar
+                          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                          backgroundColor={backgroundStyle.backgroundColor}
+                        />
     <View style={styles.container}>
       <CustomHeader title="Reset Password" />
       <View style={styles.content}>

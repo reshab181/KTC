@@ -738,7 +738,9 @@ import {
   Alert,
   ScrollView,
   Dimensions,
-  Platform, PermissionsAndroid,Linking
+  Platform, PermissionsAndroid,Linking,
+  StatusBar,
+  useColorScheme
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CustomHeader from '../../component/CustomHeader';
@@ -752,6 +754,12 @@ import { useRoute } from '@react-navigation/native';
 const { width } = Dimensions.get('window');
 
 const Upcoming = ({ navigation }) => {
+     const colorScheme = useColorScheme();
+        const isDarkMode = colorScheme === 'dark';
+        
+        const backgroundStyle = {
+          backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+        };
   const route = useRoute();
   const { eloc } = route?.params || {};
   const [isLoading, setIsLoading] = useState(false);
@@ -1089,6 +1097,10 @@ const Upcoming = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
+             <StatusBar
+                                  barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                                  backgroundColor={backgroundStyle.backgroundColor}
+                                />
       <CustomHeader
         title="Bookings"
         leftIcon={() => (

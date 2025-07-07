@@ -10,6 +10,8 @@ import {
   Alert,
   ActivityIndicator,
   Image,
+  StatusBar,
+  useColorScheme,
 } from 'react-native';
 import React, {useEffect, useState, useCallback} from 'react';
 import {useNavigation} from '@react-navigation/native';
@@ -21,10 +23,17 @@ import {INTOUCH_URL, GET_DEVICES} from '../../config/api-config';
 import UpcomingApi from '../../services/api/upcoming';
 import CustomHeader from '../../component/CustomHeader';
 import {setCoords} from '../../Redux/slice/CoordsSlice';
+import Static from '../../services/Static';
 
 const {width, height} = Dimensions.get('window');
 
 const Track = props => {
+    const colorScheme = useColorScheme();
+            const isDarkMode = colorScheme === 'dark';
+            
+            const backgroundStyle = {
+              backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+            };
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const {index, pageName, status, feedback_arr, item, eloc} =
@@ -384,6 +393,10 @@ const Track = props => {
 
   return (
     <SafeAreaView style={[styles.container, pageName === 'HIS' && {flex: 1}]}>
+         <StatusBar
+                          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                          backgroundColor={backgroundStyle.backgroundColor}
+                        />
       <CustomHeader
         title={'My Bookings'}
         handleLeftIcon={home}

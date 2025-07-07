@@ -1,7 +1,7 @@
 //Reshab Kumar Pandey
 //Profile.js
 
-import React, { useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -10,13 +10,14 @@ import {
   Alert,
   ActivityIndicator,
   TouchableOpacity,
-  Image
+  Image,
+  useColorScheme,
+  StatusBar,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import CustomHeader from '../../component/CustomHeader';
 import CustomIconTextInput from '../../component/CustomIconTextInput';
 import CustomButton from '../../component/CustomButtons';
-
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DeleteData from '../../services/api/deleteProfile';
@@ -25,9 +26,15 @@ import EmailIcon from '../../assets/icon/EmailIcon';
 import DobIcon from '../../assets/icon/DobIcon';
 import PhoneIcon from '../../assets/icon/PhoneIcon';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
 const Profile = () => {
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
+
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+  };
   const [loader, setLoader] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -39,15 +46,14 @@ const Profile = () => {
   });
   const navigation = useNavigation();
 
-   function convertUnixTimestamp(unixTimestamp) {
+  function convertUnixTimestamp(unixTimestamp) {
     const date = new Date(unixTimestamp * 1000);
     const year = date.getUTCFullYear();
-    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); 
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
     const day = String(date.getUTCDate() + 1).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
-}
-
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -115,45 +121,44 @@ const Profile = () => {
   //   );
   // };
   const handleDeleteAccount = async () => {
-    Alert.alert(
-      'Alert',
-      'Are you sure you want to delete your account?',
-      [
-        { text: 'Cancel', onPress: () => null },
-        {
-          text: 'OK',
-          onPress: async () => {
-            setLoader(true);
-            try {
-              const response = await DeleteData(formData.email);
-              if (response) {
-                await AsyncStorage.clear();  
-                setLoader(false);
-                Alert.alert('Success', 'Your account has been deleted.', [
-                  {
-                    text: 'OK',
-                    onPress: () => {
-                      navigation.navigate("CorporateLoginNavigator", {
-                        screen: "CorporateSignIn",
-                      });
-                    }
-                  }
-                ]);
-              } else {
-                setLoader(false);
-                Alert.alert('Error', 'Failed to delete the account. Please try again.');
-              }
-            } catch (error) {
+    Alert.alert('Alert', 'Are you sure you want to delete your account?', [
+      {text: 'Cancel', onPress: () => null},
+      {
+        text: 'OK',
+        onPress: async () => {
+          setLoader(true);
+          try {
+            const response = await DeleteData(formData.email);
+            if (response) {
+              await AsyncStorage.clear();
               setLoader(false);
-              console.error('Error deleting account:', error);
-              Alert.alert('Error', 'Something went wrong. Please try again.');
+              Alert.alert('Success', 'Your account has been deleted.', [
+                {
+                  text: 'OK',
+                  onPress: () => {
+                    navigation.navigate('CorporateLoginNavigator', {
+                      screen: 'CorporateSignIn',
+                    });
+                  },
+                },
+              ]);
+            } else {
+              setLoader(false);
+              Alert.alert(
+                'Error',
+                'Failed to delete the account. Please try again.',
+              );
             }
+          } catch (error) {
+            setLoader(false);
+            console.error('Error deleting account:', error);
+            Alert.alert('Error', 'Something went wrong. Please try again.');
           }
-        }
-      ]
-    );
+        },
+      },
+    ]);
   };
-  
+
   const handleInputChange = (key, value) => {
     setFormData(prevState => ({
       ...prevState,
@@ -163,12 +168,21 @@ const Profile = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        backgroundColor={backgroundStyle.backgroundColor}
+      />
       <View style={styles.mainContainer}>
         <CustomHeader
           title="Profile"
           leftIcon={() => (
-            <TouchableOpacity style={styles.headerLeftIcon} onPress={() => navigation.goBack()}>
-              <Image source={require('../../assets/ic_back_arrow_white_24.png')} style={styles.backIcon} />
+            <TouchableOpacity
+              style={styles.headerLeftIcon}
+              onPress={() => navigation.goBack()}>
+              <Image
+                source={require('../../assets/ic_back_arrow_white_24.png')}
+                style={styles.backIcon}
+              />
             </TouchableOpacity>
           )}
         />
@@ -185,7 +199,7 @@ const Profile = () => {
               placeholder="First Name"
               LeftSvg={FirstNameIcon}
               value={formData.firstName}
-              onChangeText={(value) => handleInputChange('firstName', value)}
+              onChangeText={value => handleInputChange('firstName', value)}
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -193,7 +207,7 @@ const Profile = () => {
               placeholder="Last Name"
               LeftSvg={FirstNameIcon}
               value={formData.lastName}
-              onChangeText={(value) => handleInputChange('lastName', value)}
+              onChangeText={value => handleInputChange('lastName', value)}
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -201,7 +215,7 @@ const Profile = () => {
               placeholder="Email"
               LeftSvg={EmailIcon}
               value={formData.email}
-              onChangeText={(value) => handleInputChange('email', value)}
+              onChangeText={value => handleInputChange('email', value)}
             />
           </View>
           <View style={styles.inputWrapper}>
@@ -209,10 +223,15 @@ const Profile = () => {
               placeholder="YYYY-MM-DD"
               LeftSvg={DobIcon}
               value={formData.birthDate}
-              onChangeText={(value) => handleInputChange('birthDate', value)}
+              onChangeText={value => handleInputChange('birthDate', value)}
             />
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 16 }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 16,
+            }}>
             <View style={styles.countryCodeInput}>
               <CustomIconTextInput
                 placeholder="+91"
@@ -221,13 +240,13 @@ const Profile = () => {
                 style={styles.fixedCountryCode}
               />
             </View>
-            <View style={{ flex: 1, marginLeft: 8 }}>
+            <View style={{flex: 1, marginLeft: 8}}>
               <CustomIconTextInput
                 keyboardType="numeric"
                 placeholder="Mobile Number"
                 LeftSvg={PhoneIcon}
                 value={formData.mobileNumber}
-                onChangeText={(value) => handleInputChange('mobileNumber', value)}
+                onChangeText={value => handleInputChange('mobileNumber', value)}
               />
             </View>
           </View>
@@ -236,7 +255,7 @@ const Profile = () => {
               placeholder="Change Password"
               icon1={require('../../assets/lock.png')}
               value={formData.password}
-              onChangeText={(value) => handleInputChange('password', value)}
+              onChangeText={value => handleInputChange('password', value)}
             />
           </View>
         </View>
@@ -275,7 +294,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: [{ translateX: -25 }, { translateY: -25 }],
+    transform: [{translateX: -25}, {translateY: -25}],
     zIndex: 1,
   },
   inputContainer: {
@@ -287,13 +306,13 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   countryCodeInput: {
-    width: width / 4, 
+    width: width / 4,
   },
   fixedCountryCode: {
     backgroundColor: '#e0e0e0',
     color: '#333',
-    borderRadius: 5, 
-    paddingVertical: 14, 
+    borderRadius: 5,
+    paddingVertical: 14,
     paddingHorizontal: 12,
   },
   deleteButtonContainer: {

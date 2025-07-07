@@ -39,6 +39,12 @@ const COLORS = {
 };
 
 const Register = ({ route }) => {
+     const colorScheme = useColorScheme();
+    const isDarkMode = colorScheme === 'dark';
+
+    const backgroundStyle = {
+  backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+};
     const {  emailId, clientId, sub_entity } = route.params || {};
     console.log(emailId,clientId,sub_entity,"data=========================");
     
@@ -211,6 +217,10 @@ const Register = ({ route }) => {
 
     return (
         <SafeAreaView style={styles.mainContainer}>
+              <StatusBar
+                    barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                    backgroundColor={backgroundStyle.backgroundColor}
+                  />
             <CustomHeader
                 title="Register"
                 // iconPath={require('../../assets/icbackarrow.png')}

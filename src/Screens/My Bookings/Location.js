@@ -6,7 +6,9 @@ import {
   BackHandler,
   TouchableOpacity,
   Image,
-  StyleSheet
+  StyleSheet,
+  useColorScheme,
+  StatusBar
 } from 'react-native';
 import { useSelector } from 'react-redux';
 import {INTOUCH_URL, GET_DEVICES} from '../../config/api-config';
@@ -20,6 +22,12 @@ import {useDispatch} from 'react-redux';
 const { height, width } = Dimensions.get('screen');
 
 const LocationScreen = ({ route }) => {
+    const colorScheme = useColorScheme();
+            const isDarkMode = colorScheme === 'dark';
+            
+            const backgroundStyle = {
+              backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+            };
     const dispatch = useDispatch();
   const navigation = useNavigation();
   const { item, dataTrackChiffer, access_token, showResult, index, eloc } = route?.params || {};
@@ -123,6 +131,10 @@ useEffect(() => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+         <StatusBar
+                          barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                          backgroundColor={backgroundStyle.backgroundColor}
+                        />
       <View style={styles.mainContainer}>
         <CustomHeader
           title="Track Chauffeur"

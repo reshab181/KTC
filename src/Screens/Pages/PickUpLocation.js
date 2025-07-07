@@ -412,8 +412,7 @@ import MapplsGL from 'mappls-map-react-native';
 import CloseIcon from '../../assets/icon/CloseIcon';
 
 const PickUpLocation = ({ navigation, route }) => {
-    const theme = useColorScheme();
-    const isDark = theme === 'dark';
+ 
     
     const [searchText, setSearchText] = useState('');
     const [locations, setLocations] = useState([]);
@@ -615,91 +614,90 @@ const PickUpLocation = ({ navigation, route }) => {
         }
     }, [searchText, locations]);
 
-    return (
-        <SafeAreaView style={styles.safeArea}>
-        <View style={[styles.container, isDark ? styles.darkContainer : styles.lightContainer]}>
-            <View style={styles.searchContainer}>
-                <CustomTextInput
-                    lefticon="search"
-                    Righticon={CloseIcon}
-                    iconSize={20}
-                    iconColor={isDark ? '#fff' : '#888'}
-                    placeholder="Search or enter address"
-                    value={searchText}
-                    handlePress={() => navigation.goBack()}
-                    onChangeText={setSearchText}
-                    inputStyle={isDark ? styles.darkInput : styles.lightInput}
-                    placeholderTextColor={isDark ? '#aaa' : '#888'}
-                    containerStyle={isDark ? styles.darkInputContainer : styles.lightInputContainer}
-                />
-            </View>
+  <SafeAreaView style={styles.safeArea}>
+  <View style={[styles.container, styles.lightContainer]}>
+    <View style={styles.searchContainer}>
+      <CustomTextInput
+        lefticon="search"
+        Righticon={CloseIcon}
+        iconSize={20}
+        iconColor="#888"
+        placeholder="Search or enter address"
+        value={searchText}
+        handlePress={() => navigation.goBack()}
+        onChangeText={setSearchText}
+        inputStyle={styles.lightInput}
+        placeholderTextColor="#888"
+        containerStyle={styles.lightInputContainer}
+      />
+    </View>
 
-            {(loading || geocoding) ? (
-                <View style={styles.loaderWrapper}>
-                    <ActivityIndicator size="large" color={isDark ? '#fff' : '#2C0CDF'} />
-                    <Text style={[styles.loadingText, isDark ? styles.darkText : styles.lightText]}>
-                        {geocoding ? 'Getting location details...' : 'Searching...'}
-                    </Text>
-                </View>
-            ) : (
-                <FlatList
-                    data={displayData}
-                    keyExtractor={(item, index) => `${item.mapplsPin}_${index}`}
-                    ListEmptyComponent={() => (
-                        <View style={styles.emptyContainer}>
-                            <Text style={[styles.emptyText, isDark ? styles.darkText : styles.lightText]}>
-                                {searchText.length > 1 
-                                    ? "Start typing to search locations" 
-                                    : "Enter an address to search"}
-                            </Text>
-                        </View>
-                    )}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity 
-                            onPress={() => handleSelectLocation(item)} 
-                            style={[
-                                styles.item, 
-                                isDark ? styles.darkItem : styles.lightItem,
-                                item.isManual && styles.manualItem
-                            ]}
-                        >
-                            <View style={styles.locationContainer}>
-                                <View style={[styles.iconContainer, isDark ? styles.darkIconContainer : styles.lightIconContainer]}>
-                                    <Icon 
-                                        name="map-marker" 
-                                        size={20} 
-                                        color={item.isManual ?  '#673AB7' : (isDark ? '#fff' : '#3C3567')} 
-                                    />
-                                </View>
-                                <View style={styles.textContainer}>
-                                    <Text style={[
-                                        styles.placeName, 
-                                        isDark ? styles.darkPlaceName : styles.lightPlaceName,
-                                        item.isManual && styles.manualPlaceName
-                                    ]}>
-                                        {item.placeName}
-                                    </Text>
-                                    <Text 
-                                        style={[
-                                            styles.placeAddress, 
-                                            isDark ? styles.darkPlaceAddress : styles.lightPlaceAddress,
-                                            item.isManual && styles.manualAddress
-                                        ]} 
-                                        numberOfLines={2} 
-                                        ellipsizeMode="tail"
-                                    >
-                                        {item.placeAddress}
-                                    </Text>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                    contentContainerStyle={styles.listContent}
+    {loading || geocoding ? (
+      <View style={styles.loaderWrapper}>
+        <ActivityIndicator size="large" color="#2C0CDF" />
+        <Text style={[styles.loadingText, styles.lightText]}>
+          {geocoding ? 'Getting location details...' : 'Searching...'}
+        </Text>
+      </View>
+    ) : (
+      <FlatList
+        data={displayData}
+        keyExtractor={(item, index) => `${item.mapplsPin}_${index}`}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyContainer}>
+            <Text style={[styles.emptyText, styles.lightText]}>
+              {searchText.length > 1 
+                ? "Start typing to search locations" 
+                : "Enter an address to search"}
+            </Text>
+          </View>
+        )}
+        renderItem={({ item }) => (
+          <TouchableOpacity 
+            onPress={() => handleSelectLocation(item)} 
+            style={[
+              styles.item,
+              styles.lightItem,
+              item.isManual && styles.manualItem
+            ]}
+          >
+            <View style={styles.locationContainer}>
+              <View style={[styles.iconContainer, styles.lightIconContainer]}>
+                <Icon 
+                  name="map-marker" 
+                  size={20} 
+                  color={item.isManual ? '#673AB7' : '#3C3567'} 
                 />
-            )}
-        </View>
-        </SafeAreaView>
-    );
+              </View>
+              <View style={styles.textContainer}>
+                <Text style={[
+                  styles.placeName,
+                  styles.lightPlaceName,
+                  item.isManual && styles.manualPlaceName
+                ]}>
+                  {item.placeName}
+                </Text>
+                <Text 
+                  style={[
+                    styles.placeAddress,
+                    styles.lightPlaceAddress,
+                    item.isManual && styles.manualAddress
+                  ]} 
+                  numberOfLines={2} 
+                  ellipsizeMode="tail"
+                >
+                  {item.placeAddress}
+                </Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
+        contentContainerStyle={styles.listContent}
+      />
+    )}
+  </View>
+</SafeAreaView>
+
 };
 
 export default PickUpLocation;

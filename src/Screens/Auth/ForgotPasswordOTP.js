@@ -1,5 +1,5 @@
 
-import { StyleSheet, Text, View, Alert, TextInput,SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Alert, TextInput,SafeAreaView, useColorScheme, StatusBar } from 'react-native';
 import { useWindowDimensions } from 'react-native';
 import { useRef, useState, useCallback } from 'react';
 import CustomButton from '../../component/CustomButtons';
@@ -10,6 +10,12 @@ import RNHash from 'react-native-hash';
 import { AuthStrings, Characters } from '../../constants/Strings';
 
 const ForgotPasswordOTP = ({ route, navigation }) => {
+      const colorScheme = useColorScheme();
+    const isDarkMode = colorScheme === 'dark';
+    
+    const backgroundStyle = {
+      backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+    };
   const styles = useStyles();
   const [otp, setOtp] = useState(""); // Single string for OTP
   const [isError, setIsError] = useState(false);
@@ -58,6 +64,10 @@ const ForgotPasswordOTP = ({ route, navigation }) => {
 
   return (
        <SafeAreaView style={styles.safeArea}>
+           <StatusBar
+                            barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                            backgroundColor={backgroundStyle.backgroundColor}
+                          />
     <View style={styles.root}>
       <CustomHeader title={AuthStrings.ForgotPassword} />
       <View style={styles.img}>

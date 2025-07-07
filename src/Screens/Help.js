@@ -7,7 +7,9 @@ import {
     View, 
     TouchableOpacity, 
     Dimensions, 
-    Linking ,Image
+    Linking ,Image,
+    StatusBar,
+    useColorScheme
   } from 'react-native'
   import React from 'react'
   import { useNavigation } from '@react-navigation/native'
@@ -27,12 +29,23 @@ import CustomHeader from '../component/CustomHeader'
   )
   
   const Help = () => {
+         const colorScheme = useColorScheme();
+            const isDarkMode = colorScheme === 'dark';
+            
+            const backgroundStyle = {
+              backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+            };
     const navigation = useNavigation()
   
   
   
     return (
       <SafeAreaView style={styles.container}>
+        
+   <StatusBar
+                    barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                    backgroundColor={backgroundStyle.backgroundColor}
+                  />
     
         <CustomHeader title={"Help"}
          leftIcon={() => (

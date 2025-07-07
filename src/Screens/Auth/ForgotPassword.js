@@ -6,6 +6,8 @@ import {
   View,
   StyleSheet,
   SafeAreaView,
+  StatusBar,
+  useColorScheme,
 
 } from 'react-native';
 
@@ -22,6 +24,13 @@ import { Alert } from 'react-native';
 const { height, width } = Dimensions.get('screen');
 
 const ForgotPassword = ({ route, navigation }) => {
+    const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === 'dark';
+  
+  const backgroundStyle = {
+    backgroundColor: isDarkMode ? '#121212' : '#ffffff',
+  };
+  
   const { email } = route.params || {};
   const [accessToken, setAccessToken] = useState('');
   const [loading, setLoading] = useState(false);
@@ -68,6 +77,10 @@ const ForgotPassword = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.mainContainer}>
+       <StatusBar
+                    barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+                    backgroundColor={backgroundStyle.backgroundColor}
+                  />
       <CustomHeader title={AuthStrings.ForgotPassword} leftTitle={Characters.Skip} handlePress={() => navigation.goBack()} />
 
       <View style={styles.emailContainer}>
