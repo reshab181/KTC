@@ -1109,7 +1109,7 @@ const Upcoming = ({ navigation }) => {
           onPress={() => {
             navigation.reset({
               index: 0,
-              routes: [{name: "CorporateHomeScreen"}], // yahan apna screen name daalein
+              routes: [{name: "CorporateHomeScreen"}], 
             });
           }}
         >
@@ -1302,6 +1302,7 @@ const styles = StyleSheet.create({
   backIcon: {
     width: 24,
     height: 24,
+    tintColor: '#fff'
   },
   tabContainer: {
     flexDirection: 'row',
