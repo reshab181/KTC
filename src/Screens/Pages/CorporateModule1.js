@@ -321,34 +321,47 @@ const CorporateModule1 = ({navigation}) => {
     }
   }, [city_of_usage, userDetails, accessToken, navigation]);
 
-  const areFieldsFilled = () => {
-    const filled =
-      city_of_usage && assignment && vehiclerequested && start_date && endate;
-    Reporingtime && Reportingplace?.placeAddress;
-    console.log('areFieldsFilled:', filled, {
-      city_of_usage,
-      assignment,
-      vehiclerequested,
-      Reportingplace,
-      start_date,
-      endate,
-      Reporingtime,
-    });
-    return filled;
-  };
+ const areFieldsFilled = () => {
+  const filled =
+    city_of_usage &&
+    assignment &&
+    vehiclerequested &&
+    start_date &&
+    endate &&
+    Reporingtime &&
+    Reportingplace?.placeAddress;
 
-  const openModal = () => {
-    console.log('openModal function called');
-    if (areFieldsFilled()) {
-      console.log('Setting modalVisible to true');
-      setModalVisible(true);
-    } else {
-      Alert.alert(
-        'Incomplete Fields',
-        'Please fill all required fields before proceeding.',
-      );
-    }
-  };
+  console.log('areFieldsFilled:', filled, {
+    city_of_usage,
+    assignment,
+    vehiclerequested,
+    Reportingplace,
+    start_date,
+    endate,
+    Reporingtime,
+  });
+
+  return filled;
+};
+
+const openModal = () => {
+  console.log('openModal function called');
+
+  if (!Reporingtime) {
+    Alert.alert('Time Required', 'Please select a reporting time.');
+    return;
+  }
+
+  if (areFieldsFilled()) {
+    console.log('Setting modalVisible to true');
+    setModalVisible(true);
+  } else {
+    Alert.alert(
+      'Incomplete Fields',
+      'Please fill all required fields before proceeding.',
+    );
+  }
+};
 
   const handleRightIcon = () => {
     setUnreadCount(0);
