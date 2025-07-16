@@ -1,5 +1,4 @@
-// Author: Ashutosh Rai
-// Component: PaymentMethod
+
 
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';

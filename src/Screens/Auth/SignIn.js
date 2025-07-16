@@ -296,14 +296,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     marginBottom: 8,
   },
-  // passwordContainer: {
-  //   flexDirection: 'row',
-  //   alignItems: 'center',
-  //   borderWidth: 1, // Optional, to match email input style
-  //   borderColor: '#ccc', // Optional
-  //   borderRadius: 8, // Optional
-  //   backgroundColor: '#FFF',
-  // },
+
 
   passwordInput: {
     flex: 1,

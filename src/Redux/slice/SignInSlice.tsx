@@ -33,20 +33,7 @@ const initialState: SignInState = {
     }
   );
   
-// export const SignIn = createAsyncThunk(
-//     'SignIn',
-//     async({email, password }: {email: string, password: string }, { rejectWithValue }) => {
-//         try {
-//             const response = await SignInApii(email, password )
-//         console.log('====================================');
-//         console.log("SLICE SIGNIN" , decryptData(response.data.result));
-//         console.log('====================================');
-//             return response.data.result ; 
-//         } catch(error: any) {
-//             return rejectWithValue(error.response?.data || 'Something went wrong');
-//         }
-//     }
-// )
+
 
 const SignInSlice = createSlice({
     name: 'SignIn',

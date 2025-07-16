@@ -21,7 +21,7 @@ const ReviewBookingModal = ({ visible, onClose, eloc }) => {
     const [bookingId, setBookingId] = useState('');
     const [error, setError] = useState('');
 
-    // Reset booking status when modal opens
+
     useEffect(() => {
         if (visible) {
             setBookingSuccess(false);

@@ -1,5 +1,4 @@
-// Author: Ashutosh Rai
-// Component: PaymentCustomButton
+
 import { TouchableOpacity, Text, StyleSheet, Image, View } from 'react-native';
 import React from 'react';
 

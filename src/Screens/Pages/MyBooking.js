@@ -1,5 +1,4 @@
-// Author: Ashutosh Rai
-// Component: MyBooking 
+
 import React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import CustomHeader from '../../component/CustomHeader';

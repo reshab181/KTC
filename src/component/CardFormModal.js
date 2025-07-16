@@ -1,5 +1,4 @@
-// Author: Ashutosh Rai
-// Component: CardFormModal
+
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import React, {useState} from 'react';
 import {Picker} from '@react-native-picker/picker';

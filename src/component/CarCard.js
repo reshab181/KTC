@@ -1,5 +1,4 @@
-// Author: Ashutosh Rai
-// Component: CarCard
+
 import {StyleSheet, Text, View, Image} from 'react-native';
 import React from 'react';
 import CustomButton from './CustomButtons';

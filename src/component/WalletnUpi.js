@@ -1,5 +1,4 @@
-// Author: Ashutosh Rai
-// Component: WalletnUpi
+
 import { Image, StyleSheet, View } from 'react-native';
 import React, { useState } from 'react';
 import { RadioButton } from 'react-native-paper';

@@ -1,5 +1,4 @@
-// Author: Ashutosh Rai
-// Component: ProgessCard
+
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { Svg, Line } from 'react-native-svg';
