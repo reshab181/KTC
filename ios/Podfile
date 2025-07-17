@@ -36,5 +36,23 @@ target 'KTC' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    bitcode_strip_path = `xcrun --find bitcode_strip`.chop!
+
+    def strip_bitcode_from_framework(bitcode_strip_path, framework_relative_path)
+      framework_path = File.join(Dir.pwd, framework_relative_path)
+      command = "#{bitcode_strip_path} #{framework_path} -r -o #{framework_path}"
+      puts "Stripping bitcode: #{command}"
+      framework_name = File.basename(File.dirname(framework_path), ".framework")
+      system(command)
+    end
+
+    framework_paths = [
+      "Pods/MapplsGeoanalytics/MapplsGeoanalytics.xcframework/ios-arm64_armv7/MapplsGeoanalytics.framework/MapplsGeoanalytics"
+    ]
+
+    framework_paths.each do |framework_relative_path|
+      strip_bitcode_from_framework(bitcode_strip_path, framework_relative_path)
+    end
   end
 end
+

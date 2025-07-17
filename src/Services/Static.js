@@ -1,0 +1,4 @@
+export default{
+    ACCESS_CODE_NAME:"GciOiJIUzI1NiJ9",
+    ACCESS_CODE_PASS:"bGciOiJIkUzI1NiJ9eyJpc3MiOiJrdGNhZG1pbiIsImF1ZCI62Fkb"
+}
